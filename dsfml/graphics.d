@@ -37,6 +37,7 @@ enum BlendMode
 class CircleShape:Drawable
 {
 	package sfCircleShape* sfPtr;
+	private Vector2f Position;
 
 	this(float radius = 0, int pointCount = 30)
 	{
@@ -90,12 +91,12 @@ class CircleShape:Drawable
 	{
 		void position(Vector2f newPosition)
 		{
+			Position = newPosition;
 			sfCircleShape_setPosition(sfPtr, sfVector2f(newPosition.x, newPosition.y));
 		}
 		Vector2f position()
 		{
-			sfVector2f temp = sfCircleShape_getPosition(sfPtr);
-			return Vector2f(temp.x, temp.y);
+			return Position;
 		}
 	}
 	
