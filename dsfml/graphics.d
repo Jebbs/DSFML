@@ -1277,7 +1277,15 @@ class RenderWindow:RenderTarget
 			sfRenderWindow_close(sfPtr);
 	}
 
-
+	static Vector2i mousePosition(const(RenderWindow) relativeTo)
+	{
+		return Vector2i(sfMouse_getPositionRenderWindow(relativeTo.sfPtr));
+	}
+	
+	static void setMousePosition(Vector2i position, const(RenderWindow) relativeTo)
+	{
+		sfMouse_setPositionRenderWindow(position.tosfVector2i(),relativeTo.sfPtr);
+	}
 
 	
 	
