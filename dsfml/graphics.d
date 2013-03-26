@@ -552,7 +552,7 @@ class Font
 		sfFont_destroy(sfPtr);
 	}
 
-	bool lodFromFile(string filename)
+	bool loadFromFile(string filename)
 	{
 		sfPtr = sfFont_createFromFile(toStringz(filename));
 		return (sfPtr == null)?false:true;

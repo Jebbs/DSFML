@@ -66,21 +66,29 @@ class Music
 {
 	package sfMusic* sfPtr;
 
-
-	this(string filename)
+	this()
 	{
-		sfPtr = sfMusic_createFromFile(toStringz(filename));
-	}
-
-	this(const(void)* data,size_t sizeInBytes)
-	{
-		sfPtr = sfMusic_createFromMemory(data,sizeInBytes);
+		//Creates a null Music
 	}
 	
-	this(ref sfInputStream stream)
+	bool loadFromFile(string filename)
+	{
+		sfPtr = sfMusic_createFromFile(toStringz(filename));
+		return (sfPtr == null)?false:true;
+	}
+
+	bool loadFromMemory(const(void)* data,size_t sizeInBytes)
+	{
+		sfPtr = sfMusic_createFromMemory(data,sizeInBytes);
+		return (sfPtr == null)?false:true;
+	}
+	
+	bool loadFromStream(ref sfInputStream stream)
 	{
 		sfPtr = sfMusic_createFromStream(&stream);
+		return (sfPtr == null)?false:true;
 	}
+	
 	~this()
 	{
 		debug writeln("Destroying Music");
@@ -395,26 +403,33 @@ class SoundBuffer
 {
 	sfSoundBuffer* sfPtr;
 
+	this()
+	{
+		//Creates a null 
+	}
 
-
-	this(string filename)
+	bool loadFromFile(string filename)
 	{
 		sfPtr = sfSoundBuffer_createFromFile(toStringz(filename));
+		return (sfPtr == null)?false:true;
 	}
 
-	this(const(void)* data,size_t sizeInBytes)
+	bool loadFromMemory(const(void)* data,size_t sizeInBytes)
 	{
 		sfPtr = sfSoundBuffer_createFromMemory(data,sizeInBytes);
+		return (sfPtr == null)?false:true;
 	}
 
-	this(ref sfInputStream stream)
+	bool loadFromStream(ref sfInputStream stream)
 	{
 		sfPtr = sfSoundBuffer_createFromStream(&stream);
+		return (sfPtr == null)?false:true;
 	}
 
-	this(ref const(short[]) samples, uint channelCount, uint sampleRate)
+	bool loadFromSamples(ref const(short[]) samples, uint channelCount, uint sampleRate)
 	{
 		sfPtr = sfSoundBuffer_createFromSamples(samples.ptr, samples.length, channelCount, sampleRate);
+		return (sfPtr == null)?false:true;
 	}
 	package this(const(sfSoundBuffer)* copy)
 	{
