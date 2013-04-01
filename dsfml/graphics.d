@@ -2335,35 +2335,40 @@ struct Color
 	static immutable  Transparent = Color(0, 0, 0, 0);
 
 	Color opBinary(string op)(Color otherColor) const
-	if((op == "+") || (op == "-") || (op == "*") || (op == "/"))
+	if((op == "+") || (op == "-"))
 	{
 		static if(op == "+")
 		{
 			return Color(cast(ubyte)min(r+otherColor.r, 255),
-						cast(ubyte)min(g+otherColor.g, 255),
-						cast(ubyte)min(b+otherColor.b, 255),
-						cast(ubyte)min(a+otherColor.a, 255));
+						 cast(ubyte)min(g+otherColor.g, 255),
+						 cast(ubyte)min(b+otherColor.b, 255),
+						 cast(ubyte)min(a+otherColor.a, 255));
 		}
 		static if(op == "-")
 		{
 			return Color(cast(ubyte)max(r-otherColor.r, 0),
-						cast(ubyte)max(g-otherColor.g, 0),
-						cast(ubyte)max(b-otherColor.b, 0),
-						cast(ubyte)max(a-otherColor.a, 0));
+						 cast(ubyte)max(g-otherColor.g, 0),
+						 cast(ubyte)max(b-otherColor.b, 0),
+						 cast(ubyte)max(a-otherColor.a, 0));
 		}
+	}
+
+	Color opBinary(string op, E)(E num) const
+	if(isNumeric!(E) && ((op == "*") || (op == "/")))
+	{
 		static if(op == "*")
 		{
-			return Color(cast(ubyte)min(r*otherColor.r, 255),
-						cast(ubyte)min(g*otherColor.g, 255),
-						cast(ubyte)min(b*otherColor.b, 255),
-						cast(ubyte)min(a*otherColor.a, 255));
+			return Color(cast(ubyte)min(r*num, 255),
+						 cast(ubyte)min(g*num, 255),
+						 cast(ubyte)min(b*num, 255),
+						 cast(ubyte)min(a*num, 255));
 		}
 		static if(op == "/")
 		{
-			return Color(cast(ubyte)max(r/otherColor.r, 0),
-						cast(ubyte)max(g/otherColor.g, 0),
-						cast(ubyte)max(b/otherColor.b, 0),
-						cast(ubyte)max(a/otherColor.a, 0));
+			return Color(cast(ubyte)max(r/num, 0),
+						 cast(ubyte)max(g/num, 0),
+						 cast(ubyte)max(b/num, 0),
+						 cast(ubyte)max(a/num, 0));
 		}
 	}
 
@@ -2386,20 +2391,25 @@ struct Color
 			a = cast(ubyte)max(a-otherColor.a, 0);
 			return this;
 		}
+	}
+
+	ref Color opOpAssign(string op, E)(E num)
+	if(isNumeric!(E) && ((op == "*") || (op == "/")))
+	{
 		static if(op == "*")
 		{
-			r = cast(ubyte)min(r*otherColor.r, 255);
-			g = cast(ubyte)min(g*otherColor.g, 255);
-			b = cast(ubyte)min(b*otherColor.b, 255);
-			a = cast(ubyte)min(a*otherColor.a, 255);
+			r = cast(ubyte)min(r*num, 255);
+			g = cast(ubyte)min(g*num, 255);
+			b = cast(ubyte)min(b*num, 255);
+			a = cast(ubyte)min(a*num, 255);
 			return this;
 		}
 		static if(op == "/")
 		{
-			r = cast(ubyte)max(r/otherColor.r, 0);
-			g = cast(ubyte)max(g/otherColor.g, 0);
-			b = cast(ubyte)max(b/otherColor.b, 0);
-			a = cast(ubyte)max(a/otherColor.a, 0);
+			r = cast(ubyte)max(r/num, 0);
+			g = cast(ubyte)max(g/num, 0);
+			b = cast(ubyte)max(b/num, 0);
+			a = cast(ubyte)max(a/num, 0);
 			return this;
 		}
 	}
