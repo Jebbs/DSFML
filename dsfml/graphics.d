@@ -2367,7 +2367,7 @@ struct Color
 		}
 	}
 
-	ref Color opOpAssign(string op)(Color otherColor) const
+	ref Color opOpAssign(string op)(Color otherColor)
 	if((op == "+") || (op == "-") || (op == "*") || (op == "/"))
 	{
 		static if(op == "+")
@@ -2414,10 +2414,6 @@ struct Color
 		return "R: " ~ text(r) ~ " G: " ~ text(g) ~ " B: " ~ text(b) ~ " A: " ~ text(a);
 	}
 }
-
-
-
-
 
 struct Transform
 {
