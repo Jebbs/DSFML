@@ -2408,6 +2408,11 @@ struct Color
 	{
 		return ((r == otherColor.r) && (g == otherColor.g) && (b == otherColor.b) && (a == otherColor.a));
 	}
+
+	string toString() const
+	{
+		return "R: " ~ text(r) ~ " G: " ~ text(g) ~ " B: " ~ text(b) ~ " A: " ~ text(a);
+	}
 }
 
 
