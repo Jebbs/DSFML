@@ -16,6 +16,7 @@ module dsfml.graphics;
 import std.traits;
 import std.conv;
 import std.string;
+import std.algorithm;
 
 import std.utf;
 
@@ -2332,6 +2333,81 @@ struct Color
 	static immutable Magenta = Color(255, 0, 255, 255);
 	static immutable Cyan = Color(0, 255, 255, 255);
 	static immutable  Transparent = Color(0, 0, 0, 0);
+
+	Color opBinary(string op)(Color otherColor) const
+	if((op == "+") || (op == "-") || (op == "*") || (op == "/"))
+	{
+		static if(op == "+")
+		{
+			return Color(cast(ubyte)min(r+otherColor.r, 255),
+						cast(ubyte)min(g+otherColor.g, 255),
+						cast(ubyte)min(b+otherColor.b, 255),
+						cast(ubyte)min(a+otherColor.a, 255));
+		}
+		static if(op == "-")
+		{
+			return Color(cast(ubyte)max(r-otherColor.r, 0),
+						cast(ubyte)max(g-otherColor.g, 0),
+						cast(ubyte)max(b-otherColor.b, 0),
+						cast(ubyte)max(a-otherColor.a, 0));
+		}
+		static if(op == "*")
+		{
+			return Color(cast(ubyte)min(r*otherColor.r, 255),
+						cast(ubyte)min(g*otherColor.g, 255),
+						cast(ubyte)min(b*otherColor.b, 255),
+						cast(ubyte)min(a*otherColor.a, 255));
+		}
+		static if(op == "/")
+		{
+			return Color(cast(ubyte)max(r/otherColor.r, 0),
+						cast(ubyte)max(g/otherColor.g, 0),
+						cast(ubyte)max(b/otherColor.b, 0),
+						cast(ubyte)max(a/otherColor.a, 0));
+		}
+	}
+
+	ref Color opOpAssign(string op)(Color otherColor) const
+	if((op == "+") || (op == "-") || (op == "*") || (op == "/"))
+	{
+		static if(op == "+")
+		{
+			r = cast(ubyte)min(r+otherColor.r, 255);
+			g = cast(ubyte)min(g+otherColor.g, 255);
+			b = cast(ubyte)min(b+otherColor.b, 255);
+			a = cast(ubyte)min(a+otherColor.a, 255);
+			return this;
+		}
+		static if(op == "-")
+		{
+			r = cast(ubyte)max(r-otherColor.r, 0);
+			g = cast(ubyte)max(g-otherColor.g, 0);
+			b = cast(ubyte)max(b-otherColor.b, 0);
+			a = cast(ubyte)max(a-otherColor.a, 0);
+			return this;
+		}
+		static if(op == "*")
+		{
+			r = cast(ubyte)min(r*otherColor.r, 255);
+			g = cast(ubyte)min(g*otherColor.g, 255);
+			b = cast(ubyte)min(b*otherColor.b, 255);
+			a = cast(ubyte)min(a*otherColor.a, 255);
+			return this;
+		}
+		static if(op == "/")
+		{
+			r = cast(ubyte)max(r/otherColor.r, 0);
+			g = cast(ubyte)max(g/otherColor.g, 0);
+			b = cast(ubyte)max(b/otherColor.b, 0);
+			a = cast(ubyte)max(a/otherColor.a, 0);
+			return this;
+		}
+	}
+
+	bool opEquals(Color otherColor) const
+	{
+		return ((r == otherColor.r) && (g == otherColor.g) && (b == otherColor.b) && (a == otherColor.a));
+	}
 }
 
 
