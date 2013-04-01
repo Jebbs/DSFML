@@ -1242,7 +1242,7 @@ class RenderWindow:RenderTarget
 	
 	void draw(const Vertex[] vertices, PrimitiveType type, ref RenderStates states = RenderStates())
 	{
-
+		sfRenderWindow_drawPrimitives(sfPtr, vertices.ptr, vertices.length, type, &states.tosfRenderStates());
 	}
 	
 	void setVerticalSyncEnabled(bool enabled)
@@ -2817,7 +2817,7 @@ extern(C)
 	void sfRenderWindow_drawConvexShape(sfRenderWindow* renderWindow,const(sfConvexShape)* object,const(sfRenderStates)* states);
 	void sfRenderWindow_drawRectangleShape(sfRenderWindow* renderWindow,const(sfRectangleShape)* object,const(sfRenderStates)* states);
 	void sfRenderWindow_drawVertexArray(sfRenderWindow* renderWindow,const(sfVertexArray)* object,const(sfRenderStates)* states);
-	void sfRenderWindow_drawPrimitives(sfRenderWindow* renderWindow,Vertex* vertices,uint vertexCount, PrimitiveType type,const(sfRenderStates)* states);
+	void sfRenderWindow_drawPrimitives(sfRenderWindow* renderWindow,const(Vertex)* vertices,uint vertexCount, PrimitiveType type,const(sfRenderStates)* states);
 	void sfRenderWindow_pushGLStates(sfRenderWindow* renderWindow);
 	void sfRenderWindow_popGLStates(sfRenderWindow* renderWindow);
 	void sfRenderWindow_resetGLStates(sfRenderWindow* renderWindow);
