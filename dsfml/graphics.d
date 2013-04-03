@@ -2316,7 +2316,6 @@ alias Rect!(int) IntRect;
 alias Rect!(float) FloatRect;
 
 
-//TODO: Add Operators
 struct Color
 {
 	ubyte r;
@@ -2373,7 +2372,7 @@ struct Color
 	}
 
 	ref Color opOpAssign(string op)(Color otherColor)
-	if((op == "+") || (op == "-") || (op == "*") || (op == "/"))
+	if((op == "+") || (op == "-"))
 	{
 		static if(op == "+")
 		{
