@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright (c) <2013> <Jeremy DeHaan>
 
 This software is provided 'as-is', without any express or implied warranty. 
@@ -668,14 +668,14 @@ class RenderWindow:RenderTarget
 	
 	this(VideoMode mode, string title, uint style = Window.Style.DefaultStyle,  ref const(ContextSettings) settings = ContextSettings.Default)
 	{
-		sfPtr = sfRenderWindow_create(mode,toStringz(title),style,&settings);
+		sfPtr = sfRenderWindow_create(mode.tosfVideoMode(),toStringz(title),style,&settings);
 		IsRenderWindow = true;
 	}
 	
 	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
 	this(VideoMode mode, dstring title, uint style = Window.Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
-		sfPtr = sfRenderWindow_createUnicode(mode, toUint32Ptr(title),style, &settings);
+		sfPtr = sfRenderWindow_createUnicode(mode.tosfVideoMode(), toUint32Ptr(title),style, &settings);
 		IsRenderWindow = true;
 	}
 	
@@ -2672,8 +2672,8 @@ extern(C)
 	sfBool sfRenderTexture_isSmooth(const(sfRenderTexture)* renderTexture);
 	
 	//Render Window
-	sfRenderWindow* sfRenderWindow_create(VideoMode mode,const(char)* title,int style,const(ContextSettings)* settings);
-	sfRenderWindow* sfRenderWindow_createUnicode(VideoMode mode, const(uint)* title, uint style, const(ContextSettings)* settings);
+	sfRenderWindow* sfRenderWindow_create(sfVideoMode mode,const(char)* title,int style,const(ContextSettings)* settings);
+	sfRenderWindow* sfRenderWindow_createUnicode(sfVideoMode mode, const(uint)* title, uint style, const(ContextSettings)* settings);
 	sfRenderWindow* sfRenderWindow_createFromHandle(WindowHandle handle,const(ContextSettings)* settings);
 	void sfRenderWindow_destroy(sfRenderWindow* renderWindow);
 	void sfRenderWindow_close(sfRenderWindow* renderWindow);

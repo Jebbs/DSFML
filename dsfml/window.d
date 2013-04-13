@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright (c) <2013> <Jeremy DeHaan>
 
 This software is provided 'as-is', without any express or implied warranty. 
@@ -71,13 +71,13 @@ class Window
 	
 	this(VideoMode mode, string title, Style style = Style.DefaultStyle,  ref const(ContextSettings) settings = ContextSettings.Default)
 	{
-		sfPtr = sfWindow_create(mode, toStringz(title),style, &settings);
+		sfPtr = sfWindow_create(mode.tosfVideoMode(), toStringz(title),style, &settings);
 	}
 	
 	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
 	this(VideoMode mode, dstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
-		sfPtr = sfWindow_createUnicode(mode, toUint32Ptr(title),style, &settings);
+		sfPtr = sfWindow_createUnicode(mode.tosfVideoMode(), toUint32Ptr(title),style, &settings);
 	}
 	
 	
@@ -640,28 +640,39 @@ struct VideoMode
 		bitsPerPixel = bits;
 	}
 	
-	/*
-	 this(VideoMode videoMode)
+	
+	package this(sfVideoMode videoMode)
 	{
 		width = videoMode.width;
 		height = videoMode.height;
 		bitsPerPixel = videoMode.bitsPerPixel;
-	}*/
+	}
+	
+	package sfVideoMode tosfVideoMode()const
+	{
+		return sfVideoMode(width,height, bitsPerPixel);
+	}
 	
 	static VideoMode getDesktopMode()
 	{
-		return sfVideoMode_getDesktopMode();
+		return VideoMode(sfVideoMode_getDesktopMode());
 	}
 	
 	static VideoMode[] getFullscreenModes()
 	{
 		
-		VideoMode* modes;
+		sfVideoMode* modes;
 		size_t counts;
 		
 		modes = sfVideoMode_getFullscreenModes(&counts);
 		
-		VideoMode[] videoModes = modes[0..counts];
+		VideoMode[] videoModes;
+		videoModes.length = counts;
+		
+		for(uint i = 0; i < counts; ++i)
+		{
+			videoModes[i] = VideoMode(modes[i]);
+		}
 		
 		return videoModes;
 		
@@ -669,7 +680,7 @@ struct VideoMode
 	
 	bool isValid() const
 	{
-		return (sfVideoMode_isValid(this) == sfTrue)? true:false;
+		return (sfVideoMode_isValid(this.tosfVideoMode()) == sfTrue)? true:false;
 	}
 	
 	//used for debugging
@@ -807,12 +818,20 @@ union sfEvent
 
 
 
-struct sfContext;
-struct sfWindow;
 
 
 extern(C)
 {
+	struct sfContext;
+	struct sfWindow;
+
+	struct sfVideoMode
+	{
+		uint width;
+		uint height;
+		uint bitsPerPixel;
+	}
+
 	//Context
 	sfContext* sfContext_create();
 	void sfContext_destroy(sfContext* context);
@@ -835,14 +854,14 @@ extern(C)
 	void sfMouse_setPosition(sfVector2i position, const(sfWindow)* relativeTo);
 	
 	//Video Mode
-	VideoMode sfVideoMode_getDesktopMode();
-	VideoMode* sfVideoMode_getFullscreenModes(size_t* Count);
-	sfBool sfVideoMode_isValid(VideoMode mode);
+	sfVideoMode sfVideoMode_getDesktopMode();
+	sfVideoMode* sfVideoMode_getFullscreenModes(size_t* Count);
+	sfBool sfVideoMode_isValid(sfVideoMode mode);
 	
 	//Window
-	sfWindow* sfWindow_create(VideoMode mode, const(char)* title, uint style, const(ContextSettings)* settings);
+	sfWindow* sfWindow_create(sfVideoMode mode, const(char)* title, uint style, const(ContextSettings)* settings);
 	sfWindow* sfWindow_createFromHandle(WindowHandle handle, const(ContextSettings)* settings);
-	sfWindow* sfWindow_createUnicode(VideoMode mode, const(uint)* title, uint style, const(ContextSettings)* settings);
+	sfWindow* sfWindow_createUnicode(sfVideoMode mode, const(uint)* title, uint style, const(ContextSettings)* settings);
 	void  sfWindow_destroy(sfWindow* window);
 	void  sfWindow_close(sfWindow* window);
 	sfBool   sfWindow_isOpen(const(sfWindow)* window);
