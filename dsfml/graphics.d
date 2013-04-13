@@ -140,7 +140,7 @@ class ConvexShape:Shape
 		}
 		override uint pointCount()
 		{
-			return m_points.length;
+			return cast(uint)min(m_points.length, uint.max);
 		}
 	}
 	
@@ -642,7 +642,7 @@ class RenderTexture:RenderTarget
 	
 	override void draw(const Vertex[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default())
 	{
-		sfRenderTexture_drawPrimitives(sfPtr, vertices.ptr, vertices.length,type,&states.InternalsfRenderStates);
+		sfRenderTexture_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length),type,&states.InternalsfRenderStates);
 	}
 	
 	void display()
@@ -787,7 +787,7 @@ class RenderWindow:RenderTarget
 	
 	override void draw(const Vertex[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default())
 	{
-		sfRenderWindow_drawPrimitives(sfPtr, vertices.ptr, vertices.length, type, &states.InternalsfRenderStates);
+		sfRenderWindow_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length), type, &states.InternalsfRenderStates);
 	}
 	
 	void setVerticalSyncEnabled(bool enabled)
@@ -1818,7 +1818,7 @@ class VertexArray:Drawable
 	
 	uint getVertexCount()
 	{
-		return Vertices.length;
+		return cast(uint)min(uint.max, Vertices.length);
 	}
 	
 	
@@ -1865,8 +1865,8 @@ class VertexArray:Drawable
 		if(Vertices.length != 0)
 		{
 			renderTarget.IsRenderWindow?
-				sfRenderWindow_drawPrimitives(renderTarget.WindowPtr,Vertices.ptr,Vertices.length,primativeType,&renderStates.InternalsfRenderStates):
-					sfRenderTexture_drawPrimitives(renderTarget.TexturePtr,Vertices.ptr,Vertices.length,primativeType,&renderStates.InternalsfRenderStates);
+				sfRenderWindow_drawPrimitives(renderTarget.WindowPtr,Vertices.ptr,cast(uint)min(uint.max, Vertices.length),primativeType,&renderStates.InternalsfRenderStates):
+				sfRenderTexture_drawPrimitives(renderTarget.TexturePtr,Vertices.ptr,cast(uint)min(uint.max, Vertices.length),primativeType,&renderStates.InternalsfRenderStates);
 		}
 		
 	}
@@ -1878,7 +1878,7 @@ class VertexArray:Drawable
 class View
 {
 	sfView* sfPtr;
-	
+
 	this()
 	{
 		// Constructor code
