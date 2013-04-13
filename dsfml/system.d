@@ -1,11 +1,14 @@
 /*
 Copyright (c) <2013> <Jeremy DeHaan>
 
-This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.
+This software is provided 'as-is', without any express or implied warranty. 
+In no event will the authors be held liable for any damages arising from the use of this software.
 
-Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+Permission is granted to anyone to use this software for any purpose, including commercial applications,
+and to alter it and redistribute it freely, subject to the following restrictions:
 
-    1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+    1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
+    If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
 
     2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
@@ -17,6 +20,7 @@ module dsfml.system;
 import std.math;
 import std.conv;
 import std.traits;
+import std.utf;
 
 debug import std.stdio;
 
@@ -526,6 +530,12 @@ extern(C)
 //User should not even know this stuff exists!
 package:
 
+
+//Takes a dstring(a UTF-32 string), makes sure it has a \0 character at the end of it, and returns a pointer of uints for SFML to use.
+const(uint)* toUint32Ptr(ref dstring theDstring)
+{
+	return cast(const(uint)*)toUTFz!(const(dchar)*)(theDstring);
+}
 
 alias int sfBool;
 enum sfFalse = 0;
