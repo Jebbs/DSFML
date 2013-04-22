@@ -8,9 +8,9 @@ DSFML is a D static binding of SFML, which let's you use SFML in your D program.
 Compiling a project using DSFML
 ===
 
-You can use DSFML in one of two ways, both of which are simple. You can either compile the source code into a library and link against it in your final project, or simply include the source code along with your own when compiling. DSFML is based on CSFML(which can be downloaded from SFML's website) and need's its shared libraries and import libraries in order to compile properly. Link against the import libraries, and make sure the application has access to the shared libraries and you should be good to go! 
+You can use DSFML in one of two ways, both of which are simple. You can either compile the source code into a library and link against it in your final project, or simply include the source code along with your own when compiling. DSFML is based on CSFML(which needs to be built from source if on mac or linux) and need's its shared libraries and import libraries in order to compile properly. Link against the import libraries, and make sure the application has access to the shared libraries and you should be good to go! 
 
-The version in this repo IS out of date with the current version of SFML. I wanted to get a working version first and foremost before I started updating/improving. The .dll's and .lib's for compiling this for Windows are included in the repo for download. Once I have a chance to build SFML and CSFML from source I will update the binding!
+The version in this repo should be up to date with the latest SFML and CSFML versions. If you happen to see something I missed please open an issue in the tracker! The .dll's and .lib's for building in Windows are included in the repo for download and will always be in sync with the code presented here.
 
 
 If problems are encountered!
