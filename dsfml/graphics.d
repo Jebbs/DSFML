@@ -325,7 +325,7 @@ class Image
 		return Vector2u(temp.x, temp.y);
 	}
 	
-	void createMaksFromColor(Color maskColor, ubyte alpha = 0)
+	void createMaskFromColor(Color maskColor, ubyte alpha = 0)
 	{
 		sfImage_createMaskFromColor(sfPtr, maskColor, alpha);
 	}
