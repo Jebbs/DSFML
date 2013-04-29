@@ -750,6 +750,20 @@ class RenderWindow:RenderTarget
 		}
 	}
 	
+	@property
+	{
+		void view(View newView)
+		{
+			sfRenderWindow_setView(sfPtr, newView.sfPtr);
+		}
+		View view()
+		{
+			return new View( sfView_copy(sfRenderWindow_getView(sfPtr)));
+			
+		}
+	} 
+
+	
 	void setMouseCursorVisible(bool visible)
 	{
 		visible ? sfRenderWindow_setMouseCursorVisible(sfPtr,sfTrue): sfRenderWindow_setMouseCursorVisible(sfPtr,sfFalse);
