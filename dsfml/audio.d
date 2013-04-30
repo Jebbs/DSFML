@@ -514,22 +514,9 @@ class SoundBufferRecorder
 
 
 
-//SoundRecorder planned for Revision 2(for when I have more time to look into C callbacks)
+//Notes for SoundRecorder and SoundStream Callbacks: sfBool, sfTrue, and sfFalse are now exposed for use.
 
-
-//SoundStreams planned for Revision 2(for when I have more time to look into C callbacks)
-
-
-
-package:
-struct sfMusic;
-struct sfSound;
-struct sfSoundBuffer;
-struct sfSoundBufferRecorder;
-struct sfSoundRecorder;
-struct sfSoundStream;
-
-//Sound Recorder 
+//SoundRecorder C Callbacks
 extern(C)
 {
 	alias sfBool function(void*) sfSoundRecorderStartCallback;
@@ -537,31 +524,236 @@ extern(C)
 	alias void function(void*) sfSoundRecorderStopCallback;
 }
 
-
-
-enum SoundStatus
+class SoundRecorder
 {
-	Stopped,
-	Paused,
-	Playing,
+	package sfSoundRecorder* sfPtr;
+	this(sfSoundRecorderStartCallback onStart,sfSoundRecorderProcessCallback onProcess,sfSoundRecorderStopCallback onStop, void* userData)
+	{
+		//userData is null beause sfSoundRecorderImpl has a pointer to data already.
+		sfPtr = sfSoundRecorder_create(onStart, onProcess, onStop, userData);
+	}
+
+	void start(uint sampleRate = 44100)
+	{
+		sfSoundRecorder_start(sfPtr, sampleRate);
+	}
+
+	void stop()
+	{
+		sfSoundRecorder_stop(sfPtr);
+	}
+
+	uint getSampleRate() const
+	{
+		return sfSoundRecorder_getSampleRate(sfPtr);
+	}
+
+
+	~this()
+	{
+		sfSoundRecorder_destroy(sfPtr);
+	}
+
+	static bool isAvailable()
+	{
+		return (sfSoundRecorder_isAvailable() == sfTrue)?true:false;
+	}
 }
 
 
-struct sfSoundStreamChunk
-{
-	short* samples;
-	uint sampleCount;
-}
-
+//SoundStream C Callbacks
 extern(C)
 {
-	alias sfBool function(sfSoundStreamChunk*,void*) sfSoundStreamGetDataCallback;
+	alias sfBool function(SoundStreamChunk*,void*) sfSoundStreamGetDataCallback;
 	alias void function(sfTime,void*) sfSoundStreamSeekCallback;
+
+	struct SoundStreamChunk
+	{
+		short* samples;
+		uint sampleCount;
+	}
 }
+
+class SoundStream
+{
+
+
+	sfSoundStream* sfPtr;
+
+	this(sfSoundStreamGetDataCallback onGetData,sfSoundStreamSeekCallback onSeek,uint channelCount,int sampleRate,void* userData)
+	{
+		sfPtr = sfSoundStream_create(onGetData,onSeek,channelCount,sampleRate,userData);
+	}
+	~this()
+	{
+		sfSoundStream_destroy(sfPtr);
+	}
+
+	@property
+	{
+		void isLooping(bool loop)
+		{
+		loop?sfSoundStream_setLoop(sfPtr,sfTrue):sfSoundStream_setLoop(sfPtr,sfFalse);
+		}
+		bool isLooping()
+		{
+			return (sfSoundStream_getLoop(sfPtr) == sfTrue)?true: false;
+		}
+	}
+		
+	void play()
+	{
+		sfSoundStream_play(sfPtr);
+	}
+	
+	void pause()
+	{
+		sfSoundStream_pause(sfPtr);
+	}
+	
+	void stop()
+	{
+		sfSoundStream_stop(sfPtr);
+	}
+	
+	@property
+	{
+		uint channelCount()
+		{
+			return sfSoundStream_getChannelCount(sfPtr);
+		}
+	}
+	
+	@property
+	{
+		uint sampleRate()
+		{
+			return sfSoundStream_getSampleRate(sfPtr);
+		}
+	}
+	@property
+	{
+		SoundStatus status()
+		{
+			return sfSoundStream_getStatus(sfPtr);
+		}
+	}
+	
+	@property
+	{
+		void playingOffset(Time offset)
+		{
+			sfSoundStream_setPlayingOffset(sfPtr, offset.InternalsfTime);
+		}
+		Time playingOffset()
+		{
+			return Time(sfSoundStream_getPlayingOffset(sfPtr));
+		}
+	}
+	
+	@property
+	{
+		void pitch(float setPitch)
+		{
+			sfSoundStream_setPitch(sfPtr,setPitch);
+		}
+		float pitch()
+		{
+			return sfSoundStream_getPitch(sfPtr);
+		}
+	}
+	
+	@property
+	{
+		void volume(float setVolume)
+		{
+			sfSoundStream_setVolume(sfPtr,setVolume);
+		}
+		float volume()
+		{
+			return sfSoundStream_getVolume(sfPtr);
+		}
+	}
+	
+	@property
+	{
+		void position(Vector3f setPosition)
+		{
+			sfSoundStream_setPosition(sfPtr, setPosition.tosfVector3f());
+		}
+		Vector3f position()
+		{
+			return Vector3f(sfSoundStream_getPosition(sfPtr));
+		}
+	}
+	
+	@property
+	{
+		void relativeToListener(bool relative)
+		{
+		relative?sfSoundStream_setRelativeToListener(sfPtr,sfTrue):sfSoundStream_setRelativeToListener(sfPtr,sfFalse);
+		}
+		bool relativeToListener()
+		{
+			return (sfSoundStream_isRelativeToListener(sfPtr) == sfTrue)?true:false;
+		}
+	}
+	
+	@property
+	{
+		void minDistance(float distance)
+		{
+			sfSoundStream_setMinDistance(sfPtr,distance);
+		}
+		
+		float minDistance()
+		{
+			return sfSoundStream_getMinDistance(sfPtr);
+		}
+	}
+	
+	@property
+	{
+		void attenuation(float setAttenuation)
+		{
+			sfSoundStream_setAttenuation(sfPtr, setAttenuation);
+		}
+		float attenuation()
+		{
+			return sfSoundStream_getAttenuation(sfPtr);
+		}
+		
+	}
+
+}
+
 
 
 package extern(C)
 {
+	struct sfMusic;
+	struct sfSound;
+	struct sfSoundBuffer;
+	struct sfSoundBufferRecorder;
+	struct sfSoundRecorder;
+	struct sfSoundStream;
+
+
+
+	enum SoundStatus
+	{
+		Stopped,
+		Paused,
+		Playing,
+	}
+
+
+
+
+
+
+
+
 
 	//Listener
 	void  sfListener_setGlobalVolume(float volume);

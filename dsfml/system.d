@@ -525,6 +525,10 @@ extern(C)
 	alias long function(void*) sfInputStreamGetSizeFunc;
 }
 
+//Left out of internals because of SoundRecorder and SoundStream
+alias int sfBool;
+enum sfFalse = 0;
+enum sfTrue = 1;
 
 //Internal binding portion
 //User should not even know this stuff exists!
@@ -537,9 +541,6 @@ const(uint)* toUint32Ptr(ref dstring theDstring)
 	return cast(const(uint)*)toUTFz!(const(dchar)*)(theDstring);
 }
 
-alias int sfBool;
-enum sfFalse = 0;
-enum sfTrue = 1;
 
 struct sfClock;
 
