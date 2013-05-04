@@ -1,3 +1,7 @@
+/** Converted from modplug.h from libmodplug.
+  * this code is in the public domain
+  */
+  
 module dsftrackmusic.modplug;
 
 import core.stdc.config;
