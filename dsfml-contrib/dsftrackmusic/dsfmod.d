@@ -42,29 +42,24 @@ immutable SAMPLERATE = 44100;
 extern(C) int sfTime_asMilliseconds(sfTime time);
 
 
-/*class dsfmod { //not sure if this is the way to do this... but sfMod used a namespace here.
-	private this ();
+ModPlug_Settings settings;
+ModPlug_Settings defSettings;
+
+void dsfmod_initSettings() {
+	ModPlug_GetSettings (&defSettings);
 	
-	public:
-	static ModPlug_Settings settings;
-	static ModPlug_Settings defSettings;
+	settings = defSettings;
+}
+
+void dsfmod_applySettings() {
+	ModPlug_SetSettings (&settings);
+}
+
+void dsfmod_defaultSettings () {
+	ModPlug_SetSettings (&defSettings);
 	
-	static void initSettings() {
-		ModPlug_GetSettings (&defSettings);
-		
-		settings = defSettings;
-	}
-	
-	static void applySettings() {
-		ModPlug_SetSettings (&settings);
-	}
-	
-	static void defaultSettings () {
-		ModPlug_SetSettings (&defSettings);
-		
-		settings = defSettings;
-	}
-}*/
+	settings = defSettings;
+}
 
 class Mod : SoundStream
 {
