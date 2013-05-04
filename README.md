@@ -1,21 +1,25 @@
 DSFML
 =====
 
-DSFML is a D static binding of SFML, which let's you use SFML in your D program. DSFML attempts to be as compatible with SFML as possible, but does so in a D way by using new D semanics, as well as avoiding raw pointers. 
+This is the "Experimental" branch of the DSFML project. Experimental might not be the correct term, as it is what will eventually become the new Master branch of the project, and as such won't be as complete as the Master branch until this one overtakes the other. This branch will feature its own custom version of a C shared library(akin to CSFML) for better interfacing between languages as well as being a little more complete for easier code porting. 
 
+
+Compiling DSFML(C)
+===
+
+To compile the C libraries DSFML uses, you will need Cmake and a compatible static version of the SFML modules. Building DSFML will be the exact same as building CSFML.
 
 
 Compiling a project using DSFML
 ===
 
-You can use DSFML in one of two ways, both of which are simple. You can either compile the source code into a library and link against it in your final project, or simply include the source code along with your own when compiling. DSFML is based on CSFML(which needs to be built from source if on mac or linux) and need's its shared libraries and import libraries in order to compile properly. Link against the import libraries, and make sure the application has access to the shared libraries and you should be good to go! 
+You can use DSFML in one of two ways, both of which are simple. You can either compile the source code into a library and link against it in your final project, or simply include the source code along with your own when compiling. 
 
-The version in this repo should be up to date with the latest SFML and CSFML versions. If you happen to see something I missed please open an issue in the tracker! The .dll's and .lib's for building in Windows are included in the repo for download and will always be in sync with the code presented here.
 
 
 If problems are encountered!
 ===
 
-This is my first project that I have provided others to use, so feel free to give me feed back. Especially if you encounter an issue that prevents you from using the binding!
+As this branch includes both C/C++ code AND D code, there are bound to be more issues that could arise. Feel free to email me of simply put an issue in the tracker!
 
 Email is <dehaan.jeremiah@gmail.com>
