@@ -1,3 +1,7 @@
+/* Simple test of sfmod's functionality.
+   this code is public domain.
+ */
+
 module sfmodtest;
 
 import dsfml.audio;
