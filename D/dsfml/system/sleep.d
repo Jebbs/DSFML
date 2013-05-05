@@ -1,3 +1,5 @@
+/*
+
 DSFML - The Simple and Fast Multimedia Library for D
 
 Copyright (c) <2013> <Jeremy DeHaan>
@@ -21,3 +23,16 @@ External Libraries Used:
 
 SFML - The Simple and Fast Multimedia Library
 Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
+
+*/
+
+module dsfml.system.sleep;
+
+import core.thread; 
+import dsfml.system.time;
+
+void sleep(Time duration)
+{
+	Thread.sleep(usecs(duration.asMicroseconds()));
+}
+

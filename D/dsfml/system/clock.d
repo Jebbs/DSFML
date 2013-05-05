@@ -1,3 +1,5 @@
+/*
+
 DSFML - The Simple and Fast Multimedia Library for D
 
 Copyright (c) <2013> <Jeremy DeHaan>
@@ -21,3 +23,60 @@ External Libraries Used:
 
 SFML - The Simple and Fast Multimedia Library
 Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
+
+*/
+
+module dsfml.system.clock;
+
+public import dsfml.system.time;
+
+import std.stdio;
+
+class Clock
+{
+	package sfClock* sfPtr;
+	
+	this()
+	{
+		sfPtr = sfClock_create();
+	}
+	
+	package this(sfClock* clock)
+	{
+		sfPtr = clock;
+	}
+	
+	~this()
+	{
+		debug writeln("Destroying Clock");
+		sfClock_destroy(sfPtr);
+	}
+	
+	Time getElapsedTime() const
+	{
+		return Time(sfClock_getElapsedTime(sfPtr));
+	}
+	
+	Time restart()
+	{
+		return Time(sfClock_restart(sfPtr));
+	}
+	
+	Clock dup() const
+	{
+		return new Clock(sfClock_copy(sfPtr));
+	}
+	
+}
+
+
+private extern(C):
+
+struct sfClock;
+
+sfClock* sfClock_create();
+sfClock* sfClock_copy(const(sfClock*) clock);
+void sfClock_destroy(sfClock* clock);
+long sfClock_getElapsedTime(const(sfClock*) clock);
+long sfClock_restart(sfClock* clock);
+
