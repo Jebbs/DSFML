@@ -140,11 +140,11 @@ struct Time
 	{
 		static if (op == "+")
 		{
-			return asMicroseconds(InternalsfTime.microseconds + rhs.InternalsfTime.microseconds);
+			return microseconds(InternalsfTime.microseconds + rhs.InternalsfTime.microseconds);
 		}
 		static if(op == "-")
 		{
-			return asMicroseconds(InternalsfTime.microseconds - rhs.InternalsfTime.microseconds);
+			return microseconds(InternalsfTime.microseconds - rhs.InternalsfTime.microseconds);
 		}
 	}
 
