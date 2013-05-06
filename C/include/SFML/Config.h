@@ -25,13 +25,13 @@
 #ifndef SFML_CONFIG_H
 #define SFML_CONFIG_H
 
-
-////////////////////////////////////////////////////////////
-// Define the CSFML version
-////////////////////////////////////////////////////////////
-#define CSFML_VERSION_MAJOR 2
-#define CSFML_VERSION_MINOR 0
-
+//Check to make sure the compiler is not the MS compiler, which does not
+//have a version of stdint.h but instead defines its own fixed sized types.
+#if defined(_MSC_VER)
+//do nothing
+#else
+    #include <stdint.h>
+#endif
 
 ////////////////////////////////////////////////////////////
 // Identify the operating system
@@ -39,22 +39,22 @@
 #if defined(_WIN32) || defined(__WIN32__)
 
     // Windows
-    #define CSFML_SYSTEM_WINDOWS
+    #define DSFML_SYSTEM_WINDOWS
 
 #elif defined(linux) || defined(__linux)
 
     // Linux
-    #define CSFML_SYSTEM_LINUX
+    #define DSFML_SYSTEM_LINUX
 
 #elif defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh)
 
     // MacOS
-    #define CSFML_SYSTEM_MACOS
+    #define DSFML_SYSTEM_MACOS
 
 #elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
 
     // FreeBSD
-    #define CSFML_SYSTEM_FREEBSD
+    #define DSFML_SYSTEM_FREEBSD
 
 #else
 
@@ -67,11 +67,10 @@
 ////////////////////////////////////////////////////////////
 // Define helpers to create portable import / export macros for each module
 ////////////////////////////////////////////////////////////
-#if defined(CSFML_SYSTEM_WINDOWS)
+#if defined(DSFML_SYSTEM_WINDOWS)
 
     // Windows compilers need specific (and different) keywords for export and import
-    #define CSFML_API_EXPORT extern "C" __declspec(dllexport)
-    #define CSFML_API_IMPORT extern __declspec(dllimport)
+    #define DSFML_API_EXPORT extern "C" __declspec(dllexport)
 
     // For Visual C++ compilers, we also need to turn off this annoying C4251 warning
     #ifdef _MSC_VER
@@ -86,14 +85,12 @@
 
         // GCC 4 has special keywords for showing/hidding symbols,
         // the same keyword is used for both importing and exporting
-        #define CSFML_API_EXPORT extern "C" __attribute__ ((__visibility__ ("default")))
-        #define CSFML_API_IMPORT extern __attribute__ ((__visibility__ ("default")))
+        #define DSFML_API_EXPORT extern "C" __attribute__ ((__visibility__ ("default")))
 
     #else
 
         // GCC < 4 has no mechanism to explicitely hide symbols, everything's exported
-        #define CSFML_API_EXPORT extern "C"
-        #define CSFML_API_IMPORT extern
+        #define DSFML_API_EXPORT extern "C"
 
     #endif
 
@@ -101,41 +98,71 @@
 
 
 ////////////////////////////////////////////////////////////
-// Define a portable boolean type
+// Define a boolean that is compatible with D
 ////////////////////////////////////////////////////////////
-typedef int sfBool;
-#define sfFalse 0
-#define sfTrue  1
+#if defined(_MSC_VER)
+    typedef unsigned __int8 DBool;
+#else
+    typedef uint8_t DBool;
+#endif
+#define DFalse 0
+#define DTrue  1
 
 
 ////////////////////////////////////////////////////////////
 // Define portable fixed-size types
 ////////////////////////////////////////////////////////////
 
-// All "common" platforms use the same size for char, short and int
-// (basically there are 3 types for 3 sizes, so no other match is possible),
-// we can use them without doing any kind of check
+// D requires everything to be a fixed size regardless of compiler
+// and system. This section creates types that are guarenteed to be
+// compatible with D's types.
+
 
 // 8 bits integer types
-typedef signed   char sfInt8;
-typedef unsigned char sfUint8;
+#if defined(_MSC_VER)
+    typedef signed   __int8 DByte;
+    typedef unsigned __int8 DUbyte;
+#else
+    typedef int8_t  DByte;
+    typedef uint8_t DUbyte;
+#endif
+
 
 // 16 bits integer types
-typedef signed   short sfInt16;
-typedef unsigned short sfUint16;
+#if defined(_MSC_VER)
+    typedef signed   __int16 DShort;
+    typedef unsigned __int16 DUshort;
+#else
+    typedef int16_t  DShort;
+    typedef uint16_t DUshort;
+#endif
 
 // 32 bits integer types
-typedef signed   int sfInt32;
-typedef unsigned int sfUint32;
+#if defined(_MSC_VER)
+    typedef signed   __int32 DInt;
+    typedef unsigned __int32 DUint;
+#else
+    typedef int8_t  DInt;
+    typedef uint8_t DUint;
+#endif
 
 // 64 bits integer types
 #if defined(_MSC_VER)
-    typedef signed   __int64 sfInt64;
-    typedef unsigned __int64 sfUint64;
+    typedef signed   __int64 DLong;
+    typedef unsigned __int64 DUlong;
 #else
-    typedef signed   long long sfInt64;
-    typedef unsigned long long sfUint64;
+    typedef int64_t DLong;
+    typedef uint64_t DUlong;
 #endif
+
+// 32 Bit wide character(dchar)
+#if defined(_MSC_VER)
+    typedef unsigned __int32 DChar;
+#else
+    typedef uint32_t DChar;
+#endif
+
+
 
 
 #endif // SFML_CONFIG_H

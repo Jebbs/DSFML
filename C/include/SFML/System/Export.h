@@ -36,7 +36,7 @@
 ////////////////////////////////////////////////////////////
 
 
-    #define CSFML_SYSTEM_API CSFML_API_EXPORT
+    #define DSFML_SYSTEM_API DSFML_API_EXPORT
 
 
 

@@ -54,7 +54,7 @@ void sfClock_destroy(sfClock* clock)
 
 
 ////////////////////////////////////////////////////////////
-sfInt64 sfClock_getElapsedTime(const sfClock* clock)
+DLong sfClock_getElapsedTime(const sfClock* clock)
 {
     CSFML_CHECK_RETURN(clock, 0);
 
@@ -64,7 +64,7 @@ sfInt64 sfClock_getElapsedTime(const sfClock* clock)
 
 
 ////////////////////////////////////////////////////////////
-sfInt64 sfClock_restart(sfClock* clock)
+DLong sfClock_restart(sfClock* clock)
 {
     CSFML_CHECK_RETURN(clock, 0);
 
