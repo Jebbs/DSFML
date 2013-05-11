@@ -1,4 +1,4 @@
-
+#DSFML Main Cmake List
 cmake_minimum_required(VERSION 2.8)
 
 # set a default build type if none was provided

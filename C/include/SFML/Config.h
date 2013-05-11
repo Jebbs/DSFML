@@ -25,13 +25,7 @@
 #ifndef SFML_CONFIG_H
 #define SFML_CONFIG_H
 
-//Check to make sure the compiler is not the MS compiler, which does not
-//have a version of stdint.h but instead defines its own fixed sized types.
-#if defined(_MSC_VER)
-//do nothing
-#else
-    #include <stdint.h>
-#endif
+
 
 ////////////////////////////////////////////////////////////
 // Identify the operating system
@@ -97,72 +91,57 @@
 #endif
 
 
-////////////////////////////////////////////////////////////
-// Define a boolean that is compatible with D
-////////////////////////////////////////////////////////////
-#if defined(_MSC_VER)
-    typedef unsigned __int8 DBool;
-#else
-    typedef uint8_t DBool;
-#endif
-#define DFalse 0
-#define DTrue  1
+
 
 
 ////////////////////////////////////////////////////////////
 // Define portable fixed-size types
 ////////////////////////////////////////////////////////////
 
-// D requires everything to be a fixed size regardless of compiler
-// and system. This section creates types that are guarenteed to be
-// compatible with D's types.
+// Redefine D's types using the same method SFML does.
 
 
 // 8 bits integer types
-#if defined(_MSC_VER)
-    typedef signed   __int8 DByte;
-    typedef unsigned __int8 DUbyte;
-#else
-    typedef int8_t  DByte;
-    typedef uint8_t DUbyte;
-#endif
+typedef signed char  DByte;
+typedef unsigned char DUbyte;
+
 
 
 // 16 bits integer types
-#if defined(_MSC_VER)
-    typedef signed   __int16 DShort;
-    typedef unsigned __int16 DUshort;
-#else
-    typedef int16_t  DShort;
-    typedef uint16_t DUshort;
-#endif
+typedef signed short  DShort;
+typedef unsigned short DUshort;
+
 
 // 32 bits integer types
-#if defined(_MSC_VER)
-    typedef signed   __int32 DInt;
-    typedef unsigned __int32 DUint;
-#else
-    typedef int8_t  DInt;
-    typedef uint8_t DUint;
-#endif
+typedef signed int  DInt;
+typedef unsigned int DUint;
+
 
 // 64 bits integer types
 #if defined(_MSC_VER)
     typedef signed   __int64 DLong;
     typedef unsigned __int64 DUlong;
 #else
-    typedef int64_t DLong;
-    typedef uint64_t DUlong;
+    typedef signed long long DLong;
+    typedef unsigned long long DUlong;
 #endif
 
 // 32 Bit wide character(dchar)
 #if defined(_MSC_VER)
     typedef unsigned __int32 DChar;
 #else
-    typedef uint32_t DChar;
+    typedef DUint DChar;
 #endif
 
 
+////////////////////////////////////////////////////////////
+// Define a boolean that is compatible with D
+////////////////////////////////////////////////////////////
+
+typedef DUbyte DBool;
+
+#define DFalse 0
+#define DTrue  1
 
 
 #endif // SFML_CONFIG_H
