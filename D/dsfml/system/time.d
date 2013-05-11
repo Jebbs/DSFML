@@ -86,7 +86,7 @@ struct Time
 		{
 			return 1;
 		}
-		
+
 		
 	}
 	
@@ -102,11 +102,11 @@ struct Time
 	{
 		static if (op == "+")
 		{
-			return asMicroseconds(m_microseconds + rhs.m_microseconds);
+			return microseconds(m_microseconds + rhs.m_microseconds);
 		}
 		static if(op == "-")
 		{
-			return asMicroseconds(m_microseconds - rhs.m_microseconds);
+			return microseconds(m_microseconds - rhs.m_microseconds);
 		}
 	}
 	
