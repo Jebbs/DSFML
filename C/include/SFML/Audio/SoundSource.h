@@ -1,6 +1,6 @@
 
-#ifndef DSFML_SOUNDSTREAM_H
-#define DSFML_SOUNDSTREAM_H
+#ifndef DSFML_SOUNDSOURCE_H
+#define DSFML_SOUNDSOURCE_H
 
 #include <SFML/Audio/AL/al.h>
 #include <SFML/Audio/AL/alc.h>
@@ -10,40 +10,40 @@
 
 
 
-//Define the OpenAL functions used by SFML, but wrapped up nicely.
+//Define the audio methods used within sf::SoundSource
 
-DSFML_AUDIO_API void ensureALInit();
+DSFML_AUDIO_API void sfSoundSource_ensureALInit();
 
-DSFML_AUDIO_API void SoundSourceInitialize(DUint* sourceID);
+DSFML_AUDIO_API void sfSoundSource_initialize(DUint* sourceID);
 
-DSFML_AUDIO_API void SoundSourceSetPitch(DUint sourceID, float pitch);
+DSFML_AUDIO_API void sfSoundSource_setPitch(DUint sourceID, float pitch);
 
-DSFML_AUDIO_API void SoundSourceSetVolume(DUint sourceID, float volume);
+DSFML_AUDIO_API void sfSoundSource_setVolume(DUint sourceID, float volume);
 
-DSFML_AUDIO_API void SoundSourceSetPosition(DUint sourceID, float x, float y, float z);
+DSFML_AUDIO_API void sfSoundSource_setPosition(DUint sourceID, float x, float y, float z);
 
-DSFML_AUDIO_API void SoundSourceSetRelativeToListener(DUint sourceID,DBool relative);
+DSFML_AUDIO_API void sfSoundSource_setRelativeToListener(DUint sourceID,DBool relative);
 
-DSFML_AUDIO_API void SoundSourceSetMinDistance(DUint sourceID, float distance);
+DSFML_AUDIO_API void sfSoundSource_setMinDistance(DUint sourceID, float distance);
 
-DSFML_AUDIO_API void SoundSourceSetAttenuation(DUint sourceID, float attenuation);
+DSFML_AUDIO_API void sfSoundSource_setAttenuation(DUint sourceID, float attenuation);
 
 
 
-DSFML_AUDIO_API float SoundSourceGetPitch(DUint sourceID);
+DSFML_AUDIO_API float sfSoundSource_getPitch(DUint sourceID);
 
-DSFML_AUDIO_API float SoundSourceGetVolume(DUint sourceID);
+DSFML_AUDIO_API float sfSoundSource_getVolume(DUint sourceID);
 
-DSFML_AUDIO_API void SoundSourceGetPosition(DUint sourceID, float* x, float* y, float* z);
+DSFML_AUDIO_API void sfSoundSource_getPosition(DUint sourceID, float* x, float* y, float* z);
 
-DSFML_AUDIO_API DBool SoundSourceIsRelativeToListener(DUint sourceID);
+DSFML_AUDIO_API DBool sfSoundSource_isRelativeToListener(DUint sourceID);
 
-DSFML_AUDIO_API float SoundSourceGetMinDistance(DUint sourceID);
+DSFML_AUDIO_API float sfSoundSource_getMinDistance(DUint sourceID);
 
-DSFML_AUDIO_API float SoundSourceGetAttenuation(DUint sourceID);
+DSFML_AUDIO_API float sfSoundSource_getAttenuation(DUint sourceID);
 
-DSFML_AUDIO_API int SoundSourceGetStatus(DUint sourceID);
+DSFML_AUDIO_API DInt sfSoundSource_getStatus(DUint sourceID);
 
-DSFML_AUDIO_API void SoundSourceDestroy(DUint* sourceID);
+DSFML_AUDIO_API void sfSoundSource_destroy(DUint* sourceID);
 
-#endif // DSFML_SOUNDSTREAM_H
+#endif // DSFML_SOUNDSOURCE_H

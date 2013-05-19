@@ -26,8 +26,6 @@
 
 
 typedef struct sfClock sfClock;
-typedef struct sfMutex sfMutex;
-typedef struct sfThread sfThread;
 
 
 #endif // SFML_SYSTEM_TYPES_H

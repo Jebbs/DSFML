@@ -43,7 +43,7 @@ class Thread
 
 	this(void delegate() dg, size_t sz = 0)
 	{
-		InternalThread = new core.Thread(dg, sz);
+		InternalThread = new core.Thread(dg, sz);	
 	}
 
 	void launch()

@@ -5,9 +5,15 @@ set(SRCROOT ${CMAKE_SOURCE_DIR}/src/SFML/Audio)
 
 # all source files
 set(SRC
+ ${SRCROOT}/ALCheck.cpp
+ ${SRCROOT}/ALCheck.hpp
+ ${SRCROOT}/AudioDevice.cpp
+ ${SRCROOT}/AudioDevice.hpp
  ${INCROOT}/Export.h
- ${SRCROOT}/SOundSource.cpp
+ ${SRCROOT}/SoundSource.cpp
  ${INCROOT}/SoundSource.h
+ ${SRCROOT}/SoundStream.cpp
+ ${INCROOT}/SoundStream.h
  
 )
 

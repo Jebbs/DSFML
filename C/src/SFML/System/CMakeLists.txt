@@ -9,6 +9,9 @@ set(SRC
     ${SRCROOT}/ClockStruct.h
     ${INCROOT}/Clock.h
     ${INCROOT}/Types.h
+    ${SRCROOT}/Err.cpp
+    ${INCROOT}/Err.h
+    
     
 )
 

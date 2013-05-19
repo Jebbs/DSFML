@@ -40,3 +40,13 @@ public
 	import dsfml.system.vector2;
 	import dsfml.system.vector3;
 }
+
+//Redirects sf::err() to nothing so that all error output can be taken care of using D's stderr output stream.
+static this()
+{
+	sfErr_directToNothing();
+}
+
+private extern(C):
+
+void sfErr_directToNothing();
