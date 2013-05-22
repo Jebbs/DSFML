@@ -14,32 +14,35 @@ class SoundStream:SoundSource
 
 	struct Chunk
 	{
-		const short[] samples;
+		const(short)* samples;
+		size_t sampleCount;
 	}
 
 	~this()
 	{
+		writeln("SoundStream Destroyed");
 		stop();
 	}
 	void play()
 	{
+
 		//check to see if sound parameters ave been set
 		if(m_format == 0)
 		{
 			stderr.writeln("Faile to play audio stream: sound parameters have not been initialized (call Initialization fisrt)");
 			return;
 		}
-
+		
 		//If the sound is already playing(probably paused), just resume it.
 		if(m_isStreaming)
 		{
 			sfSoundStream_alSourcePlay(m_source);
 			return;
 		}
-
+		
 		//Move to the beginning
 		onSeek(Time.Zero);
-
+		
 		//Start updating the stream in a separate thread to avoid blocking the application
 		m_samplesProcessed = 0;
 		m_isStreaming = true;
@@ -54,7 +57,12 @@ class SoundStream:SoundSource
 	void stop()
 	{
 		m_isStreaming = false;
-		m_thread.join(true);
+
+		//check to make sure the thread is already running before trying to join with main thread.
+		if(m_thread.isRunning())
+		{
+			m_thread.join(true);
+		}
 	}
 
 	@property
@@ -134,6 +142,7 @@ class SoundStream:SoundSource
 		m_format = 0;
 		m_loop = false;
 		m_samplesProcessed = 0;
+
 	}
 
 	void initialize(uint theChannelCount, uint theSampleRate)
@@ -277,7 +286,7 @@ class SoundStream:SoundSource
 				onSeek(Time.Zero);
 
 				//If we previously had no data, try to fill the buffer once again
-				if(data.samples.length == 0)
+				if(data.sampleCount == 0)
 				{
 					return fillAndPushBuffer(bufferNum);
 				}
@@ -290,12 +299,12 @@ class SoundStream:SoundSource
 		}//on get data
 
 		//fill the buffer if some data was returned
-		if(data.samples.length>0)
+		if(data.sampleCount>0)
 		{
 			uint buffer = m_buffers[bufferNum];
 
 			//fill the buffer
-			sfSoundStream_fillBuffer(buffer, data.samples.ptr,data.samples.length,m_format,m_sampleRate);
+			sfSoundStream_fillBuffer(buffer, data.samples,data.sampleCount,m_format,m_sampleRate);
 
 			//push it into the queue
 			sfSoundStream_queueBuffer(m_source, &buffer);

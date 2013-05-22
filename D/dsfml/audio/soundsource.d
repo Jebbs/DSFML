@@ -12,6 +12,8 @@ class SoundSource
 		Playing
 	}
 
+
+
 	this(const ref SoundSource copy)
 	{
 		//Copy Constructor
