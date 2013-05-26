@@ -1587,7 +1587,7 @@ class Text:Drawable
 	{
 		void String(string newString)
 		{
-			string_ = cast(const(void)*)toStringz(newString);
+			string_ = toStringz(newString);
 			sfText_setString(sfPtr, cast(immutable(char)*)string_);
 		}
 		
@@ -1601,7 +1601,7 @@ class Text:Drawable
 	{
 		void unicodeString(dstring newUnicodeString)
 		{
-			string_ = cast(const(void)*)toUint32Ptr(newUnicodeString);
+			string_ = toUint32Ptr(newUnicodeString);
 			sfText_setUnicodeString(sfPtr, cast(const(uint)*)string_);
 		}
 		
