@@ -1474,9 +1474,11 @@ class Text:Drawable
 	}
 	
 	package sfText* sfPtr;
+	private Font font_;
+	private const(void)* string_;
 	
 	
-	this(string String, const Font font, uint characterSize=30)
+	this(string String, const(Font) font, uint characterSize=30)
 	{
 		
 		
@@ -1493,6 +1495,8 @@ class Text:Drawable
 		//set character size
 		
 		sfText_setCharacterSize(sfPtr, characterSize);
+		
+		font_ = cast(Font)font;
 		
 	}
 	
@@ -1581,14 +1585,15 @@ class Text:Drawable
 	
 	@property
 	{
-		void String(string String)
+		void String(string newString)
 		{
-			sfText_setString(sfPtr, toStringz(String));
+			string_ = toStringz(newString);
+			sfText_setString(sfPtr, cast(immutable(char)*)string_);
 		}
 		
 		string String()
 		{			
-			return text(sfText_getString(sfPtr));			
+			return text(cast(immutable(char)*)string_);			
 		}
 	}
 	
@@ -1596,21 +1601,13 @@ class Text:Drawable
 	{
 		void unicodeString(dstring newUnicodeString)
 		{
-			sfText_setUnicodeString(sfPtr, toUint32Ptr(newUnicodeString));
+			string_ = toUint32Ptr(newUnicodeString);
+			sfText_setUnicodeString(sfPtr, cast(const(uint)*)string_);
 		}
 		
 		dstring unicodeString()
 		{
-			immutable(dchar)* temp = cast(immutable(dchar)*)sfText_getUnicodeString(sfPtr);
-			
-			int length = 0;
-			
-			while (temp[length] != '\0')
-			{
-				length++;
-			}
-			
-			return temp[0..length];
+			return dtext(cast(immutable(dchar)*)string_);
 		}
 	}
 	
@@ -1619,12 +1616,12 @@ class Text:Drawable
 	{
 		void font(const(Font) newFont)
 		{
+			font_ = cast(Font)newFont;
 			sfText_setFont(sfPtr, newFont.sfPtr);
 		}
 		const(Font) font()
 		{
-			//will be fixed in Revision 2
-			return new Font(sfFont_copy(sfText_getFont(sfPtr)));
+			return cast(const(Font))font_;
 		}
 	}
 	
