@@ -1474,9 +1474,10 @@ class Text:Drawable
 	}
 	
 	package sfText* sfPtr;
+	private Font font_;
 	
 	
-	this(string String, const Font font, uint characterSize=30)
+	this(string String,  Font font, uint characterSize=30)
 	{
 		
 		
@@ -1493,6 +1494,8 @@ class Text:Drawable
 		//set character size
 		
 		sfText_setCharacterSize(sfPtr, characterSize);
+		
+		font_ = font;
 		
 	}
 	
@@ -1617,8 +1620,9 @@ class Text:Drawable
 	
 	@property
 	{
-		void font(const(Font) newFont)
+		void font(Font newFont)
 		{
+			font_ = newFont;
 			sfText_setFont(sfPtr, newFont.sfPtr);
 		}
 		const(Font) font()
