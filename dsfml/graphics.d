@@ -2075,7 +2075,7 @@ struct Rect(T)
 	}
 	
 	bool intersects(E,O)(Rect!(E) rectangle, out Rect!(O) intersection)
-	if(isNumeric!(E,O))
+	if(isNumeric!(E) && isNumeric!(O))
 	{
 		O interLeft = intersection.max(left, rectangle.left);
 		O interTop = intersection.max(top, rectangle.top);
