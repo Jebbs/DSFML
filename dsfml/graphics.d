@@ -1474,6 +1474,8 @@ class Text:Drawable
 	}
 	
 	package sfText* sfPtr;
+	package immutable(char)* string_;
+	package immutable(uint)* ustring_;
 	
 	
 	this(string String, const Font font, uint characterSize=30)
@@ -1583,7 +1585,8 @@ class Text:Drawable
 	{
 		void String(string String)
 		{
-			sfText_setString(sfPtr, toStringz(String));
+			string_ = toStringz(String);
+			sfText_setString(sfPtr, string_);
 		}
 		
 		string String()
@@ -1596,7 +1599,8 @@ class Text:Drawable
 	{
 		void unicodeString(dstring newUnicodeString)
 		{
-			sfText_setUnicodeString(sfPtr, toUint32Ptr(newUnicodeString));
+			ustring_ = toUint32Ptr(newUnicodeString);
+			sfText_setUnicodeString(sfPtr, ustring_);
 		}
 		
 		dstring unicodeString()
