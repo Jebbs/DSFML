@@ -1366,21 +1366,6 @@ class Sprite:Drawable
 	}
 	
 	
-	void move(Vector2f offset)
-	{
-		sfSprite_move(sfPtr, offset.tosfVector2f());
-	}
-	
-	void rotate(float angle)
-	{
-		sfSprite_rotate(sfPtr, angle);
-	}
-	
-	void scale(Vector2f factor)
-	{
-		sfSprite_scale(sfPtr, factor.tosfVector2f());
-	}
-	
 	Transform getTransform()
 	{
 		return Transform(sfSprite_getTransform(sfPtr));
@@ -2761,9 +2746,9 @@ extern(C)
 	float sfSprite_getRotation(const(sfSprite)* sprite);
 	sfVector2f sfSprite_getScale(const(sfSprite)* sprite);
 	sfVector2f sfSprite_getOrigin(const(sfSprite)* sprite);
-	void sfSprite_move(sfSprite* sprite,sfVector2f offset);
-	void sfSprite_rotate(sfSprite* sprite,float angle);
-	void sfSprite_scale(sfSprite* sprite,sfVector2f factors);
+	//void sfSprite_move(sfSprite* sprite,sfVector2f offset);
+	//void sfSprite_rotate(sfSprite* sprite,float angle);
+	//void sfSprite_scale(sfSprite* sprite,sfVector2f factors);
 	sfTransform sfSprite_getTransform(const(sfSprite)* sprite);
 	sfTransform sfSprite_getInverseTransform(const(sfSprite)* sprite);
 	void sfSprite_setTexture(sfSprite* sprite,const(sfTexture)* texture,sfBool resetRect);
