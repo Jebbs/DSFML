@@ -728,7 +728,7 @@ class RenderWindow:RenderTarget
 	{
 		void position(Vector2i newPosition)
 		{
-			sfRenderWindow_setPosition(sfPtr,newPosition.tosfVector2i);
+			sfRenderWindow_setPosition(sfPtr,newPosition.tosfVector2i());
 		}
 		
 		Vector2i position()
@@ -742,7 +742,7 @@ class RenderWindow:RenderTarget
 	{
 		void size(Vector2u newSize)
 		{
-			sfRenderWindow_setSize(sfPtr, newSize.tosfVector2u);
+			sfRenderWindow_setSize(sfPtr, newSize.tosfVector2u());
 		}
 		Vector2u size()
 		{
@@ -969,12 +969,12 @@ class Shader
 	
 	void setParameter(string name, Vector2f vector)
 	{
-		sfShader_setVector2Parameter(sfPtr, toStringz(name), vector.tosfVector2f);
+		sfShader_setVector2Parameter(sfPtr, toStringz(name), vector.tosfVector2f());
 	}
 	
 	void setParameter(string name, Vector3f vector)
 	{
-		sfShader_setVector3Parameter(sfPtr, toStringz(name), vector.tosfVector3f);
+		sfShader_setVector3Parameter(sfPtr, toStringz(name), vector.tosfVector3f());
 	}
 	
 	void setParameter(string name, Color color)
@@ -1406,7 +1406,7 @@ class Sprite:Drawable
 	{
 		void textureRect(IntRect rect)
 		{
-			sfSprite_setTextureRect(sfPtr, rect.tosfIntRect);
+			sfSprite_setTextureRect(sfPtr, rect.tosfIntRect());
 		}
 		
 		IntRect textureRect()
@@ -1587,7 +1587,7 @@ class Text:Drawable
 	{
 		void String(string newString)
 		{
-			string_ = toStringz(newString);
+			string_ = cast(const(void)*)toStringz(newString);
 			sfText_setString(sfPtr, cast(immutable(char)*)string_);
 		}
 		
@@ -1919,7 +1919,7 @@ class View
 	{
 		void center(Vector2f newCenter)
 		{
-			sfView_setCenter(sfPtr, newCenter.tosfVector2f);
+			sfView_setCenter(sfPtr, newCenter.tosfVector2f());
 		}
 		
 		Vector2f center()

@@ -127,7 +127,7 @@ class Window
 	{
 		void position(Vector2i newPosition)
 		{
-			sfWindow_setPosition(sfPtr,newPosition.tosfVector2i);
+			sfWindow_setPosition(sfPtr,newPosition.tosfVector2i());
 		}
 		
 		Vector2i position()
@@ -140,7 +140,7 @@ class Window
 	{
 		void size(Vector2u newSize)
 		{
-			sfWindow_setSize(sfPtr, newSize.tosfVector2u);
+			sfWindow_setSize(sfPtr, newSize.tosfVector2u());
 		}
 		Vector2u size()
 		{
@@ -413,12 +413,12 @@ class Mouse
 	
 	static void setPosition(Vector2i position)
 	{
-		sfMouse_setPosition(position.tosfVector2i,null);
+		sfMouse_setPosition(position.tosfVector2i(),null);
 	}
 	
 	static void setPosition(Vector2i position, const(Window) relativeTo)
 	{
-		sfMouse_setPosition(position.tosfVector2i, relativeTo.sfPtr);
+		sfMouse_setPosition(position.tosfVector2i(), relativeTo.sfPtr);
 	}
 }
 
