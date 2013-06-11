@@ -392,7 +392,7 @@ class Http
 
 		uint getMinorHttpVersion()
 		{
-			return sfHttpResponse_getMinorVersion(sfPtrResponse);;
+			return sfHttpResponse_getMinorVersion(sfPtrResponse);
 		}
 
 		string getBody()
