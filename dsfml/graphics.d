@@ -1587,7 +1587,7 @@ class Text:Drawable
 	{
 		void String(string newString)
 		{
-			string_ = cast(const(void)*)toStringz(newString);
+			string_ = toStringz(newString);
 			sfText_setString(sfPtr, cast(immutable(char)*)string_);
 		}
 		
