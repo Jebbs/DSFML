@@ -13,6 +13,15 @@ You can use DSFML in one of two ways, both of which are simple. You can either c
 The version in this repo should be up to date with the latest SFML and CSFML versions. If you happen to see something I missed please open an issue in the tracker! The .dll's and .lib's for building in Windows are included in the repo for download and will always be in sync with the code presented here.
 
 
+
+Extensions
+===
+
+E.S. Quinn has started a repository for various extensions to DSFML including his own binding for sfMod.
+You can find it at <https://github.com/aubade/dsfml-contrib>
+
+
+
 If problems are encountered!
 ===
 
