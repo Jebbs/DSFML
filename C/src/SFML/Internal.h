@@ -22,6 +22,8 @@
 //
 ////////////////////////////////////////////////////////////
 
+//TODO: Remove this file and perform all validity checks in D code
+
 #ifndef SFML_INTERNAL_H
 #define SFML_INTERNAL_H
 

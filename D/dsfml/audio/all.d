@@ -28,17 +28,16 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-#ifndef DSFML_AUDIO_EXPORT_H
-#define DSFML_AUDIO_EXPORT_H
+module dsfml.audio.all;
 
-
-//Headers
-#include <SFML/Config.h>
-
-
-
-//Define export macro
-#define DSFML_AUDIO_API DSFML_API_EXPORT
-
-
-#endif // DSFML_AUDIO_EXPORT_H
+public
+{
+	import dsfml.audio.listener;
+	import dsfml.audio.music;
+	import dsfml.audio.sound;
+	import dsfml.audio.soundbuffer;
+	import dsfml.audio.soundbufferrecorder;
+	import dsfml.audio.soundrecorder;
+	import dsfml.audio.soundsource;
+	import dsfml.audio.soundstream;
+}

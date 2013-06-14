@@ -31,8 +31,8 @@
 #include <SFML/Config.hpp>
 #include <iostream>
 #include <string>
-#include <SFML/Audio/AL/al.h>
-#include <SFML/Audio/AL/alc.h>
+#include <al.h>
+#include <alc.h>
 
 
 namespace sf

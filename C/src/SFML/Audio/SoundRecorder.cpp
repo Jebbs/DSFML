@@ -28,17 +28,53 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-#ifndef DSFML_AUDIO_EXPORT_H
-#define DSFML_AUDIO_EXPORT_H
-
-
 //Headers
-#include <SFML/Config.h>
+#include <SFML/Audio/SoundRecorder.h>
+#include <SFML/Audio/SoundRecorderStruct.h>
+#include <SFML/Audio/InternalSoundRecorder.hpp>
 
 
+sfSoundRecorder* sfSoundRecorder_create()
+{
+    return new sfSoundRecorder();
+}
 
-//Define export macro
-#define DSFML_AUDIO_API DSFML_API_EXPORT
+void sfSoundRecorder_destroy(sfSoundRecorder* recorder)
+{
+    delete recorder;
+}
 
+DBool sfSoundRecorder_initialize(sfSoundRecorder* recorder,DUint sampleRate)
+{
+    return recorder->This.initialize(sampleRate);
+}
 
-#endif // DSFML_AUDIO_EXPORT_H
+void sfSoundRecorder_startCapture(sfSoundRecorder* recorder)
+{
+    recorder->This.startCapture();
+}
+
+DInt sfSoundRecorder_getNumAvailableSamples(sfSoundRecorder* recorder)
+{
+    recorder->This.getSampleNumber();
+}
+
+DShort* sfSoundRecorder_getSamplePointer(sfSoundRecorder* recorder, DInt numSamples)
+{
+    recorder->This.getSamplePointer(numSamples);
+}
+
+void sfSoundRecorder_stopCapture(sfSoundRecorder* recorder)
+{
+    recorder->This.stopCapture();
+}
+
+void sfSoundRecorder_closeDevice(sfSoundRecorder* recorder)
+{
+    recorder->This.closeDevice();
+}
+
+DBool sfSoundRecorder_isAvailable()
+{
+    return InternalSoundRecorder::isAvailable();
+}

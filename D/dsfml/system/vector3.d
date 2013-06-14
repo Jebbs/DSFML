@@ -1,5 +1,4 @@
 /*
-
 DSFML - The Simple and Fast Multimedia Library for D
 
 Copyright (c) <2013> <Jeremy DeHaan>
@@ -18,12 +17,15 @@ If you use this software in a product, an acknowledgment in the product document
 3. This notice may not be removed or altered from any source distribution
 
 
+***All code is based on code written by Laurent Gomila***
+
 
 External Libraries Used:
 
 SFML - The Simple and Fast Multimedia Library
 Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
+All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
 module dsfml.system.vector3;
@@ -56,15 +58,15 @@ struct Vector3(T)
 	
 	// Add/Subtract between two vector3's
 	Vector3!(T) opBinary(string op,E)(Vector3!(E) otherVector) const
-	if(isNumeric!(E) && ((s == "+") || (s == "-")))
+	if(isNumeric!(E) && ((op == "+") || (op == "-")))
 	{
 		static if (op == "+")
 		{
-			return Vector3!(T)(cast(T)(x+otherVector.x),cast(T)(y+otherVector.y),cast(T)(z + otherVctor.z));
+			return Vector3!(T)(cast(T)(x+otherVector.x),cast(T)(y+otherVector.y),cast(T)(z + otherVector.z));
 		}
 		static if(op == "-")
 		{
-			return Vector2!(T)(cast(T)(x-otherVector.x),cast(T)(y-otherVector.y),cast(T)(z - otherVctor.z));
+			return Vector2!(T)(cast(T)(x-otherVector.x),cast(T)(y-otherVector.y),cast(T)(z - otherVector.z));
 		}
 		
 	}
@@ -73,7 +75,7 @@ struct Vector3(T)
 	
 	// Multiply/Divide a Vector3 with a numaric value
 	Vector3!(T) opBinary(string op,E)(E num) const
-	if(isNumeric!(E) && ((s == "*") || (s == "/")))
+	if(isNumeric!(E) && ((op == "*") || (op == "/")))
 	{
 		static if (op == "*")
 		{
@@ -89,7 +91,7 @@ struct Vector3(T)
 	
 	// Assign Add/Subtract with another vector3
 	ref Vector3!(T) opOpAssign(string op, E)(Vector3!(E) otherVector)
-	if(isNumeric!(E) && ((s == "+") || (s == "-")))
+	if(isNumeric!(E) && ((op == "+") || (op == "-")))
 	{
 		static if(op == "+")
 		{
@@ -109,7 +111,7 @@ struct Vector3(T)
 	
 	//Assign Multiply/Divide a Vector3 with a numaric value
 	ref Vector3!(T) opOpAssign(string op)(T num)
-	if(isNumeric!(E) && ((s == "*") || (s == "/")))
+	if(isNumeric!(E) && ((op == "*") || (op == "/")))
 	{
 		static if(op == "*")
 		{

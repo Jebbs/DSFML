@@ -16,10 +16,16 @@ set(SRC
  ${INCROOT}/Sound.h
  ${SRCROOT}/SoundBuffer.cpp
  ${INCROOT}/SoundBuffer.h
+ ${SRCROOT}/sfSoundFile.cpp
+ ${INCROOT}/sfSoundFile.h
+ ${SRCROOT}/sfSoundFile.cpp
  ${SRCROOT}/SoundFile.cpp
  ${SRCROOT}/SoundFile.hpp
- ${INCROOT}/SoundFile.h
+ ${SRCROOT}/InternalSoundRecorder.cpp
+ ${INCROOT}/InternalSoundRecorder.hpp
  ${SRCROOT}/SoundFileStruct.h
+ ${SRCROOT}/SoundRecorder.cpp
+ ${INCROOT}/SoundRecorder.h
  ${SRCROOT}/SoundSource.cpp
  ${INCROOT}/SoundSource.h
  ${SRCROOT}/SoundStream.cpp
@@ -28,6 +34,7 @@ set(SRC
 )
 
 source_group("" FILES ${SRC})
+
 
 # let CMake know about our additional audio libraries paths (on Windows and OSX)
 if(WINDOWS)
@@ -47,8 +54,7 @@ find_package(Sndfile REQUIRED)
 include_directories(${OPENAL_INCLUDE_DIR} ${SNDFILE_INCLUDE_DIR})
 
 # define the csfml-audio target
-sfml_add_library(dsfml-audio
- 			SOURCES ${SRC}
- 			DEPENDS ${SFML_AUDIO_LIBRARY} ${SFML_SYSTEM_LIBRARY}
-			EXTERNAL_LIBS ${OPENAL_LIBRARY} ${SNDFILE_LIBRARY})
+csfml_add_library(dsfml-audio
+                  SOURCES ${SRC}
+                  DEPENDS ${SFML_AUDIO_LIBRARY} ${SFML_SYSTEM_LIBRARY})
 

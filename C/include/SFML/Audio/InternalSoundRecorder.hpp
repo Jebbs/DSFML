@@ -28,17 +28,42 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-#ifndef DSFML_AUDIO_EXPORT_H
-#define DSFML_AUDIO_EXPORT_H
-
+#ifndef DSFML_INTERNALSOUNDRECORDER_HPP
+#define DSFML_INTERNALSOUNDRECORDER_HPP
 
 //Headers
 #include <SFML/Config.h>
+#include <vector>
+
+//Class for recording sound data to be passed to sfSoundRecorder
+class InternalSoundRecorder
+{
+public:
+    //Initialize the system for recording
+    DBool initialize(DUint sampleRate);
+
+    //Start the capturing of sound data
+    void startCapture();
+
+    //Get the number of samples that have been recorded so far
+    DInt getSampleNumber();
+
+    //Get a pointer to the samples that have been captured
+    DShort* getSamplePointer(DInt numSamples);
+
+    //Stop the capturing of sound data
+    void stopCapture();
+
+    //Close the device so that another sound recorder may use it
+    void closeDevice();
+
+    //Check to see if sound recording is allowed on the system
+    static DBool isAvailable();
+
+private:
+    std::vector<DShort> m_samples;//Vector that stores recorded samples
 
 
+};
 
-//Define export macro
-#define DSFML_AUDIO_API DSFML_API_EXPORT
-
-
-#endif // DSFML_AUDIO_EXPORT_H
+#endif // DSFML_INTERNALSOUNDRECORDER_HPP

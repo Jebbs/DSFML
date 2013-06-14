@@ -2,8 +2,7 @@
 #ifndef DSFML_SOUNDSOURCE_H
 #define DSFML_SOUNDSOURCE_H
 
-#include <SFML/Audio/AL/al.h>
-#include <SFML/Audio/AL/alc.h>
+
 #include <SFML/Audio/ALCheck.hpp>
 #include <SFML/Audio/Export.h>
 #include <SFML/Audio/SoundSource.hpp>

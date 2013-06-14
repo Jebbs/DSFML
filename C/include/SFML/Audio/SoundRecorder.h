@@ -28,17 +28,31 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-#ifndef DSFML_AUDIO_EXPORT_H
-#define DSFML_AUDIO_EXPORT_H
-
+#ifndef DSFML_SOUNDRECORDER_H
+#define DSFML_SOUNDRECORDER_H
 
 //Headers
-#include <SFML/Config.h>
+#include <SFML/Audio/Export.h>
+#include <SFML/Audio/Types.h>
 
 
+DSFML_AUDIO_API sfSoundRecorder* sfSoundRecorder_create();
 
-//Define export macro
-#define DSFML_AUDIO_API DSFML_API_EXPORT
+DSFML_AUDIO_API void sfSoundRecorder_destroy(sfSoundRecorder* recorder);
+
+DSFML_AUDIO_API DBool sfSoundRecorder_initialize(sfSoundRecorder* recorder, DUint sampleRate);
+
+DSFML_AUDIO_API void sfSoundRecorder_startCapture(sfSoundRecorder* recorder);
+
+DSFML_AUDIO_API DInt sfSoundRecorder_getNumAvailableSamples(sfSoundRecorder* recorder);
+
+DSFML_AUDIO_API DShort* sfSoundRecorder_getSamplePointer(sfSoundRecorder* recorder, DInt numSamples);
+
+DSFML_AUDIO_API void sfSoundRecorder_stopCapture(sfSoundRecorder* recorder);
+
+DSFML_AUDIO_API void sfSoundRecorder_closeDevice(sfSoundRecorder* recorder);
+
+DSFML_AUDIO_API DBool sfSoundRecorder_isAvailable();
 
 
-#endif // DSFML_AUDIO_EXPORT_H
+#endif // DSFML_SOUNDRECORDER_H

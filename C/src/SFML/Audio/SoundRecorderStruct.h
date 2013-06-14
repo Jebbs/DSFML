@@ -28,17 +28,15 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-#ifndef DSFML_AUDIO_EXPORT_H
-#define DSFML_AUDIO_EXPORT_H
-
+#ifndef DSFML_SOUNDRECORDER_STRUCT_H
+#define DSFML_SOUNDRECORDER_STRUCT_H
 
 //Headers
-#include <SFML/Config.h>
+#include <SFML/Audio/InternalSoundRecorder.hpp>
 
-
-
-//Define export macro
-#define DSFML_AUDIO_API DSFML_API_EXPORT
-
-
-#endif // DSFML_AUDIO_EXPORT_H
+//Wrapper around an InternalSoundRecorder
+struct sfSoundRecorder
+{
+    InternalSoundRecorder This;
+};
+#endif // DSFML_SOUNDRECORDER_STRUCT_H

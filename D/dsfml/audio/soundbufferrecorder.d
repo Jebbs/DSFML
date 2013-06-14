@@ -28,17 +28,60 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-#ifndef DSFML_AUDIO_EXPORT_H
-#define DSFML_AUDIO_EXPORT_H
+module dsfml.audio.soundbufferrecorder;
+
+import dsfml.audio.soundrecorder;
+import dsfml.audio.soundbuffer;
+
+import std.stdio;
+
+class SoundBufferRecorder:SoundRecorder
+{
+	this()
+	{
+		// Constructor code
+	}
+
+	SoundBuffer getBuffer()
+	{
+		return m_buffer;
+	}
+
+	protected
+	{
+	override bool onStart()
+	{
+		m_samples.length = 0;
+		m_buffer = new SoundBuffer();
+
+		return true;
+	}
+
+	override bool onProcessSamples(ref short[] samples)
+	{
+			writeln(samples.length);
 
 
-//Headers
-#include <SFML/Config.h>
+			m_samples ~= samples;
+				
+
+		return true;
+	}
+
+	override void onStop()
+	{
+		if(m_samples.length >0)
+		{
+			m_buffer.loadFromSamples(m_samples,1,sampleRate);
+		}
+	}
+	}
+
+private:
+	short[] m_samples;
+	SoundBuffer m_buffer;
+
+}
 
 
 
-//Define export macro
-#define DSFML_AUDIO_API DSFML_API_EXPORT
-
-
-#endif // DSFML_AUDIO_EXPORT_H

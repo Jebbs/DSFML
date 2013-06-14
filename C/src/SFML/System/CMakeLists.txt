@@ -1,16 +1,17 @@
 #DSFML System Cmake
+
 set(INCROOT ${CMAKE_SOURCE_DIR}/include/SFML/System)
 set(SRCROOT ${CMAKE_SOURCE_DIR}/src/SFML/System)
 
 # all source files
 set(SRC
-    ${INCROOT}/Export.h
-    ${SRCROOT}/Clock.cpp
-    ${SRCROOT}/ClockStruct.h
-    ${INCROOT}/Clock.h
-    ${INCROOT}/Types.h
-    ${SRCROOT}/Err.cpp
-    ${INCROOT}/Err.h
+ ${INCROOT}/Export.h
+ ${SRCROOT}/Clock.cpp
+ ${INCROOT}/Clock.h
+ ${SRCROOT}/ClockStruct.h
+ ${INCROOT}/Types.h
+ ${SRCROOT}/Err.cpp
+ ${INCROOT}/Err.h
     
     
 )

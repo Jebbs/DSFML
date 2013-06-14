@@ -1,5 +1,4 @@
 /*
-
 DSFML - The Simple and Fast Multimedia Library for D
 
 Copyright (c) <2013> <Jeremy DeHaan>
@@ -18,12 +17,15 @@ If you use this software in a product, an acknowledgment in the product document
 3. This notice may not be removed or altered from any source distribution
 
 
+***All code is based on code written by Laurent Gomila***
+
 
 External Libraries Used:
 
 SFML - The Simple and Fast Multimedia Library
 Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
+All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
 module dsfml.system.time;
