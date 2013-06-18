@@ -17,7 +17,7 @@ The version in this repo should be up to date with the latest SFML and CSFML ver
 Extensions
 ===
 
-E.S. Quinn has started a repository for various extensions to DSFML including his own binding for sfMod.
+E.S. Quinn has started a repository for various extensions to DSFML including his own bindings for sfMod and sfMidi.
 You can find it at <https://github.com/aubade/dsfml-contrib>
 
 
