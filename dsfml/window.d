@@ -655,9 +655,17 @@ struct VideoMode
 	
 	static VideoMode getDesktopMode()
 	{
-                return internalGetDesktopMode();
+		//Fix for Issue #28
+		//create a temporary for getting the desktop settings(still breaks when directly using sfVideoMode_getDesktopMode())
+		VideoMode temp1 = internalGetDesktopMode();
+		//put the settings into a second temporary that can actually be returned without causing the error
+		VideoMode temp2 = VideoMode(temp1.width, temp1.height, temp1.bitsPerPixel);
+		//rewrite the original temporary to allow the varable to be collected without issue
+		temp1 = VideoMode(0,0,0);
+		//return videomode
+		return temp2;
 	}
-
+	//Part of the fix for Issue #28
 	private static VideoMode internalGetDesktopMode()
 	{
 		return VideoMode(sfVideoMode_getDesktopMode());
