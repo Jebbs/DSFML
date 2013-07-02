@@ -655,6 +655,11 @@ struct VideoMode
 	
 	static VideoMode getDesktopMode()
 	{
+                return internalGetDesktopMode();
+	}
+
+	private static VideoMode internalGetDesktopMode()
+	{
 		return VideoMode(sfVideoMode_getDesktopMode());
 	}
 	
