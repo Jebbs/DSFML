@@ -769,7 +769,7 @@ class RenderWindow:RenderTarget
 		visible ? sfRenderWindow_setMouseCursorVisible(sfPtr,sfTrue): sfRenderWindow_setMouseCursorVisible(sfPtr,sfFalse);
 	}
 	
-	void setKeyRepeatEnable(bool enabled)
+	void setKeyRepeatEnabled(bool enabled)
 	{
 		enabled ? sfRenderWindow_setKeyRepeatEnabled(sfPtr,sfTrue):sfRenderWindow_setKeyRepeatEnabled(sfPtr,sfFalse);
 	}
