@@ -1774,7 +1774,7 @@ class VertexArray:Drawable
 		Vertices = new Vertex[vertexCount];
 	}
 	
-	private this(PrimitiveType type, Vertex[] vertices)
+	this(PrimitiveType type, Vertex[] vertices)
 	{
 		primativeType = type;
 		
