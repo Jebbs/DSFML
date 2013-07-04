@@ -351,6 +351,13 @@ struct Vector2(T)
 	{
 		return "X: " ~ text(x) ~ " Y: " ~ text(y);
 	}
+	
+    void opAssign(T)( in T v )
+    if( !isScalarType!(T) )
+    {
+        x = v.x;
+        y = v.y;
+    }
 }
 
 alias Vector2!(int) Vector2i;
