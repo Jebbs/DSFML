@@ -652,7 +652,7 @@ class RenderTexture:RenderTarget
 		sfRenderTexture_display(sfPtr);
 	}
 	
-	void Clear(Color color)
+	void clear(Color color = Color.Black)
 	{
 		sfRenderTexture_clear(sfPtr, color);
 	}
@@ -826,7 +826,7 @@ class RenderWindow:RenderTarget
 		
 	}
 	
-	void clear(Color color)
+	void clear(Color color = Color.Black)
 	{
 		sfRenderWindow_clear(sfPtr, color);
 		
