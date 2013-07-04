@@ -652,7 +652,7 @@ class RenderTexture:RenderTarget
 		sfRenderTexture_display(sfPtr);
 	}
 	
-	void Clear(Color color)
+	void clear(Color color)
 	{
 		sfRenderTexture_clear(sfPtr, color);
 	}
