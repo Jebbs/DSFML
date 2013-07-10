@@ -762,7 +762,7 @@ class RenderWindow:RenderTarget
 			
 		}
 	} 
-
+	
 	
 	void setMouseCursorVisible(bool visible)
 	{
@@ -1294,7 +1294,7 @@ class Sprite:Drawable
 	package sfSprite* sfPtr;
 	
 	
-	this(Texture texture)
+	this(const(Texture) texture)
 	{
 		// Constructor code
 		
@@ -1874,7 +1874,7 @@ class VertexArray:Drawable
 class View
 {
 	sfView* sfPtr;
-
+	
 	this()
 	{
 		// Constructor code
@@ -2010,7 +2010,7 @@ struct Rect(T)
 	}
 	
 	bool contains(E)(E X, E Y)
-	if(isNumeric!(E))
+		if(isNumeric!(E))
 	{
 		if(left <= X && X<= (left + width))
 		{
@@ -2029,7 +2029,7 @@ struct Rect(T)
 		}
 	}
 	bool contains(E)(Vector2!(E) point)
-	if(isNumeric!(E))
+		if(isNumeric!(E))
 	{
 		if(left <= point.x && point.x<= (left + width))
 		{
@@ -2049,7 +2049,7 @@ struct Rect(T)
 	}
 	
 	bool intersects(E)(Rect!(E) rectangle)
-	if(isNumeric!(E))
+		if(isNumeric!(E))
 	{
 		Rect!(T) rect;
 		
@@ -2057,7 +2057,7 @@ struct Rect(T)
 	}
 	
 	bool intersects(E,O)(Rect!(E) rectangle, out Rect!(O) intersection)
-	if(isNumeric!(E) && isNumeric!(O))
+		if(isNumeric!(E) && isNumeric!(O))
 	{
 		O interLeft = intersection.max(left, rectangle.left);
 		O interTop = intersection.max(top, rectangle.top);
@@ -2141,7 +2141,7 @@ struct Color
 	static immutable  Transparent = Color(0, 0, 0, 0);
 	
 	Color opBinary(string op)(Color otherColor) const
-	if((op == "+") || (op == "-"))
+		if((op == "+") || (op == "-"))
 	{
 		static if(op == "+")
 		{
@@ -2160,7 +2160,7 @@ struct Color
 	}
 	
 	Color opBinary(string op, E)(E num) const
-	if(isNumeric!(E) && ((op == "*") || (op == "/")))
+		if(isNumeric!(E) && ((op == "*") || (op == "/")))
 	{
 		static if(op == "*")
 		{
@@ -2179,7 +2179,7 @@ struct Color
 	}
 	
 	ref Color opOpAssign(string op)(Color otherColor)
-	if((op == "+") || (op == "-"))
+		if((op == "+") || (op == "-"))
 	{
 		static if(op == "+")
 		{
@@ -2200,7 +2200,7 @@ struct Color
 	}
 	
 	ref Color opOpAssign(string op, E)(E num)
-	if(isNumeric!(E) && ((op == "*") || (op == "/")))
+		if(isNumeric!(E) && ((op == "*") || (op == "/")))
 	{
 		static if(op == "*")
 		{
@@ -2236,16 +2236,16 @@ struct Transform
 	
 	package sfTransform InternalsfTransform = sfTransform(
 		[1.0f, 0.0f, 0.0f,
-	 0.0f, 1.0f, 0.0f,
-	 0.0f, 0.0f, 1.0f]);
+		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 1.0f]);
 	
 	
 	this(float a00, float a01, float a02, float a10, float a11, float a12, float a20, float a21, float a22)
 	{
 		InternalsfTransform = sfTransform(
 			[a00, a01, a02,
-		 a10, a11, a12,
-		 a20, a21, a22]);
+			a10, a11, a12,
+			a20, a21, a22]);
 		
 	}
 	
@@ -2328,7 +2328,7 @@ struct Transform
 	}
 	
 	Transform opBinary(string op)(Transform rhs)
-	if(op == "*")
+		if(op == "*")
 	{
 		Transform temp = Transform(InternalsfTransform);
 		temp.combine(rhs);
@@ -2336,7 +2336,7 @@ struct Transform
 	}
 	
 	ref Transform opOpAssign(string op)(Transform rhs)
-	if(op == "*")
+		if(op == "*")
 	{
 		
 		this.combine(rhs);
@@ -2344,7 +2344,7 @@ struct Transform
 	}
 	
 	Transform opBinary(string op)(Vector2f vector)
-	if(op == "*")
+		if(op == "*")
 	{
 		return transformPoint(vector);
 	}
