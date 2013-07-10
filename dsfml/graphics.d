@@ -168,7 +168,7 @@ class ConvexShape:Shape
 
 abstract class Drawable
 {
-	void draw(RenderTarget renderTarget, ref RenderStates renderStates);
+	void draw(RenderTarget renderTarget, RenderStates renderStates);
 }
 
 abstract class DrawableTransformable:Drawable,Transformable
@@ -1125,7 +1125,7 @@ class Shape:DrawableTransformable
 		return getTransform().transformRect(getLocalBounds());
 	}
 	
-	override void draw(RenderTarget renderTarget, ref RenderStates renderStates)
+	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		
 		renderStates.transform = renderStates.transform * getTransform();
@@ -1429,7 +1429,7 @@ class Sprite:Drawable
 		return FloatRect(temp.left,temp.top,temp.width, temp.height);
 	}
 	
-	override void draw(RenderTarget renderTarget, ref RenderStates renderStates)// const
+	override void draw(RenderTarget renderTarget, RenderStates renderStates)// const
 	{
 		
 		renderTarget.IsRenderWindow?
@@ -1622,7 +1622,7 @@ class Text:Drawable
 		}
 	}
 	
-	override void draw(RenderTarget renderTarget, ref RenderStates renderStates)
+	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		renderTarget.IsRenderWindow?
 			sfRenderWindow_drawText(renderTarget.WindowPtr, sfPtr,&renderStates.InternalsfRenderStates):
@@ -1856,7 +1856,7 @@ class VertexArray:Drawable
 	}
 	
 	
-	override void draw(RenderTarget renderTarget, ref RenderStates renderStates)
+	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		if(Vertices.length != 0)
 		{
