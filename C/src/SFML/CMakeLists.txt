@@ -49,7 +49,7 @@ if(WINDOWS)
     add_definitions(-DSFML_STATIC)
 endif()
 
-find_package(SFML 2.0 COMPONENTS system audio REQUIRED)
+find_package(SFML 2.0 COMPONENTS system network audio REQUIRED)
 #When completed, the line above should look like as follows
 #find_package(SFML 2.0 COMPONENTS system window network graphics audio REQUIRED)
 
@@ -61,7 +61,7 @@ include_directories(${SFML_INCLUDE_DIR})
 # add the modules subdirectories
 add_subdirectory(System)
 #add_subdirectory(Window)
-#add_subdirectory(Network)
+add_subdirectory(Network)
 #add_subdirectory(Graphics)
 add_subdirectory(Audio)
 
