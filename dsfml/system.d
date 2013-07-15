@@ -399,11 +399,11 @@ struct Vector3(T)
 	{
 		static if (op == "+")
 		{
-			return Vector3!(T)(cast(T)(x+otherVector.x),cast(T)(y+otherVector.y),cast(T)(z + otherVctor.z));
+			return Vector3!(T)(cast(T)(x+otherVector.x),cast(T)(y+otherVector.y),cast(T)(z + otherVector.z));
 		}
 		static if(op == "-")
 		{
-			return Vector2!(T)(cast(T)(x-otherVector.x),cast(T)(y-otherVector.y),cast(T)(z - otherVctor.z));
+			return Vector2!(T)(cast(T)(x-otherVector.x),cast(T)(y-otherVector.y),cast(T)(z - otherVector.z));
 		}
 		
 	}
