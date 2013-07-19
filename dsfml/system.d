@@ -110,7 +110,7 @@ struct Time
 		return InternalsfTime.microseconds == rhs.InternalsfTime.microseconds;
 	}
 
-	int opCmp(const ref Time rhs)
+	int opCmp(const Time rhs)
 	{
 		if(opEquals(rhs))
 		{
@@ -124,8 +124,6 @@ struct Time
 		{
 			return 1;
 		}
-
-
 	}
 
 	Time opUnary(string s)() const

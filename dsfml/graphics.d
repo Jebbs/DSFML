@@ -1622,6 +1622,12 @@ class Text:Drawable
 		}
 	}
 	
+	FloatRect getGlobalBounds()
+	{
+		sfFloatRect temp = sfText_getGlobalBounds(sfPtr);
+		return FloatRect(temp.left,temp.top,temp.width, temp.height);
+	}
+	
 	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		renderTarget.IsRenderWindow?
