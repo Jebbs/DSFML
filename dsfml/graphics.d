@@ -847,7 +847,15 @@ class RenderWindow:RenderTarget
 		sfMouse_setPositionRenderWindow(position.tosfVector2i(),relativeTo.sfPtr);
 	}
 	
-	
+	Vector2f mapPixelToCoords(Vector2i point) {
+		sfVector2f v = sfRenderWindow_mapPixelToCoords(sfPtr, sfVector2i(point.x, point.y), view.sfPtr);
+		return Vector2f(v);
+	}
+
+	Vector2i mapCoordsToPixel(Vector2f point) {
+		sfVector2i v = sfRenderWindow_mapCoordsToPixel(sfPtr, sfVector2f(point.x, point.y), view.sfPtr);
+		return Vector2i(v);
+	}
 	
 }
 
