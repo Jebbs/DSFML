@@ -203,7 +203,7 @@ class SoundStream:SoundSource
 	void streamData()
 	{
 		//create the buffers
-		sfSoundStream_alGenBuffers(BufferCount,m_buffers);
+		sfSoundStream_alGenBuffers(BufferCount,m_buffers.ptr);
 		for(int i = 0; i< BufferCount;++i)
 		{
 			m_endBuffers[i] = false;
@@ -294,7 +294,7 @@ class SoundStream:SoundSource
 		clearQueue();
 
 		//Delete the buffers
-		sfSoundStream_deleteBuffers(m_source,BufferCount,m_buffers);
+		sfSoundStream_deleteBuffers(m_source,BufferCount,m_buffers.ptr);
 	}
 	 
 
