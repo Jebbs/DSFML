@@ -60,7 +60,7 @@ include_directories(${SFML_INCLUDE_DIR})
 
 # add the modules subdirectories
 add_subdirectory(System)
-#add_subdirectory(Window)
+add_subdirectory(Window)
 add_subdirectory(Network)
 #add_subdirectory(Graphics)
 add_subdirectory(Audio)
