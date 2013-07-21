@@ -198,9 +198,9 @@ struct Time
 struct Vector2(T)
 	if(isNumeric!(T))
 {
-	public T x;
-	public T y;
-	
+	public T x = 0;
+	public T y = 0;
+
 	this(T X,T Y)
 	{		
 		x = X;
