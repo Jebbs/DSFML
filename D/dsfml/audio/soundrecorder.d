@@ -92,7 +92,7 @@ class SoundRecorder
 	{
 		abstract bool onStart();
 
-		abstract bool onProcessSamples(ref short[] samples);
+		abstract bool onProcessSamples(short[] samples);
 
 		abstract void onStop();
 
