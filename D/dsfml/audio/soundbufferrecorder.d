@@ -57,7 +57,7 @@ class SoundBufferRecorder:SoundRecorder
 		return true;
 	}
 
-	override bool onProcessSamples(ref short[] samples)
+	override bool onProcessSamples(short[] samples)
 	{
 			writeln(samples.length);
 
