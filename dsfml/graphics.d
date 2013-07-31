@@ -545,6 +545,13 @@ abstract class RenderTarget
 	void draw(Drawable drawable, RenderStates states = RenderStates.Default());
 	
 	void draw(const Vertex[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default());
+	
+	@property
+	{
+		void view(View newView);
+		View view();
+	} 
+
 }
 
 class RenderTexture:RenderTarget
@@ -588,11 +595,11 @@ class RenderTexture:RenderTarget
 	
 	@property
 	{
-		void view(View newView)
+		override void view(View newView)
 		{
 			sfRenderTexture_setView(sfPtr, newView.sfPtr);
 		}
-		View view()
+		override View view()
 		{
 			//try to fix
 			return new View( sfView_copy(sfRenderTexture_getView(sfPtr)));
@@ -752,11 +759,11 @@ class RenderWindow:RenderTarget
 	
 	@property
 	{
-		void view(View newView)
+		override void view(View newView)
 		{
 			sfRenderWindow_setView(sfPtr, newView.sfPtr);
 		}
-		View view()
+		override View view()
 		{
 			return new View( sfView_copy(sfRenderWindow_getView(sfPtr)));
 			
