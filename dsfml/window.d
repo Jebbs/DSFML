@@ -168,7 +168,7 @@ class Window
 		visible ? sfWindow_setMouseCursorVisible(sfPtr,sfTrue): sfWindow_setMouseCursorVisible(sfPtr,sfFalse);
 	}
 	
-	void setKeyRepeatEnable(bool enabled)
+	void setKeyRepeatEnabled(bool enabled)
 	{
 		enabled ? sfWindow_setKeyRepeatEnabled(sfPtr,sfTrue):sfWindow_setKeyRepeatEnabled(sfPtr,sfFalse);
 	}

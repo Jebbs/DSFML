@@ -168,7 +168,7 @@ class ConvexShape:Shape
 
 abstract class Drawable
 {
-	void draw(RenderTarget renderTarget, ref RenderStates renderStates);
+	void draw(RenderTarget renderTarget, RenderStates renderStates);
 }
 
 abstract class DrawableTransformable:Drawable,Transformable
@@ -659,7 +659,7 @@ class RenderTexture:RenderTarget
 		sfRenderTexture_display(sfPtr);
 	}
 	
-	void Clear(Color color)
+	void clear(Color color = Color.Black)
 	{
 		sfRenderTexture_clear(sfPtr, color);
 	}
@@ -769,14 +769,14 @@ class RenderWindow:RenderTarget
 			
 		}
 	} 
-
+	
 	
 	void setMouseCursorVisible(bool visible)
 	{
 		visible ? sfRenderWindow_setMouseCursorVisible(sfPtr,sfTrue): sfRenderWindow_setMouseCursorVisible(sfPtr,sfFalse);
 	}
 	
-	void setKeyRepeatEnable(bool enabled)
+	void setKeyRepeatEnabled(bool enabled)
 	{
 		enabled ? sfRenderWindow_setKeyRepeatEnabled(sfPtr,sfTrue):sfRenderWindow_setKeyRepeatEnabled(sfPtr,sfFalse);
 	}
@@ -833,7 +833,7 @@ class RenderWindow:RenderTarget
 		
 	}
 	
-	void clear(Color color)
+	void clear(Color color = Color.Black)
 	{
 		sfRenderWindow_clear(sfPtr, color);
 		
@@ -854,7 +854,17 @@ class RenderWindow:RenderTarget
 		sfMouse_setPositionRenderWindow(position.tosfVector2i(),relativeTo.sfPtr);
 	}
 	
-	
+	Vector2f mapPixelToCoords(Vector2i point)
+	{
+		sfVector2f v = sfRenderWindow_mapPixelToCoords(sfPtr, sfVector2i(point.x, point.y), view.sfPtr);
+		return Vector2f(v);
+	}
+
+	Vector2i mapCoordsToPixel(Vector2f point)
+	{
+		sfVector2i v = sfRenderWindow_mapCoordsToPixel(sfPtr, sfVector2f(point.x, point.y), view.sfPtr);
+		return Vector2i(v);
+	}
 	
 }
 
@@ -1132,7 +1142,7 @@ class Shape:DrawableTransformable
 		return getTransform().transformRect(getLocalBounds());
 	}
 	
-	override void draw(RenderTarget renderTarget, ref RenderStates renderStates)
+	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		
 		renderStates.transform = renderStates.transform * getTransform();
@@ -1301,7 +1311,7 @@ class Sprite:Drawable
 	package sfSprite* sfPtr;
 	
 	
-	this(Texture texture)
+	this(const(Texture) texture)
 	{
 		// Constructor code
 		
@@ -1373,21 +1383,6 @@ class Sprite:Drawable
 	}
 	
 	
-	void move(Vector2f offset)
-	{
-		sfSprite_move(sfPtr, offset.tosfVector2f());
-	}
-	
-	void rotate(float angle)
-	{
-		sfSprite_rotate(sfPtr, angle);
-	}
-	
-	void scale(Vector2f factor)
-	{
-		sfSprite_scale(sfPtr, factor.tosfVector2f());
-	}
-	
 	Transform getTransform()
 	{
 		return Transform(sfSprite_getTransform(sfPtr));
@@ -1451,7 +1446,7 @@ class Sprite:Drawable
 		return FloatRect(temp.left,temp.top,temp.width, temp.height);
 	}
 	
-	override void draw(RenderTarget renderTarget, ref RenderStates renderStates)// const
+	override void draw(RenderTarget renderTarget, RenderStates renderStates)// const
 	{
 		
 		renderTarget.IsRenderWindow?
@@ -1644,7 +1639,13 @@ class Text:Drawable
 		}
 	}
 	
-	override void draw(RenderTarget renderTarget, ref RenderStates renderStates)
+	FloatRect getGlobalBounds()
+	{
+		sfFloatRect temp = sfText_getGlobalBounds(sfPtr);
+		return FloatRect(temp.left,temp.top,temp.width, temp.height);
+	}
+	
+	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		renderTarget.IsRenderWindow?
 			sfRenderWindow_drawText(renderTarget.WindowPtr, sfPtr,&renderStates.InternalsfRenderStates):
@@ -1878,7 +1879,7 @@ class VertexArray:Drawable
 	}
 	
 	
-	override void draw(RenderTarget renderTarget, ref RenderStates renderStates)
+	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		if(Vertices.length != 0)
 		{
@@ -1896,7 +1897,7 @@ class VertexArray:Drawable
 class View
 {
 	sfView* sfPtr;
-
+	
 	this()
 	{
 		// Constructor code
@@ -1983,6 +1984,11 @@ class View
 	{
 		sfView_zoom(sfPtr, factor);
 	}
+
+	void move(Vector2f offset)
+	{
+		sfView_move(sfPtr, sfVector2f(offset.x, offset.y));
+	}
 	
 	
 }
@@ -2032,7 +2038,7 @@ struct Rect(T)
 	}
 	
 	bool contains(E)(E X, E Y)
-	if(isNumeric!(E))
+		if(isNumeric!(E))
 	{
 		if(left <= X && X<= (left + width))
 		{
@@ -2051,7 +2057,7 @@ struct Rect(T)
 		}
 	}
 	bool contains(E)(Vector2!(E) point)
-	if(isNumeric!(E))
+		if(isNumeric!(E))
 	{
 		if(left <= point.x && point.x<= (left + width))
 		{
@@ -2071,7 +2077,7 @@ struct Rect(T)
 	}
 	
 	bool intersects(E)(Rect!(E) rectangle)
-	if(isNumeric!(E))
+		if(isNumeric!(E))
 	{
 		Rect!(T) rect;
 		
@@ -2079,7 +2085,7 @@ struct Rect(T)
 	}
 	
 	bool intersects(E,O)(Rect!(E) rectangle, out Rect!(O) intersection)
-	if(isNumeric!(E) && isNumeric!(O))
+		if(isNumeric!(E) && isNumeric!(O))
 	{
 		O interLeft = intersection.max(left, rectangle.left);
 		O interTop = intersection.max(top, rectangle.top);
@@ -2163,7 +2169,7 @@ struct Color
 	static immutable  Transparent = Color(0, 0, 0, 0);
 	
 	Color opBinary(string op)(Color otherColor) const
-	if((op == "+") || (op == "-"))
+		if((op == "+") || (op == "-"))
 	{
 		static if(op == "+")
 		{
@@ -2182,7 +2188,7 @@ struct Color
 	}
 	
 	Color opBinary(string op, E)(E num) const
-	if(isNumeric!(E) && ((op == "*") || (op == "/")))
+		if(isNumeric!(E) && ((op == "*") || (op == "/")))
 	{
 		static if(op == "*")
 		{
@@ -2201,7 +2207,7 @@ struct Color
 	}
 	
 	ref Color opOpAssign(string op)(Color otherColor)
-	if((op == "+") || (op == "-"))
+		if((op == "+") || (op == "-"))
 	{
 		static if(op == "+")
 		{
@@ -2222,7 +2228,7 @@ struct Color
 	}
 	
 	ref Color opOpAssign(string op, E)(E num)
-	if(isNumeric!(E) && ((op == "*") || (op == "/")))
+		if(isNumeric!(E) && ((op == "*") || (op == "/")))
 	{
 		static if(op == "*")
 		{
@@ -2258,16 +2264,16 @@ struct Transform
 	
 	package sfTransform InternalsfTransform = sfTransform(
 		[1.0f, 0.0f, 0.0f,
-	 0.0f, 1.0f, 0.0f,
-	 0.0f, 0.0f, 1.0f]);
+		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 1.0f]);
 	
 	
 	this(float a00, float a01, float a02, float a10, float a11, float a12, float a20, float a21, float a22)
 	{
 		InternalsfTransform = sfTransform(
 			[a00, a01, a02,
-		 a10, a11, a12,
-		 a20, a21, a22]);
+			a10, a11, a12,
+			a20, a21, a22]);
 		
 	}
 	
@@ -2350,7 +2356,7 @@ struct Transform
 	}
 	
 	Transform opBinary(string op)(Transform rhs)
-	if(op == "*")
+		if(op == "*")
 	{
 		Transform temp = Transform(InternalsfTransform);
 		temp.combine(rhs);
@@ -2358,7 +2364,7 @@ struct Transform
 	}
 	
 	ref Transform opOpAssign(string op)(Transform rhs)
-	if(op == "*")
+		if(op == "*")
 	{
 		
 		this.combine(rhs);
@@ -2366,7 +2372,7 @@ struct Transform
 	}
 	
 	Transform opBinary(string op)(Vector2f vector)
-	if(op == "*")
+		if(op == "*")
 	{
 		return transformPoint(vector);
 	}
@@ -2768,9 +2774,9 @@ extern(C)
 	float sfSprite_getRotation(const(sfSprite)* sprite);
 	sfVector2f sfSprite_getScale(const(sfSprite)* sprite);
 	sfVector2f sfSprite_getOrigin(const(sfSprite)* sprite);
-	void sfSprite_move(sfSprite* sprite,sfVector2f offset);
-	void sfSprite_rotate(sfSprite* sprite,float angle);
-	void sfSprite_scale(sfSprite* sprite,sfVector2f factors);
+	//void sfSprite_move(sfSprite* sprite,sfVector2f offset);
+	//void sfSprite_rotate(sfSprite* sprite,float angle);
+	//void sfSprite_scale(sfSprite* sprite,sfVector2f factors);
 	sfTransform sfSprite_getTransform(const(sfSprite)* sprite);
 	sfTransform sfSprite_getInverseTransform(const(sfSprite)* sprite);
 	void sfSprite_setTexture(sfSprite* sprite,const(sfTexture)* texture,sfBool resetRect);

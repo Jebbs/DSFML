@@ -13,9 +13,23 @@ You can use DSFML in one of two ways, both of which are simple. You can either c
 The version in this repo should be up to date with the latest SFML and CSFML versions. If you happen to see something I missed please open an issue in the tracker! The .dll's and .lib's for building in Windows are included in the repo for download and will always be in sync with the code presented here.
 
 
+
+Extensions
+===
+
+E.S. Quinn has started a repository for various extensions to DSFML including his own bindings for sfMod and sfMidi.
+You can find it at <https://github.com/aubade/dsfml-contrib>
+
+Known Issues
+===
+
+There is a known issue that currently prevents 64bit builds of this library using DMD. There is a fix in the works, but for the time being either compile SFML, CSFML, and DSFML in 32bits or use a D compiler that doesn't skew the C ABI such as GDC.
+
+
 If problems are encountered!
 ===
 
 This is my first project that I have provided others to use, so feel free to give me feed back. Especially if you encounter an issue that prevents you from using the binding!
 
 Email is <dehaan.jeremiah@gmail.com>
+
