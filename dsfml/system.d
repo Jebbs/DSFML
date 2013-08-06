@@ -528,6 +528,10 @@ alias int sfBool;
 enum sfFalse = 0;
 enum sfTrue = 1;
 
+void sleep (Time duration) {
+	sfSleep (duration.InternalsfTime);
+}
+
 //Internal binding portion
 //User should not even know this stuff exists!
 package:
@@ -583,7 +587,7 @@ extern (C)
 	sfTime sfSeconds(float amount);
 	sfTime sfMilliseconds(int amount);
 	sfTime sfMicroseconds(long amount);
-
+	void sfSleep (sfTime duration);
 
 }
 
