@@ -2156,7 +2156,7 @@ struct Color
 	ubyte r;
 	ubyte g;
 	ubyte b;
-	ubyte a;
+	ubyte a = 255;
 	
 	static immutable Black = Color(0, 0, 0, 255);
 	static immutable White = Color(255, 255, 255, 255);
