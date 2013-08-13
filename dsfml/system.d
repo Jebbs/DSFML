@@ -110,7 +110,7 @@ struct Time
 		return InternalsfTime.microseconds == rhs.InternalsfTime.microseconds;
 	}
 
-	int opCmp(const ref Time rhs)
+	int opCmp(const Time rhs)
 	{
 		if(opEquals(rhs))
 		{
@@ -124,8 +124,6 @@ struct Time
 		{
 			return 1;
 		}
-
-
 	}
 
 	Time opUnary(string s)() const
@@ -200,9 +198,9 @@ struct Time
 struct Vector2(T)
 	if(isNumeric!(T))
 {
-	public T x;
-	public T y;
-	
+	public T x = 0;
+	public T y = 0;
+
 	this(T X,T Y)
 	{		
 		x = X;
@@ -399,11 +397,11 @@ struct Vector3(T)
 	{
 		static if (op == "+")
 		{
-			return Vector3!(T)(cast(T)(x+otherVector.x),cast(T)(y+otherVector.y),cast(T)(z + otherVctor.z));
+			return Vector3!(T)(cast(T)(x+otherVector.x),cast(T)(y+otherVector.y),cast(T)(z + otherVector.z));
 		}
 		static if(op == "-")
 		{
-			return Vector2!(T)(cast(T)(x-otherVector.x),cast(T)(y-otherVector.y),cast(T)(z - otherVctor.z));
+			return Vector2!(T)(cast(T)(x-otherVector.x),cast(T)(y-otherVector.y),cast(T)(z - otherVector.z));
 		}
 		
 	}
@@ -530,6 +528,10 @@ alias int sfBool;
 enum sfFalse = 0;
 enum sfTrue = 1;
 
+void sleep (Time duration) {
+	sfSleep (duration.InternalsfTime);
+}
+
 //Internal binding portion
 //User should not even know this stuff exists!
 package:
@@ -585,7 +587,7 @@ extern (C)
 	sfTime sfSeconds(float amount);
 	sfTime sfMilliseconds(int amount);
 	sfTime sfMicroseconds(long amount);
-
+	void sfSleep (sfTime duration);
 
 }
 
