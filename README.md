@@ -10,6 +10,10 @@ Compiling DSFML
 ===
 The new build system is super easy! It only supports DMD, but all you need to do is open up a shell, navigate to the main directory, run "rdmd build.d", and you now have static libraries to link against your project.
 
+Compiling your project using DSFML
+===
+Don't forget that you need to add the src directory to your import path!
+
 
 If problems are encountered!
 ===
