@@ -1,1 +1,0 @@
-If on windows, don't forget to use implib.exe on dlls!
