@@ -3,6 +3,7 @@ DSFML
 
 DSFML is a D static binding of SFML, which let's you use SFML in your D program. DSFML attempts to be as compatible with SFML as possible, but does so in a D way by using new D semanics, as well as avoiding raw pointers. 
 
+*Important Notice:* A new version of DSFML is currently being worked on and is very nearly done. Please check it out in the experimental branch [here](https://github.com/Jebbs/DSFML/tree/Experimental). This branch has many improvements over the current branch and will soon be replacing it.
 
 
 Compiling a project using DSFML
