@@ -751,7 +751,7 @@ class RenderWindow:RenderTarget
 		{
 			sfRenderWindow_setSize(sfPtr, newSize.tosfVector2u());
 		}
-		Vector2u size()
+		Vector2u size() const
 		{
 			return Vector2u(sfRenderWindow_getSize(sfPtr));
 		}
