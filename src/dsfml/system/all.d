@@ -32,6 +32,7 @@ module dsfml.system.all;
 public
 {
 	import dsfml.system.clock;
+	import dsfml.system.err;
 	import dsfml.system.inputstream;
 	import dsfml.system.lock;
 	import dsfml.system.mutex;
@@ -42,12 +43,3 @@ public
 	import dsfml.system.vector3;
 }
 
-//Redirects sf::err() to a different stream so that the output can be later sent to stderr
-static this()
-{
-	//sfErr_redirect();
-}
-
-private extern(C):
-
-void sfErr_redirect();

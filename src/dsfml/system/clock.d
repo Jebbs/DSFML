@@ -33,7 +33,7 @@ module dsfml.system.clock;
 
 public import dsfml.system.time;
 
-import std.stdio;
+debug import std.stdio;
 
 class Clock
 {
@@ -51,7 +51,8 @@ class Clock
 	
 	~this()
 	{
-		debug writeln("Destroying Clock");
+		import std.stdio;
+		writeln("Destroying Clock");
 		sfClock_destroy(sfPtr);
 	}
 	
@@ -70,6 +71,23 @@ class Clock
 		return new Clock(sfClock_copy(sfPtr));
 	}
 	
+}
+
+unittest
+{
+	import std.stdio;
+
+	writeln("Unit test for Clock");
+
+	Clock clock = new Clock();
+
+	writeln("Counting Time for 5 seconds.");
+
+	while(clock.getElapsedTime().asSeconds()<5)
+	{
+		writeln(clock.getElapsedTime().asSeconds());
+	}
+
 }
 
 

@@ -33,7 +33,13 @@ import dsfml.graphics.glyph;
 
 import std.string;
 
+import dsfml.system.inputstream;
+
 debug import std.stdio;
+
+import dsfml.system.err;
+import std.conv;
+
 class Font
 {
 	package sfFont* sfPtr;
@@ -52,18 +58,28 @@ class Font
 	bool loadFromFile(string filename)
 	{
 		sfPtr = sfFont_createFromFile(toStringz(filename));
-		return (sfPtr == null)?false:true;
+
+		err.write(text(sfErrGraphics_getOutput()));
+		
+		return (sfPtr != null);
 	}
 	
-	bool loadFromMemory(const(void)* data, int sizeInBytes)
+	bool loadFromMemory(const(void)[] data)
 	{
-		sfPtr = sfFont_createFromMemory(data, sizeInBytes);
-		return (sfPtr == null)?false:true;
+		sfPtr = sfFont_createFromMemory(data.ptr, data.length);
+
+		err.write(text(sfErrGraphics_getOutput()));
+
+		return (sfPtr != null);
 	}
 	
-	bool loadFromStream(void* stream)
+	bool loadFromStream(InputStream stream)
 	{
-		sfPtr = sfFont_createFromStream(stream);
+
+		sfPtr = sfFont_createFromStream(new fontStream(stream));
+
+		err.write(text(sfErrGraphics_getOutput()));
+		
 		return (sfPtr == null)?false:true;
 	}
 	
@@ -116,10 +132,56 @@ class Font
 
 }
 
+private:
+
+private extern(C++) interface sfmlInputStream
+{
+	long read(void* data, long size);
+	
+	long seek(long position);
+	
+	long tell();
+	
+	long getSize();
+}
+
+
+private class fontStream:sfmlInputStream
+{
+	private InputStream myStream;
+	
+	this(InputStream stream)
+	{
+		myStream = stream;
+	}
+	
+	extern(C++)long read(void* data, long size)
+	{
+		return myStream.read(data[0..cast(size_t)size]);
+	}
+	
+	extern(C++)long seek(long position)
+	{
+		return myStream.seek(position);
+	}
+	
+	extern(C++)long tell()
+	{
+		return myStream.tell();
+	}
+	
+	extern(C++)long getSize()
+	{
+		return myStream.getSize();
+	}
+}
+
+
 
 package extern(C):
 struct sfFont;
 
+private extern(C):
 //Create a new font from a file
 sfFont* sfFont_createFromFile(const char* filename);
 
@@ -129,7 +191,7 @@ sfFont* sfFont_createFromMemory(const void* data, size_t sizeInBytes);
 
 
 //Create a new image font a custom stream
-sfFont* sfFont_createFromStream(void* stream);
+sfFont* sfFont_createFromStream(sfmlInputStream stream);
 
 
 // Copy an existing font
@@ -154,3 +216,5 @@ int sfFont_getLineSpacing(const(sfFont)* font, uint characterSize);
 
 //Get the texture containing the glyphs of a given size in a font
 sfTexture* sfFont_getTexture(const(sfFont)* font, uint characterSize);
+
+const(char)* sfErrGraphics_getOutput();

@@ -118,7 +118,7 @@ class Sound : SoundSource
 		}
 		Time playingOffset()
 		{
-			return Time.seconds(sfSound_getPlayingOffset(m_source));
+			return seconds(sfSound_getPlayingOffset(m_source));
 		}
 	}
 	@property

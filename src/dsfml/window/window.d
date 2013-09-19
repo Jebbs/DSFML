@@ -34,6 +34,8 @@ import dsfml.window.videomode;
 import dsfml.window.contextsettings;
 import dsfml.window.windowhandle;
 import dsfml.system.vector2;
+import dsfml.system.err;
+import std.conv;
 import std.string;
 import std.utf;
 debug import std.stdio;
@@ -62,18 +64,21 @@ class Window
 	this(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
 		sfPtr = sfWindow_create(mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(text(sfErrWindow_getOutput()));
 	}
 	
 	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
 	this(VideoMode mode, dstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
 		sfPtr = sfWindow_createUnicode(mode.width, mode.height, mode.bitsPerPixel, toUTF32z(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(text(sfErrWindow_getOutput()));
 	}
 	
 	
 	this(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
 		sfPtr = sfWindow_createFromHandle(handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(text(sfErrWindow_getOutput()));
 	}
 	
 	~this()
@@ -193,9 +198,11 @@ class Window
 		return (sfWindow_isOpen(sfPtr));
 	}
 	
-	void setActive(bool active)
+	bool setActive(bool active)
 	{
-		sfWindow_setActive(sfPtr, active);
+		bool toReturn = sfWindow_setActive(sfPtr, active);
+		err.write(text(sfErrWindow_getOutput()));
+		return toReturn;
 	}
 	
 	void display()
@@ -351,4 +358,6 @@ private extern(C)
 
 	void sfMouse_getPosition(const(sfWindow)* relativeTo, int* x, int* y);
 	void sfMouse_setPosition(int x, int y, const(sfWindow)* relativeTo);
+
+	const(char)* sfErrWindow_getOutput();
 }

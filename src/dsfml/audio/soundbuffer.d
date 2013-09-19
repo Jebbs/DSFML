@@ -45,6 +45,9 @@ import std.array;
 
 import core.memory;
 
+import dsfml.system.err;
+import std.conv;
+
 class SoundBuffer
 {
 	
@@ -54,6 +57,8 @@ class SoundBuffer
 		//create the buffer
 		
 		sfSoundSource_ensureALInit();
+		err.write(text(sfErrAudio_getOutput()));
+
 		
 		//Create the buffer
 		sfSoundBuffer_alGenBuffers(&m_buffer);
@@ -87,14 +92,11 @@ class SoundBuffer
 	
 	bool loadFromFile(string filename)
 	{
-		sfSoundFile* file = sfSoundFile_create();
-		scope(exit)
-		{
-			sfSoundFile_destroy(file);
-		}
+		SoundFile file;
+		file.create();
 		
 		
-		if(sfSoundFile_openReadFromFile(file,toStringz(filename)))
+		if(file.openReadFromFile(filename))
 		{
 			return initialize(file);
 		}
@@ -102,14 +104,12 @@ class SoundBuffer
 		return false;
 	}
 	
-	bool loadFromMemory(const(void)* data,size_t sizeInBytes)
+	bool loadFromMemory(const(void)[] data)
 	{
-		sfSoundFile* file = sfSoundFile_create();
-		scope(exit)
-		{
-			sfSoundFile_destroy(file);
-		}
-		if(sfSoundFile_openReadFromMemory(file,data, sizeInBytes))
+		SoundFile file;
+		file.create();
+
+		if(file.openReadFromMemory(data))
 		{
 			return initialize(file);
 		}
@@ -118,12 +118,10 @@ class SoundBuffer
 	
 	bool loadFromStream(InputStream stream)
 	{
-		sfSoundFile* file = sfSoundFile_create();
-		scope(exit)
-		{
-			sfSoundFile_destroy(file);
-		}
-		if(sfSoundFile_openReadFromStream(file,&stream))
+		SoundFile file;
+		file.create();
+
+		if(file.openReadFromStream(stream))
 		{
 			return initialize(file);
 		}
@@ -131,7 +129,7 @@ class SoundBuffer
 		return false;
 	}
 	
-	bool loadFromSamples(ref const(short[]) samples, uint channelCount, uint sampleRate)
+	bool loadFromSamples(const(short[]) samples, uint channelCount, uint sampleRate)
 	{
 		if((samples.length >0) && (channelCount>0) && (sampleRate>0))
 		{
@@ -147,7 +145,11 @@ class SoundBuffer
 		{
 			//Error...
 			
-			stderr.writeln("Failed to load the buffer from samples");
+			err.write("Failed to load sound buffer from samples (");
+			err.write("array: ", samples, ",");
+			err.write("");
+			err.write("");
+
 			return false;
 		}
 		
@@ -158,15 +160,12 @@ class SoundBuffer
 	
 	bool saveToFile(string filename)
 	{
-		sfSoundFile* file = sfSoundFile_create();
-		scope(exit)
-		{
-			sfSoundFile_destroy(file);
-		}
+		SoundFile file;
+		file.create();
 		
-		if(sfSoundFile_openWrite(file, toStringz(filename),getChannelCount(),getSampleRate()))
+		if(file.openWrite(filename,getChannelCount(),getSampleRate()))
 		{
-			sfSoundFile_write(file, m_samples.ptr, m_samples.length);
+			file.write( m_samples);
 			
 			return true;
 		}
@@ -216,21 +215,21 @@ class SoundBuffer
 	
 	private
 	{
-		bool initialize(sfSoundFile* file)
+		bool initialize(SoundFile file)
 		{
 			
 			
 			// Retrieve the sound parameters
-			size_t sampleCount = cast(size_t)sfSoundFile_getSampleCount(file);
-			uint channelCount = sfSoundFile_getChannelCount(file);
-			uint sampleRate = sfSoundFile_getSampleRate(file);
+			size_t sampleCount = cast(size_t)file.getSampleCount();
+			uint channelCount = file.getChannelCount();
+			uint sampleRate = file.getSampleRate();
 			
 			
 			// Read the samples from the provided file
 			m_samples.length = sampleCount;
+
 			
-			
-			if (sfSoundFile_read(file, &m_samples[0], sampleCount) == sampleCount)
+			if (file.read(m_samples) == sampleCount)
 			{
 				// Update the internal buffer with the new samples
 				return update(channelCount, sampleRate);
@@ -273,7 +272,7 @@ class SoundBuffer
 			sfSoundBuffer_fillBuffer(m_buffer,&m_samples[0],m_samples.length,sampleRate, format);
 			
 			//Computer Duration
-			m_duration = Time.milliseconds(1000 * m_samples.length / sampleRate / channelCount);
+			m_duration = milliseconds(1000 * m_samples.length / sampleRate / channelCount);
 			
 			
 			return true;
@@ -360,6 +359,51 @@ private struct SoundList
 
 }//SoundList
 
+
+private extern(C++) interface sfmlInputStream
+{
+	long read(void* data, long size);
+	
+	long seek(long position);
+	
+	long tell();
+	
+	long getSize();
+}
+
+/*
+private class sfmlStream:sfmlInputStream
+{
+	private InputStream myStream;
+	
+	this(InputStream stream)
+	{
+		myStream = stream;
+	}
+	
+	extern(C++)long read(void* data, long size)
+	{
+		return myStream.read(data[0..cast(size_t)size]);
+	}
+	
+	extern(C++)long seek(long position)
+	{
+		return myStream.seek(position);
+	}
+	
+	extern(C++)long tell()
+	{
+		return myStream.tell();
+	}
+	
+	extern(C++)long getSize()
+	{
+		return myStream.getSize();
+	}
+}
+
+*/
+
 private extern(C):
 
 void sfSoundSource_ensureALInit();
@@ -371,4 +415,8 @@ void sfSoundBuffer_alDeleteBuffer(uint* bufferID);
 uint sfSoundBuffer_getSampleRate(uint bufferID);
 uint sfSoundBuffer_getChannelCount(uint bufferID);
 void sfSoundBuffer_fillBuffer(uint bufferID, short* samples, long sampleSize, uint sampleRate, uint format);
+
+const(char)* sfErrAudio_getOutput();
+
+
 

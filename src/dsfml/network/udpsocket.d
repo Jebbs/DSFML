@@ -35,6 +35,9 @@ import dsfml.network.ipaddress;
 
 import dsfml.network.socket;
 
+import dsfml.system.err;
+import std.conv;
+
 debug import std.stdio;
 
 class UdpSocket:Socket
@@ -69,7 +72,9 @@ class UdpSocket:Socket
 
 	Status bind(ushort port)
 	{
-		return sfUdpSocket_bind(sfPtr,port);
+		Status toReturn = sfUdpSocket_bind(sfPtr,port);
+		err.write(text(sfErrNetwork_getOutput()));
+		return toReturn;
 	}
 
 	void unbind()
@@ -79,17 +84,20 @@ class UdpSocket:Socket
 	
 	Status send(const(void)[] data, IpAddress address, ushort port)
 	{
-		return sfUdpSocket_send(sfPtr,data.ptr, data.length,address.m_address.ptr,port);
+		Status toReturn = sfUdpSocket_send(sfPtr,data.ptr, data.length,address.m_address.ptr,port);
+
+		return toReturn;
 	}
 
-	Status receive(void[] data, size_t maxSize, IpAddress address, out ushort port)
+	Status receive(void[] data, IpAddress address, out ushort port)
 	{
-		void* dataPtr;
+
 		size_t sizeReceived;
 
-		Status status = sfUdpSocket_receive(sfPtr, dataPtr, maxSize,&sizeReceived, address.m_address.ptr, &port);
+		Status status = sfUdpSocket_receive(sfPtr, data.ptr, data.length, &sizeReceived, address.m_address.ptr, &port);
 
-		data = dataPtr[0 .. sizeReceived];
+		err.write(text(sfErrNetwork_getOutput()));
+
 		return status;
 	}
 	
@@ -173,6 +181,8 @@ Socket.Status sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, cons
 
 //Receive a formatted packet of data from a remote peer with a UDP socket
 Socket.Status sfUdpSocket_receivePacket(sfUdpSocket* socket, sfPacket* packet, char* address, ushort* port);
+
+const(char)* sfErrNetwork_getOutput();
 
 
 

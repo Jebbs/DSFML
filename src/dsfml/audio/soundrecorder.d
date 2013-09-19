@@ -33,11 +33,16 @@ module dsfml.audio.soundrecorder;
 import core.thread;
 import std.stdio;
 
+import dsfml.system.err;
+import std.conv;
+
 class SoundRecorder
 {
 	 protected this()
 	{
 		sfSoundSource_ensureALInit();
+		err.write(text(sfErrAudio_getOutput()));
+
 		m_thread = new Thread(&record);
 		m_isCapturing = false;
 		recorder = sfSoundRecorder_create();
@@ -52,6 +57,7 @@ class SoundRecorder
 		//Initialize the device before starting to capture
 		if(!sfSoundRecorder_initialize(recorder, theSampleRate))
 		{
+			err.write(text(sfErrAudio_getOutput()));
 			return;
 		}
 
@@ -190,3 +196,5 @@ void sfSoundRecorder_stopCapture(sfSoundRecorder* recorder);
 void sfSoundRecorder_closeDevice(sfSoundRecorder* recorder);
 
 bool sfSoundRecorder_isAvailable();
+
+const(char)* sfErrAudio_getOutput();

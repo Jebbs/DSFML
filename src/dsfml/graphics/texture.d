@@ -38,7 +38,12 @@ import dsfml.graphics.image;
 import dsfml.window.window;
 
 import dsfml.graphics.renderwindow;
+
+import dsfml.system.err;
+
+import std.conv;
 import std.string;
+
 debug import std.stdio;
 
 class Texture
@@ -60,30 +65,36 @@ class Texture
 	bool create(uint height, uint width)
 	{
 		sfPtr = sfTexture_create(width, height);
+		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
 	bool loadFromFile(string filename, IntRect area = IntRect() )
 	{
 		sfPtr = sfTexture_createFromFile(toStringz(filename) ,area.left, area.top,area.width, area.height);
+		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
 	bool loadFromMemory(const(void)* data, size_t sizeInBytes, IntRect area = IntRect())
 	{
 		sfPtr = sfTexture_createFromMemory(data,sizeInBytes,area.left, area.top,area.width, area.height);
+		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
 	bool loadFromStream(InputStream stream, IntRect area = IntRect())
 	{
 		sfPtr = sfTexture_createFromStream(new sfmlStream(stream), area.left, area.top,area.width, area.height);
+		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
-	this(Image image, IntRect area = IntRect())
+	bool loadFromImage(Image image, IntRect area = IntRect())
 	{
 		sfPtr = sfTexture_createFromImage(image.sfPtr, area.left, area.top,area.width, area.height);
+		err.write(text(sfErrGraphics_getOutput()));
+		return (sfPtr != null);
 	}
 	
 	
@@ -108,7 +119,8 @@ class Texture
 	{
 		sfTexture_updateFromImage(sfPtr, image.sfPtr, x, y);
 	}
-	
+
+	//TODO: Get this working via inheritance.
 	void updateFromWindow(Window window, uint x, uint y)
 	{
 		sfTexture_updateFromWindow(sfPtr, RenderWindow.windowPointer(window), x, y);
@@ -265,3 +277,5 @@ void sfTexture_bind(const sfTexture* texture);
 
 //Get the maximum texture size allowed
 uint sfTexture_getMaximumSize();
+
+const(char)* sfErrGraphics_getOutput();

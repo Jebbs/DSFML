@@ -58,8 +58,7 @@ class CircleShape:Shape
 	{
 		debug writeln("Destroying CircleShape");
 	}
-	
-	//TODO: Get this working
+
 	CircleShape dup() const
 	{
 		CircleShape temp = new CircleShape(m_radius, m_pointCount);
@@ -85,7 +84,7 @@ class CircleShape:Shape
 		}
 	}
 	
-	override Vector2f getPoint(uint index)
+	override Vector2f getPoint(uint index) const
 	{
 		
 		static const(float) pi = 3.141592654f;

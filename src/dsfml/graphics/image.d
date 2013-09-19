@@ -38,8 +38,12 @@ import dsfml.graphics.rect;
 
 debug import std.stdio;
 
+import dsfml.system.err;
+import std.conv;
+
 import std.string;
 
+//Possible to do: Rewrite this class using a dynamic array and use an sfml Image to just load/save.
 class Image
 {
 	
@@ -64,31 +68,36 @@ class Image
 	bool create(uint width, uint height, Color color)
 	{
 		sfPtr = sfImage_createFromColor(width, height,color.r, color.b, color.g, color.a);
-		return (sfPtr == null)?false:true;
+		return (sfPtr != null);
 	}
 	
 	
 	bool create(uint width, uint height, const ref ubyte[] pixels)
 	{
 		sfPtr = sfImage_createFromPixels(width, height,pixels.ptr);
-		return (sfPtr == null)?false:true;
+		return (sfPtr != null);
 	}
 	
 	bool loadFromFile(string fileName)
 	{
 		sfPtr = sfImage_createFromFile(toStringz(fileName));
-		return (sfPtr == null)?false:true;
+
+		err.write(text(sfErrGraphics_getOutput()));
+
+		return (sfPtr != null);
 	}
 	
-	bool loadFromMemory(const(void)* data, uint sizeInBytes)
+	bool loadFromMemory(const(void)[] data)
 	{
-		sfPtr = sfImage_createFromMemory(data, sizeInBytes);
-		return (sfPtr == null)?false:true;
+		sfPtr = sfImage_createFromMemory(data.ptr, data.length);
+		err.write(text(sfErrGraphics_getOutput()));
+		return (sfPtr != null);
 	}
 	
 	bool loadFromStream(InputStream stream)
 	{
-		sfPtr = sfImage_createFromStream(&stream);
+		sfPtr = sfImage_createFromStream(new imageStream(stream));
+		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
@@ -101,7 +110,9 @@ class Image
 	
 	bool saveToFile(string fileName)
 	{
-		return sfImage_saveToFile(sfPtr, fileName.ptr);//? true:false;
+		bool toReturn = sfImage_saveToFile(sfPtr, fileName.ptr);
+		err.write(text(sfErrGraphics_getOutput()));
+		return toReturn;
 	}
 	
 	Vector2u getSize()
@@ -135,7 +146,16 @@ class Image
 	{
 		Vector2u size = getSize();
 		int length = size.x * size.y * 4;
-		return sfImage_getPixelsPtr(sfPtr)[0..length];
+
+		if(length!=0)
+		{
+			return sfImage_getPixelsPtr(sfPtr)[0..length];
+		}
+		else
+		{
+			err.writeln("Trying to access the pixels of an empty image");
+			return [];
+		}
 	}
 	
 	void flipHorizontally()
@@ -155,7 +175,49 @@ class Image
 	}
 
 }
+private:
 
+private extern(C++) interface sfmlInputStream
+{
+	long read(void* data, long size);
+	
+	long seek(long position);
+	
+	long tell();
+	
+	long getSize();
+}
+
+
+private class imageStream:sfmlInputStream
+{
+	private InputStream myStream;
+	
+	this(InputStream stream)
+	{
+		myStream = stream;
+	}
+	
+	extern(C++)long read(void* data, long size)
+	{
+		return myStream.read(data[0..cast(size_t)size]);
+	}
+	
+	extern(C++)long seek(long position)
+	{
+		return myStream.seek(position);
+	}
+	
+	extern(C++)long tell()
+	{
+		return myStream.tell();
+	}
+	
+	extern(C++)long getSize()
+	{
+		return myStream.getSize();
+	}
+}
 
 
 package extern(C) struct sfImage;
@@ -184,7 +246,7 @@ sfImage* sfImage_createFromMemory(const void* data, size_t size);
 
 
 /// \brief Create an image from a custom stream
-sfImage* sfImage_createFromStream(void* stream);
+sfImage* sfImage_createFromStream(sfmlInputStream stream);
 
 
 /// \brief Copy an existing image
@@ -229,3 +291,5 @@ void sfImage_flipHorizontally(sfImage* image);
 
 /// \brief Flip an image vertically (top <-> bottom)
 void sfImage_flipVertically(sfImage* image);
+
+const(char)* sfErrGraphics_getOutput();

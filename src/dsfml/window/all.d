@@ -45,3 +45,10 @@ public
 	import dsfml.window.window;
 	import dsfml.window.windowhandle;
 }
+static this()
+{
+	sfErrWindow_redirect();
+}
+
+private extern(C) void sfErrWindow_redirect();
+

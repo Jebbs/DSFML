@@ -43,8 +43,5 @@ interface InputStream
 
 
 
-//ToDo: Make this a regular interface, and throw up some code to call this via a different C++ interface
-
-
 
 

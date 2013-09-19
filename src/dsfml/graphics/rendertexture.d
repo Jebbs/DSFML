@@ -51,6 +51,9 @@ import std.algorithm;
 
 import dsfml.graphics.transform;
 
+import dsfml.system.err;
+import std.conv;
+
 class RenderTexture:RenderTarget
 {
 	
@@ -58,8 +61,9 @@ class RenderTexture:RenderTarget
 	
 	this(uint width, uint height, bool depthBuffer = false)
 	{
-		sfPtr = sfRenderTexture_create(width, height, depthBuffer);//: sfRenderTexture_create(width, height,sfFalse);
-		//IsRenderWindow = false;
+		sfPtr = sfRenderTexture_create(width, height, depthBuffer);
+		err.write(text(sfErrGraphics_getOutput()));
+
 	}
 	
 	~this()
@@ -182,6 +186,7 @@ class RenderTexture:RenderTarget
 	void pushGLStates()
 	{
 		sfRenderTexture_pushGLStates(sfPtr);
+		err.write(text(sfErrGraphics_getOutput()));
 	}
 
 	void popGLStates()
@@ -261,3 +266,6 @@ void sfRenderTexture_setSmooth(sfRenderTexture* renderTexture, bool smooth);
 
 //  Tell whether the smooth filter is enabled or not for a render texture
 bool sfRenderTexture_isSmooth(const sfRenderTexture* renderTexture);
+
+
+const(char)* sfErrGraphics_getOutput();

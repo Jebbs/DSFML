@@ -39,6 +39,9 @@ import dsfml.system.vector3;
 
 import dsfml.graphics.color;
 
+import dsfml.system.err;
+import std.conv;
+
 import std.string;
 
 debug import std.stdio;
@@ -86,19 +89,20 @@ class Shader
 		{
 			sfPtr = sfShader_createFromFile(null , toStringz(filename) );
 		}
+		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
 	bool loadFromFile(string vertexShaderFilename, string fragmentShaderFilename)
 	{
 		sfPtr = sfShader_createFromFile(toStringz(vertexShaderFilename) , toStringz(fragmentShaderFilename));
-		//exception
-		return (sfPtr == null)?false:true;
+		err.write(text(sfErrGraphics_getOutput()));
+		return (sfPtr != null);
 	}
 	
-	bool loadFromMemory(char[] shader, Type type)
+	bool loadFromMemory(string shader, Type type)
 	{
-		
+
 		if(type == Type.Vertex)
 		{
 			sfPtr = sfShader_createFromMemory(toStringz(shader) , null);
@@ -107,7 +111,7 @@ class Shader
 		{
 			sfPtr = sfShader_createFromMemory(null , toStringz(shader) );
 		}
-		
+		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
@@ -115,6 +119,7 @@ class Shader
 	bool loadFromMemory(string vertexShader, string fragmentShader)
 	{
 		sfShader_createFromMemory(toStringz(vertexShader) , toStringz(fragmentShader));
+		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
@@ -130,12 +135,14 @@ class Shader
 		{
 			sfPtr = sfShader_createFromStream(null , &stream );
 		}
+		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
 	bool loadFromStream(InputStream vertexShaderStream, InputStream fragmentShaderStream)
 	{
 		sfPtr = sfShader_createFromStream(&vertexShaderStream, &fragmentShaderStream);
+		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
@@ -182,6 +189,7 @@ class Shader
 	void setParameter(string name, Texture texture)
 	{
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
+		err.write(text(sfErrGraphics_getOutput()));
 	}
 	
 	void setParameter(string name, CurrentTextureType)
@@ -197,7 +205,9 @@ class Shader
 	
 	static bool isAvailable()
 	{
-		return (sfShader_isAvailable());//?true:false;
+		bool toReturn = sfShader_isAvailable();
+		err.write(text(sfErrGraphics_getOutput()));
+		return toReturn;
 	}
 	
 }
@@ -260,3 +270,5 @@ void sfShader_bind(const sfShader* shader);
 
 //Tell whether or not the system supports shaders
 bool sfShader_isAvailable();
+
+const(char)* sfErrGraphics_getOutput();

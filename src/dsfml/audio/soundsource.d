@@ -33,6 +33,10 @@ module dsfml.audio.soundsource;
 import dsfml.system.vector3;
 
 import std.stdio;
+
+import dsfml.system.err;
+import std.conv;
+
 class SoundSource
 {
 	enum Status
@@ -44,9 +48,10 @@ class SoundSource
 
 
 
-	this(const ref SoundSource copy)
+	this(const(SoundSource) copy)
 	{
 		//Copy Constructor
+		//TODO: Look into this
 	}
 
 
@@ -140,6 +145,8 @@ class SoundSource
 		this()
 		{
 			sfSoundSource_ensureALInit();
+			err.write(text(sfErrAudio_getOutput()));
+
 			
 			sfSoundSource_initialize(&m_source);
 		}
@@ -188,4 +195,6 @@ float sfSoundSource_getAttenuation(uint sourceID);
 int sfSoundSource_getStatus(uint sourceID);
 
 void sfSoundSource_destroy(uint* souceID);
+
+const(char)* sfErrAudio_getOutput();
 

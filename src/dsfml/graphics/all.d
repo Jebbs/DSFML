@@ -31,6 +31,8 @@ module dsfml.graphics.all;
 
 public
 {
+	import dsfml.window.all;
+
 	import dsfml.graphics.blendmode;
 	import dsfml.graphics.circleshape;
 	import dsfml.graphics.color;
@@ -56,3 +58,9 @@ public
 	import dsfml.graphics.vertexarray;
 	import dsfml.graphics.view;
 }
+static this()
+{
+	sfErrGraphics_redirect();
+}
+
+private extern(C) void sfErrGraphics_redirect();

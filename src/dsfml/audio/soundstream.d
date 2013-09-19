@@ -38,6 +38,8 @@ import dsfml.audio.soundsource;
 
 import dsfml.system.time;
 
+import dsfml.system.err;
+
 class SoundStream:SoundSource
 {
 	public:
@@ -59,7 +61,7 @@ class SoundStream:SoundSource
 		//check to see if sound parameters ave been set
 		if(m_format == 0)
 		{
-			stderr.writeln("Faile to play audio stream: sound parameters have not been initialized (call Initialization fisrt)");
+			err.writeln("Faile to play audio stream: sound parameters have not been initialized (call Initialization fisrt)");
 			return;
 		}
 		
@@ -142,7 +144,7 @@ class SoundStream:SoundSource
 		{
 			if((m_sampleRate!=0) && (m_channelCount !=0))
 			{
-				return Time.microseconds(sfSoundStream_getPlayingOffset(m_source, m_samplesProcessed, m_sampleRate, m_channelCount));
+				return microseconds(sfSoundStream_getPlayingOffset(m_source, m_samplesProcessed, m_sampleRate, m_channelCount));
 			}
 
 			return Time.Zero;
@@ -189,7 +191,7 @@ class SoundStream:SoundSource
 			m_channelCount = 0;
 			m_sampleRate = 0;
 
-			stderr.writeln("Unsupported number of channels");
+			err.writeln("Unsupported number of channels");
 		}
 	}
 

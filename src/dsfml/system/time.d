@@ -39,7 +39,7 @@ struct Time
 		m_microseconds = microseconds;
 	}
 	
-	float asSeconds()
+	public float asSeconds()
 	{
 		return m_microseconds/1000000f;
 	}
@@ -52,20 +52,7 @@ struct Time
 		return m_microseconds;
 	}
 	
-	static Time seconds(float amount)
-	{
-		return Time(cast(long)(amount * 1000000));
-	}
-	
-	static Time milliseconds(int amount)
-	{
-		return Time(amount*1000);
-	}
-	
-	static Time microseconds(long amount)
-	{
-		return Time( amount);
-	}
+
 	
 	static immutable(Time) Zero;
 	
@@ -159,4 +146,22 @@ struct Time
 	
 }
 
+Time seconds(float amount)
+{
+	return Time(cast(long)(amount * 1000000));
+}
 
+Time milliseconds(int amount)
+{
+	return Time(amount*1000);
+}
+
+Time microseconds(long amount)
+{
+	return Time( amount);
+}
+
+unittest
+{
+
+}

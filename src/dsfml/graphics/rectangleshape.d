@@ -28,22 +28,51 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-module dsfml.audio.all;
-//pragma(lib,"dsfml-audio");
-public
+module dsfml.graphics.rectangleshape;
+
+import dsfml.graphics.shape;
+import dsfml.system.vector2;
+
+class RectangleShape:Shape
 {
-	import dsfml.audio.listener;
-	import dsfml.audio.music;
-	import dsfml.audio.sound;
-	import dsfml.audio.soundbuffer;
-	import dsfml.audio.soundbufferrecorder;
-	import dsfml.audio.soundrecorder;
-	import dsfml.audio.soundsource;
-	import dsfml.audio.soundstream;
-}
-static this()
-{
-	sfErrAudio_redirect();
+	private Vector2f m_size;
+
+	this(Vector2f theSize = Vector2f(0,0))
+	{
+		size = theSize;
+	}
+
+	@property
+	{
+		override uint pointCount()
+		{
+			return 4;
+		}
+	}
+
+	override Vector2f getPoint(uint index) const
+	{
+		switch (index)
+		{
+			default:
+			case 0: return Vector2f(0, 0);
+			case 1: return Vector2f(m_size.x, 0);
+			case 2: return Vector2f(m_size.x, m_size.y);
+			case 3: return Vector2f(0, m_size.y);
+		}
+	}
+
+	@property
+	{
+		void size(Vector2f theSize)
+		{
+			m_size = theSize;
+			update();
+		}
+		Vector2f size()
+		{
+			return m_size;
+		}
+	}
 }
 
-private extern(C) void sfErrAudio_redirect();

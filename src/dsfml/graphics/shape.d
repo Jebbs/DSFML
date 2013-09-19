@@ -156,7 +156,7 @@ class Shape:Drawable,Transformable
 		abstract uint pointCount();
 	}
 	
-	abstract Vector2f getPoint(uint index);
+	abstract Vector2f getPoint(uint index) const;
 	
 	//get local bounds
 	FloatRect getLocalBounds() const

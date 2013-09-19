@@ -34,6 +34,9 @@ debug import std.stdio;
 import dsfml.network.socket;
 import dsfml.network.tcpsocket;
 
+import dsfml.system.err;
+import std.conv;
+
 class TcpListener:Socket
 {
 	sfTcpListener* sfPtr;
@@ -65,12 +68,16 @@ class TcpListener:Socket
 	
 	Status listen(ushort port)
 	{
-		return sfTcpListener_listen(sfPtr, port);
+		Status toReturn = sfTcpListener_listen(sfPtr, port);
+		err.write(text(sfErrNetwork_getOutput()));
+		return toReturn;
 	}
 	
 	Status accept(TcpSocket socket)
 	{
-		return sfTcpListener_accept(sfPtr, &socket.sfPtr);
+		Status toReturn = sfTcpListener_accept(sfPtr, &socket.sfPtr); 
+		err.write(text(sfErrNetwork_getOutput()));
+		return toReturn; 
 	}
 	
 }
@@ -104,3 +111,5 @@ Socket.Status sfTcpListener_listen(sfTcpListener* listener, ushort port);
 
 //Accept a new connection
 Socket.Status sfTcpListener_accept(sfTcpListener* listener, sfTcpSocket** connected);
+
+const(char)* sfErrNetwork_getOutput();

@@ -32,7 +32,7 @@ class ConvexShape:Shape
 	}
 	
 	
-	override Vector2f getPoint(uint index)
+	override Vector2f getPoint(uint index) const
 	{
 		return m_points[index];
 	}

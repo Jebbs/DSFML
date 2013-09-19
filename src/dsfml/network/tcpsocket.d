@@ -36,6 +36,9 @@ import dsfml.network.packet;
 
 import dsfml.system.time;
 
+import dsfml.system.err;
+import std.conv;
+
 debug import std.stdio;
 
 class TcpSocket:Socket
@@ -94,7 +97,9 @@ class TcpSocket:Socket
 	
 	Status send(const(void)[] data)
 	{
-		return sfTcpSocket_send(sfPtr, data.ptr, data.length);
+		Status toReturn = sfTcpSocket_send(sfPtr, data.ptr, data.length);
+		err.write(text(sfErrNetwork_getOutput()));
+		return toReturn;
 	}
 
 	Status receive(out void[] data, size_t maxSize)
@@ -194,4 +199,6 @@ Socket.Status sfTcpSocket_sendPacket(sfTcpSocket* socket, sfPacket* packet);
 
 //Receive a formatted packet of data from the remote peer
 Socket.Status sfTcpSocket_receivePacket(sfTcpSocket* socket, sfPacket* packet);
+
+const(char)* sfErrNetwork_getOutput();
 

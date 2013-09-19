@@ -36,6 +36,7 @@ import dsfml.system.lock;
 
 
 import dsfml.system.time;
+import dsfml.system.inputstream;
 
 import dsfml.audio.soundstream;
 
@@ -49,7 +50,7 @@ class Music:SoundStream
 {
 	this()
 	{
-		m_file = sfSoundFile_create();
+		m_file.create();
 
 		m_mutex = new Mutex();
 
@@ -65,7 +66,7 @@ class Music:SoundStream
 		//stop music if already playing
 		stop();
 
-		if(!sfSoundFile_openReadFromFile(m_file,toStringz(filename)))
+		if(!m_file.openReadFromFile(filename))
 		{
 			return false;
 		}
@@ -75,14 +76,31 @@ class Music:SoundStream
 		return true;
 	}
 
-	bool openFromMemory()
+	bool openFromMemory(const(void)[] data)
 	{
-		return false;
+		stop();
+
+		if(!m_file.openReadFromMemory(data))
+		{
+			return false;
+		}
+
+		initialize();
+		return true;
 	}
 
-	bool openFromStream()
+	bool openFromStream(InputStream stream)
 	{
-		return false;
+		stop();
+
+		if(!m_file.openReadFromStream(stream))
+		{
+			return false;
+		}
+
+		initialize();
+
+		return true;
 	}
 
 	Time getDuration()
@@ -94,7 +112,6 @@ class Music:SoundStream
 	{
 		writeln("Destroying Music");
 		stop();
-		sfSoundFile_destroy(m_file);
 	}
 
 	protected
@@ -103,7 +120,7 @@ class Music:SoundStream
 		{
 			Lock lock = Lock(m_mutex);
 
-			data.sampleCount = cast(size_t)sfSoundFile_read(m_file,&m_samples[0],m_samples.length);
+			data.sampleCount = cast(size_t)m_file.read(m_samples);
 			data.samples = &m_samples[0];
 
 
@@ -114,7 +131,7 @@ class Music:SoundStream
 		{
 			Lock lock =Lock(m_mutex);
 
-			sfSoundFile_seek(m_file,timeOffset.asMicroseconds());
+			m_file.seek(timeOffset.asMicroseconds());
 		}
 	}
 
@@ -122,14 +139,14 @@ class Music:SoundStream
 	{
 		void initialize()
 		{
-			size_t sampleCount = cast(size_t)sfSoundFile_getSampleCount(m_file);
+			size_t sampleCount = cast(size_t)m_file.getSampleCount();
 
-			uint channelCount = sfSoundFile_getChannelCount(m_file);
+			uint channelCount = m_file.getChannelCount() ;
 
-			uint sampleRate = sfSoundFile_getSampleRate(m_file);
+			uint sampleRate = m_file.getSampleRate();
 
 			// Compute the music duration
-			m_duration = Time.seconds(cast(float)(sampleCount) / sampleRate / channelCount);
+			m_duration = seconds(cast(float)(sampleCount) / sampleRate / channelCount);
 			
 			// Resize the internal buffer so that it can contain 1 second of audio samples
 			m_samples.length = sampleRate * channelCount;
@@ -139,7 +156,8 @@ class Music:SoundStream
 
 		}
 		
-		sfSoundFile* m_file;
+		//sfSoundFile* m_file;
+		SoundFile m_file;
 		Time m_duration;
 		short[] m_samples;
 		Mutex m_mutex;
