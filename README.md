@@ -12,7 +12,7 @@ The new build system is super easy! It only supports DMD, but all you need to do
 
 Compiling your project using DSFML
 ===
-Don't forget that you need to add the src directory to your import path!
+There is a brand new [tutorial](https://github.com/Jebbs/DSFML/wiki/Building-The-Library-And-Your-First-DSFML-Program) to follow for setting up your first DSFML project!
 
 
 If problems are encountered!
