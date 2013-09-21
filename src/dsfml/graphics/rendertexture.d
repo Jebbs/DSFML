@@ -259,7 +259,7 @@ void sfRenderTexture_popGLStates(sfRenderTexture* renderTexture);
 void sfRenderTexture_resetGLStates(sfRenderTexture* renderTexture);
 
 //  Get the target texture of a render texture
-const sfTexture* sfRenderTexture_getTexture(const sfRenderTexture* renderTexture);
+sfTexture* sfRenderTexture_getTexture(const sfRenderTexture* renderTexture);
 
 //  Enable or disable the smooth filter on a render texture
 void sfRenderTexture_setSmooth(sfRenderTexture* renderTexture, bool smooth);
