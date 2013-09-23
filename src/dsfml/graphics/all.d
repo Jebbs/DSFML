@@ -43,6 +43,7 @@ public
 	import dsfml.graphics.image;
 	import dsfml.graphics.primitivetype;
 	import dsfml.graphics.rect;
+	import dsfml.graphics.rectangleshape;
 	import dsfml.graphics.renderstates;
 	import dsfml.graphics.rendertarget;
 	import dsfml.graphics.rendertexture;

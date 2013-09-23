@@ -117,7 +117,7 @@ class TcpSocket:Socket
 	{
 
 		//temporary packet to be removed on function exit
-		scope Packet temp = new Packet;;
+		scope Packet temp = new Packet;
 
 		//getting packet's "to send" data
 		temp.append(packet.onSend());

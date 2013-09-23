@@ -282,7 +282,7 @@ void sfImage_getPixel(const sfImage* image, uint x, uint y, ubyte* r, ubyte* b, 
 
 
 /// \brief Get a read-only pointer to the array of pixels of an image
-const ubyte* sfImage_getPixelsPtr(const sfImage* image);
+const (ubyte)* sfImage_getPixelsPtr(const sfImage* image);
 
 
 /// \brief Flip an image horizontally (left <-> right)

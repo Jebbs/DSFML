@@ -272,7 +272,7 @@ class SoundBuffer
 			sfSoundBuffer_fillBuffer(m_buffer,&m_samples[0],m_samples.length,sampleRate, format);
 			
 			//Computer Duration
-			m_duration = milliseconds(1000 * m_samples.length / sampleRate / channelCount);
+			m_duration = milliseconds(cast(int)(1000 * m_samples.length / sampleRate / channelCount));
 			
 			
 			return true;
