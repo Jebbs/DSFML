@@ -1,0 +1,10 @@
+{
+	"name": "DSFML",
+	"description": "static binding of SFML",
+	"homepage": "https://github.com/Jebbs/DSFML",
+	"dependencies": {},
+	
+	"sourcePaths": [ "." ],
+	"targetPath": ".",
+	"targetType": "library"
+}
