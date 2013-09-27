@@ -4,6 +4,7 @@
 	"homepage": "https://github.com/Jebbs/DSFML",
 	"dependencies": {},
 	
+	"libs": [ "dl", "csfml-graphics", "csfml-window", "csfml-system" ],
 	"sourcePaths": [ "." ],
 	"targetPath": ".",
 	"targetType": "library"
