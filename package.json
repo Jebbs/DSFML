@@ -40,7 +40,7 @@
 			"name": "system",
 			"targetType": "library",
 			"sourceFiles": ["dsfml/system.d"],
-			"libs": [ "dl", "csfml-system" ]
+			"libs": [ "csfml-system" ]
 		}
 	]
 }
