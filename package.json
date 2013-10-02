@@ -1,0 +1,46 @@
+{
+	"name": "dsfml",
+	"description": "static binding of SFML",
+	"homepage": "https://github.com/Jebbs/DSFML",
+	
+	"sourcePaths": [ "." ],
+	"targetType": "none",
+	
+	"subPackages":
+	[
+		{
+			"name": "audio",
+			"targetType": "library",
+			"sourceFiles": ["dsfml/audio.d"],
+			"libs": [ "csfml-audio" ],
+			"dependencies": { "dsfml:system": "~master" }
+		},
+		{
+			"name": "graphics",
+			"targetType": "library",
+			"sourceFiles": ["dsfml/graphics.d"],
+			"libs": [ "csfml-graphics" ],
+			"dependencies": { "dsfml:system": "~master" }
+		},
+		{
+			"name": "window",
+			"targetType": "library",
+			"sourceFiles": ["dsfml/window.d"],
+			"libs": [ "csfml-window" ],
+			"dependencies": { "dsfml:system": "~master" }
+		},
+		{
+			"name": "network",
+			"targetType": "library",
+			"sourceFiles": ["dsfml/network.d"],
+			"libs": [ "csfml-network" ],
+			"dependencies": { "dsfml:system": "~master" }
+		},
+		{
+			"name": "system",
+			"targetType": "library",
+			"sourceFiles": ["dsfml/system.d"],
+			"libs": [ "csfml-system" ]
+		}
+	]
+}
