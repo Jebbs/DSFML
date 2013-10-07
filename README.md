@@ -8,7 +8,7 @@ Use [DSFML-C](https://github.com/Jebbs/DSFML-C) along with this branch to get ev
 
 Compiling/Using DSFML
 ===
-There is a brand new [tutorial](https://github.com/Jebbs/DSFML/wiki/Building-The-Library-And-Your-First-DSFML-Program) to follow for setting up your first DSFML project! Check it out and have fun making cool stuff in D!
+There is a brand new [tutorial](https://github.com/Jebbs/DSFML/wiki/Building-The-Library-And-Your-First-DSFML-Program) to follow for setting up your first DSFML project! It includes building the D and C/C++ portions of the binding. Check it out and have fun making cool stuff in D!
 
 
 If problems are encountered!
