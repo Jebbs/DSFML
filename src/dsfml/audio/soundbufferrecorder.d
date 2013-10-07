@@ -1,3 +1,4 @@
+/*
 DSFML - The Simple and Fast Multimedia Library for D
 
 Copyright (c) <2013> <Jeremy DeHaan>
@@ -16,7 +17,7 @@ If you use this software in a product, an acknowledgment in the product document
 3. This notice may not be removed or altered from any source distribution
 
 
-***All code is based on Laurent Gomila's SFML library.***
+***All code is based on code written by Laurent Gomila***
 
 
 External Libraries Used:
@@ -25,3 +26,62 @@ SFML - The Simple and Fast Multimedia Library
 Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
+*/
+
+module dsfml.audio.soundbufferrecorder;
+
+import dsfml.audio.soundrecorder;
+import dsfml.audio.soundbuffer;
+
+import std.stdio;
+
+class SoundBufferRecorder:SoundRecorder
+{
+	this()
+	{
+		// Constructor code
+	}
+
+	SoundBuffer getBuffer()
+	{
+		return m_buffer;
+	}
+
+	protected
+	{
+	override bool onStart()
+	{
+		m_samples.length = 0;
+		m_buffer = new SoundBuffer();
+
+		return true;
+	}
+
+	override bool onProcessSamples(short[] samples)
+	{
+			writeln(samples.length);
+
+
+			m_samples ~= samples;
+				
+
+		return true;
+	}
+
+	override void onStop()
+	{
+		if(m_samples.length >0)
+		{
+			m_buffer.loadFromSamples(m_samples,1,sampleRate);
+		}
+	}
+	}
+
+private:
+	short[] m_samples;
+	SoundBuffer m_buffer;
+
+}
+
+
+

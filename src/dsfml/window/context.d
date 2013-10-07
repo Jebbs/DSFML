@@ -1,3 +1,4 @@
+/*
 DSFML - The Simple and Fast Multimedia Library for D
 
 Copyright (c) <2013> <Jeremy DeHaan>
@@ -16,7 +17,7 @@ If you use this software in a product, an acknowledgment in the product document
 3. This notice may not be removed or altered from any source distribution
 
 
-***All code is based on Laurent Gomila's SFML library.***
+***All code is based on code written by Laurent Gomila***
 
 
 External Libraries Used:
@@ -25,3 +26,40 @@ SFML - The Simple and Fast Multimedia Library
 Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
+*/
+module dsfml.window.context;
+
+debug import std.stdio;
+
+class Context
+{
+	package sfContext* sfPtr;
+	
+	this()
+	{
+		sfPtr = sfContext_create();
+	}
+	
+	~this()
+	{
+		debug writeln("Destroying Context");
+		sfContext_destroy(sfPtr);	
+	}
+	
+	void setActive(bool active)
+	{
+		sfContext_setActive(sfPtr,active);
+	}
+	
+}
+
+package extern(C)
+{
+	struct sfContext;
+}
+private extern(C)
+{
+	sfContext* sfContext_create();
+	void sfContext_destroy(sfContext* context);
+	void sfContext_setActive(sfContext* context, bool active);
+}

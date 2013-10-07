@@ -1,3 +1,4 @@
+/*
 DSFML - The Simple and Fast Multimedia Library for D
 
 Copyright (c) <2013> <Jeremy DeHaan>
@@ -16,7 +17,7 @@ If you use this software in a product, an acknowledgment in the product document
 3. This notice may not be removed or altered from any source distribution
 
 
-***All code is based on Laurent Gomila's SFML library.***
+***All code is based on code written by Laurent Gomila***
 
 
 External Libraries Used:
@@ -25,3 +26,20 @@ SFML - The Simple and Fast Multimedia Library
 Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
+*/
+
+module dsfml.network.socket;
+
+//base class for sockets
+abstract class Socket
+{
+	//TODO: Add methods to this so that they can be overridden by the socket classes
+	enum Status
+	{
+		Done, /// The socket has sent / received the data
+		NotReady, /// The socket is not ready to send / receive data yet
+		Disconnected, /// The TCP socket has been disconnected
+		Error /// An unexpected error happened
+	}
+}
+
