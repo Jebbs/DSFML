@@ -1,5 +1,4 @@
 /*
-/*
 DSFML - The Simple and Fast Multimedia Library for D
 
 Copyright (c) <2013> <Jeremy DeHaan>
@@ -51,7 +50,7 @@ class Clock
 	
 	~this()
 	{
-		writeln("Destroying Clock");
+		debug writeln("Destroying Clock");
 		sfClock_destroy(sfPtr);
 	}
 	
