@@ -48,7 +48,7 @@ class Mouse
 	
 	static bool isButtonPressed(Button button)
 	{
-		return (sfMouse_isButtonPressed(button) );//== sfTrue) ? true : false;
+		return (sfMouse_isButtonPressed(button) );
 	}
 	
 	static Vector2i getPosition()
@@ -68,25 +68,38 @@ class Mouse
 	{
 		sfMouse_setPosition(position.x, position.y,null);
 	}
-	
+
 	static void setPosition(Vector2i position, const(Window) relativeTo)
 	{
-		sfMouse_setPosition(position.x, position.y, relativeTo.sfPtr);
+		relativeTo.mouse_SetPosition(position);
 	}
 }
 
 private extern(C)
 {
 
-
 	//Check if a mouse button is pressed
 	bool sfMouse_isButtonPressed(int button);
-	
-	
+
 	//Get the current position of the mouse
 	void sfMouse_getPosition(const(sfWindow)* relativeTo, int* x, int* y);
-	
-	
+
 	//Set the current position of the mouse
 	void sfMouse_setPosition(int x, int y, const(sfWindow)* relativeTo);
+}
+
+unittest
+{
+	import std.stdio;
+
+	writeln("Unit test for Mouse class");
+
+	writeln("Current mouse position: ", Mouse.getPosition().toString());
+
+	Mouse.setPosition(Vector2i(100,400));
+
+	writeln("New mouse position: ", Mouse.getPosition().toString());
+
+
+
 }

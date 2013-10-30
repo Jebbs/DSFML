@@ -39,3 +39,4 @@ struct ContextSettings
 	
 	static const(ContextSettings) Default;
 }
+//unittest?

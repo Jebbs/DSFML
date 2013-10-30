@@ -63,3 +63,4 @@ private extern(C)
 	void sfContext_destroy(sfContext* context);
 	void sfContext_setActive(sfContext* context, bool active);
 }
+//unittest?

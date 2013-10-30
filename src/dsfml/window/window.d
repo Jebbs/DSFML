@@ -52,8 +52,7 @@ class Window
 		Fullscreen = 1 << 3,
 		DefaultStyle = Titlebar | Resize | Close
 	}
-	
-	
+
 	package sfWindow* sfPtr;
 
 	//blank constructor for RenderWindow
@@ -112,7 +111,7 @@ class Window
 		sfWindow_close(sfPtr);
 	}
 	
-	const(ContextSettings) getSettings() const
+	ContextSettings getSettings() const
 	{
 		ContextSettings temp;
 		sfWindow_getSettings(sfPtr,&temp.depthBits, &temp.stencilBits, &temp.antialiasingLevel, &temp.majorVersion, &temp.minorVersion);
@@ -235,8 +234,6 @@ class Window
 		setMousePosition(pos);
 	}
 
-
-
 	//Circumvents the package restriction allowing Texture to get the internal pointer
 	protected static void* getWindowPointer(Window window)
 	{
@@ -246,6 +243,73 @@ class Window
 	
 }
 
+unittest
+{
+	import std.stdio;
+	import dsfml.graphics.image;
+
+	//constructor
+	auto window = new Window(VideoMode(800,600),"Test Window");
+
+	//perform each window call
+	Vector2u windowSize = window.size;
+
+	windowSize.x = 1000;
+	windowSize.y = 1000;
+
+	window.size = windowSize;
+
+	Vector2i windowPosition = window.position;
+
+	windowPosition.x = 100;
+	windowPosition.y = 100;
+
+	window.position = windowPosition;
+
+	window.setTitle("thing");//uses the first set title
+
+	window.setTitle("素晴らしい ！"d);//forces the dstring override and uses unicode
+
+	window.setActive(true);
+
+	window.setJoystickThreshhold(1);
+
+	window.setVisible(true);
+
+	window.setFramerateLimit(60);
+
+	window.setMouseCursorVisible(true);
+
+	window.setVerticalSyncEnabled(true);
+
+	auto settings = window.getSettings();
+
+	auto image = new Image();
+	image.loadFromFile("Crono.png");//replace with something that won't get me in trouble
+
+	window.setIcon(image.getSize().x,image.getSize().x,image.getPixelArray());
+
+	if(window.isOpen())
+	{
+		Event event;
+		if(window.pollEvent(event))
+		{
+
+		}
+		//requires users input
+		if(window.waitEvent(event))
+		{
+
+		}
+
+		window.display();
+	}
+
+	window.close();
+
+
+}
+
 
 alias std.utf.toUTFz!(const(dchar)*) toUTF32z;
 
@@ -253,102 +317,78 @@ package extern(C)
 {
 	struct sfWindow;
 }
+
 private extern(C)
 {
-
-
 	//Construct a new window
 	sfWindow* sfWindow_create(uint width, uint height, uint bitsPerPixel, const char* title, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
-	
-	
+
 	//Construct a new window (with a UTF-32 title)
 	sfWindow* sfWindow_createUnicode(uint width, uint height, uint bitsPerPixel, const(dchar)* title, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
-	
-	
+
 	//Construct a window from an existing control
 	sfWindow* sfWindow_createFromHandle(WindowHandle handle, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
-	
-	
+
 	// Destroy a window
 	void sfWindow_destroy(sfWindow* window);
-	
-	
+
 	//Close a window and destroy all the attached resources
 	void sfWindow_close(sfWindow* window);
-	
-	
+
 	//Tell whether or not a window is opened
 	bool sfWindow_isOpen(const(sfWindow)* window);
-	
-	
+
 	//Get the settings of the OpenGL context of a window
 	void sfWindow_getSettings(const(sfWindow)* window, uint* depthBits, uint* stencilBits, uint* antialiasingLevel, uint* majorVersion, uint* minorVersion);
-	
-	
+
 	//Pop the event on top of event queue, if any, and return it
 	bool sfWindow_pollEvent(sfWindow* window, Event* event);
-	
-	
+
 	//Wait for an event and return it
 	bool sfWindow_waitEvent(sfWindow* window, Event* event);
-	
-	
+
 	//Get the position of a window
 	void sfWindow_getPosition(const(sfWindow)* window, int* x, int* y);
-	
-	
+
 	//Change the position of a window on screen
 	void sfWindow_setPosition(sfWindow* window, int x, int y);
-	
-	
+
 	//Get the size of the rendering region of a window
 	void sfWindow_getSize(const(sfWindow)* window, uint* width, uint* height);
-	
-	
+
 	//Change the size of the rendering region of a window
 	void sfWindow_setSize(sfWindow* window, uint width, uint height);
-	
-	
+
 	//Change the title of a window
 	void sfWindow_setTitle(sfWindow* window, const(char)* title);
-	
-	
+
 	//Change the title of a window (with a UTF-32 string)
 	void sfWindow_setUnicodeTitle(sfWindow* window, const(dchar)* title);
-	
-	
+
 	//Change a window's icon
 	void sfWindow_setIcon(sfWindow* window, uint width, uint height, const(ubyte)* pixels);
-	
-	
+
 	//Show or hide a window
 	void sfWindow_setVisible(sfWindow* window, bool visible);
-	
-	
+
 	//Show or hide the mouse cursor
 	void sfWindow_setMouseCursorVisible(sfWindow* window, bool visible);
-	
-	
+
 	//Enable or disable vertical synchronization
 	 void sfWindow_setVerticalSyncEnabled(sfWindow* window, bool enabled);
-	
-	
+
 	//Enable or disable automatic key-repeat
 	 void sfWindow_setKeyRepeatEnabled(sfWindow* window, bool enabled);
-	
-	
+
 	//Activate or deactivate a window as the current target for OpenGL rendering
 	 bool sfWindow_setActive(sfWindow* window, bool active);
-	
-	
+
 	//Display on screen what has been rendered to the window so far
 	 void sfWindow_display(sfWindow* window);
-	
-	
+
 	//Limit the framerate to a maximum fixed frequency
 	 void sfWindow_setFramerateLimit(sfWindow* window, uint limit);
-	
-	
+
 	//Change the joystick threshold
 	 void sfWindow_setJoystickThreshold(sfWindow* window, float threshold);
 	
@@ -361,3 +401,5 @@ private extern(C)
 
 	const(char)* sfErrWindow_getOutput();
 }
+
+

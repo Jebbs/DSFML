@@ -126,7 +126,7 @@ class RenderWindow:Window,RenderTarget
 		sfRenderWindow_close(sfPtr);
 	}
 	
-	override const(ContextSettings) getSettings() const
+	override ContextSettings getSettings() const
 	{
 		ContextSettings temp;
 		sfRenderWindow_getSettings(sfPtr,&temp.depthBits, &temp.stencilBits, &temp.antialiasingLevel, &temp.majorVersion, &temp.minorVersion);
@@ -231,7 +231,7 @@ class RenderWindow:Window,RenderTarget
 		return temp;
 	}
 
-	override protected void setMousePosition(Vector2i pos)
+	override protected void setMousePosition(Vector2i pos) const
 	{
 		sfMouse_setPositionRenderWindow(pos.x, pos.y, sfPtr);
 	}

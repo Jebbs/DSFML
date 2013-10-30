@@ -45,12 +45,7 @@ struct VideoMode
 		height = Height;
 		bitsPerPixel = bits;
 	}
-	
-	
 
-	
-
-	
 	static VideoMode getDesktopMode()
 	{
 		VideoMode temp;
@@ -60,21 +55,22 @@ struct VideoMode
 	
 	static VideoMode[] getFullscreenModes()
 	{
-		static VideoMode[] videoModes;
+		static VideoMode[] videoModes;//stores all video modes after the first call
 
+		//if getFullscreenModes hasn't been called yet
 		if(videoModes.length == 0)
 		{
 			uint* modes;
 			size_t counts;
 		
+			//returns uints instead of structs due to 64 bit bug
 			modes = sfVideoMode_getFullscreenModes(&counts);
-		
 
+			//calculate real length
 			videoModes.length = counts/3;
 
-
+			//populate videoModes
 			int videoModeIndex = 0;
-
 			for(uint i = 0; i < counts; i+=3)
 			{
 				VideoMode temp = VideoMode(modes[i], modes[i+1], modes[i+2]);
@@ -102,10 +98,28 @@ struct VideoMode
 }
 
 private extern(C):
-
-
-
-//Video Mode
 void sfVideoMode_getDesktopMode(uint* width, uint* height, uint* bitsPerPixel);
 uint* sfVideoMode_getFullscreenModes(size_t* Count);
 bool sfVideoMode_isValid(uint width, uint height, uint bitsPerPixel);
+
+
+unittest
+{
+	import std.stdio;
+
+	writeln("Unit test for VideoMode struct");
+
+	uint modesCount = VideoMode.getFullscreenModes().length;
+
+	writeln("There are ", modesCount, " full screen modes available.");
+	writeln("Your current desktop video mode is ",VideoMode.getDesktopMode().toString());
+
+	writeln("Confirming all fullscreen modes are valid.");
+	foreach(mode; VideoMode.getFullscreenModes())
+	{
+		assert(mode.isValid());
+	}
+	writeln("All video modes are valid.");
+
+	writeln();
+}
