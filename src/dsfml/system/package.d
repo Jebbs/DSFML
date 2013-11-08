@@ -27,23 +27,19 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
-
-module dsfml.audio.all;
-//pragma(lib,"dsfml-audio");
+module dsfml.system;
+//pragma(lib,"dsfml-system");
 public
 {
-	import dsfml.audio.listener;
-	import dsfml.audio.music;
-	import dsfml.audio.sound;
-	import dsfml.audio.soundbuffer;
-	import dsfml.audio.soundbufferrecorder;
-	import dsfml.audio.soundrecorder;
-	import dsfml.audio.soundsource;
-	import dsfml.audio.soundstream;
-}
-static this()
-{
-	sfErrAudio_redirect();
+	import dsfml.system.clock;
+	import dsfml.system.err;
+	import dsfml.system.inputstream;
+	import dsfml.system.lock;
+	import dsfml.system.mutex;
+	import dsfml.system.sleep;
+	import dsfml.system.thread;
+	import dsfml.system.time;
+	import dsfml.system.vector2;
+	import dsfml.system.vector3;
 }
 
-private extern(C) void sfErrAudio_redirect();

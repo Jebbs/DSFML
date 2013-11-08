@@ -27,28 +27,41 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
-module dsfml.window.all;
-
-//pragma(lib,"dsfml-window");
+module dsfml.graphics;
 
 public
 {
-	import dsfml.system.all;
+	import dsfml.window;
 
-	import dsfml.window.context;
-	import dsfml.window.contextsettings;
-	import dsfml.window.event;
-	import dsfml.window.joystick;
-	import dsfml.window.keyboard;
-	import dsfml.window.mouse;
-	import dsfml.window.videomode;
-	import dsfml.window.window;
-	import dsfml.window.windowhandle;
+	import dsfml.graphics.blendmode;
+	import dsfml.graphics.circleshape;
+	import dsfml.graphics.color;
+	import dsfml.graphics.convexshape;
+	import dsfml.graphics.drawable;
+	import dsfml.graphics.font;
+	import dsfml.graphics.glyph;
+	import dsfml.graphics.image;
+	import dsfml.graphics.primitivetype;
+	import dsfml.graphics.rect;
+	import dsfml.graphics.rectangleshape;
+	import dsfml.graphics.renderstates;
+	import dsfml.graphics.rendertarget;
+	import dsfml.graphics.rendertexture;
+	import dsfml.graphics.renderwindow;
+	import dsfml.graphics.shader;
+	import dsfml.graphics.shape;
+	import dsfml.graphics.sprite;
+	import dsfml.graphics.text;
+	import dsfml.graphics.texture;
+	import dsfml.graphics.transform;
+	import dsfml.graphics.transformable;
+	import dsfml.graphics.vertex;
+	import dsfml.graphics.vertexarray;
+	import dsfml.graphics.view;
 }
 static this()
 {
-	sfErrWindow_redirect();
+	sfErrGraphics_redirect();
 }
 
-private extern(C) void sfErrWindow_redirect();
-
+private extern(C) void sfErrGraphics_redirect();
