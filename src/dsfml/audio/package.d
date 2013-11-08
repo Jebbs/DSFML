@@ -27,41 +27,23 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
-module dsfml.graphics.all;
 
+module dsfml.audio;
+//pragma(lib,"dsfml-audio");
 public
 {
-	import dsfml.window.all;
-
-	import dsfml.graphics.blendmode;
-	import dsfml.graphics.circleshape;
-	import dsfml.graphics.color;
-	import dsfml.graphics.convexshape;
-	import dsfml.graphics.drawable;
-	import dsfml.graphics.font;
-	import dsfml.graphics.glyph;
-	import dsfml.graphics.image;
-	import dsfml.graphics.primitivetype;
-	import dsfml.graphics.rect;
-	import dsfml.graphics.rectangleshape;
-	import dsfml.graphics.renderstates;
-	import dsfml.graphics.rendertarget;
-	import dsfml.graphics.rendertexture;
-	import dsfml.graphics.renderwindow;
-	import dsfml.graphics.shader;
-	import dsfml.graphics.shape;
-	import dsfml.graphics.sprite;
-	import dsfml.graphics.text;
-	import dsfml.graphics.texture;
-	import dsfml.graphics.transform;
-	import dsfml.graphics.transformable;
-	import dsfml.graphics.vertex;
-	import dsfml.graphics.vertexarray;
-	import dsfml.graphics.view;
+	import dsfml.audio.listener;
+	import dsfml.audio.music;
+	import dsfml.audio.sound;
+	import dsfml.audio.soundbuffer;
+	import dsfml.audio.soundbufferrecorder;
+	import dsfml.audio.soundrecorder;
+	import dsfml.audio.soundsource;
+	import dsfml.audio.soundstream;
 }
 static this()
 {
-	sfErrGraphics_redirect();
+	sfErrAudio_redirect();
 }
 
-private extern(C) void sfErrGraphics_redirect();
+private extern(C) void sfErrAudio_redirect();

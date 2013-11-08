@@ -27,25 +27,28 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
-module dsfml.network.all;
+module dsfml.window;
 
-//pragma(lib,"dsfml-network");
+//pragma(lib,"dsfml-window");
 
 public
 {
-	import dsfml.network.ftp;
-	import dsfml.network.http;
-	import dsfml.network.ipaddress;
-	import dsfml.network.packet;
-	import dsfml.network.socket;
-	import dsfml.network.socketselector;
-	import dsfml.network.tcplistener;
-	import dsfml.network.tcpsocket;
-	import dsfml.network.udpsocket;
+	import dsfml.system;
+
+	import dsfml.window.context;
+	import dsfml.window.contextsettings;
+	import dsfml.window.event;
+	import dsfml.window.joystick;
+	import dsfml.window.keyboard;
+	import dsfml.window.mouse;
+	import dsfml.window.videomode;
+	import dsfml.window.window;
+	import dsfml.window.windowhandle;
 }
 static this()
 {
-	sfErrNetwork_redirect();
+	sfErrWindow_redirect();
 }
 
-private extern(C) void sfErrNetwork_redirect();
+private extern(C) void sfErrWindow_redirect();
+

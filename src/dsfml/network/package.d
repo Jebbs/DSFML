@@ -27,19 +27,25 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
-module dsfml.system.all;
-//pragma(lib,"dsfml-system");
+module dsfml.network;
+
+//pragma(lib,"dsfml-network");
+
 public
 {
-	import dsfml.system.clock;
-	import dsfml.system.err;
-	import dsfml.system.inputstream;
-	import dsfml.system.lock;
-	import dsfml.system.mutex;
-	import dsfml.system.sleep;
-	import dsfml.system.thread;
-	import dsfml.system.time;
-	import dsfml.system.vector2;
-	import dsfml.system.vector3;
+	import dsfml.network.ftp;
+	import dsfml.network.http;
+	import dsfml.network.ipaddress;
+	import dsfml.network.packet;
+	import dsfml.network.socket;
+	import dsfml.network.socketselector;
+	import dsfml.network.tcplistener;
+	import dsfml.network.tcpsocket;
+	import dsfml.network.udpsocket;
+}
+static this()
+{
+	sfErrNetwork_redirect();
 }
 
+private extern(C) void sfErrNetwork_redirect();
