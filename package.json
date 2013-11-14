@@ -1,4 +1,72 @@
 {
         "name": "dsfml",
-        "description": "This is a temporary json file for DUB. It will be filled out soon!"
+        "description": "This is a temporary json file for DUB. It currently does not work! It will be filled out soon!",
+        "authors": ["Jeremy DeHaan"],
+	"homepage": "https://github.com/Jebbs/DSFML",
+	"license": "Zlib",
+	"sourcePaths": [ "." ],
+        "targetType": "none",
+        
+        "subPackages":[{"Description":"subPackages is currently broken, untested, or, at the time of this writing, both."}],
+        "subPackages":[{"Description":"This needs to be made sure it works for all OS's. Library names are different on OSX."}]
+        "subPackages":
+        [
+                {
+                        "name": "audio",
+                        "targetType": "library",
+                        "sourceFiles": 
+                        ["dsfml/audio/listener.d",
+                        "dsfml/audio/music.d",
+                        "dsfml/audio/package.d",
+                        "dsfml/audio/sound.d",
+                        "dsfml/audio/soundbuffer.d",
+                        "dsfml/audio/soundbufferrecorder.d",
+                        "dsfml/audio/soundfile.d",
+                        "dsfml/audio/soundrecorder.d",
+                        "dsfml/audio/soundsource.d",
+                        "dsfml/audio/soundstream.d"],
+                        "libs": [ "dsfml-audio" ],
+                        "dependencies": 
+                        { 
+                                "dsfml:system": "~master" 
+                        }
+                },
+                {
+                        "name": "graphics",
+                        "targetType": "library",
+                        "sourceFiles": ["dsfml/graphics.d"],
+                        "libs": [ "dsfml-graphics" ],
+                        "dependencies": 
+                        { 
+                                "dsfml:system": "~master",
+                                "dsfml:window": "~master"
+                        }
+                },
+                {
+                        "name": "window",
+                        "targetType": "library",
+                        "sourceFiles": ["dsfml/window.d"],
+                        "libs": [ "dsfml-window" ],
+                        "dependencies": 
+                        { 
+                                "dsfml:system": "~master" 
+                        }
+                },
+                {
+                        "name": "network",
+                        "targetType": "library",
+                        "sourceFiles": ["dsfml/network.d"],
+                        "libs": [ "dsfml-network" ],
+                        "dependencies": 
+                        { 
+                                "dsfml:system": "~master" 
+                        }
+                },
+                {
+                        "name": "system",
+                        "targetType": "library",
+                        "sourceFiles": ["dsfml/system.d"],
+                        "libs": [ "dsfml-system" ]
+                }
+        ]
 }
