@@ -68,9 +68,16 @@
                         }
                 },
                 {
-                        "name": "window",
-                        "targetType": "library",
-                        "sourceFiles": [],
+                        "name": "window
+                        ["dsfml/window/context.d",
+        		"dsfml/window/contextsettings.d",
+        		"dsfml/window/event.d",
+			"dsfml/window/joystick.d",
+			"dsfml/window/keyboard.d",
+			"dsfml/window/mouse.d",
+			"dsfml/window/videomode.d",
+			"dsfml/window/window.d",
+        		"dsfml/window/windowhandle.d"],
                         "libs": [ "dsfml-window" ],
                         "dependencies": 
                         { 
