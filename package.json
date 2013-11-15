@@ -70,6 +70,16 @@
                 {
                         "name": "window",
                         "targetType": "library",
+                        "sourceFiles": [],
+                        "libs": [ "dsfml-window" ],
+                        "dependencies": 
+                        { 
+                                "dsfml:system": "~master" 
+                        }
+                },
+                {
+                        "name": "network",
+                        "targetType": "library",
                         "sourceFiles": 
                         ["dsfml/network/ftp.d",
 			"dsfml/network/http.d",
@@ -80,16 +90,6 @@
         		"dsfml/network/tcplistener.d",
         		"dsfml/network/tcpsocket.d",
         		"dsfml/network/udpsocket.d"],
-                        "libs": [ "dsfml-window" ],
-                        "dependencies": 
-                        { 
-                                "dsfml:system": "~master" 
-                        }
-                },
-                {
-                        "name": "network",
-                        "targetType": "library",
-                        "sourceFiles": ["dsfml/network.d"],
                         "libs": [ "dsfml-network" ],
                         "dependencies": 
                         { 
