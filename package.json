@@ -70,7 +70,16 @@
                 {
                         "name": "window",
                         "targetType": "library",
-                        "sourceFiles": ["dsfml/window.d"],
+                        "sourceFiles": 
+                        ["dsfml/network/ftp.d",
+			"dsfml/network/http.d",
+        		"dsfml/network/ipaddress.d",
+        		"dsfml/network/packet.d",
+        		"dsfml/network/socket.d",
+        		"dsfml/network/socketselector.d",
+        		"dsfml/network/tcplistener.d",
+        		"dsfml/network/tcpsocket.d",
+        		"dsfml/network/udpsocket.d"],
                         "libs": [ "dsfml-window" ],
                         "dependencies": 
                         { 
