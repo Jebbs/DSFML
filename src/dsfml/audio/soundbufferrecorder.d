@@ -33,8 +33,6 @@ module dsfml.audio.soundbufferrecorder;
 import dsfml.audio.soundrecorder;
 import dsfml.audio.soundbuffer;
 
-import std.stdio;
-
 class SoundBufferRecorder:SoundRecorder
 {
 	this()
@@ -59,12 +57,8 @@ class SoundBufferRecorder:SoundRecorder
 
 	override bool onProcessSamples(short[] samples)
 	{
-			writeln(samples.length);
-
-
-			m_samples ~= samples;
+		m_samples ~= samples;
 				
-
 		return true;
 	}
 
@@ -80,6 +74,50 @@ class SoundBufferRecorder:SoundRecorder
 private:
 	short[] m_samples;
 	SoundBuffer m_buffer;
+
+}
+
+unittest
+{
+	import std.stdio;
+	import dsfml.window.keyboard;
+	import dsfml.audio.sound;
+	import dsfml.system.time;
+	import dsfml.system.clock;
+
+	writeln("Unit test for SoundBufferRecorder.");
+
+	auto recorder = new SoundBufferRecorder();
+
+	writeln("Press Enter to start recording.");
+	if(Keyboard.isKeyPressed(Keyboard.Key.Return))
+	{
+		recorder.start();
+	}
+
+	writeln("Press Enter to stop recording.");
+
+	if(Keyboard.isKeyPressed(Keyboard.Key.Return))
+	{
+		recorder.stop();
+	}
+
+	auto recorderDuration = recorder.getBuffer().getDuration();
+
+	auto recorderSound = new Sound(recorder.getBuffer());
+
+	auto clock = new Clock();
+
+	recorderSound.play();
+	while(clock.getElapsedTime() < recorderDuration)
+	{
+		//sound playing
+	}
+
+
+
+
+	writeln();
 
 }
 

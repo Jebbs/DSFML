@@ -142,26 +142,31 @@ class Sound : SoundSource
 	private Rebindable!(const(SoundBuffer)) m_buffer;
 }
 
-/*
-private struct ChangeableConst(T)
+unittest
 {
-	T m_object;
+	import std.stdio;
+
+	writeln("Unit test for Sound class");
+
+	//first, get a sound buffer
+
+	auto soundbuffer = new SoundBuffer();
 	
-	alias getObject this;
-	
-	this(const(T) object)
+	if(!soundbuffer.loadFromFile("cave1.ogg"))
 	{
-		m_object = cast(T)object;
+		//error
+		return;
 	}
 
+	auto sound = new Sound(soundbuffer);
 
-	
-	const(T) getObject()//works with both classes and structs?
-	{
-		return m_object;
-	}
+	//play the sound!
+	sound.play();
+
+
+	writeln();
 }
-*/
+
 private extern(C):
 
 void sfSoundStream_alSourcePlay(uint sourceID);

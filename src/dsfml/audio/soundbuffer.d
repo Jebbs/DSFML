@@ -217,8 +217,7 @@ class SoundBuffer
 	{
 		bool initialize(SoundFile file)
 		{
-			
-			
+
 			// Retrieve the sound parameters
 			size_t sampleCount = cast(size_t)file.getSampleCount();
 			uint channelCount = file.getChannelCount();
@@ -278,11 +277,7 @@ class SoundBuffer
 			return true;
 		}
 		
-		
-		
-		
-		
-		
+
 		short[] m_samples; /// Samples buffer
 		Time m_duration; /// Sound duration
 
@@ -292,6 +287,34 @@ class SoundBuffer
 	}
 
 }
+
+unittest
+{
+	import std.stdio;
+
+	writeln("Unit test for sound buffer");
+
+	auto soundbuffer = new SoundBuffer();
+
+	if(!soundbuffer.loadFromFile("cave1.ogg"))
+	{
+		//error
+		return;
+	}
+
+	writeln("Sample Rate: ", soundbuffer.getSampleRate());
+
+	writeln("Channel Count: ", soundbuffer.getChannelCount());
+
+	writeln("Duration: ",soundbuffer.getDuration().asSeconds());
+
+	writeln("Sample Count: ",soundbuffer.getSamples().length);
+
+	//use sound buffer here
+
+	writeln();
+}
+
 
 
 ///SoundList is a map of sorts that allows an array of sounds to be bound to a particular key.
@@ -359,50 +382,6 @@ private struct SoundList
 
 }//SoundList
 
-
-private extern(C++) interface sfmlInputStream
-{
-	long read(void* data, long size);
-	
-	long seek(long position);
-	
-	long tell();
-	
-	long getSize();
-}
-
-/*
-private class sfmlStream:sfmlInputStream
-{
-	private InputStream myStream;
-	
-	this(InputStream stream)
-	{
-		myStream = stream;
-	}
-	
-	extern(C++)long read(void* data, long size)
-	{
-		return myStream.read(data[0..cast(size_t)size]);
-	}
-	
-	extern(C++)long seek(long position)
-	{
-		return myStream.seek(position);
-	}
-	
-	extern(C++)long tell()
-	{
-		return myStream.tell();
-	}
-	
-	extern(C++)long getSize()
-	{
-		return myStream.getSize();
-	}
-}
-
-*/
 
 private extern(C):
 

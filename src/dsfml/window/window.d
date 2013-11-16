@@ -224,12 +224,12 @@ class Window
 		return getMousePosition();
 	}
 
-	protected void setMousePosition(Vector2i pos)
+	protected void setMousePosition(Vector2i pos) const
 	{
 		sfMouse_setPosition(pos.x, pos.y, sfPtr);
 	}
 
-	package void mouse_SetPosition(Vector2i pos)
+	package void mouse_SetPosition(Vector2i pos) const
 	{
 		setMousePosition(pos);
 	}

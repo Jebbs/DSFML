@@ -32,6 +32,8 @@ module dsfml.audio;
 //pragma(lib,"dsfml-audio");
 public
 {
+	import dsfml.system;
+
 	import dsfml.audio.listener;
 	import dsfml.audio.music;
 	import dsfml.audio.sound;

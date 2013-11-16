@@ -54,9 +54,6 @@ class Music:SoundStream
 
 		m_mutex = new Mutex();
 
-		m_mutex.lock();
-		m_mutex.unlock();
-
 		super();
 		
 	}
@@ -121,7 +118,7 @@ class Music:SoundStream
 			Lock lock = Lock(m_mutex);
 
 			data.sampleCount = cast(size_t)m_file.read(m_samples);
-			data.samples = &m_samples[0];
+			data.samples = m_samples.ptr;
 
 
 			return data.sampleCount == m_samples.length;
@@ -141,7 +138,7 @@ class Music:SoundStream
 		{
 			size_t sampleCount = cast(size_t)m_file.getSampleCount();
 
-			uint channelCount = m_file.getChannelCount() ;
+			uint channelCount = m_file.getChannelCount();
 
 			uint sampleRate = m_file.getSampleRate();
 
@@ -155,8 +152,7 @@ class Music:SoundStream
 			super.initialize(channelCount, sampleRate);
 
 		}
-		
-		//sfSoundFile* m_file;
+
 		SoundFile m_file;
 		Time m_duration;
 		short[] m_samples;
@@ -164,6 +160,36 @@ class Music:SoundStream
 	}
 }
 
-private extern(C):
+unittest
+{
+	import std.stdio;
+	import dsfml.system.clock;
+
+	writeln("Unit test for Music Class");
+
+	auto music = new Music();
+
+	if(!music.openFromFile("hal1.ogg"))
+	{
+		return;
+	}
+
+	auto clock = new Clock();
+
+	writeln("Playing music for 5 seconds");
+
+	music.play();
+	while(clock.getElapsedTime().asSeconds() < 5)
+	{
+		//playing music in seoarate thread while main thread is stuck here
+	}
+
+	music.stop();
+
+
+
+
+	writeln();
+}
 
 

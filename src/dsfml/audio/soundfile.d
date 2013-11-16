@@ -80,7 +80,6 @@ struct SoundFile
 
 	long read(short[] data)
 	{
-
 		return sfSoundFile_read(soundFile,data.ptr, data.length);
 
 	}
@@ -93,6 +92,7 @@ struct SoundFile
 	void seek(long timeOffset)
 	{
 		sfSoundFile_seek(soundFile, timeOffset);
+		err.write(text(sfErrAudio_getOutput()));
 	}
 
 	long getSampleCount()
@@ -163,7 +163,7 @@ extern(C) const(char)* sfErrAudio_getOutput();
 
 
 extern(C)
-	{
+{
 
 struct sfSoundFile;
 

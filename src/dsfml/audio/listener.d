@@ -80,6 +80,31 @@ final abstract class Listener
 	}
 }
 
+unittest
+{
+	import std.stdio;
+
+	writeln("Unit test for Listener");
+
+	float volume = Listener.GlobalVolume;
+	volume-=30;
+	Listener.GlobalVolume = volume;
+
+	Vector3f pos = Listener.Position;
+	pos.x += 10;
+	pos.y -= 10;
+	pos.z *= 3;
+	Listener.Position = pos;
+
+	Vector3f dir = Listener.Direction;
+	dir.x += 10;
+	dir.y -= 10;
+	dir.z *= 3;
+	Listener.Direction = dir;
+	writeln("Unit tests pass!");
+	writeln();
+}
+
 private extern(C):
 
 void sfListener_setGlobalVolume(float volume);
