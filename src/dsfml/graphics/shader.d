@@ -81,6 +81,12 @@ class Shader
 	
 	bool loadFromFile(string filename, Type type)
 	{
+		//if the Shader exists, destroy it first
+		if(sfPtr)
+		{
+			sfShader_destroy(sfPtr);
+		}
+
 		if(type == Type.Vertex)
 		{
 			sfPtr = sfShader_createFromFile(toStringz(filename) , null);
@@ -95,6 +101,12 @@ class Shader
 	
 	bool loadFromFile(string vertexShaderFilename, string fragmentShaderFilename)
 	{
+		//if the Shader exists, destroy it first
+		if(sfPtr)
+		{
+			sfShader_destroy(sfPtr);
+		}
+
 		sfPtr = sfShader_createFromFile(toStringz(vertexShaderFilename) , toStringz(fragmentShaderFilename));
 		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr != null);
@@ -102,6 +114,11 @@ class Shader
 	
 	bool loadFromMemory(string shader, Type type)
 	{
+		//if the Shader exists, destroy it first
+		if(sfPtr)
+		{
+			sfShader_destroy(sfPtr);
+		}
 
 		if(type == Type.Vertex)
 		{
@@ -118,6 +135,12 @@ class Shader
 	
 	bool loadFromMemory(string vertexShader, string fragmentShader)
 	{
+		//if the Shader exists, destroy it first
+		if(sfPtr)
+		{
+			sfShader_destroy(sfPtr);
+		}
+
 		sfShader_createFromMemory(toStringz(vertexShader) , toStringz(fragmentShader));
 		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
@@ -126,7 +149,12 @@ class Shader
 	
 	bool loadFromStream(InputStream stream, Type type)
 	{
-		
+		//if the Shader exists, destroy it first
+		if(sfPtr)
+		{
+			sfShader_destroy(sfPtr);
+		}
+
 		if(type == Type.Vertex)
 		{
 			sfPtr = sfShader_createFromStream(&stream , null);
@@ -141,6 +169,12 @@ class Shader
 	
 	bool loadFromStream(InputStream vertexShaderStream, InputStream fragmentShaderStream)
 	{
+		//if the Shader exists, destroy it first
+		if(sfPtr)
+		{
+			sfShader_destroy(sfPtr);
+		}
+
 		sfPtr = sfShader_createFromStream(&vertexShaderStream, &fragmentShaderStream);
 		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;

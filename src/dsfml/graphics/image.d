@@ -67,6 +67,12 @@ class Image
 	
 	bool create(uint width, uint height, Color color)
 	{
+		//if the Image already exists, destroy it first
+		if(sfPtr)
+		{
+			sfImage_destroy(sfPtr);
+		}
+
 		sfPtr = sfImage_createFromColor(width, height,color.r, color.b, color.g, color.a);
 		return (sfPtr != null);
 	}
@@ -74,12 +80,24 @@ class Image
 	
 	bool create(uint width, uint height, const ref ubyte[] pixels)
 	{
+		//if the Image already exists, destroy it first
+		if(sfPtr)
+		{
+			sfImage_destroy(sfPtr);
+		}
+
 		sfPtr = sfImage_createFromPixels(width, height,pixels.ptr);
 		return (sfPtr != null);
 	}
 	
 	bool loadFromFile(string fileName)
 	{
+		//if the Image already exists, destroy it first
+		if(sfPtr)
+		{
+			sfImage_destroy(sfPtr);
+		}
+
 		sfPtr = sfImage_createFromFile(toStringz(fileName));
 
 		err.write(text(sfErrGraphics_getOutput()));
@@ -89,6 +107,12 @@ class Image
 	
 	bool loadFromMemory(const(void)[] data)
 	{
+		//if the Image already exists, destroy it first
+		if(sfPtr)
+		{
+			sfImage_destroy(sfPtr);
+		}
+
 		sfPtr = sfImage_createFromMemory(data.ptr, data.length);
 		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr != null);
@@ -96,6 +120,12 @@ class Image
 	
 	bool loadFromStream(InputStream stream)
 	{
+		//if the Image already exists, destroy it first
+		if(sfPtr)
+		{
+			sfImage_destroy(sfPtr);
+		}
+
 		sfPtr = sfImage_createFromStream(new imageStream(stream));
 		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;

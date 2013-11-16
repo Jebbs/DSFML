@@ -59,6 +59,12 @@ class Font
 	
 	bool loadFromFile(string filename)
 	{
+		//if the Font already exists, destroy it first
+		if(sfPtr)
+		{
+			sfFont_destroy(sfPtr);
+		}
+
 		sfPtr = sfFont_createFromFile(toStringz(filename));
 
 		if(sfPtr!is null)
@@ -73,6 +79,12 @@ class Font
 	
 	bool loadFromMemory(const(void)[] data)
 	{
+		//if the Font already exists, destroy it first
+		if(sfPtr)
+		{
+			sfFont_destroy(sfPtr);
+		}
+
 		sfPtr = sfFont_createFromMemory(data.ptr, data.length);
 
 		if(sfPtr!is null)
@@ -87,6 +99,12 @@ class Font
 	
 	bool loadFromStream(InputStream stream)
 	{
+		//if the Font already exists, destroy it first
+		if(sfPtr)
+		{
+			sfFont_destroy(sfPtr);
+		}
+
 		sfPtr = sfFont_createFromStream(new fontStream(stream));
 
 		if(sfPtr!is null)
