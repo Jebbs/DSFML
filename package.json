@@ -42,6 +42,7 @@
                         "dsfml/graphics/drawable.d",
                         "dsfml/graphics/font.d",
                         "dsfml/graphics/glyph.d",
+                        "dsfml/graphics/package.d",
                         "dsfml/graphics/image.d",
                         "dsfml/graphics/primitivetype.d",
                         "dsfml/graphics/rect.d",
@@ -68,13 +69,14 @@
                         }
                 },
                 {
-                        "name": "window
+                        "name": "window"
                         ["dsfml/window/context.d",
         		"dsfml/window/contextsettings.d",
         		"dsfml/window/event.d",
 			"dsfml/window/joystick.d",
 			"dsfml/window/keyboard.d",
 			"dsfml/window/mouse.d",
+			"dsfml/window/package.d",
 			"dsfml/window/videomode.d",
 			"dsfml/window/window.d",
         		"dsfml/window/windowhandle.d"],
@@ -91,6 +93,7 @@
                         ["dsfml/network/ftp.d",
 			"dsfml/network/http.d",
         		"dsfml/network/ipaddress.d",
+        		"dsfml/network/package.d",
         		"dsfml/network/packet.d",
         		"dsfml/network/socket.d",
         		"dsfml/network/socketselector.d",
@@ -106,7 +109,18 @@
                 {
                         "name": "system",
                         "targetType": "library",
-                        "sourceFiles": ["dsfml/system.d"],
+                        "sourceFiles": 
+                        ["dsfml/system/clock.d",
+			"dsfml/system/err.d",
+			"dsfml/system/inputstream.d",
+			"dsfml/system/lock.d",
+			"dsfml/system/mutex.d",
+			"dsfml/system/package.d",
+			"dsfml/system/sleep.d",
+			"dsfml/system/thread.d",
+        		"dsfml/system/time.d",
+        		"dsfml/system/vector2.d",
+        		"dsfml/system/vector3.d"],
                         "libs": [ "dsfml-system" ]
                 }
         ]
