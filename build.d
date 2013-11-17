@@ -98,12 +98,11 @@ void build()
 			fileList~= name ~ " ";
 		}
 
-		string buildCommand = "dmd "~ fileList ~ compilerSwitches ~ " -of"~libDirectory~prefix~"dsfml-"~theModule~extension;
+		string buildCommand = "dmd "~ fileList ~ compilerSwitches ~ " -of"~libDirectory~prefix~"dsfml-"~theModule~"-2"~extension;
 		
 		writeln("Building " ~ theModule~ " module.");
 		
 		auto status = executeShell(buildCommand);
-		//writeln(status.output);
 	}
 }
 void main(string[] args)
