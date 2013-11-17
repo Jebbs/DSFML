@@ -1,14 +1,12 @@
 {
         "name": "dsfml",
-        "description": "This is a temporary json file for DUB. It currently does not work! It will be filled out soon!",
+        "description": "This is a temporary json file for DUB. It is ready for testing, but no promises!",
         "authors": ["Jeremy DeHaan"],
 	"homepage": "https://github.com/Jebbs/DSFML",
 	"license": "Zlib",
 	"sourcePaths": [ "." ],
         "targetType": "none",
         
-        "subPackages":[{"Description":"subPackages is currently broken, untested, or, at the time of this writing, both."}],
-        "subPackages":[{"Description":"This needs to be made sure it works for all OS's. Library names are different on OSX."}],
         "subPackages":
         [
                 {
