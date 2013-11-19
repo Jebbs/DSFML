@@ -2,8 +2,8 @@
         "name": "dsfml",
         "description": "This is a temporary json file for DUB. It is ready for testing, but no promises!",
         "authors": ["Jeremy DeHaan"],
-	"homepage": "https://github.com/Jebbs/DSFML",
-	"license": "Zlib",
+        "homepage": "https://github.com/Jebbs/DSFML",
+        "license": "Zlib",
         "targetType": "none",
         "importPaths": ["scr/"],
         
@@ -12,17 +12,7 @@
                 {
                         "name": "audio",
                         "targetType": "library",
-                        "sourceFiles": 
-                        ["dsfml/audio/listener.d",
-                        "dsfml/audio/music.d",
-                        "dsfml/audio/package.d",
-                        "dsfml/audio/sound.d",
-                        "dsfml/audio/soundbuffer.d",
-                        "dsfml/audio/soundbufferrecorder.d",
-                        "dsfml/audio/soundfile.d",
-                        "dsfml/audio/soundrecorder.d",
-                        "dsfml/audio/soundsource.d",
-                        "dsfml/audio/soundstream.d"],
+                        "sourcePaths": ["src/dsfml/audio"],
                         "libs": [ "dsfml-audio" ],
                         "dependencies": 
                         { 
@@ -32,33 +22,7 @@
                 {
                         "name": "graphics",
                         "targetType": "library",
-                        "sourceFiles": 
-                        ["dsfml/graphics/blendmode.d",
-                        "dsfml/graphics/circleshape.d",
-                        "dsfml/graphics/color.d",
-                        "dsfml/graphics/convexshape.d",
-                        "dsfml/graphics/drawable.d",
-                        "dsfml/graphics/font.d",
-                        "dsfml/graphics/glyph.d",
-                        "dsfml/graphics/package.d",
-                        "dsfml/graphics/image.d",
-                        "dsfml/graphics/primitivetype.d",
-                        "dsfml/graphics/rect.d",
-                        "dsfml/graphics/rectangleshape.d",
-                        "dsfml/graphics/renderstates.d",
-                        "dsfml/graphics/rendertarget.d",
-                        "dsfml/graphics/rendertexture.d",
-                        "dsfml/graphics/renderwindow.d",
-                        "dsfml/graphics/shader.d",
-                        "dsfml/graphics/shape.d",
-                        "dsfml/graphics/sprite.d",
-                        "dsfml/graphics/text.d",
-                        "dsfml/graphics/texture.d;",
-                        "dsfml/graphics/transform.d",
-                        "dsfml/graphics/transformable.d",
-                        "dsfml/graphics/vertex.d",
-                        "dsfml/graphics/vertexarray.d",
-                        "dsfml/graphics/view.d"],
+                        "sourcePaths": ["src/dsfml/graphics"],
                         "libs": [ "dsfml-graphics" ],
                         "dependencies": 
                         { 
@@ -68,17 +32,7 @@
                 },
                 {
                         "name": "window",
-                        "sourceFiles":
-                        ["dsfml/window/context.d",
-        		"dsfml/window/contextsettings.d",
-        		"dsfml/window/event.d",
-			"dsfml/window/joystick.d",
-			"dsfml/window/keyboard.d",
-			"dsfml/window/mouse.d",
-			"dsfml/window/package.d",
-			"dsfml/window/videomode.d",
-			"dsfml/window/window.d",
-        		"dsfml/window/windowhandle.d"],
+                        "sourcePaths": ["src/dsfml/window"],
                         "libs": [ "dsfml-window" ],
                         "dependencies": 
                         { 
@@ -88,17 +42,7 @@
                 {
                         "name": "network",
                         "targetType": "library",
-                        "sourceFiles": 
-                        ["dsfml/network/ftp.d",
-			"dsfml/network/http.d",
-        		"dsfml/network/ipaddress.d",
-        		"dsfml/network/package.d",
-        		"dsfml/network/packet.d",
-        		"dsfml/network/socket.d",
-        		"dsfml/network/socketselector.d",
-        		"dsfml/network/tcplistener.d",
-        		"dsfml/network/tcpsocket.d",
-        		"dsfml/network/udpsocket.d"],
+                        "sourcePaths": ["src/dsfml/network"],
                         "libs": [ "dsfml-network" ],
                         "dependencies": 
                         { 
@@ -108,18 +52,7 @@
                 {
                         "name": "system",
                         "targetType": "library",
-                        "sourceFiles": 
-                        ["dsfml/system/clock.d",
-			"dsfml/system/err.d",
-			"dsfml/system/inputstream.d",
-			"dsfml/system/lock.d",
-			"dsfml/system/mutex.d",
-			"dsfml/system/package.d",
-			"dsfml/system/sleep.d",
-			"dsfml/system/thread.d",
-        		"dsfml/system/time.d",
-        		"dsfml/system/vector2.d",
-        		"dsfml/system/vector3.d"],
+                        "sourcePaths": ["src/dsfml/system"],
                         "libs": [ "dsfml-system" ]
                 }
         ]
