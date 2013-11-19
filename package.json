@@ -1,5 +1,5 @@
 {
-        "name": "dsfml",
+        "name": "DSFML",
         "description": "This is a temporary json file for DUB. It is ready for testing, but no promises!",
         "authors": ["Jeremy DeHaan"],
 	"homepage": "https://github.com/Jebbs/DSFML",
