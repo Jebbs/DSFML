@@ -1,11 +1,11 @@
 {
-        "name": "DSFML",
+        "name": "dsfml",
         "description": "This is a temporary json file for DUB. It is ready for testing, but no promises!",
         "authors": ["Jeremy DeHaan"],
 	"homepage": "https://github.com/Jebbs/DSFML",
 	"license": "Zlib",
-	"sourcePaths": [ "." ],
         "targetType": "none",
+        "importPaths": "scr/",
         
         "subPackages":
         [
@@ -67,7 +67,8 @@
                         }
                 },
                 {
-                        "name": "window"
+                        "name": "window",
+                        "sourceFiles":
                         ["dsfml/window/context.d",
         		"dsfml/window/contextsettings.d",
         		"dsfml/window/event.d",
