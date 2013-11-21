@@ -1,11 +1,9 @@
 {
         "name": "dsfml",
-        "description": "This is a temporary json file for DUB. It is ready for testing, but no promises!",
+        "description": "DSFML binding for SFML-The Simple and Fast Multimedia Library",
         "authors": ["Jeremy DeHaan"],
         "homepage": "https://github.com/Jebbs/DSFML",
         "license": "Zlib",
-        "targetType": "none",
-        "importPaths": ["src/"],
         
         "subPackages":
         [
@@ -52,6 +50,7 @@
                 {
                         "name": "system",
                         "targetType": "library",
+                        "importPaths": ["src/"],
                         "sourcePaths": ["src/dsfml/system"],
                         "libs": [ "dsfml-system" ]
                 }
