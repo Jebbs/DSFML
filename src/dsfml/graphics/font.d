@@ -45,6 +45,8 @@ class Font
 	package sfFont* sfPtr;
 
 	private Texture fontTexture;
+
+	private fontStream m_stream;//keeps an instance of the C++ interface stored if used
 		
 	this()
 	{
@@ -104,8 +106,9 @@ class Font
 		{
 			sfFont_destroy(sfPtr);
 		}
+		m_stream = new fontStream(stream);
 
-		sfPtr = sfFont_createFromStream(new fontStream(stream));
+		sfPtr = sfFont_createFromStream(m_stream);
 
 		if(sfPtr!is null)
 		{

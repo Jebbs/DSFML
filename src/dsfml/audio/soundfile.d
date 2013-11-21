@@ -39,73 +39,75 @@ package:
 
 struct SoundFile
 {
-	private sfSoundFile* soundFile;
-
+	private sfSoundFile* m_soundFile;
+	private soundFileStream m_stream;//keeps an instance of the C++ interface stored if used
 	void create()
 	{
-		soundFile = sfSoundFile_create();
+		m_soundFile = sfSoundFile_create();
 	}
 	
 	~this()
 	{
-		sfSoundFile_destroy(soundFile);
+		sfSoundFile_destroy(m_soundFile);
 	}
 
 	bool openReadFromFile(string filename)
 	{
-		bool toReturn = sfSoundFile_openReadFromFile(soundFile, toStringz(filename));
+		bool toReturn = sfSoundFile_openReadFromFile(m_soundFile, toStringz(filename));
 		err.write(text(sfErrAudio_getOutput()));
 		return toReturn;
 	}
 
 	bool openReadFromMemory(const(void)[] data)
 	{
-		bool toReturn = sfSoundFile_openReadFromMemory(soundFile, data.ptr, data.length);
+		bool toReturn = sfSoundFile_openReadFromMemory(m_soundFile, data.ptr, data.length);
 		err.write(text(sfErrAudio_getOutput()));
 		return toReturn;
 	}
 	bool openReadFromStream(InputStream stream)
 	{
-		bool toReturn  = sfSoundFile_openReadFromStream(soundFile, new soundFileStream(stream));
+		m_stream = new soundFileStream(stream);
+
+		bool toReturn  = sfSoundFile_openReadFromStream(m_soundFile, m_stream);
 		err.write(text(sfErrAudio_getOutput()));
 		return toReturn;
 	}
 
 	bool openWrite(string filename,uint channelCount,uint sampleRate)
 	{
-		bool toReturn = sfSoundFile_openWrite(soundFile, toStringz(filename),channelCount,sampleRate);
+		bool toReturn = sfSoundFile_openWrite(m_soundFile, toStringz(filename),channelCount,sampleRate);
 		err.write(text(sfErrAudio_getOutput()));
 		return toReturn;
 	}
 
 	long read(short[] data)
 	{
-		return sfSoundFile_read(soundFile,data.ptr, data.length);
+		return sfSoundFile_read(m_soundFile,data.ptr, data.length);
 
 	}
 
 	void write(const(short)[] data)
 	{
-		sfSoundFile_write(soundFile, data.ptr, data.length);
+		sfSoundFile_write(m_soundFile, data.ptr, data.length);
 	}
 
 	void seek(long timeOffset)
 	{
-		sfSoundFile_seek(soundFile, timeOffset);
+		sfSoundFile_seek(m_soundFile, timeOffset);
 		err.write(text(sfErrAudio_getOutput()));
 	}
 
 	long getSampleCount()
 	{
-		return sfSoundFile_getSampleCount(soundFile);
+		return sfSoundFile_getSampleCount(m_soundFile);
 	}
 	uint getSampleRate()
 	{
-		return sfSoundFile_getSampleRate(soundFile);
+		return sfSoundFile_getSampleRate(m_soundFile);
 	}
 	uint getChannelCount()
 	{
-		return sfSoundFile_getChannelCount(soundFile);
+		return sfSoundFile_getChannelCount(m_soundFile);
 	}
 
 
