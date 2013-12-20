@@ -58,13 +58,15 @@ class RenderTexture:RenderTarget
 {
 	
 	package sfRenderTexture* sfPtr;
+	private Texture m_texture;
 	
 	this(uint width, uint height, bool depthBuffer = false)
 	{
 		sfPtr = sfRenderTexture_create(width, height, depthBuffer);
+		m_texture = new Texture(sfRenderTexture_getTexture(sfPtr));
 		err.write(text(sfErrGraphics_getOutput()));
-
 	}
+	
 	
 	~this()
 	{
@@ -80,7 +82,7 @@ class RenderTexture:RenderTarget
 		}
 		bool smooth()
 		{
-			return (sfRenderTexture_isSmooth(sfPtr));//== sfTrue)? true:false;
+			return (sfRenderTexture_isSmooth(sfPtr));
 		}
 	}
 	
@@ -155,8 +157,7 @@ class RenderTexture:RenderTarget
 	
 	const(Texture) getTexture()
 	{
-		//Will be fixed in Revision 2
-		return new Texture(sfRenderTexture_getTexture(sfPtr));
+		return m_texture;
 	}
 	
 	
