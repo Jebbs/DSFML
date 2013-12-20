@@ -59,14 +59,34 @@ class RenderTexture:RenderTarget
 	
 	package sfRenderTexture* sfPtr;
 	private Texture m_texture;
-	
-	this(uint width, uint height, bool depthBuffer = false)
+
+	this()
 	{
-		sfPtr = sfRenderTexture_create(width, height, depthBuffer);
-		m_texture = new Texture(sfRenderTexture_getTexture(sfPtr));
-		err.write(text(sfErrGraphics_getOutput()));
+
 	}
-	
+
+	bool create(uint width, uint height, bool depthBuffer)
+	{
+		//if the RenderTexture already exists, destroy it first
+		if(sfPtr != null)
+		{
+			sfRenderTexture_destroy(sfPtr);
+		}
+
+		sfPtr = sfRenderTexture_create(width, height, depthBuffer);
+		err.write(text(sfErrGraphics_getOutput()));
+
+		if(sfPtr != null)
+		{
+			m_texture = new Texture(sfRenderTexture_getTexture(sfPtr));
+			return true;
+		}
+		else
+		{
+			m_texture = new Texture();
+			return false;
+		}
+	}
 	
 	~this()
 	{
@@ -82,7 +102,7 @@ class RenderTexture:RenderTarget
 		}
 		bool smooth()
 		{
-			return (sfRenderTexture_isSmooth(sfPtr));
+			return (sfRenderTexture_isSmooth(sfPtr));//== sfTrue)? true:false;
 		}
 	}
 	
