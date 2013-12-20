@@ -65,7 +65,7 @@ class RenderTexture:RenderTarget
 
 	}
 
-	bool create(uint width, uint height, bool depthBuffer)
+	bool create(uint width, uint height, bool depthBuffer = false)
 	{
 		//if the RenderTexture already exists, destroy it first
 		if(sfPtr != null)
