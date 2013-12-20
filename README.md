@@ -9,6 +9,21 @@ Getting Started
 Check out the wiki for information on [getting started](https://github.com/Jebbs/DSFML/wiki#getting-started) with DSFML.
 
 
+Nightlies
+===
+DSFML uses a C wrapper for SFML in order to run, called DSFML-C. There are tutorials in the wiki for building this from source, but if you would rather download these nightly* builds, feel free.
+
+[Windows 32bit](https://dl.dropboxusercontent.com/u/167365084/DSFML%20for%20Windows.zip) - Compiled December 19th, 2013
+
+Windows 64bit - Coming 2014(Unless someone else wants to build them for me)
+
+Linux - Coming soon!
+
+OSX - Coming 2014(Unless someone else wants to build them for me)
+
+*Nightly builds are not actually built every night. Only when there have been changes
+
+
 If problems are encountered!
 ===
 If you encounter an issue with this binding feel free to open up an issue in the tracker!
