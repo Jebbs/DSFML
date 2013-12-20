@@ -21,7 +21,7 @@ Linux - Coming soon!
 
 OSX - Coming 2014(Unless someone else wants to build them for me)
 
-*Nightly builds are not actually built every night. Only when there have been changes
+*Nightly builds are not actually built every night. Only when there have been changed.
 
 
 If problems are encountered!
