@@ -4,7 +4,13 @@
         "authors": ["Jeremy DeHaan"],
         "homepage": "https://github.com/Jebbs/DSFML",
         "license": "Zlib",
-        
+        "dependencies": {
+            "dsfml:audio": "~master",
+            "dsfml:graphics": "~master",
+            "dsfml:window": "~master",
+            "dsfml:network": "~master",
+            "dsfml:system": "~master"
+        },
         "subPackages":
         [
                 {
