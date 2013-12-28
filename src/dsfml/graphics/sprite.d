@@ -116,10 +116,10 @@ class Sprite:Drawable,Transformable
 		void color(Color newColor)
 		{
 			// Update the vertices' color
-			m_vertices[0].color = color;
-			m_vertices[1].color = color;
-			m_vertices[2].color = color;
-			m_vertices[3].color = color;
+			m_vertices[0].color = newColor;
+			m_vertices[1].color = newColor;
+			m_vertices[2].color = newColor;
+			m_vertices[3].color = newColor;
 		}
 		
 		Color color()
