@@ -18,6 +18,7 @@
                         "targetType": "library",
                         "sourcePaths": ["src/dsfml/audio"],
                         "libs": [ "dsfml-audio" ],
+                        "libs-linux": ["openal"],
                         "dependencies": 
                         { 
                                 "dsfml:system": "~master" 
