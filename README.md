@@ -17,9 +17,11 @@ DSFML uses a C wrapper for SFML in order to run, called DSFML-C. There are tutor
 
 Windows 64bit - Coming 2014(Unless someone else wants to build them for me)
 
+[Linux 32bit](https://dl.dropboxusercontent.com/u/167365084/DSFML%20for%20Linux%2032bit.zip) - Compiled December 28th, 2013 on Mint
+
 [Linux 64bit](https://dl.dropboxusercontent.com/u/167365084/DSFML%20for%20Linux.zip) - Compiled December 19th, 2013 on Mint
 
-OSX - Coming 2014(Unless someone else wants to build them for me)
+[OSX](https://dl.dropboxusercontent.com/u/167365084/DSFML%20for%20OSX.zip) - Compiled November 11th, 2013 on Mavericks by @jaredonline. Thanks, Jared!
 
 *Nightly builds are not actually built every night. Only when there have been changed.
 
