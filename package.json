@@ -28,6 +28,7 @@
                         "targetType": "library",
                         "sourcePaths": ["src/dsfml/graphics"],
                         "libs": [ "dsfml-graphics" ],
+                        "libs-linux":["jpeg","lGL","GLU","freetype","GLEW"],
                         "dependencies": 
                         { 
                                 "dsfml:system": "~master",
@@ -38,6 +39,7 @@
                         "name": "window",
                         "sourcePaths": ["src/dsfml/window"],
                         "libs": [ "dsfml-window" ],
+                        "libs-linux":["X11","Xrandr"]
                         "dependencies": 
                         { 
                                 "dsfml:system": "~master" 
