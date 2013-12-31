@@ -75,7 +75,7 @@ void initialize()
 		writeln("Building for Linux");
 		prefix = "lib";
 		extension = ".a";
-		compilerSwitches = "-lib -O -release -inline -property -I"~impDirectory;;
+		compilerSwitches = "-lib -O -release -inline -property -I"~impDirectory;
 	}
 	else
 	{
