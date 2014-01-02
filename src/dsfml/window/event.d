@@ -140,7 +140,7 @@ unittest
 	import dsfml.graphics.font;
 	import dsfml.graphics.text;
 	import dsfml.graphics.renderwindow;
-	import dsfml.window.all;
+	import dsfml.window;
 	import std.conv;
 
 	string[int] keys;
