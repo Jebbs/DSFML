@@ -43,7 +43,7 @@ interface InputStream
 
 unittest
 {
-	import dsfml.graphics.all;
+	import dsfml.graphics.texture;
 	import std.stdio;
 
 
