@@ -61,7 +61,7 @@ import std.utf;
 
 import std.algorithm;
 
-import std.stdio;
+debug import std.stdio;
 
 class Text:Drawable,Transformable
 {
@@ -238,7 +238,7 @@ public:
 	}
 	~this()
 	{
-		writeln("Destroying Text");
+		debug writeln("Destroying Text");
 	}
 
 	void setString(dstring text)
