@@ -29,10 +29,6 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 */
 module dsfml.window.videomode;
 
-import std.conv;
-
-import std.stdio;
-
 struct VideoMode
 {
 	uint width;
@@ -46,6 +42,18 @@ struct VideoMode
 		bitsPerPixel = bits;
 	}
 
+	bool isValid() const
+	{
+		return sfVideoMode_isValid(width, height, bitsPerPixel);
+	}
+	
+	//used for debugging
+	string toString()
+	{
+		import std.conv: text;
+		return "Width: " ~ text(width) ~ " Height: " ~ text(height) ~ " Bits per pixel: " ~ text(bitsPerPixel);
+	}
+
 	static VideoMode getDesktopMode()
 	{
 		VideoMode temp;
@@ -56,51 +64,42 @@ struct VideoMode
 	static VideoMode[] getFullscreenModes()
 	{
 		static VideoMode[] videoModes;//stores all video modes after the first call
-
+		
 		//if getFullscreenModes hasn't been called yet
 		if(videoModes.length == 0)
 		{
 			uint* modes;
 			size_t counts;
-		
+			
 			//returns uints instead of structs due to 64 bit bug
 			modes = sfVideoMode_getFullscreenModes(&counts);
-
+			
 			//calculate real length
 			videoModes.length = counts/3;
-
+			
 			//populate videoModes
 			int videoModeIndex = 0;
 			for(uint i = 0; i < counts; i+=3)
 			{
 				VideoMode temp = VideoMode(modes[i], modes[i+1], modes[i+2]);
-					
+				
 				videoModes[videoModeIndex] = temp;
 				++videoModeIndex;
 			}
-		
+			
 		}
-
+		
 		return videoModes;
 		
 	}
-	
-	bool isValid() const
-	{
-		return sfVideoMode_isValid(width, height, bitsPerPixel);
-	}
-	
-	//used for debugging
-	string toString()
-	{
-		return "Width: " ~ text(width) ~ " Height: " ~ text(height) ~ " Bits per pixel: " ~ text(bitsPerPixel);
-	}
 }
 
-private extern(C):
-void sfVideoMode_getDesktopMode(uint* width, uint* height, uint* bitsPerPixel);
-uint* sfVideoMode_getFullscreenModes(size_t* Count);
-bool sfVideoMode_isValid(uint width, uint height, uint bitsPerPixel);
+private extern(C)
+{
+	void sfVideoMode_getDesktopMode(uint* width, uint* height, uint* bitsPerPixel);
+	uint* sfVideoMode_getFullscreenModes(size_t* Count);
+	bool sfVideoMode_isValid(uint width, uint height, uint bitsPerPixel);
+}
 
 
 unittest

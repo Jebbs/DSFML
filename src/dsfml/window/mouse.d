@@ -32,7 +32,7 @@ module dsfml.window.mouse;
 import dsfml.system.vector2;
 import dsfml.window.window;
 
-class Mouse
+final abstract class Mouse
 {
 	enum Button
 	{
@@ -45,12 +45,17 @@ class Mouse
 		Count /// Keep last -- the total number of mouse buttons
 		
 	}
-	
-	static bool isButtonPressed(Button button)
+
+	static void setPosition(Vector2i position)
 	{
-		return (sfMouse_isButtonPressed(button) );
+		sfMouse_setPosition(position.x, position.y,null);
 	}
 	
+	static void setPosition(Vector2i position, const(Window) relativeTo)
+	{
+		relativeTo.mouse_SetPosition(position);
+	}
+
 	static Vector2i getPosition()
 	{
 		Vector2i temp;
@@ -63,16 +68,12 @@ class Mouse
 	{
 		return relativeTo.mouse_getPosition();
 	}
-	
-	static void setPosition(Vector2i position)
+
+	static bool isButtonPressed(Button button)
 	{
-		sfMouse_setPosition(position.x, position.y,null);
+		return (sfMouse_isButtonPressed(button) );
 	}
 
-	static void setPosition(Vector2i position, const(Window) relativeTo)
-	{
-		relativeTo.mouse_SetPosition(position);
-	}
 }
 
 private extern(C)

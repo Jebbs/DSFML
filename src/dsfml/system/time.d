@@ -29,6 +29,7 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 */
 
 module dsfml.system.time;
+
 import std.traits;
 
 struct Time

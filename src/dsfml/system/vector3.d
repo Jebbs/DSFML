@@ -30,8 +30,8 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 
 module dsfml.system.vector3;
 
-import std.traits;
 import std.conv;
+import std.traits;
 
 struct Vector3(T)
 	if(isNumeric!(T))

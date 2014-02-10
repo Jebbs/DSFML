@@ -30,11 +30,11 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 
 module dsfml.system.sleep;
 
-import core.thread; 
 import dsfml.system.time;
 
 void sleep(Time duration)
 {
+	import core.thread; 
 	Thread.sleep(usecs(duration.asMicroseconds()));
 }
 

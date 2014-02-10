@@ -28,7 +28,8 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 module dsfml.window.keyboard;
-class Keyboard
+
+final abstract class Keyboard
 {
 	//TODO: Remove wonky comments
 	enum Key
