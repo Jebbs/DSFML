@@ -41,6 +41,7 @@ struct SoundFile
 {
 	private sfSoundFile* m_soundFile;
 	private soundFileStream m_stream;//keeps an instance of the C++ interface stored if used
+
 	void create()
 	{
 		m_soundFile = sfSoundFile_create();

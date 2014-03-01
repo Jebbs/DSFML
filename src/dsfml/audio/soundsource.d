@@ -46,15 +46,26 @@ class SoundSource
 		Playing
 	}
 
-
-
 	this(const(SoundSource) copy)
 	{
-		//Copy Constructor
+		//Copy Constructor?
 		//TODO: Look into this
 	}
 
+	protected this()
+	{
+		sfSoundSource_ensureALInit();
+		err.write(text(sfErrAudio_getOutput()));
+		
+		
+		sfSoundSource_initialize(&m_source);
+	}
 
+	~this()
+	{
+		debug writeln("Destroying SoundSource");
+		sfSoundSource_destroy(&m_source);
+	}
 
 	@property
 	{
@@ -108,7 +119,7 @@ class SoundSource
 			return sfSoundSource_isRelativeToListener(m_source);
 		}
 	}
-
+	
 	@property
 	{
 		void minDistance(float distance)
@@ -120,7 +131,7 @@ class SoundSource
 			return sfSoundSource_getMinDistance(m_source);
 		}
 	}
-
+	
 	@property
 	{
 		void attenuation(float newAttenuation)
@@ -133,23 +144,9 @@ class SoundSource
 		}
 	}
 
-
-	~this()
-	{
-		debug writeln("Destroying SoundSource");
-		sfSoundSource_destroy(&m_source);
-	}
-
 	protected
 	{
-		this()
-		{
-			sfSoundSource_ensureALInit();
-			err.write(text(sfErrAudio_getOutput()));
 
-			
-			sfSoundSource_initialize(&m_source);
-		}
 
 		Status getStatus()
 		{

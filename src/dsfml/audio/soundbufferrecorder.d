@@ -35,6 +35,12 @@ import dsfml.audio.soundbuffer;
 
 class SoundBufferRecorder:SoundRecorder
 {
+	private
+	{
+		short[] m_samples;
+		SoundBuffer m_buffer;
+	}
+
 	this()
 	{
 		// Constructor code
@@ -47,34 +53,29 @@ class SoundBufferRecorder:SoundRecorder
 
 	protected
 	{
-	override bool onStart()
-	{
-		m_samples.length = 0;
-		m_buffer = new SoundBuffer();
-
-		return true;
-	}
-
-	override bool onProcessSamples(short[] samples)
-	{
-		m_samples ~= samples;
-				
-		return true;
-	}
-
-	override void onStop()
-	{
-		if(m_samples.length >0)
+		override bool onStart()
 		{
-			m_buffer.loadFromSamples(m_samples,1,sampleRate);
+			m_samples.length = 0;
+			m_buffer = new SoundBuffer();
+
+			return true;
+		}
+
+		override bool onProcessSamples(short[] samples)
+		{
+			m_samples ~= samples;
+				
+			return true;
+		}
+
+		override void onStop()
+		{
+			if(m_samples.length >0)
+			{
+				m_buffer.loadFromSamples(m_samples,1,sampleRate);
+			}
 		}
 	}
-	}
-
-private:
-	short[] m_samples;
-	SoundBuffer m_buffer;
-
 }
 
 unittest

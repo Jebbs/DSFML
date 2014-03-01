@@ -35,13 +35,18 @@ import dsfml.audio.soundsource;
 
 import dsfml.system.time;
 
-import std.stdio;
 
-import std.typecons;
+
+
 
 
 class Sound : SoundSource
 {
+	import std.typecons:Rebindable;
+
+	//Const AND able to be rebound. Word.
+	private Rebindable!(const(SoundBuffer)) m_buffer;
+
 	this()
 	{
 		// Constructor code
@@ -51,10 +56,12 @@ class Sound : SoundSource
 	{
 		setBuffer(buffer);
 	}
-	//TODO: copy constructor
+	//TODO: copy constructor?
 
 	~this()
 	{
+		debug import std.stdio;
+
 		debug writeln("Destroying Sound");
 		//stop the sound
 		stop();
@@ -65,39 +72,7 @@ class Sound : SoundSource
 			m_buffer.detachSound(this);
 		}
 	}
-	void play()
-	{
-		sfSoundStream_alSourcePlay(m_source);
-	}
 
-	void pause()
-	{
-		sfSoundStream_alSourcePause(m_source);
-	}
-
-	void stop()
-	{
-		sfSoundStream_alSourceStop(m_source);
-	}
-
-
-	void setBuffer(const(SoundBuffer) buffer)
-	{
-		//First detach from the previous buffer
-		if(m_buffer !is null)
-		{
-			stop();
-
-			m_buffer.detachSound(this);
-		}
-
-		//assign the new buffer
-		m_buffer = buffer;
-		m_buffer.attachSound(this);
-		sfSound_assignBuffer(m_source, m_buffer.m_buffer);
-
-
-	}
 	@property
 	{
 		void isLooping(bool loop)
@@ -109,7 +84,7 @@ class Sound : SoundSource
 			return sfSound_getLoop(m_source);
 		}
 	}
-
+	
 	@property
 	{
 		void playingOffset(Time offset)
@@ -121,6 +96,7 @@ class Sound : SoundSource
 			return seconds(sfSound_getPlayingOffset(m_source));
 		}
 	}
+
 	@property
 	{
 		Status status()
@@ -128,6 +104,36 @@ class Sound : SoundSource
 			return super.getStatus();
 		}
 	}
+
+	//Property?
+	void setBuffer(const(SoundBuffer) buffer)
+	{
+		//First detach from the previous buffer
+		if(m_buffer !is null)
+		{
+			stop();
+			
+			m_buffer.detachSound(this);
+		}
+		
+		//assign the new buffer
+		m_buffer = buffer;
+		m_buffer.attachSound(this);
+		sfSound_assignBuffer(m_source, m_buffer.m_buffer);
+		
+		
+	}
+
+	void pause()
+	{
+		sfSoundStream_alSourcePause(m_source);
+	}
+
+	void play()
+	{
+		sfSoundStream_alSourcePlay(m_source);
+	}
+
 	void resetBuffer()
 	{
 		//stop the current sound;
@@ -138,8 +144,11 @@ class Sound : SoundSource
 		m_buffer = null;
 	}
 
-	//Const AND able to be rebound
-	private Rebindable!(const(SoundBuffer)) m_buffer;
+	void stop()
+	{
+		sfSoundStream_alSourceStop(m_source);
+	}
+
 }
 
 unittest

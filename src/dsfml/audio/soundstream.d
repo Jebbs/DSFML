@@ -32,7 +32,6 @@ module dsfml.audio.soundstream;
 
 import core.thread;
 
-import std.stdio;
 
 import dsfml.audio.soundsource;
 
@@ -42,7 +41,18 @@ import dsfml.system.err;
 
 class SoundStream:SoundSource
 {
-	public:
+	private
+	{
+		Thread m_thread;
+		bool m_isStreaming;
+		uint m_buffers[BufferCount];
+		uint m_channelCount;
+		uint m_sampleRate;
+		uint m_format;
+		bool m_loop;
+		long m_samplesProcessed;
+		bool m_endBuffers[BufferCount];
+	}
 
 	struct Chunk
 	{
@@ -50,11 +60,97 @@ class SoundStream:SoundSource
 		size_t sampleCount;
 	}
 
+	protected this()
+	{
+		m_thread = new Thread(&streamData);
+		m_isStreaming = false;
+		m_channelCount = 0;
+		m_sampleRate = 0;
+		m_format = 0;
+		m_loop = false;
+		m_samplesProcessed = 0;
+		
+	}
+
 	~this()
 	{
-		writeln("SoundStream Destroyed");
+		debug import std.stdio;
+		debug writeln("SoundStream Destroyed");
 		stop();
 	}
+
+	@property
+	{
+		uint channelCount()
+		{
+			return m_channelCount;
+		}
+	}
+
+	@property
+	{
+		uint sampleRate()
+		{
+			return m_sampleRate;
+		}
+	}
+	
+	@property
+	{
+		Status status()
+		{
+			Status temp = super.getStatus();
+			
+			//to compensate for the lag between play() and alSourcePlay()
+			if((temp == Status.Stopped) && m_isStreaming)
+			{
+				temp = Status.Playing;
+			}
+			
+			return temp;
+		}
+	}
+	
+	@property
+	{
+		void playingOffset(Time offset)
+		{
+			stop();
+			
+			onSeek(offset);
+			m_samplesProcessed = cast(long)(offset.asSeconds() * m_sampleRate * m_channelCount);
+			m_isStreaming = true;
+			m_thread.start();
+			
+		}
+		Time playingOffset()
+		{
+			if((m_sampleRate!=0) && (m_channelCount !=0))
+			{
+				return microseconds(sfSoundStream_getPlayingOffset(m_source, m_samplesProcessed, m_sampleRate, m_channelCount));
+			}
+			
+			return Time.Zero;
+		}
+	}
+	
+	@property
+	{
+		void isLooping(bool loop)
+		{
+			m_loop = loop;
+		}
+		bool isLooping()
+		{
+			return m_loop;
+		}
+	}
+
+	void pause()
+	{
+		sfSoundStream_alSourcePause(m_source);
+	}
+
 	void play()
 	{
 
@@ -81,11 +177,6 @@ class SoundStream:SoundSource
 		m_thread.start();
 	}
 
-	void pause()
-	{
-		sfSoundStream_alSourcePause(m_source);
-	}
-
 	void stop()
 	{
 		m_isStreaming = false;
@@ -97,86 +188,7 @@ class SoundStream:SoundSource
 		}
 	}
 
-	@property
-	{
-		uint channelCount()
-		{
-			return m_channelCount;
-		}
-	}
-	@property
-	{
-		uint sampleRate()
-		{
-			return m_sampleRate;
-		}
-	}
-
-	@property
-	{
-		Status status()
-		{
-			Status temp = super.getStatus();
-
-			//to compensate for the lag between play() and alSourcePlay()
-			if((temp == Status.Stopped) && m_isStreaming)
-			{
-				temp = Status.Playing;
-			}
-
-			return temp;
-		}
-	}
-
-	@property
-	{
-		void playingOffset(Time offset)
-		{
-			stop();
-
-			onSeek(offset);
-			m_samplesProcessed = cast(long)(offset.asSeconds() * m_sampleRate * m_channelCount);
-			m_isStreaming = true;
-			m_thread.start();
-
-		}
-		Time playingOffset()
-		{
-			if((m_sampleRate!=0) && (m_channelCount !=0))
-			{
-				return microseconds(sfSoundStream_getPlayingOffset(m_source, m_samplesProcessed, m_sampleRate, m_channelCount));
-			}
-
-			return Time.Zero;
-		}
-	}
-
-	@property
-	{
-		void isLooping(bool loop)
-		{
-			m_loop = loop;
-		}
-		bool isLooping()
-		{
-			return m_loop;
-		}
-	}
-
-	protected:
-
-	this()
-	{
-		m_thread = new Thread(&streamData);
-		m_isStreaming = false;
-		m_channelCount = 0;
-		m_sampleRate = 0;
-		m_format = 0;
-		m_loop = false;
-		m_samplesProcessed = 0;
-
-	}
-
+protected:
 	void initialize(uint theChannelCount, uint theSampleRate)
 	{
 		m_channelCount = theChannelCount;
@@ -200,7 +212,7 @@ class SoundStream:SoundSource
 	abstract void onSeek(Time timeOffset);
 
 
-	private:
+private:
 
 	void streamData()
 	{
@@ -363,21 +375,7 @@ class SoundStream:SoundSource
 		sfSoundStream_clearQueue(m_source);
 	}
 
-	enum 
-	{
-		BufferCount = 3
-	}
-
-
-	Thread m_thread;
-	bool m_isStreaming;
-	uint m_buffers[BufferCount];
-	uint m_channelCount;
-	uint m_sampleRate;
-	uint m_format;
-	bool m_loop;
-	long m_samplesProcessed;
-	bool m_endBuffers[BufferCount];
+	enum BufferCount = 3;
 
 }
 

@@ -36,6 +36,22 @@ final abstract class Listener
 {
 	@property
 	{
+		static void Direction(Vector3f orientation)
+		{
+			sfListener_setDirection(orientation.x, orientation.y, orientation.z);
+		}
+		static Vector3f Direction()
+		{
+			Vector3f temp;
+			
+			sfListener_getDirection(&temp.x, &temp.y, &temp.z);
+			
+			return temp;
+		}
+	}
+
+	@property
+	{
 		static void GlobalVolume(float volume)
 		{
 			sfListener_setGlobalVolume(volume);
@@ -59,22 +75,6 @@ final abstract class Listener
 
 			sfListener_getPosition(&temp.x, &temp.y, &temp.z);
 
-			return temp;
-		}
-	}
-	
-	@property
-	{
-		static void Direction(Vector3f orientation)
-		{
-			sfListener_setDirection(orientation.x, orientation.y, orientation.z);
-		}
-		static Vector3f Direction()
-		{
-			Vector3f temp;
-			
-			sfListener_getDirection(&temp.x, &temp.y, &temp.z);
-			
 			return temp;
 		}
 	}

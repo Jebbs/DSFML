@@ -31,13 +31,19 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 module dsfml.audio.soundrecorder;
 
 import core.thread;
-import std.stdio;
-
 import dsfml.system.err;
 import std.conv;
 
 class SoundRecorder
 {
+	private
+	{
+		Thread m_thread;
+		sfSoundRecorder* recorder;
+		uint m_sampleRate;
+		bool m_isCapturing;
+	}
+
 	 protected this()
 	{
 		sfSoundSource_ensureALInit();
@@ -52,6 +58,7 @@ class SoundRecorder
 	{
 		sfSoundRecorder_destroy(recorder);
 	}
+
    	void start(uint theSampleRate = 44100)
 	{
 		//Initialize the device before starting to capture
@@ -161,18 +168,8 @@ class SoundRecorder
 
 		}
 
-		Thread m_thread;
-		//short[] m_samples;
-		sfSoundRecorder* recorder;
-		uint m_sampleRate;
-		bool m_isCapturing;
 	}
-
 }
-
-
-
-
 
 private extern(C):
 

@@ -30,24 +30,27 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 
 module dsfml.audio.music;
 
-
 import dsfml.system.mutex;
-import dsfml.system.lock;
-
-
 import dsfml.system.time;
 import dsfml.system.inputstream;
 
 import dsfml.audio.soundstream;
-
 import dsfml.audio.soundfile;
 
 import std.string;
 
-import std.stdio;
+
 
 class Music:SoundStream
 {
+	private
+	{
+		SoundFile m_file;
+		Time m_duration;
+		short[] m_samples;
+		Mutex m_mutex;
+	}
+
 	this()
 	{
 		m_file.create();
@@ -100,21 +103,25 @@ class Music:SoundStream
 		return true;
 	}
 
+	~this()
+	{
+		debug import std.stdio;
+
+		debug writeln("Destroying Music");
+		stop();
+	}
+
 	Time getDuration()
 	{
 		return m_duration;
-	}
-
-	~this()
-	{
-		writeln("Destroying Music");
-		stop();
 	}
 
 	protected
 	{
 		override bool onGetData(ref Chunk data)
 		{
+			import dsfml.system.lock;
+
 			Lock lock = Lock(m_mutex);
 
 			data.sampleCount = cast(size_t)m_file.read(m_samples);
@@ -126,6 +133,8 @@ class Music:SoundStream
 
 		override void onSeek(Time timeOffset)
 		{
+			import dsfml.system.lock;
+
 			Lock lock =Lock(m_mutex);
 
 			m_file.seek(timeOffset.asMicroseconds());
@@ -153,10 +162,6 @@ class Music:SoundStream
 
 		}
 
-		SoundFile m_file;
-		Time m_duration;
-		short[] m_samples;
-		Mutex m_mutex;
 	}
 }
 
@@ -169,6 +174,7 @@ unittest
 
 	auto music = new Music();
 
+	//TODO: update this for a real unit test users can run themselves.
 	if(!music.openFromFile("hal1.ogg"))
 	{
 		return;

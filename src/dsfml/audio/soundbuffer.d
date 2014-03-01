@@ -50,46 +50,72 @@ import std.conv;
 
 class SoundBuffer
 {
+	private 
+	{
+
+		Time m_duration; 
+		short[] m_samples;
 	
+		//Allows a sound buffer to remain const while still having a mutable list of sounds attached to it.
+		static SoundList m_sounds;
+	}
 	
 	this()
 	{
 		//create the buffer
-		
 		sfSoundSource_ensureALInit();
 		err.write(text(sfErrAudio_getOutput()));
-
 		
 		//Create the buffer
 		sfSoundBuffer_alGenBuffers(&m_buffer);
 
 		//use the existing buffer ID to create a mutable list of sounds attached to it
-
 		m_sounds.add(m_buffer);
 
-		//m_sounds[m_buffer] = new Sound[0];
 	}
-	
+
 	~this()
 	{
-
+		
 		//Detach 
 		foreach(Sound sound;m_sounds[m_buffer])
 		{
 			sound.toString();
 			sound.resetBuffer();
 		}
-
-
+		
+		
 		m_sounds.remove(m_buffer);
-
+		
 		
 		sfSoundBuffer_alDeleteBuffer(&m_buffer);
-
 	}
 	
-	//TODO: copy constructor
+	//TODO: copy constructor?
+
+	//So many possible properties....
+	const(short[]) getSamples()
+	{
+		return m_samples;
+		
+	}
 	
+	uint getSampleRate()
+	{
+		return sfSoundBuffer_getSampleRate(m_buffer);
+	}
+	
+	uint getChannelCount()
+	{
+		return sfSoundBuffer_getChannelCount(m_buffer);
+	}
+	
+	Time getDuration()
+	{
+		return m_duration;
+	}
+
+
 	bool loadFromFile(string filename)
 	{
 		SoundFile file;
@@ -155,8 +181,7 @@ class SoundBuffer
 		
 		
 	}
-	
-	
+
 	
 	bool saveToFile(string filename)
 	{
@@ -174,26 +199,7 @@ class SoundBuffer
 	}
 	
 	
-	const(short[]) getSamples()
-	{
-		return m_samples;
-		
-	}
-	
-	uint getSampleRate()
-	{
-		return sfSoundBuffer_getSampleRate(m_buffer);
-	}
-	
-	uint getChannelCount()
-	{
-		return sfSoundBuffer_getChannelCount(m_buffer);
-	}
-	
-	Time getDuration()
-	{
-		return m_duration;
-	}
+
 	
 	package
 	{
@@ -276,13 +282,6 @@ class SoundBuffer
 			
 			return true;
 		}
-		
-
-		short[] m_samples; /// Samples buffer
-		Time m_duration; /// Sound duration
-
-		//Allows a sound buffer to remain const while still having a mutable list of sounds attached to it.
-		private static SoundList m_sounds;
 
 	}
 
