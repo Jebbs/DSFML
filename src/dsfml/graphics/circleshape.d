@@ -33,7 +33,7 @@ import dsfml.graphics.shape;
 
 import dsfml.system.vector2;
 
-debug import std.stdio;
+
 
 import std.math;
 
@@ -56,22 +56,11 @@ class CircleShape:Shape
 	
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying CircleShape");
 	}
 
-	CircleShape dup() const
-	{
-		CircleShape temp = new CircleShape(m_radius, m_pointCount);
-		
-		temp.position = position;
-		temp.rotation = rotation;
-		temp.scale = scale;
-		temp.origin = origin;
-		
-		return temp;
-	}
-	
-	
+
 	@property
 	{
 		void pointCount(uint newPointCount)
@@ -83,7 +72,20 @@ class CircleShape:Shape
 			return m_pointCount;
 		}
 	}
-	
+
+	@property
+	{
+		void radius(float newRadius)
+		{
+			m_radius = newRadius;
+			update();
+		}
+		float radius()
+		{
+			return m_radius;
+		}
+	}
+
 	override Vector2f getPoint(uint index) const
 	{
 		
@@ -99,20 +101,17 @@ class CircleShape:Shape
 		return Vector2f(m_radius + x, m_radius + y);
 	}
 	
-	
-	
-	@property
+
+	CircleShape dup() const
 	{
-		void radius(float newRadius)
-		{
-			m_radius = newRadius;
-			update();
-		}
-		float radius()
-		{
-			return m_radius;
-		}
+		CircleShape temp = new CircleShape(m_radius, m_pointCount);
+		
+		temp.position = position;
+		temp.rotation = rotation;
+		temp.scale = scale;
+		temp.origin = origin;
+		
+		return temp;
 	}
-	
 	
 }

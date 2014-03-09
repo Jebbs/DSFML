@@ -29,7 +29,7 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 */
 module dsfml.graphics.glyph;
 
-import dsfml.graphics.rect;
+public import dsfml.graphics.rect;
 
 struct Glyph
 {

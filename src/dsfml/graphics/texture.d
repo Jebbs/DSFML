@@ -1,4 +1,3 @@
-
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
@@ -27,24 +26,18 @@ SFML - The Simple and Fast Multimedia Library
 Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
-*/module dsfml.graphics.texture;
+*/
+module dsfml.graphics.texture;
 
 import dsfml.system.vector2;
 import dsfml.graphics.rect;
 import dsfml.system.inputstream;
 
 import dsfml.graphics.image;
-
 import dsfml.window.window;
-
 import dsfml.graphics.renderwindow;
 
 import dsfml.system.err;
-
-import std.conv;
-import std.string;
-
-debug import std.stdio;
 
 class Texture
 {
@@ -64,6 +57,7 @@ class Texture
 	
 	bool create(uint height, uint width)
 	{
+		import std.conv;
 		//if the Texture already exists, destroy it first
 		if(sfPtr)
 		{
@@ -77,6 +71,8 @@ class Texture
 	
 	bool loadFromFile(string filename, IntRect area = IntRect() )
 	{
+		import std.conv;
+		import std.string;
 		//if the Texture already exists, destroy it first
 		if(sfPtr)
 		{
@@ -90,6 +86,7 @@ class Texture
 	
 	bool loadFromMemory(const(void)* data, size_t sizeInBytes, IntRect area = IntRect())
 	{
+		import std.conv;
 		//if the Texture already exists, destroy it first
 		if(sfPtr)
 		{
@@ -103,6 +100,7 @@ class Texture
 	
 	bool loadFromStream(InputStream stream, IntRect area = IntRect())
 	{
+		import std.conv;
 		//if the Texture already exists, destroy it first
 		if(sfPtr)
 		{
@@ -116,6 +114,7 @@ class Texture
 	
 	bool loadFromImage(Image image, IntRect area = IntRect())
 	{
+		import std.conv;
 		//if the Texture already exists, destroy it first
 		if(sfPtr)
 		{
@@ -159,8 +158,7 @@ class Texture
 	{
 		sfTexture_updateFromRenderWindow(sfPtr, window.sfPtr, x, y);
 	}
-	
-	
+
 	Image copyToImage()
 	{
 		return new Image(sfTexture_copyToImage(sfPtr));
@@ -194,7 +192,7 @@ class Texture
 	
 	~this()
 	{
-		
+		debug import std.stdio;
 		debug writeln("Destroying Texture");
 		sfTexture_destroy( sfPtr);
 		

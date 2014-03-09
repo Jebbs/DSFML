@@ -45,14 +45,9 @@ import dsfml.graphics.color;
 
 import dsfml.system.vector2;
 
-debug import std.stdio;
-
-import std.algorithm;
-
-import dsfml.graphics.transform;
 
 import dsfml.system.err;
-import std.conv;
+
 
 class RenderTexture:RenderTarget
 {
@@ -65,8 +60,16 @@ class RenderTexture:RenderTarget
 
 	}
 
+	~this()
+	{
+		debug import std.stdio;
+		debug writeln("Destroying Render Texture");
+		sfRenderTexture_destroy(sfPtr);
+	}
+
 	bool create(uint width, uint height, bool depthBuffer = false)
 	{
+		import std.conv;
 		//if the RenderTexture already exists, destroy it first
 		if(sfPtr != null)
 		{
@@ -88,11 +91,6 @@ class RenderTexture:RenderTarget
 		}
 	}
 	
-	~this()
-	{
-		debug writeln("Destroying Render Texture");
-		sfRenderTexture_destroy(sfPtr);
-	}
 
 	@property
 	{
@@ -105,19 +103,7 @@ class RenderTexture:RenderTarget
 			return (sfRenderTexture_isSmooth(sfPtr));//== sfTrue)? true:false;
 		}
 	}
-	
-	Vector2u getSize() const
-	{
-		Vector2u temp;
-		sfRenderTexture_getSize(sfPtr, &temp.x, &temp.y);
-		return temp;
-	}
-	
-	void setActive(bool active = true)
-	{
-		sfRenderTexture_setActive(sfPtr, active);
-	}
-	
+
 	@property
 	{
 		override void view(const(View) newView)
@@ -131,12 +117,80 @@ class RenderTexture:RenderTarget
 			
 		}
 	}
-	
+
 	const(View) getDefaultView() const
 	{
 		return new View( sfRenderTexture_getDefaultView(sfPtr));
 	}
+
+	Vector2u getSize() const
+	{
+		Vector2u temp;
+		sfRenderTexture_getSize(sfPtr, &temp.x, &temp.y);
+		return temp;
+	}
+
+	IntRect getViewport(const(View) view) const
+	{
+		IntRect temp;
 		
+		sfRenderTexture_getViewport(sfPtr, view.sfPtr, &temp.left, &temp.top, &temp.width, &temp.height);
+		
+		return temp;
+	}
+
+	const(Texture) getTexture()
+	{
+		return m_texture;
+	}
+
+	void setActive(bool active = true)
+	{
+		sfRenderTexture_setActive(sfPtr, active);
+	}
+
+	void clear(Color color = Color.Black)
+	{
+		sfRenderTexture_clear(sfPtr, color.r,color.g, color.b, color.a);
+	}
+
+	void display()
+	{
+		sfRenderTexture_display(sfPtr);
+	}
+
+	override void draw(Drawable drawable, RenderStates states = RenderStates.Default())
+	{
+		//Confirms that even a blank render states struct won't break anything during drawing
+		if(states.texture is null)
+		{
+			states.texture = RenderStates.emptyTexture;
+		}
+		if(states.shader is null)
+		{
+			states.shader = RenderStates.emptyShader;
+		}
+		
+		drawable.draw(this, states);
+	}
+	
+	override void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default())
+	{
+		import std.algorithm;
+		
+		//Confirms that even a blank render states struct won't break anything during drawing
+		if(states.texture is null)
+		{
+			states.texture = RenderStates.emptyTexture;
+		}
+		if(states.shader is null)
+		{
+			states.shader = RenderStates.emptyShader;
+		}
+		
+		sfRenderTexture_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length),type,states.blendMode, states.transform.m_matrix.ptr, states.texture.sfPtr, states.shader.sfPtr);
+	}
+
 	Vector2f mapPixelToCoords(Vector2i point) const
 	{
 		Vector2f temp;
@@ -164,81 +218,23 @@ class RenderTexture:RenderTarget
 		sfRenderTexture_mapCoordsToPixel(sfPtr,point.x, point.y, &temp.x, &temp.y,view.sfPtr); 
 		return temp;
 	}
-	
-	IntRect getViewport(const(View) view) const
-	{
-		IntRect temp;
-
-		sfRenderTexture_getViewport(sfPtr, view.sfPtr, &temp.left, &temp.top, &temp.width, &temp.height);
-		
-		return temp;
-	}
-	
-	
-	const(Texture) getTexture()
-	{
-		return m_texture;
-	}
-	
-	
-	override void draw(Drawable drawable, RenderStates states = RenderStates.Default())
-	{
-		//Confirms that even a blank render states struct won't break anything during drawing
-		if(states.texture is null)
-		{
-			states.texture = RenderStates.emptyTexture;
-		}
-		if(states.shader is null)
-		{
-			states.shader = RenderStates.emptyShader;
-		}
-
-		drawable.draw(this, states);
-	}
-	
-	override void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default())
-	{
-		//Confirms that even a blank render states struct won't break anything during drawing
-		if(states.texture is null)
-		{
-			states.texture = RenderStates.emptyTexture;
-		}
-		if(states.shader is null)
-		{
-			states.shader = RenderStates.emptyShader;
-		}
-
-		sfRenderTexture_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length),type,states.blendMode, states.transform.m_matrix.ptr, states.texture.sfPtr, states.shader.sfPtr);
-	}
-	
-	void display()
-	{
-		
-		
-		sfRenderTexture_display(sfPtr);
-	}
-	
-	void clear(Color color = Color.Black)
-	{
-		sfRenderTexture_clear(sfPtr, color.r,color.g, color.b, color.a);
-	}
-	
-	void pushGLStates()
-	{
-		sfRenderTexture_pushGLStates(sfPtr);
-		err.write(text(sfErrGraphics_getOutput()));
-	}
 
 	void popGLStates()
 	{
 		sfRenderTexture_popGLStates(sfPtr);
 	}
 
+	void pushGLStates()
+	{
+		import std.conv;
+		sfRenderTexture_pushGLStates(sfPtr);
+		err.write(text(sfErrGraphics_getOutput()));
+	}
+
 	void resetGLStates()
 	{
 		sfRenderTexture_resetGLStates(sfPtr);
 	}
-	
 }
 
 

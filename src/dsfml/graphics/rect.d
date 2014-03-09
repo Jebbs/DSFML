@@ -30,7 +30,7 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 module dsfml.graphics.rect;
 
 import std.traits;
-import std.conv;
+
 import dsfml.system.vector2;
 
 struct Rect(T)
@@ -131,6 +131,7 @@ struct Rect(T)
 	
 	string toString()
 	{
+		import std.conv;
 		return "Left: " ~ text(left) ~ " Top: " ~ text(top) ~ " Width: " ~ text(width) ~ " Height: " ~ text(height);
 	}
 	

@@ -29,10 +29,6 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 */
 module dsfml.graphics.color;
 
-import std.conv;
-import std.traits;
-import std.algorithm;
-
 struct Color
 {
 	ubyte r;
@@ -137,6 +133,7 @@ struct Color
 	
 	string toString() const
 	{
+		import std.conv;
 		return "R: " ~ text(r) ~ " G: " ~ text(g) ~ " B: " ~ text(b) ~ " A: " ~ text(a);
 	}
 }

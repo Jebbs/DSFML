@@ -60,7 +60,7 @@ import std.string;
 import std.utf;
 
 import dsfml.system.err;
-import std.conv;
+
 
 debug import std.stdio;
 
@@ -75,6 +75,7 @@ class RenderWindow:Window,RenderTarget
 
 	this(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
+		import std.conv;
 		sfPtr = sfRenderWindow_create(mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(text(sfErrGraphics_getOutput()));
 	}
@@ -82,12 +83,14 @@ class RenderWindow:Window,RenderTarget
 	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
 	this(VideoMode mode, dstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
+		import std.conv;
 		sfPtr = sfRenderWindow_createUnicode(mode.width, mode.height, mode.bitsPerPixel, toUTF32z(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(text(sfErrGraphics_getOutput()));
 	}
 
 	this(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
+		import std.conv;
 		sfPtr = sfRenderWindow_createFromHandle(handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(text(sfErrGraphics_getOutput()));
 	}
@@ -214,6 +217,7 @@ class RenderWindow:Window,RenderTarget
 	
 	override bool setActive(bool active)
 	{
+		import std.conv;
 		bool toReturn = sfRenderWindow_setActive(sfPtr, active);
 		err.write(text(sfErrGraphics_getOutput()));
 		return toReturn;
@@ -344,6 +348,7 @@ class RenderWindow:Window,RenderTarget
 	
 	void pushGLStates()
 	{
+		import std.conv;
 		sfRenderWindow_pushGLStates(sfPtr);
 		err.write(text(sfErrGraphics_getOutput()));
 	}
@@ -359,6 +364,7 @@ class RenderWindow:Window,RenderTarget
 
 	}
 
+	//TODO: Fix these names or something.
 
 	//Provides the static windowPointer method a way to get the pointer
 	//Window.getWindowPointer is protected, so the static method cannot call it directly
@@ -371,14 +377,13 @@ class RenderWindow:Window,RenderTarget
 	package static void* windowPointer(Window window)
 	{
 		scope RenderWindow temp = new RenderWindow();
-
-
+	
 		return temp.getWindowPtr(window); 
 	}
 
 }
 
-alias std.utf.toUTFz!(const(dchar)*) toUTF32z;
+alias toUTF32z = std.utf.toUTFz!(const(dchar)*);
 package extern(C):
 
 struct sfRenderWindow;

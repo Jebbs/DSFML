@@ -38,8 +38,6 @@ import dsfml.system.vector2;
 
 import dsfml.graphics.rect;
 
-import dsfml.graphics.transform;
-
 import dsfml.graphics.color;
 
 import dsfml.graphics.renderstates;
@@ -50,47 +48,24 @@ import dsfml.graphics.vertexarray;
 
 import dsfml.graphics.primitivetype;
 
-import std.math;
-
-debug import std.stdio;
+import std.typecons:Rebindable;
 
 class Shape:Drawable,Transformable
 {
 	mixin NormalTransformable;
 
-	private Vector2f computeNormal(Vector2f p1, Vector2f p2)
+	private
 	{
-		Vector2f normal = Vector2f(p1.y - p2.y, p2.x - p1.x);
-		float length = sqrt(normal.x * normal.x + normal.y * normal.y);
-		if (length != 0f)
-		{
-			normal /= length;
-		}
-		return normal;
+		Rebindable!(const(Texture)) m_texture; /// Texture of the shape
+		IntRect m_textureRect; /// Rectangle defining the area of the source texture to display
+		Color m_fillColor; /// Fill color
+		Color m_outlineColor; /// Outline color
+		float m_outlineThickness; /// Thickness of the shape's outline
+		VertexArray m_vertices; /// Vertex array containing the fill geometry
+		VertexArray m_outlineVertices; /// Vertex array containing the outline geometry
+		FloatRect m_insideBounds; /// Bounding rectangle of the inside (fill)
+		FloatRect m_bounds; /// Bounding rectangle of the whole shape (outline + fill)
 	}
-	
-	private float dotProduct(Vector2f p1, Vector2f p2)
-	{
-		return (p1.x * p2.x) + (p1.y * p2.y);
-	}
-	
-	void setTexture(const(Texture) texture, bool resetRect)
-	{
-		if((texture !is null) && (resetRect || (m_texture is null)))
-		{
-			textureRect = IntRect(0, 0, texture.getSize().x, texture.getSize().y);
-		}
-		
-		//texture is only used as constant data, so this is safe
-		m_texture = (texture is null)? null:cast(Texture)texture;
-		
-	}
-	//get texture
-	const(Texture) getTexture() const
-	{
-		return m_texture;
-	}
-	
 	@property
 	{
 		//Set Texture Rect
@@ -155,21 +130,37 @@ class Shape:Drawable,Transformable
 	{
 		abstract uint pointCount();
 	}
-	
-	abstract Vector2f getPoint(uint index) const;
-	
-	//get local bounds
-	FloatRect getLocalBounds() const
-	{
-		return m_bounds;
-	}
-	
+
+
 	//get global bounds
 	FloatRect getGlobalBounds()
 	{
 		return getTransform().transformRect(getLocalBounds());
 	}
-	
+	//get local bounds
+	FloatRect getLocalBounds() const
+	{
+		return m_bounds;
+	}
+	abstract Vector2f getPoint(uint index) const;
+
+	//get texture
+	const(Texture) getTexture() const
+	{
+		return m_texture;
+	}
+
+	void setTexture(const(Texture) texture, bool resetRect)
+	{
+		if((texture !is null) && (resetRect || (m_texture is null)))
+		{
+			textureRect = IntRect(0, 0, texture.getSize().x, texture.getSize().y);
+		}
+		
+		m_texture = (texture is null)? null:texture;
+		
+	}
+
 	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		renderStates.transform = renderStates.transform * getTransform();
@@ -232,6 +223,22 @@ class Shape:Drawable,Transformable
 	
 	private
 	{
+		Vector2f computeNormal(Vector2f p1, Vector2f p2)
+		{
+			Vector2f normal = Vector2f(p1.y - p2.y, p2.x - p1.x);
+			float length = sqrt(normal.x * normal.x + normal.y * normal.y);
+			if (length != 0f)
+			{
+				normal /= length;
+			}
+			return normal;
+		}
+		
+		float dotProduct(Vector2f p1, Vector2f p2)
+		{
+			return (p1.x * p2.x) + (p1.y * p2.y);
+		}
+
 		//update methods
 		
 		void updateFillColors()
@@ -319,15 +326,7 @@ class Shape:Drawable,Transformable
 		
 		//Member data
 		//Can't make m_texture const, as const data can only be initialized in a constructor
-		Texture m_texture; /// Texture of the shape
-		IntRect m_textureRect; /// Rectangle defining the area of the source texture to display
-		Color m_fillColor; /// Fill color
-		Color m_outlineColor; /// Outline color
-		float m_outlineThickness; /// Thickness of the shape's outline
-		VertexArray m_vertices; /// Vertex array containing the fill geometry
-		VertexArray m_outlineVertices; /// Vertex array containing the outline geometry
-		FloatRect m_insideBounds; /// Bounding rectangle of the inside (fill)
-		FloatRect m_bounds; /// Bounding rectangle of the whole shape (outline + fill)
+
 	}
 }
 

@@ -36,14 +36,8 @@ import dsfml.system.inputstream;
 
 import dsfml.graphics.rect;
 
-debug import std.stdio;
-
 import dsfml.system.err;
-import std.conv;
 
-import std.string;
-
-//Possible to do: Rewrite this class using a dynamic array and use an sfml Image to just load/save.
 class Image
 {
 	
@@ -61,6 +55,7 @@ class Image
 	
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying Image");
 		sfImage_destroy(sfPtr);
 	}
@@ -92,6 +87,8 @@ class Image
 	
 	bool loadFromFile(string fileName)
 	{
+		import std.conv;
+		import std.string;
 		//if the Image already exists, destroy it first
 		if(sfPtr)
 		{
@@ -107,6 +104,7 @@ class Image
 	
 	bool loadFromMemory(const(void)[] data)
 	{
+		import std.conv;
 		//if the Image already exists, destroy it first
 		if(sfPtr)
 		{
@@ -120,6 +118,7 @@ class Image
 	
 	bool loadFromStream(InputStream stream)
 	{
+		import std.conv;
 		//if the Image already exists, destroy it first
 		if(sfPtr)
 		{
@@ -130,53 +129,19 @@ class Image
 		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
-	
-	
-	
-	Image dup() const
-	{
-		return new Image(sfImage_copy(sfPtr));
-	}
-	
-	bool saveToFile(string fileName)
-	{
-		bool toReturn = sfImage_saveToFile(sfPtr, fileName.ptr);
-		err.write(text(sfErrGraphics_getOutput()));
-		return toReturn;
-	}
-	
-	Vector2u getSize()
-	{
-		Vector2u temp;
-		sfImage_getSize(sfPtr,&temp.x, &temp.y);
-		return temp;
-	}
-	
-	void createMaskFromColor(Color maskColor, ubyte alpha = 0)
-	{
-		sfImage_createMaskFromColor(sfPtr,maskColor.r,maskColor.b, maskColor.g, maskColor.a, alpha);
-	}
-	
-	
-	
-	void setPixel(uint x, uint y, Color color)
-	{
-		sfImage_setPixel(sfPtr, x,y,color.r, color.b,color.g, color.a);
-	}
-	
+
 	Color getPixel(uint x, uint y)
 	{ 
 		Color temp;
 		sfImage_getPixel(sfPtr, x,y, &temp.r, &temp.b, &temp.g, &temp.a);
 		return temp;
 	}
-	
-	
+
 	const(ubyte)[] getPixelArray()
 	{
 		Vector2u size = getSize();
 		int length = size.x * size.y * 4;
-
+		
 		if(length!=0)
 		{
 			return sfImage_getPixelsPtr(sfPtr)[0..length];
@@ -187,7 +152,35 @@ class Image
 			return [];
 		}
 	}
+
+	Vector2u getSize()
+	{
+		Vector2u temp;
+		sfImage_getSize(sfPtr,&temp.x, &temp.y);
+		return temp;
+	}
+
+	void setPixel(uint x, uint y, Color color)
+	{
+		sfImage_setPixel(sfPtr, x,y,color.r, color.b,color.g, color.a);
+	}
+
+	void copyImage(const ref Image source, uint destX, uint destY, IntRect sourceRect = IntRect(0,0,0,0), bool applyAlpha = false)
+	{
+		sfImage_copyImage(sfPtr, source.sfPtr, destX, destY,sourceRect.left, sourceRect.top, sourceRect.width, sourceRect.height, applyAlpha);//:sfImage_copyImage(sfPtr, source.sfPtr, destX, destY, temp, sfFalse);
+		
+	}
+
+	void createMaskFromColor(Color maskColor, ubyte alpha = 0)
+	{
+		sfImage_createMaskFromColor(sfPtr,maskColor.r,maskColor.b, maskColor.g, maskColor.a, alpha);
+	}
 	
+	Image dup() const
+	{
+		return new Image(sfImage_copy(sfPtr));
+	}
+
 	void flipHorizontally()
 	{
 		sfImage_flipHorizontally(sfPtr);
@@ -197,13 +190,14 @@ class Image
 	{
 		sfImage_flipVertically(sfPtr);
 	}
-	
-	void copyImage(const ref Image source, uint destX, uint destY, IntRect sourceRect = IntRect(0,0,0,0), bool applyAlpha = false)
-	{
-		sfImage_copyImage(sfPtr, source.sfPtr, destX, destY,sourceRect.left, sourceRect.top, sourceRect.width, sourceRect.height, applyAlpha);//:sfImage_copyImage(sfPtr, source.sfPtr, destX, destY, temp, sfFalse);
-		
-	}
 
+	bool saveToFile(string fileName)
+	{
+		import std.conv;
+		bool toReturn = sfImage_saveToFile(sfPtr, fileName.ptr);
+		err.write(text(sfErrGraphics_getOutput()));
+		return toReturn;
+	}
 }
 private:
 

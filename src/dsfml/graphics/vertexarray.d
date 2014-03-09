@@ -71,39 +71,7 @@ class VertexArray:Drawable
 	{
 		debug writeln("Destroying Vertex Array");
 	}
-	
-	VertexArray dup() const
-	{
-		return new VertexArray(this.primativeType,Vertices.dup);
-	}
-	
-	
-	ref Vertex opIndex(size_t index)
-	{
-		return Vertices[index];
-	}
-	
-	
-	void append(Vertex newVertex)
-	{
-		Vertices ~= newVertex;
-	}
-	void clear()
-	{
-		Vertices.length = 0;
-	}
-	
-	void resize(uint length)
-	{
-		Vertices.length = length;
-	}
-	
-	uint getVertexCount()
-	{
-		return cast(uint)min(uint.max, Vertices.length);
-	}
-	
-	
+
 	FloatRect getBounds()
 	{
 		
@@ -140,8 +108,21 @@ class VertexArray:Drawable
 		
 		
 	}
-	
-	
+
+	uint getVertexCount()
+	{
+		return cast(uint)min(uint.max, Vertices.length);
+	}
+
+	void append(Vertex newVertex)
+	{
+		Vertices ~= newVertex;
+	}
+	void clear()
+	{
+		Vertices.length = 0;
+	}
+
 	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		if(Vertices.length != 0)
@@ -150,6 +131,15 @@ class VertexArray:Drawable
 		}
 		
 	}
-	
+
+	void resize(uint length)
+	{
+		Vertices.length = length;
+	}
+
+	ref Vertex opIndex(size_t index)
+	{
+		return Vertices[index];
+	}
 	
 }

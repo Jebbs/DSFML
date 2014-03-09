@@ -28,39 +28,41 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 module dsfml.graphics.font;
+
 import dsfml.graphics.texture;
 import dsfml.graphics.glyph;
-
-import std.string;
-
 import dsfml.system.inputstream;
-
-debug import std.stdio;
-
 import dsfml.system.err;
-import std.conv;
+
 
 class Font
 {
 	package sfFont* sfPtr;
 
 	private Texture fontTexture;
-
 	private fontStream m_stream;//keeps an instance of the C++ interface stored if used
 		
 	this()
 	{
 		//Creates a null font
 	}
+
+	package this(sfFont* newFont)
+	{
+		sfPtr = newFont;
+	}
 	
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying Font");
 		sfFont_destroy(sfPtr);
 	}
 	
 	bool loadFromFile(string filename)
 	{
+		import std.conv;
+		import std.string;
 		//if the Font already exists, destroy it first
 		if(sfPtr)
 		{
@@ -81,6 +83,7 @@ class Font
 	
 	bool loadFromMemory(const(void)[] data)
 	{
+		import std.conv;
 		//if the Font already exists, destroy it first
 		if(sfPtr)
 		{
@@ -101,6 +104,7 @@ class Font
 	
 	bool loadFromStream(InputStream stream)
 	{
+		import std.conv;
 		//if the Font already exists, destroy it first
 		if(sfPtr)
 		{
@@ -118,16 +122,6 @@ class Font
 		err.write(text(sfErrGraphics_getOutput()));
 		
 		return (sfPtr == null)?false:true;
-	}
-	
-	package this(sfFont* newFont)
-	{
-		sfPtr = newFont;
-	}
-	
-	Font dup() const
-	{
-		return new Font(sfFont_copy(sfPtr));
 	}
 	
 	Glyph getGlyph(dchar codePoint, uint characterSize, bool bold) const
@@ -160,12 +154,10 @@ class Font
 
 	}
 
-
-
-
-
-
-
+	Font dup() const
+	{
+		return new Font(sfFont_copy(sfPtr));
+	}
 
 }
 

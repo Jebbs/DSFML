@@ -33,9 +33,7 @@ import dsfml.graphics.blendmode;
 import dsfml.graphics.transform;
 import dsfml.graphics.texture;
 import dsfml.graphics.shader;
-import std.typecons;
-
-import std.stdio;
+import std.typecons:Rebindable;
 
 struct RenderStates
 {
@@ -161,7 +159,7 @@ struct RenderStates
 	static RenderStates Default()
 	{
 
-		RenderStates temp;
+		RenderStates temp;//make a static variable?
 
 		temp.m_texture = emptyTexture;
 		temp.m_shader = emptyShader;
@@ -169,6 +167,8 @@ struct RenderStates
 		return temp;
 	}
 
+	//Creates empty an epty texture and shader for continuous use to prevent
+	//creating them on the fly
 	package static Texture emptyTexture;
 	package static Shader emptyShader;
 

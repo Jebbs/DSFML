@@ -70,7 +70,9 @@ class Sprite:Drawable,Transformable
 		setTexture(texture);
 	}
 
-	
+
+
+	//TODO: Fix this. Whoops.
 	Sprite dup() const
 	{
 		return new Sprite();

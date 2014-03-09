@@ -37,7 +37,6 @@ import dsfml.system.vector2;
 
 import dsfml.graphics.rect;
 
-import dsfml.graphics.transform;
 import dsfml.graphics.transformable;
 import dsfml.graphics.drawable;
 import dsfml.graphics.texture;

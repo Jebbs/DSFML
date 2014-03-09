@@ -31,7 +31,7 @@ module dsfml.graphics.transformable;
 
 import dsfml.system.vector2;
 
-import dsfml.graphics.transform;
+public import dsfml.graphics.transform;
 
 
 

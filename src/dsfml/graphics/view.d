@@ -52,14 +52,12 @@ class View
 	{
 		sfPtr = sfview;
 	}
-	
-	
-	View dup() const
+
+	~this()
 	{
-		return new View(sfView_copy(sfPtr));
+		sfView_destroy(sfPtr);
 	}
-	
-	
+
 	@property
 	{
 		void center(Vector2f newCenter)
@@ -88,7 +86,6 @@ class View
 			Vector2f temp;
 			sfView_getSize(sfPtr, &temp.x, &temp.y);
 			return temp;
-			//return Vector2f(sfView_getSize(sfPtr));
 		}
 	}
 	
@@ -116,27 +113,28 @@ class View
 			FloatRect temp;
 			sfView_getViewport(sfPtr, &temp.left, &temp.top, &temp.width, &temp.height);
 			return temp;
-			//return FloatRect(sfView_getViewport(sfPtr));
 		}
 	}
-	
-	void reset(FloatRect rectangle)
+
+	View dup() const
 	{
-		sfView_reset(sfPtr, rectangle.left,rectangle.top, rectangle.width, rectangle.height);
+		return new View(sfView_copy(sfPtr));
 	}
-	
-	
-	void zoom(float factor)
-	{
-		sfView_zoom(sfPtr, factor);
-	}
-	
+
 	void move(Vector2f offset)
 	{
 		sfView_move(sfPtr, offset.x, offset.y);
 	}
-	
-	
+
+	void reset(FloatRect rectangle)
+	{
+		sfView_reset(sfPtr, rectangle.left,rectangle.top, rectangle.width, rectangle.height);
+	}
+
+	void zoom(float factor)
+	{
+		sfView_zoom(sfPtr, factor);
+	}
 }
 
 package extern(C) struct sfView;

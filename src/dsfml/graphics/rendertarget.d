@@ -45,8 +45,6 @@ import dsfml.system.vector2;
 
 interface RenderTarget
 {
-	void clear(Color color = Color.Black);
-
 	@property
 	{
 		void view(const(View) newView);
@@ -55,7 +53,15 @@ interface RenderTarget
 
 	const(View) getDefaultView() const;
 
+	Vector2u getSize() const;
+
 	IntRect getViewport(const(View) view) const;
+
+	void clear(Color color = Color.Black);
+
+	void draw(Drawable drawable, RenderStates states = RenderStates.Default());
+	
+	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default());
 
 	Vector2f mapPixelToCoords(Vector2i point) const;
 
@@ -65,17 +71,9 @@ interface RenderTarget
 
 	Vector2i mapCoordsToPixel(Vector2f point, const(View) view) const;
 
-	void draw(Drawable drawable, RenderStates states = RenderStates.Default());
-	
-	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default());
-
-	Vector2u getSize() const;
-
-	void pushGLStates();
-
 	void popGLStates();
-
+	
+	void pushGLStates();
+	
 	void resetGLStates();
-
-
 }

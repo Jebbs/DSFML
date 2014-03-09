@@ -1,23 +1,24 @@
 module dsfml.graphics.convexshape;
 
 import dsfml.system.vector2;
-
 import dsfml.graphics.shape;
-import std.algorithm;
-
-debug import std.stdio;
 
 class ConvexShape:Shape
 {
+	private Vector2f[] m_points;
+
 	this(uint thePointCount)
 	{
 		this.pointCount = thePointCount;
 		update();
 	}
+
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying ConvexShape");
 	}
+
 	@property
 	{
 		void pointCount(uint newPointCount)
@@ -27,10 +28,10 @@ class ConvexShape:Shape
 		}
 		override uint pointCount()
 		{
+			import std.algorithm;
 			return cast(uint)min(m_points.length, uint.max);
 		}
 	}
-	
 	
 	override Vector2f getPoint(uint index) const
 	{
@@ -48,6 +49,4 @@ class ConvexShape:Shape
 		m_points ~=point;
 		update();
 	}
-	
-	private Vector2f[] m_points;
 }
