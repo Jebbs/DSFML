@@ -94,9 +94,10 @@ class RenderTexture:RenderTarget
 
 	@property
 	{
-		void smooth(bool newSmooth)
+		bool smooth(bool newSmooth)
 		{
 			sfRenderTexture_setSmooth(sfPtr, newSmooth);
+			return newSmooth;
 		}
 		bool smooth()
 		{
@@ -106,9 +107,10 @@ class RenderTexture:RenderTarget
 
 	@property
 	{
-		override void view(const(View) newView)
+		override const(View) view(const(View) newView)
 		{
 			sfRenderTexture_setView(sfPtr, newView.sfPtr);
+			return newView;
 		}
 		override View view() const
 		{

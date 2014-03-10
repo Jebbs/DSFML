@@ -52,10 +52,11 @@ class RectangleShape:Shape
 
 	@property
 	{
-		void size(Vector2f theSize)
+		Vector2f size(Vector2f theSize)
 		{
 			m_size = theSize;
 			update();
+			return theSize;
 		}
 		Vector2f size()
 		{

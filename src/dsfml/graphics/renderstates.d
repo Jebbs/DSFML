@@ -117,7 +117,7 @@ struct RenderStates
 
 	@property
 	{
-		void texture(const(Texture) theTexture)
+		const(Texture) texture(const(Texture) theTexture)
 		{
 			if(theTexture !is null)
 			{
@@ -128,7 +128,7 @@ struct RenderStates
 			{
 				m_texture = emptyTexture;
 			}
-			
+			return theTexture;
 		}
 		const(Texture) texture()
 		{
@@ -138,7 +138,7 @@ struct RenderStates
 	
 	@property
 	{
-		void shader(const(Shader) theShader)
+		const(Shader) shader(const(Shader) theShader)
 		{
 			if(theShader !is null)
 			{
@@ -148,6 +148,7 @@ struct RenderStates
 			{
 				m_shader = emptyShader;
 			}
+			return theShader;
 		}
 		const(Shader) shader()
 		{

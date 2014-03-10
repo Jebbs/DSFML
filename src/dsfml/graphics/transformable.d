@@ -40,25 +40,25 @@ interface Transformable
 	
 	@property
 	{
-		void position(Vector2f newPosition);
+		Vector2f position(Vector2f newPosition);
 		Vector2f position() const;
 	}
 	
 	@property
 	{
-		void rotation(float newRotation);
+		float rotation(float newRotation);
 		float rotation() const;
 	}
 	
 	@property
 	{
-		void scale(Vector2f newScale);
+		Vector2f scale(Vector2f newScale);
 		Vector2f scale() const;
 	}
 	
 	@property
 	{
-		void origin(Vector2f newOrigin);
+		Vector2f origin(Vector2f newOrigin);
 		Vector2f origin() const;
 	}
 	
@@ -72,11 +72,12 @@ mixin template NormalTransformable()
 {
 	@property
 	{
-		void position(Vector2f newPosition)
+		Vector2f position(Vector2f newPosition)
 		{
 			m_position = newPosition;
 			m_transformNeedUpdate = true;
 			m_inverseTransformNeedUpdate = true;
+			return newPosition;
 		}
 		
 		Vector2f position() const
@@ -87,7 +88,7 @@ mixin template NormalTransformable()
 	
 	@property
 	{
-		void rotation(float newRotation)
+		float rotation(float newRotation)
 		{
 			m_rotation = cast(float)fmod(newRotation, 360);
 			if(m_rotation < 0)
@@ -96,6 +97,7 @@ mixin template NormalTransformable()
 			}
 			m_transformNeedUpdate = true;
 			m_inverseTransformNeedUpdate = true;
+			return newRotation;
 		}
 		
 		float rotation() const
@@ -106,11 +108,12 @@ mixin template NormalTransformable()
 	
 	@property
 	{
-		void scale(Vector2f newScale)
+		Vector2f scale(Vector2f newScale)
 		{
 			m_scale = newScale;
 			m_transformNeedUpdate = true;
 			m_inverseTransformNeedUpdate = true;
+			return newScale;
 		}
 		
 		Vector2f scale() const
@@ -121,11 +124,12 @@ mixin template NormalTransformable()
 	
 	@property
 	{
-		void origin(Vector2f newOrigin)
+		Vector2f origin(Vector2f newOrigin)
 		{
 			m_origin = newOrigin;
 			m_transformNeedUpdate = true;
 			m_inverseTransformNeedUpdate = true;
+			return newOrigin;
 		}
 		
 		Vector2f origin() const

@@ -90,9 +90,10 @@ class Window
 
 	@property
 	{
-		void position(Vector2i newPosition)
+		Vector2i position(Vector2i newPosition)
 		{
 			sfWindow_setPosition(sfPtr,newPosition.x, newPosition.y);
+			return newPosition;
 		}
 		
 		Vector2i position()
@@ -105,9 +106,10 @@ class Window
 	
 	@property
 	{
-		void size(Vector2u newSize)
+		Vector2u size(Vector2u newSize)
 		{
 			sfWindow_setSize(sfPtr, newSize.x, newSize.y);
+			return newSize;
 		}
 		Vector2u size()
 		{
