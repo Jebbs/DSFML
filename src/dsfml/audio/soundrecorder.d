@@ -56,6 +56,11 @@ class SoundRecorder
 
 	~this()
 	{
+		version(DSFML_Debug_Out)
+		{
+			import std.stdio;
+			writeln("Destroying SoundRecorder");
+		}
 		sfSoundRecorder_destroy(recorder);
 	}
 

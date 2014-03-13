@@ -192,8 +192,11 @@ class Texture
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Texture");
+		version(DSFML_Debug_Out)
+		{
+			import std.stdio;
+			writeln("Destroying Texture");
+		}
 		sfTexture_destroy( sfPtr);
 		
 	}

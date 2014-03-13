@@ -56,8 +56,11 @@ class CircleShape:Shape
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying CircleShape");
+		version(DSFML_Debug_Out)
+		{
+			import std.stdio;
+			writeln("Destroying CircleShape");
+		}
 	}
 
 

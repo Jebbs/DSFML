@@ -74,8 +74,11 @@ class SoundStream:SoundSource
 
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("SoundStream Destroyed");
+		version(DSFML_Debug_Out)
+		{
+			import std.stdio;
+			writeln("Destroying SoundStream");
+		}
 		stop();
 	}
 

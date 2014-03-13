@@ -81,8 +81,11 @@ class Window
 	
 	~this()
 	{
-		debug import std.stdio: writeln;
-		debug writeln("Destroying Window");
+		version(DSFML_Debug_Out)
+		{
+			import std.stdio;
+			writeln("Destroying Window");
+		}
 		sfWindow_destroy(sfPtr);
 	}
 

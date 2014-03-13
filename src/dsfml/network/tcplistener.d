@@ -47,7 +47,11 @@ class TcpListener:Socket
 	
 	~this()
 	{
-		debug writeln("Destroying Tcp Listener");
+		version(DSFML_Debug_Out)
+		{
+			import std.stdio;
+			writeln("Destroying TcpListener");
+		}
 		sfTcpListener_destroy(sfPtr);
 	}
 	

@@ -30,8 +30,6 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 
 module dsfml.network.packet;
 
-debug import std.stdio;
-
 import std.conv;
 
 class Packet
@@ -45,7 +43,11 @@ class Packet
 	
 	~this()
 	{
-		debug writeln("Destroying Packet");
+		version(DSFML_Debug_Out) 
+		{
+			import std.stdio;
+			writeln("Destroying Packet");
+		}
 		sfPacket_destroy(sfPtr);
 	}
 
