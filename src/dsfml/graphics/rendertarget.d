@@ -47,7 +47,7 @@ interface RenderTarget
 {
 	@property
 	{
-		void view(const(View) newView);
+		const(View) view(const(View) newView);
 		View view() const;
 	}  
 

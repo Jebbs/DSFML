@@ -63,9 +63,10 @@ class CircleShape:Shape
 
 	@property
 	{
-		void pointCount(uint newPointCount)
+		uint pointCount(uint newPointCount)
 		{
 			m_pointCount = newPointCount;
+			return newPointCount;
 		}
 		override uint pointCount()
 		{
@@ -75,10 +76,11 @@ class CircleShape:Shape
 
 	@property
 	{
-		void radius(float newRadius)
+		float radius(float newRadius)
 		{
 			m_radius = newRadius;
 			update();
+			return newRadius;
 		}
 		float radius()
 		{

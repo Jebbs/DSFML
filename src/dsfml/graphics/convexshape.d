@@ -21,10 +21,11 @@ class ConvexShape:Shape
 
 	@property
 	{
-		void pointCount(uint newPointCount)
+		uint pointCount(uint newPointCount)
 		{
 			m_points.length = newPointCount;
 			update();
+			return newPointCount;
 		}
 		override uint pointCount()
 		{
