@@ -154,7 +154,7 @@ class Shape:Drawable,Transformable
 		return m_texture;
 	}
 
-	void setTexture(const(Texture) texture, bool resetRect)
+	void setTexture(const(Texture) texture, bool resetRect = false)
 	{
 		if((texture !is null) && (resetRect || (m_texture is null)))
 		{
