@@ -60,9 +60,10 @@ class View
 
 	@property
 	{
-		void center(Vector2f newCenter)
+		Vector2f center(Vector2f newCenter)
 		{
 			sfView_setCenter(sfPtr, newCenter.x, newCenter.y);
+			return newCenter;
 		}
 		
 		Vector2f center()
@@ -76,9 +77,10 @@ class View
 	
 	@property
 	{
-		void size(Vector2f newSize)
+		Vector2f size(Vector2f newSize)
 		{
 			sfView_setSize(sfPtr, newSize.x, newSize.y);
+			return newSize;
 		}
 		
 		Vector2f size()
@@ -91,9 +93,10 @@ class View
 	
 	@property
 	{
-		void rotation(float newRotation)
+		float rotation(float newRotation)
 		{
 			sfView_setRotation(sfPtr, newRotation);
+			return newRotation;
 		}
 		float rotation()
 		{
@@ -104,9 +107,10 @@ class View
 	
 	@property
 	{
-		void viewport(FloatRect newTarget)
+		FloatRect viewport(FloatRect newTarget)
 		{
 			sfView_setViewport(sfPtr, newTarget.left, newTarget.top, newTarget.width, newTarget.height);
+			return newTarget;
 		}
 		FloatRect viewport()
 		{

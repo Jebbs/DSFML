@@ -69,10 +69,11 @@ class Shape:Drawable,Transformable
 	@property
 	{
 		//Set Texture Rect
-		void textureRect(IntRect rect)
+		IntRect textureRect(IntRect rect)
 		{
 			m_textureRect = rect;
 			updateTexCoords();
+			return rect;
 		}
 		//get texture Rect
 		IntRect textureRect() const
@@ -84,10 +85,11 @@ class Shape:Drawable,Transformable
 	@property
 	{
 		//set Fill color
-		void fillColor(Color color)
+		Color fillColor(Color color)
 		{
 			m_fillColor = color;
 			updateFillColors();
+			return color;
 		}
 		//get fill color
 		Color fillColor() const
@@ -99,10 +101,11 @@ class Shape:Drawable,Transformable
 	@property
 	{
 		//set outline color
-		void outlineColor(Color color)
+		Color outlineColor(Color color)
 		{
 			m_outlineColor = color;
 			updateOutlineColors();
+			return color;
 		}
 		//get outline color
 		Color outlineColor() const
@@ -114,10 +117,11 @@ class Shape:Drawable,Transformable
 	@property
 	{
 		//set ouline thickness
-		void outlineThickness(float thickness)
+		float outlineThickness(float thickness)
 		{
 			m_outlineThickness = thickness;
 			update();
+			return thickness;
 		}
 		//get outline thickness
 		float outlineThickness() const
@@ -150,7 +154,7 @@ class Shape:Drawable,Transformable
 		return m_texture;
 	}
 
-	void setTexture(const(Texture) texture, bool resetRect)
+	void setTexture(const(Texture) texture, bool resetRect = false)
 	{
 		if((texture !is null) && (resetRect || (m_texture is null)))
 		{

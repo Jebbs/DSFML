@@ -94,7 +94,7 @@ class Sprite:Drawable,Transformable
 	
 	@property
 	{
-		void textureRect(IntRect rect)
+		IntRect textureRect(IntRect rect)
 		{
 			if (rect != m_textureRect)
 			{
@@ -102,7 +102,7 @@ class Sprite:Drawable,Transformable
 				updatePositions();
 				updateTexCoords();
 			}
-			
+			return rect;
 		}
 		
 		IntRect textureRect()
@@ -113,13 +113,14 @@ class Sprite:Drawable,Transformable
 	
 	@property//color
 	{
-		void color(Color newColor)
+		Color color(Color newColor)
 		{
 			// Update the vertices' color
 			m_vertices[0].color = newColor;
 			m_vertices[1].color = newColor;
 			m_vertices[2].color = newColor;
 			m_vertices[3].color = newColor;
+			return newColor;
 		}
 		
 		Color color()

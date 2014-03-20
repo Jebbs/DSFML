@@ -144,9 +144,10 @@ class RenderWindow:Window,RenderTarget
 	
 	@property
 	{
-		override void position(Vector2i newPosition)
+		override Vector2i position(Vector2i newPosition)
 		{
 			sfRenderWindow_setPosition(sfPtr,newPosition.x, newPosition.y);
+			return newPosition;
 		}
 		
 		override Vector2i position()
@@ -159,9 +160,10 @@ class RenderWindow:Window,RenderTarget
 	
 	@property
 	{
-		override void size(Vector2u newSize)
+		override Vector2u size(Vector2u newSize)
 		{
 			sfRenderWindow_setSize(sfPtr, newSize.x, newSize.y);
+			return newSize;
 		}
 		override Vector2u size()
 		{
