@@ -49,8 +49,12 @@ class Clock
 	
 	~this()
 	{
-		debug import std.stdio: writeln;
-		debug writeln("Destroying Clock");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying Clock");
+		}
 		sfClock_destroy(sfPtr);
 	}
 	

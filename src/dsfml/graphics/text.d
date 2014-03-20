@@ -60,8 +60,6 @@ import std.utf;
 
 import std.algorithm;
 
-debug import std.stdio;
-
 class Text:Drawable,Transformable
 {
 private:
@@ -237,7 +235,12 @@ public:
 	}
 	~this()
 	{
-		debug writeln("Destroying Text");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying Text");
+		}
 	}
 
 	void setString(dstring text)

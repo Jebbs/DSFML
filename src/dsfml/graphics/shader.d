@@ -44,8 +44,6 @@ import std.conv;
 
 import std.string;
 
-debug import std.stdio;
-
 class Shader
 {
 	enum Type
@@ -75,7 +73,12 @@ class Shader
 	
 	~this()
 	{
-		debug writeln("Destroying Shader");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying Shader");
+		}
 		sfShader_destroy(sfPtr);
 	}
 	

@@ -63,7 +63,12 @@ class SoundSource
 
 	~this()
 	{
-		debug writeln("Destroying SoundSource");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying Sound Source");
+		}
 		sfSoundSource_destroy(&m_source);
 	}
 

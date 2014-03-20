@@ -39,8 +39,6 @@ import dsfml.system.time;
 import dsfml.system.err;
 import std.conv;
 
-debug import std.stdio;
-
 class TcpSocket:Socket
 {
 	sfTcpSocket* sfPtr;
@@ -52,7 +50,12 @@ class TcpSocket:Socket
 	
 	~this()
 	{
-		debug writeln("Destroying Tcp Socket");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying TcpSocket");
+		}
 		sfTcpSocket_destroy(sfPtr);
 	}
 	

@@ -34,8 +34,6 @@ import dsfml.network.tcplistener;
 import dsfml.network.tcpsocket;
 import dsfml.network.udpsocket;
 
-debug import std.stdio;
-
 import dsfml.system.time;
 
 class SocketSelector
@@ -49,7 +47,12 @@ class SocketSelector
 	
 	~this()
 	{
-		debug writeln("Destroying Socket Selector");
+		version(DSFML_Quiet_Destructors) { }
+		else 
+		{
+			import std.stdio;
+			writeln("Destroying SocketSelector");
+		}
 		sfSocketSelector_destroy(sfPtr);
 	}
 	

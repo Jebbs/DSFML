@@ -44,8 +44,6 @@ import dsfml.graphics.primitivetype;
 import dsfml.system.vector2;
 import std.typecons;
 
-import std.stdio;
-
 class Sprite:Drawable,Transformable
 {
 	mixin NormalTransformable;
@@ -182,8 +180,12 @@ class Sprite:Drawable,Transformable
 	
 	~this()
 	{
-		debug writeln("Destroying Sprite");
-
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying Sprite");
+		}
 	}
 	
 }

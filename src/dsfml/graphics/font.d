@@ -54,8 +54,12 @@ class Font
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Font");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying Font");
+		}
 		sfFont_destroy(sfPtr);
 	}
 	

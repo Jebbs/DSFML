@@ -53,8 +53,13 @@ class Http
 	
 	~this()
 	{
-		debug writeln("Destroying Http");
 		sfHttp_destroy(sfPtr);
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying Http");
+		}
 	}
 	
 	void setHost(string host, ushort port = 0)

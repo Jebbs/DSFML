@@ -51,7 +51,12 @@ class UdpSocket:Socket
 	
 	~this()
 	{
-		debug writeln("Destroy Udp Socket");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying UdpSocket");
+		}
 		sfUdpSocket_destroy(sfPtr);
 	}
 	

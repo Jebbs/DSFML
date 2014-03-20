@@ -105,9 +105,12 @@ class Music:SoundStream
 
 	~this()
 	{
-		debug import std.stdio;
-
-		debug writeln("Destroying Music");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying Music");
+		}
 		stop();
 	}
 

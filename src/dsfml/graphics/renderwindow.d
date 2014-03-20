@@ -98,7 +98,12 @@ class RenderWindow:Window,RenderTarget
 
 	~this()
 	{
-		debug writeln("Destroying RenderWindow");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying RenderWindow");
+		}
 		sfRenderWindow_destroy(sfPtr);
 	}
 

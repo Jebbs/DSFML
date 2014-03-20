@@ -44,7 +44,6 @@ import dsfml.system.vector2;
 
 
 import std.algorithm;
-debug import std.stdio;
 
 class VertexArray:Drawable
 {
@@ -69,7 +68,12 @@ class VertexArray:Drawable
 	
 	~this()
 	{
-		debug writeln("Destroying Vertex Array");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying VertexArray");
+		}
 	}
 
 	FloatRect getBounds()

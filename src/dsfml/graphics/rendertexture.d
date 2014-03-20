@@ -62,8 +62,12 @@ class RenderTexture:RenderTarget
 
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Render Texture");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying RenderTexture");
+		}
 		sfRenderTexture_destroy(sfPtr);
 	}
 

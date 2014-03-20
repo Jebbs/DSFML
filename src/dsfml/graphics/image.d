@@ -55,8 +55,12 @@ class Image
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Image");
+		version(DSFML_Quiet_Destructors) { }
+		else
+		{
+			import std.stdio;
+			writeln("Destroying Image");
+		}
 		sfImage_destroy(sfPtr);
 	}
 	
