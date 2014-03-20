@@ -60,7 +60,8 @@ class Sound : SoundSource
 
 	~this()
 	{
-		version(DSFML_Debug_Out)
+		version(DSFML_Quiet_Destructors) { }
+		else
 		{
 			import std.stdio;
 			writeln("Destroying Sound");
