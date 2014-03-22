@@ -48,7 +48,7 @@ interface RenderTarget
 	@property
 	{
 		const(View) view(const(View) newView);
-		View view() const;
+		const(View) view() const;
 	}  
 
 	const(View) getDefaultView() const;

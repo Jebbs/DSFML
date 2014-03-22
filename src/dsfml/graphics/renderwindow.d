@@ -249,11 +249,12 @@ class RenderWindow:Window,RenderTarget
 
 	@property
 	{
-		void view(const(View) newView)
+		const(View) view(const(View) newView)
 		{
 			sfRenderWindow_setView(sfPtr, newView.sfPtr);
+			return newView;
 		}
-		View view() const
+		const(View) view() const
 		{
 			return new View(sfRenderWindow_getView(sfPtr));
 		}
