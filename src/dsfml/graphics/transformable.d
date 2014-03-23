@@ -31,13 +31,19 @@ module dsfml.graphics.transformable;
 
 import dsfml.system.vector2;
 
-public import dsfml.graphics.transform;
-
+//public import so that people don't have to worry about 
+//importing transform when they import transformable
+public import dsfml.graphics.transform; 
 
 
 interface Transformable
 {
-	
+	@property
+	{
+		Vector2f origin(Vector2f newOrigin);
+		Vector2f origin() const;
+	}
+
 	@property
 	{
 		Vector2f position(Vector2f newPosition);
@@ -55,13 +61,7 @@ interface Transformable
 		Vector2f scale(Vector2f newScale);
 		Vector2f scale() const;
 	}
-	
-	@property
-	{
-		Vector2f origin(Vector2f newOrigin);
-		Vector2f origin() const;
-	}
-	
+
 	const(Transform) getTransform();
 	
 	const(Transform) getInverseTransform();
@@ -70,6 +70,34 @@ interface Transformable
 
 mixin template NormalTransformable()
 {
+	private
+	{
+		Vector2f m_origin = Vector2f(0,0); ///< Origin of translation/rotation/scaling of the object
+		Vector2f m_position = Vector2f(0,0); ///< Position of the object in the 2D world
+		float m_rotation = 0; ///< Orientation of the object, in degrees
+		Vector2f m_scale = Vector2f(1,1); ///< Scale of the object
+		Transform m_transform; ///< Combined transformation of the object
+		bool m_transformNeedUpdate; ///< Does the transform need to be recomputed?
+		Transform m_inverseTransform; ///< Combined transformation of the object
+		bool m_inverseTransformNeedUpdate; ///< Does the transform need to be recomputed?
+	}
+
+	@property
+	{
+		Vector2f origin(Vector2f newOrigin)
+		{
+			m_origin = newOrigin;
+			m_transformNeedUpdate = true;
+			m_inverseTransformNeedUpdate = true;
+			return newOrigin;
+		}
+		
+		Vector2f origin() const
+		{
+			return m_origin;
+		}
+	}
+
 	@property
 	{
 		Vector2f position(Vector2f newPosition)
@@ -121,23 +149,18 @@ mixin template NormalTransformable()
 			return m_scale;
 		}
 	}
-	
-	@property
+
+	const(Transform) getInverseTransform()
 	{
-		Vector2f origin(Vector2f newOrigin)
+		if (m_inverseTransformNeedUpdate)
 		{
-			m_origin = newOrigin;
-			m_transformNeedUpdate = true;
-			m_inverseTransformNeedUpdate = true;
-			return newOrigin;
+			m_inverseTransform = getTransform().getInverse();
+			m_inverseTransformNeedUpdate = false;
 		}
 		
-		Vector2f origin() const
-		{
-			return m_origin;
-		}
+		return m_inverseTransform;
 	}
-	
+
 	const(Transform) getTransform()
 	{
 		
@@ -161,30 +184,5 @@ mixin template NormalTransformable()
 		
 		
 		return m_transform;
-	}
-	
-	const(Transform) getInverseTransform()
-	{
-		if (m_inverseTransformNeedUpdate)
-		{
-			m_inverseTransform = getTransform().getInverse();
-			m_inverseTransformNeedUpdate = false;
-		}
-		
-		return m_inverseTransform;
-	}
-	
-	
-	
-	private
-	{
-		Vector2f m_origin = Vector2f(0,0); ///< Origin of translation/rotation/scaling of the object
-		Vector2f m_position = Vector2f(0,0); ///< Position of the object in the 2D world
-		float m_rotation = 0; ///< Orientation of the object, in degrees
-		Vector2f m_scale = Vector2f(1,1); ///< Scale of the object
-		Transform m_transform; ///< Combined transformation of the object
-		bool m_transformNeedUpdate; ///< Does the transform need to be recomputed?
-		Transform m_inverseTransform; ///< Combined transformation of the object
-		bool m_inverseTransformNeedUpdate; ///< Does the transform need to be recomputed?
 	}
 }

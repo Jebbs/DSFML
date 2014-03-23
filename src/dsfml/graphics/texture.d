@@ -54,7 +54,15 @@ class Texture
 	{
 		sfPtr = texturePointer;
 	}
-	
+
+	~this()
+	{
+		debug import std.stdio;
+		debug writeln("Destroying Texture");
+		sfTexture_destroy( sfPtr);
+		
+	}
+
 	bool create(uint height, uint width)
 	{
 		import std.conv;
@@ -125,81 +133,69 @@ class Texture
 		err.write(text(sfErrGraphics_getOutput()));
 		return (sfPtr != null);
 	}
-	
-	
-	Texture dup() const
-	{
-		return new Texture(sfTexture_copy(sfPtr));
-	}
-	
+
 	Vector2u getSize() const
 	{
 		Vector2u temp;
 		sfTexture_getSize(sfPtr, &temp.x, &temp.y);
 		return temp;
 	}
-	
-	void updateFromPixels(const(ubyte)[] pixels, uint width, uint height, uint x, uint y)
+
+	void setSmooth(bool smooth)
 	{
-		sfTexture_updateFromPixels(sfPtr,pixels.ptr,width, height, x,y);
-	}
-	
-	void updateFromImage(Image image, uint x, uint y)
-	{
-		sfTexture_updateFromImage(sfPtr, image.sfPtr, x, y);
+		sfTexture_setSmooth(sfPtr, smooth);//:sfTexture_setSmooth(sfPtr, sfFalse);
 	}
 
-	//TODO: Get this working via inheritance.
-	void updateFromWindow(Window window, uint x, uint y)
+	void setRepeated(bool repeated)
 	{
-		sfTexture_updateFromWindow(sfPtr, RenderWindow.windowPointer(window), x, y);
+		sfTexture_setRepeated(sfPtr, repeated);//:sfTexture_setRepeated(sfPtr, sfFalse);
 	}
-	void updateFromWindow(RenderWindow window, uint x, uint y)
+
+	static void bind(Texture texture)
 	{
-		sfTexture_updateFromRenderWindow(sfPtr, window.sfPtr, x, y);
+		(texture is null)?sfTexture_bind(null):sfTexture_bind(texture.sfPtr);
 	}
 
 	Image copyToImage()
 	{
 		return new Image(sfTexture_copyToImage(sfPtr));
 	}
-	
-	void setSmooth(bool smooth)
+
+	Texture dup() const
 	{
-		sfTexture_setSmooth(sfPtr, smooth);//:sfTexture_setSmooth(sfPtr, sfFalse);
+		return new Texture(sfTexture_copy(sfPtr));
 	}
-	
-	bool isSmooth() const
-	{
-		return (sfTexture_isSmooth(sfPtr));// == sfTrue)?true:false;
-	}
-	
-	void setRepeated(bool repeated)
-	{
-		sfTexture_setRepeated(sfPtr, repeated);//:sfTexture_setRepeated(sfPtr, sfFalse);
-	}
-	
+
 	bool isRepeated() const
 	{
 		return (sfTexture_isRepeated(sfPtr));// == sfTrue)?true:false;
 	}
-	
-	
-	static void bind(Texture texture)
+
+	bool isSmooth() const
 	{
-		(texture is null)?sfTexture_bind(null):sfTexture_bind(texture.sfPtr);
+		return (sfTexture_isSmooth(sfPtr));// == sfTrue)?true:false;
 	}
-	
-	~this()
+
+	void updateFromImage(Image image, uint x, uint y)
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Texture");
-		sfTexture_destroy( sfPtr);
-		
+		sfTexture_updateFromImage(sfPtr, image.sfPtr, x, y);
 	}
-	
-	
-	
+
+	void updateFromPixels(const(ubyte)[] pixels, uint width, uint height, uint x, uint y)
+	{
+		sfTexture_updateFromPixels(sfPtr,pixels.ptr,width, height, x,y);
+	}
+
+	//TODO: Get this working via inheritance?(so custom window classes can do it too)
+	void updateFromWindow(Window window, uint x, uint y)
+	{
+		sfTexture_updateFromWindow(sfPtr, RenderWindow.windowPointer(window), x, y);
+	}
+	//Is this even safe? RenderWindow inherits from Window, so what happens? Is this the bottom used or the top?
+	void updateFromWindow(RenderWindow window, uint x, uint y)
+	{
+		sfTexture_updateFromRenderWindow(sfPtr, window.sfPtr, x, y);
+	}
 }
 
 private extern(C++) interface sfmlInputStream

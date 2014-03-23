@@ -53,9 +53,10 @@ class Shader
 		Vertex,
 		Fragment
 	}
-	struct CurrentTextureType {};
+
+	struct CurrentTextureType {};//are these
 	
-	static CurrentTextureType CurrentTexture;
+	static CurrentTextureType CurrentTexture;//even useful?
 	
 	
 	package sfShader* sfPtr;

@@ -53,7 +53,8 @@ struct RenderStates
 		m_texture = emptyTexture;
 		m_shader = emptyShader;
 
-	}	
+	}
+
 	this(Transform theTransform)
 	{
 		transform = theTransform;
@@ -63,6 +64,7 @@ struct RenderStates
 		m_texture = emptyTexture;
 		m_shader = emptyShader;
 	}
+
 	this(const(Texture) theTexture)
 	{
 		if(theTexture !is null)
@@ -80,6 +82,7 @@ struct RenderStates
 		transform = Transform();
 		m_shader = emptyShader;
 	}
+
 	this(const(Shader) theShader)
 	{
 		if(theShader !is null)
@@ -117,27 +120,6 @@ struct RenderStates
 
 	@property
 	{
-		const(Texture) texture(const(Texture) theTexture)
-		{
-			if(theTexture !is null)
-			{
-				
-				m_texture = theTexture;
-			}
-			else
-			{
-				m_texture = emptyTexture;
-			}
-			return theTexture;
-		}
-		const(Texture) texture()
-		{
-			return m_texture;
-		}
-	}
-	
-	@property
-	{
 		const(Shader) shader(const(Shader) theShader)
 		{
 			if(theShader !is null)
@@ -156,10 +138,29 @@ struct RenderStates
 		}
 	}
 
+	@property
+	{
+		const(Texture) texture(const(Texture) theTexture)
+		{
+			if(theTexture !is null)
+			{
+				
+				m_texture = theTexture;
+			}
+			else
+			{
+				m_texture = emptyTexture;
+			}
+			return theTexture;
+		}
+		const(Texture) texture()
+		{
+			return m_texture;
+		}
+	}
 
 	static RenderStates Default()
 	{
-
 		RenderStates temp;//make a static variable?
 
 		temp.m_texture = emptyTexture;

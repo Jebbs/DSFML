@@ -62,9 +62,13 @@ import std.algorithm;
 
 debug import std.stdio;
 
+
 class Text:Drawable,Transformable
 {
-private:
+	mixin NormalTransformable;
+
+	private
+	{
 
 	dstring m_string;
 	Rebindable!(const(Font)) m_font;
@@ -77,7 +81,192 @@ private:
 	//used for caching the font texture
 	uint lastSizeUsed = 0;
 	Rebindable!(const(Texture)) lastTextureUsed;
+	}
 
+
+	enum Style
+	{
+		Regular = 0, ///< Regular characters, no style
+		Bold = 1 << 0, ///< Bold characters
+		Italic = 1 << 1, ///< Italic characters
+		Underlined = 1 << 2 ///< Underlined characters
+	}
+	
+	this()
+	{
+		m_string = "";
+		m_characterSize = 30;
+		m_style = Style.Regular;
+		m_color = Color(255,255,255);
+		m_vertices = new VertexArray(PrimitiveType.Quads,0);
+		m_bounds = FloatRect();
+	}
+	
+	this(dstring text, const(Font) font, uint characterSize = 30)
+	{
+		m_string = text;
+		m_characterSize = characterSize;
+		m_style = Style.Regular;
+		m_color = Color(255,255,255);
+		m_vertices = new VertexArray(PrimitiveType.Quads,0);
+		m_bounds = FloatRect();
+		m_font = font;
+		updateGeometry();
+	}
+	~this()
+	{
+		debug writeln("Destroying Text");
+	}
+
+	void setString(dstring text)
+	{
+		m_string = text;
+		updateGeometry();
+	}
+	
+	void setFont(const(Font) font)
+	{
+		m_font = font;
+		updateGeometry();
+	}
+	
+	void setCharacterSize(uint size)
+	{
+		m_characterSize = size;
+		updateGeometry();
+	}
+	
+	void setStyle(Style style)
+	{
+		m_style = style;
+		updateGeometry();
+	}
+	
+	void setColor(Color color)
+	{
+		m_color = color;
+		updateGeometry();
+	}
+
+	dstring getString() const
+	{
+		return m_string;
+	}
+	
+	const(Font) getFont() const
+	{
+		if(m_font is null)
+		{
+			return null;
+		}
+		else
+		{
+			return m_font;
+		}
+	}
+	
+	uint getCharacterSize() const
+	{
+		return m_characterSize;
+	}
+	
+	Style getStyle() const
+	{
+		return m_style;
+	}
+	
+	Color getColor() const
+	{
+		return m_color;
+	}
+
+	Vector2f findCharacterPos(size_t index)
+	{
+		// Make sure that we have a valid font
+		if(m_font !is null)
+		{
+			return Vector2f(0,0);
+		}
+		
+		// Adjust the index if it's out of range
+		if(index > m_string.length)
+		{
+			index = m_string.length;
+		}
+		
+		
+		bool bold  = (m_style & Style.Bold) != 0;
+		
+		
+		
+		float hspace = cast(float)(m_font.getGlyph(' ', m_characterSize, bold).advance);
+		float vspace = cast(float)(m_font.getLineSpacing(m_characterSize));
+		
+		Vector2f position;
+		dchar prevChar = 0;
+		for (size_t i = 0; i < index; ++i)
+		{
+			dchar curChar = m_string[i];
+			
+			// Apply the kerning offset
+			position.x += cast(float)(m_font.getKerning(prevChar, curChar, m_characterSize));
+			prevChar = curChar;
+			
+			// Handle special characters
+			switch (curChar)
+			{
+				case ' ' : position.x += hspace; continue;
+				case '\t' : position.x += hspace * 4; continue;
+				case '\n' : position.y += vspace; position.x = 0; continue;
+				case '\v' : position.y += vspace * 4; continue;
+				default:
+					break;
+			}
+			
+			// For regular characters, add the advance offset of the glyph
+			position.x += cast(float)(m_font.getGlyph(curChar, m_characterSize, bold).advance);
+		}
+		
+		// Transform the position to global coordinates
+		position = getTransform().transformPoint(position);
+		
+		return position;
+		
+		
+	}
+	
+	FloatRect getLocalBounds() const
+	{
+		return m_bounds;
+	}
+	
+	FloatRect getGlobalBounds()
+	{
+		return getTransform().transformRect(getLocalBounds());
+	}
+	
+	void draw(RenderTarget renderTarget, RenderStates renderStates)
+	{
+		if ((m_font !is null) && (m_characterSize>0))
+		{
+			renderStates.transform *= getTransform();
+			
+			//only call getTexture if the size has changed
+			if(m_characterSize != lastSizeUsed)
+			{
+				//update the size
+				lastSizeUsed = m_characterSize;
+				//grab the new texture
+				lastTextureUsed = m_font.getTexture(m_characterSize);
+			}
+			updateGeometry();
+			renderStates.texture =  m_font.getTexture(m_characterSize);
+			
+			renderTarget.draw(m_vertices, renderStates);
+		}
+	}
+
+private:
 	void updateGeometry()
 	{
 		// Clear the previous geometry
@@ -201,193 +390,6 @@ private:
 		m_bounds.width = maxX - minX;
 		m_bounds.height = maxY - minY;
 	}
-
-
-
-public:
-	mixin NormalTransformable;
-	enum Style
-	{
-		Regular = 0, ///< Regular characters, no style
-		Bold = 1 << 0, ///< Bold characters
-		Italic = 1 << 1, ///< Italic characters
-		Underlined = 1 << 2 ///< Underlined characters
-	}
-
-	this()
-	{
-		m_string = "";
-		m_characterSize = 30;
-		m_style = Style.Regular;
-		m_color = Color(255,255,255);
-		m_vertices = new VertexArray(PrimitiveType.Quads,0);
-		m_bounds = FloatRect();
-	}
-
-	this(dstring text, const(Font) font, uint characterSize = 30)
-	{
-		m_string = text;
-		m_characterSize = characterSize;
-		m_style = Style.Regular;
-		m_color = Color(255,255,255);
-		m_vertices = new VertexArray(PrimitiveType.Quads,0);
-		m_bounds = FloatRect();
-		m_font = font;
-		updateGeometry();
-	}
-	~this()
-	{
-		debug writeln("Destroying Text");
-	}
-
-	void setString(dstring text)
-	{
-		m_string = text;
-		updateGeometry();
-	}
-
-	void setFont(const(Font) font)
-	{
-		m_font = font;
-		updateGeometry();
-	}
-
-	void setCharacterSize(uint size)
-	{
-		m_characterSize = size;
-		updateGeometry();
-	}
-
-	void setStyle(Style style)
-	{
-		m_style = style;
-		updateGeometry();
-	}
-
-	void setColor(Color color)
-	{
-		m_color = color;
-		updateGeometry();
-	}
-
-	dstring getString() const
-	{
-		return m_string;
-	}
-
-	const(Font) getFont() const
-	{
-		if(m_font is null)
-		{
-			return null;
-		}
-		else
-		{
-			return m_font;
-		}
-	}
-
-	uint getCharacterSize() const
-	{
-		return m_characterSize;
-	}
-
-	Style getStyle() const
-	{
-		return m_style;
-	}
-
-	Color getColor() const
-	{
-		return m_color;
-	}
-
-	Vector2f findCharacterPos(size_t index)
-	{
-		// Make sure that we have a valid font
-		if(m_font !is null)
-		{
-			return Vector2f(0,0);
-		}
-
-		// Adjust the index if it's out of range
-		if(index > m_string.length)
-		{
-			index = m_string.length;
-		}
-
-
-		bool bold  = (m_style & Style.Bold) != 0;
-
-
-
-		float hspace = cast(float)(m_font.getGlyph(' ', m_characterSize, bold).advance);
-		float vspace = cast(float)(m_font.getLineSpacing(m_characterSize));
-
-		Vector2f position;
-		dchar prevChar = 0;
-		for (size_t i = 0; i < index; ++i)
-		{
-			dchar curChar = m_string[i];
-			
-			// Apply the kerning offset
-			position.x += cast(float)(m_font.getKerning(prevChar, curChar, m_characterSize));
-			prevChar = curChar;
-			
-			// Handle special characters
-			switch (curChar)
-			{
-				case ' ' : position.x += hspace; continue;
-				case '\t' : position.x += hspace * 4; continue;
-				case '\n' : position.y += vspace; position.x = 0; continue;
-				case '\v' : position.y += vspace * 4; continue;
-				default:
-					break;
-			}
-			
-			// For regular characters, add the advance offset of the glyph
-			position.x += cast(float)(m_font.getGlyph(curChar, m_characterSize, bold).advance);
-		}
-		
-		// Transform the position to global coordinates
-		position = getTransform().transformPoint(position);
-		
-		return position;
-
-	
-	}
-
-	FloatRect getLocalBounds() const
-	{
-		return m_bounds;
-	}
-
-	FloatRect getGlobalBounds()
-	{
-		return getTransform().transformRect(getLocalBounds());
-	}
-
-	void draw(RenderTarget renderTarget, RenderStates renderStates)
-	{
-		if ((m_font !is null) && (m_characterSize>0))
-		{
-			renderStates.transform *= getTransform();
-
-			//only call getTexture if the size has changed
-			if(m_characterSize != lastSizeUsed)
-			{
-				//update the size
-				lastSizeUsed = m_characterSize;
-				//grab the new texture
-				lastTextureUsed = m_font.getTexture(m_characterSize);
-			}
-			updateGeometry();
-			renderStates.texture =  m_font.getTexture(m_characterSize);
-
-			renderTarget.draw(m_vertices, renderStates);
-		}
-	}
-
 }
 
 alias std.utf.toUTFz!(const(dchar)*) toUTF32z;

@@ -77,6 +77,20 @@ class View
 	
 	@property
 	{
+		float rotation(float newRotation)
+		{
+			sfView_setRotation(sfPtr, newRotation);
+			return newRotation;
+		}
+		float rotation()
+		{
+			return sfView_getRotation(sfPtr);
+			
+		}
+	}
+
+	@property
+	{
 		Vector2f size(Vector2f newSize)
 		{
 			sfView_setSize(sfPtr, newSize.x, newSize.y);
@@ -88,20 +102,6 @@ class View
 			Vector2f temp;
 			sfView_getSize(sfPtr, &temp.x, &temp.y);
 			return temp;
-		}
-	}
-	
-	@property
-	{
-		float rotation(float newRotation)
-		{
-			sfView_setRotation(sfPtr, newRotation);
-			return newRotation;
-		}
-		float rotation()
-		{
-			return sfView_getRotation(sfPtr);
-			
 		}
 	}
 	

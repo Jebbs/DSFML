@@ -66,6 +66,7 @@ class Shape:Drawable,Transformable
 		FloatRect m_insideBounds; /// Bounding rectangle of the inside (fill)
 		FloatRect m_bounds; /// Bounding rectangle of the whole shape (outline + fill)
 	}
+
 	@property
 	{
 		//Set Texture Rect

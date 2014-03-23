@@ -70,28 +70,10 @@ class Sprite:Drawable,Transformable
 		setTexture(texture);
 	}
 
-
-
-	//TODO: Fix this. Whoops.
-	Sprite dup() const
+	~this()
 	{
-		return new Sprite();
-	}
-
-	
-	void setTexture(const(Texture) texture, bool rectReset = false)
-	{
-		if(rectReset || ((m_texture is null) && (m_textureRect == IntRect())))
-		{
-			textureRect(IntRect(0,0,texture.getSize().x,texture.getSize().y));
-		}
-
-		m_texture = texture;
-	}
-
-	const(Texture) getTexture()
-	{
-		return m_texture;
+		debug writeln("Destroying Sprite");
+		
 	}
 	
 	@property
@@ -131,7 +113,11 @@ class Sprite:Drawable,Transformable
 		}
 		
 	}
-	
+
+	const(Texture) getTexture()
+	{
+		return m_texture;
+	}
 
 	FloatRect getLocalBounds()
 	{
@@ -146,6 +132,16 @@ class Sprite:Drawable,Transformable
 		return FloatRect();
 	}
 	
+	void setTexture(const(Texture) texture, bool rectReset = false)
+	{
+		if(rectReset || ((m_texture is null) && (m_textureRect == IntRect())))
+		{
+			textureRect(IntRect(0,0,texture.getSize().x,texture.getSize().y));
+		}
+		
+		m_texture = texture;
+	}
+		
 	override void draw(RenderTarget renderTarget, RenderStates renderStates)// const
 	{
 		if (m_texture)
@@ -154,6 +150,12 @@ class Sprite:Drawable,Transformable
 			renderStates.texture = m_texture;
 			renderTarget.draw(m_vertices, PrimitiveType.Quads, renderStates);
 		}
+	}
+
+	//TODO: Fix this. Whoops.
+	Sprite dup() const
+	{
+		return new Sprite();
 	}
 	
 	void updatePositions()
@@ -179,11 +181,4 @@ class Sprite:Drawable,Transformable
 		m_vertices[3].texCoords = Vector2f(right, top);
 	}
 
-	
-	~this()
-	{
-		debug writeln("Destroying Sprite");
-
-	}
-	
 }

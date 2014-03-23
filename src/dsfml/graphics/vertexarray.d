@@ -43,8 +43,8 @@ import dsfml.graphics.renderstates;
 import dsfml.system.vector2;
 
 
-import std.algorithm;
-debug import std.stdio;
+
+
 
 class VertexArray:Drawable
 {
@@ -69,6 +69,7 @@ class VertexArray:Drawable
 	
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying Vertex Array");
 	}
 
@@ -111,6 +112,7 @@ class VertexArray:Drawable
 
 	uint getVertexCount()
 	{
+		import std.algorithm;
 		return cast(uint)min(uint.max, Vertices.length);
 	}
 

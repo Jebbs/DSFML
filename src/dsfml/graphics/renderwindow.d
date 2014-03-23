@@ -95,48 +95,12 @@ class RenderWindow:Window,RenderTarget
 		err.write(text(sfErrGraphics_getOutput()));
 	}
 
-
 	~this()
 	{
 		debug writeln("Destroying RenderWindow");
 		sfRenderWindow_destroy(sfPtr);
 	}
 
-
-
-	override bool pollEvent(ref Event event)
-	{
-		return (sfRenderWindow_pollEvent(sfPtr, &event));
-	}
-
-	override bool waitEvent(ref Event event)
-	{
-		return (sfRenderWindow_waitEvent(sfPtr, &event));
-	}
-	
-	override void setTitle(string newTitle)
-	{
-		sfRenderWindow_setTitle(sfPtr, toStringz(newTitle));
-	}
-	
-	override void setTitle(dstring newTitle)
-	{
-		sfRenderWindow_setUnicodeTitle(sfPtr, toUTF32z(newTitle));
-	}
-	
-	override void close()
-	{
-		sfRenderWindow_close(sfPtr);
-	}
-	
-	override ContextSettings getSettings() const
-	{
-		ContextSettings temp;
-		sfRenderWindow_getSettings(sfPtr,&temp.depthBits, &temp.stencilBits, &temp.antialiasingLevel, &temp.majorVersion, &temp.minorVersion);
-		return temp;
-	}
-	
-	
 	@property
 	{
 		override Vector2i position(Vector2i newPosition)
@@ -152,7 +116,7 @@ class RenderWindow:Window,RenderTarget
 			return temp;
 		}
 	}
-	
+
 	@property
 	{
 		override Vector2u size(Vector2u newSize)
@@ -167,85 +131,6 @@ class RenderWindow:Window,RenderTarget
 			return temp;
 		}
 	}
-	
-	override void setIcon(uint width, uint height, const(ubyte[]) pixels)
-	{
-		sfRenderWindow_setIcon(sfPtr,width, height, pixels.ptr);
-	}
-	
-	override void setVisible(bool visible)
-	{
-		sfRenderWindow_setVisible(sfPtr,visible);
-	}
-	
-	override void setVerticalSyncEnabled(bool enabled)
-	{
-		enabled ? sfRenderWindow_setVerticalSyncEnabled(sfPtr, true): sfRenderWindow_setVerticalSyncEnabled(sfPtr, false);
-	}
-	
-	override void setMouseCursorVisible(bool visible)
-	{
-		visible ? sfRenderWindow_setMouseCursorVisible(sfPtr,true): sfRenderWindow_setMouseCursorVisible(sfPtr,false);
-	}
-	
-	override void setKeyRepeatEnabled(bool enabled)
-	{
-		enabled ? sfRenderWindow_setKeyRepeatEnabled(sfPtr,true):sfRenderWindow_setKeyRepeatEnabled(sfPtr,false);
-	}
-	
-	override void setFramerateLimit(uint limit)
-	{
-		sfRenderWindow_setFramerateLimit(sfPtr, limit);
-	}
-	
-	override void setJoystickThreshhold(float threshhold)
-	{
-		sfRenderWindow_setJoystickThreshold(sfPtr, threshhold);
-	}
-	
-	override WindowHandle getSystemHandle() const
-	{
-		return sfRenderWindow_getSystemHandle(sfPtr);
-	}
-	
-	//TODO: Consider adding these methods.
-	//void onCreate
-	//void onResize
-	
-	override bool isOpen()
-	{
-		return (sfRenderWindow_isOpen(sfPtr));
-	}
-	
-	override bool setActive(bool active)
-	{
-		import std.conv;
-		bool toReturn = sfRenderWindow_setActive(sfPtr, active);
-		err.write(text(sfErrGraphics_getOutput()));
-		return toReturn;
-	}
-	
-	override void display()
-	{
-		sfRenderWindow_display(sfPtr);
-	}
-
-	override protected Vector2i getMousePosition()const
-	{
-		Vector2i temp;
-		sfMouse_getPositionRenderWindow(sfPtr, &temp.x, &temp.y);
-		return temp;
-	}
-
-	override protected void setMousePosition(Vector2i pos) const
-	{
-		sfMouse_setPositionRenderWindow(pos.x, pos.y, sfPtr);
-	}
-
-	void clear(Color color = Color.Black)
-	{
-		sfRenderWindow_clear(sfPtr, color.r,color.g, color.b, color.a);
-	}
 
 	@property
 	{
@@ -258,40 +143,150 @@ class RenderWindow:Window,RenderTarget
 		{
 			return new View(sfRenderWindow_getView(sfPtr));
 		}
-	} 
+	}
+
+	override protected Vector2i getMousePosition()const
+	{
+		Vector2i temp;
+		sfMouse_getPositionRenderWindow(sfPtr, &temp.x, &temp.y);
+		return temp;
+	}
+
+	override ContextSettings getSettings() const
+	{
+		ContextSettings temp;
+		sfRenderWindow_getSettings(sfPtr,&temp.depthBits, &temp.stencilBits, &temp.antialiasingLevel, &temp.majorVersion, &temp.minorVersion);
+		return temp;
+	}
 
 	const(View) getDefaultView() const
 	{
 		return new View(sfRenderWindow_getDefaultView(sfPtr));
 	}
-	
+
 	IntRect getViewport(const(View) view) const
 	{
 		IntRect temp;
-
+		
 		sfRenderWindow_getViewport(sfPtr, view.sfPtr, &temp.left, &temp.top, &temp.width, &temp.height);
-
-		return temp;
-	}
-	
-	Vector2f mapPixelToCoords(Vector2i point) const
-	{
-		Vector2f temp;
-
-		sfRenderWindow_mapPixelToCoords(sfPtr,point.x, point.y, &temp.x, &temp.y,null);
-
-		return temp;
-	}
-	
-	Vector2f mapPixelToCoords(Vector2i point, const(View) view) const
-	{
-		Vector2f temp;
-		
-		sfRenderWindow_mapPixelToCoords(sfPtr,point.x, point.y, &temp.x, &temp.y,view.sfPtr);
 		
 		return temp;
 	}
+
+	//this is a duplicate with the size property. Need to look into that.(Inherited from RenderTarget)
+	Vector2u getSize() const
+	{
+		Vector2u temp;
+		
+		sfRenderWindow_getSize(sfPtr, &temp.x, &temp.y);
+		
+		return temp;
+	}
+
+
+	override WindowHandle getSystemHandle() const
+	{
+		return sfRenderWindow_getSystemHandle(sfPtr);
+	}
+
+	override bool setActive(bool active)
+	{
+		import std.conv;
+		bool toReturn = sfRenderWindow_setActive(sfPtr, active);
+		err.write(text(sfErrGraphics_getOutput()));
+		return toReturn;
+	}
+
+	override void setFramerateLimit(uint limit)
+	{
+		sfRenderWindow_setFramerateLimit(sfPtr, limit);
+	}
+
+	override void setIcon(uint width, uint height, const(ubyte[]) pixels)
+	{
+		sfRenderWindow_setIcon(sfPtr,width, height, pixels.ptr);
+	}
+
+	override void setJoystickThreshhold(float threshhold)
+	{
+		sfRenderWindow_setJoystickThreshold(sfPtr, threshhold);
+	}
+
+	override void setMouseCursorVisible(bool visible)
+	{
+		visible ? sfRenderWindow_setMouseCursorVisible(sfPtr,true): sfRenderWindow_setMouseCursorVisible(sfPtr,false);
+	}
 	
+	override void setKeyRepeatEnabled(bool enabled)
+	{
+		enabled ? sfRenderWindow_setKeyRepeatEnabled(sfPtr,true):sfRenderWindow_setKeyRepeatEnabled(sfPtr,false);
+	}
+	
+	override void setTitle(string newTitle)
+	{
+		sfRenderWindow_setTitle(sfPtr, toStringz(newTitle));
+	}
+	
+	override void setTitle(dstring newTitle)
+	{
+		sfRenderWindow_setUnicodeTitle(sfPtr, toUTF32z(newTitle));
+	}
+
+	override void setVerticalSyncEnabled(bool enabled)
+	{
+		enabled ? sfRenderWindow_setVerticalSyncEnabled(sfPtr, true): sfRenderWindow_setVerticalSyncEnabled(sfPtr, false);
+	}
+
+	override void setVisible(bool visible)
+	{
+		sfRenderWindow_setVisible(sfPtr,visible);
+	}
+
+	void clear(Color color = Color.Black)
+	{
+		sfRenderWindow_clear(sfPtr, color.r,color.g, color.b, color.a);
+	}
+
+	override void close()
+	{
+		sfRenderWindow_close(sfPtr);
+	}
+
+	override void display()
+	{
+		sfRenderWindow_display(sfPtr);
+	}
+
+	void draw(Drawable drawable, RenderStates states = RenderStates.Default())
+	{
+		//Confirms that even a blank render states struct won't break anything during drawing
+		if(states.texture is null)
+		{
+			states.texture = RenderStates.emptyTexture;
+		}
+		if(states.shader is null)
+		{
+			states.shader = RenderStates.emptyShader;
+		}
+		
+		drawable.draw(this,states);
+	}
+	
+	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default())
+	{
+		//Confirms that even a blank render states struct won't break anything during drawing
+		if(states.texture is null)
+		{
+			states.texture = RenderStates.emptyTexture;
+		}
+		if(states.shader is null)
+		{
+			states.shader = RenderStates.emptyShader;
+		}
+		
+		sfRenderWindow_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length), type,states.blendMode, states.transform.m_matrix.ptr,states.texture.sfPtr,states.shader.sfPtr);
+	}
+
 	Vector2i mapCoordsToPixel(Vector2f point) const
 	{
 		Vector2i temp;
@@ -309,46 +304,35 @@ class RenderWindow:Window,RenderTarget
 		
 		return temp;
 	}
-
-	void draw(Drawable drawable, RenderStates states = RenderStates.Default())
+	
+	Vector2f mapPixelToCoords(Vector2i point) const
 	{
-		//Confirms that even a blank render states struct won't break anything during drawing
-		if(states.texture is null)
-		{
-			states.texture = RenderStates.emptyTexture;
-		}
-		if(states.shader is null)
-		{
-			states.shader = RenderStates.emptyShader;
-		}
-
-		drawable.draw(this,states);
-	}
-
-	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default())
-	{
-		//Confirms that even a blank render states struct won't break anything during drawing
-		if(states.texture is null)
-		{
-			states.texture = RenderStates.emptyTexture;
-		}
-		if(states.shader is null)
-		{
-			states.shader = RenderStates.emptyShader;
-		}
-
-		sfRenderWindow_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length), type,states.blendMode, states.transform.m_matrix.ptr,states.texture.sfPtr,states.shader.sfPtr);
-	}
-
-	Vector2u getSize() const
-	{
-		Vector2u temp;
-
-		sfRenderWindow_getSize(sfPtr, &temp.x, &temp.y);
-
+		Vector2f temp;
+		
+		sfRenderWindow_mapPixelToCoords(sfPtr,point.x, point.y, &temp.x, &temp.y,null);
+		
 		return temp;
 	}
 	
+	Vector2f mapPixelToCoords(Vector2i point, const(View) view) const
+	{
+		Vector2f temp;
+		
+		sfRenderWindow_mapPixelToCoords(sfPtr,point.x, point.y, &temp.x, &temp.y,view.sfPtr);
+		
+		return temp;
+	}
+
+	void popGLStates()
+	{
+		sfRenderWindow_popGLStates(sfPtr);
+	}
+
+	override bool pollEvent(ref Event event)
+	{
+		return (sfRenderWindow_pollEvent(sfPtr, &event));
+	}
+
 	void pushGLStates()
 	{
 		import std.conv;
@@ -356,18 +340,29 @@ class RenderWindow:Window,RenderTarget
 		err.write(text(sfErrGraphics_getOutput()));
 	}
 	
-	void popGLStates()
-	{
-		sfRenderWindow_popGLStates(sfPtr);
-	}
-	
 	void resetGLStates()
 	{
 		sfRenderWindow_resetGLStates(sfPtr);
-
+		
 	}
 
+	override bool waitEvent(ref Event event)
+	{
+		return (sfRenderWindow_waitEvent(sfPtr, &event));
+	}
+	
+
+	
+	//TODO: Consider adding these methods.
+	//void onCreate
+	//void onResize
+	
+
 	//TODO: Fix these names or something.
+	override protected void setMousePosition(Vector2i pos) const
+	{
+		sfMouse_setPositionRenderWindow(pos.x, pos.y, sfPtr);
+	}
 
 	//Provides the static windowPointer method a way to get the pointer
 	//Window.getWindowPointer is protected, so the static method cannot call it directly
@@ -380,7 +375,7 @@ class RenderWindow:Window,RenderTarget
 	package static void* windowPointer(Window window)
 	{
 		scope RenderWindow temp = new RenderWindow();
-	
+		
 		return temp.getWindowPtr(window); 
 	}
 

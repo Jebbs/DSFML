@@ -46,9 +46,7 @@ struct Transform
 	{
 		m_matrix = newMatrix.dup;
 	}
-	
 
-	
 	const(float)[] getMatrix()
 	{
 		static float[16] temp;
@@ -65,7 +63,13 @@ struct Transform
 		sfTransform_getInverse(m_matrix.ptr,temp.ptr);
 		return Transform(temp);
 	}
-	
+
+	void combine(Transform otherTransform)
+	{
+		
+		sfTransform_combine(m_matrix.ptr, otherTransform.m_matrix.ptr);
+	}
+
 	Vector2f transformPoint(Vector2f point) const
 	{
 		Vector2f temp;
@@ -80,12 +84,6 @@ struct Transform
 		return temp;
 	}
 
-	void combine(Transform otherTransform)
-	{
-		
-		sfTransform_combine(m_matrix.ptr, otherTransform.m_matrix.ptr);
-	}
-	
 	void translate(float x, float y)
 	{
 		sfTransform_translate(m_matrix.ptr, x, y);

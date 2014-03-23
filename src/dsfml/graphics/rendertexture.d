@@ -57,7 +57,6 @@ class RenderTexture:RenderTarget
 
 	this()
 	{
-
 	}
 
 	~this()
@@ -70,6 +69,7 @@ class RenderTexture:RenderTarget
 	bool create(uint width, uint height, bool depthBuffer = false)
 	{
 		import std.conv;
+
 		//if the RenderTexture already exists, destroy it first
 		if(sfPtr != null)
 		{
