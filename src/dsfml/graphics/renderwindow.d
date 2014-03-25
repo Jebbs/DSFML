@@ -1,4 +1,4 @@
-/*
+﻿/*
 DSFML - The Simple and Fast Multimedia Library for D
 
 Copyright (c) <2013> <Jeremy DeHaan>
@@ -285,6 +285,11 @@ class RenderWindow:Window,RenderTarget
 		}
 		
 		sfRenderWindow_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length), type,states.blendMode, states.transform.m_matrix.ptr,states.texture.sfPtr,states.shader.sfPtr);
+	}
+
+	override bool isOpen()
+	{
+		return (sfRenderWindow_isOpen(sfPtr));
 	}
 
 	Vector2i mapCoordsToPixel(Vector2f point) const
