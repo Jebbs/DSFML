@@ -68,7 +68,9 @@ class RenderWindow:Window,RenderTarget
 {
 	package sfRenderWindow* sfPtr;
 
-	package this(){}
+	package this()
+	{
+	}
 
 	this(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{

@@ -55,7 +55,9 @@ class RenderTexture:RenderTarget
 	package sfRenderTexture* sfPtr;
 	private Texture m_texture;
 
-	this(){}
+	this()
+	{
+	}
 
 	~this()
 	{
