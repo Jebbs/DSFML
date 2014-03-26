@@ -116,42 +116,145 @@ class Text : Drawable, Transformable
 		debug mixin(destructorOutput);
 	}
 
-	/**
-	 * Get the character size.
-	 * 
-	 * Returns: Size of the characters, in pixels.
-	 */
-	uint getCharacterSize() const
+	@property
 	{
-		return m_characterSize;
-	}
-
-	/**
-	 * Get the global color of the text.
-	 * 
-	 * Returns: Global color of the text.
-	 */
-	Color getColor() const
-	{
-		return m_color;
-	}
-
-	/**
-	 * Get thet text's font.
-	 * 
-	 * If the text has no font attached, a NULL pointer is returned. The returned reference is const, which means that you cannot modify the font when you get it from this function.
-	 * 
-	 * Returns: Text's font.
-	 */
-	const(Font) getFont() const
-	{
-		if(m_font is null)
+		/**
+		 * Get the character size.
+		 * 
+		 * Returns: Size of the characters, in pixels.
+		 */
+		uint characterSize() const
 		{
-			return null;
+			return m_characterSize;
 		}
-		else
+		/**
+		 * Set the character size.
+		 * 
+		 * The default size is 30.
+		 * 
+		 * Params:
+		 * 		size	= New character size, in pixels.
+		 */
+		uint characterSize(uint size)
 		{
-			return m_font;
+			m_characterSize = size;
+			updateGeometry();
+			return size;
+		}
+	}
+
+	@property
+	{
+		/**
+		 * Get the global color of the text.
+		 * 
+		 * Returns: Global color of the text.
+		 */
+		Color color() const
+		{
+			return m_color;
+		}
+		/**
+		 * Set the global color of the text.
+		 * 
+		 * By default, the text's color is opaque white.
+		 * 
+		 * Params:
+		 * 		color	= New color of the text.
+		 */
+		Color color(Color color)
+		{
+			m_color = color;
+			updateGeometry();
+			return color;
+		}
+	}
+
+	@property
+	{
+		/**
+		 * Get thet text's font.
+		 * 
+		 * If the text has no font attached, a NULL pointer is returned. The returned reference is const, which means that you cannot modify the font when you get it from this function.
+		 * 
+		 * Returns: Text's font.
+		 */
+		const(Font) font() const
+		{
+			if(m_font is null)
+			{
+				return null;
+			}
+			else
+			{
+				return m_font;
+			}
+		}
+		/**
+		 * Set the text's font.
+		 * 
+		 * The font argument refers to a font that must exist as long as the text uses it. Indeed, the text doesn't store its own copy of the font, but rather keeps a pointer to the one that you passed to this function. If the font is destroyed and the text tries to use it, the behaviour is undefined.
+		 * 
+		 * Params:
+		 * 		font	= New font
+		 */
+		const(Font) font(const(Font) font)
+		{
+			m_font = font;
+			updateGeometry();
+			return font;
+		}
+	}
+
+	@property
+	{
+		/**
+		 * Get the text's string.
+		 * 
+		 * The returned string is a dstring, a unicode type.
+		 */
+		dstring string_() const
+		{
+			return m_string;
+		}
+		/**
+		 * Set the text's string.
+		 * 
+		 * A text's string is empty by default.
+		 * 
+		 * Params:
+		 * 		text	= New string
+		 */
+		dstring string_(dstring text)
+		{
+			m_string = text;
+			updateGeometry();
+			return text;
+		}
+	}
+
+	@property
+	{
+		/**
+		 * Get the text's style.
+		 * 
+		 * Returns: Text's style.
+		 */
+		Style style() const
+		{
+			return m_style;
+		}
+		//TODO: Does doing binary operations on Styles like the docs suggest actually work?
+		/**
+		 * Set the text's style.
+		 * 
+		 * You can pass a combination of one or more styles, for example Style.Bold | Text.Italic.
+		 */
+		Style style(Style style)
+		{
+			m_style = style;
+			updateGeometry();
+			return style;
 		}
 	}
 
@@ -177,95 +280,6 @@ class Text : Drawable, Transformable
 	FloatRect getLocalBounds() const
 	{
 		return m_bounds;
-	}
-
-	//TODO: maybe a getString!dstring or getString!wstring etc template would be appropriate?
-	/**
-	 * Get the text's string.
-	 * 
-	 * The returned string is a dstring, a unicode type.
-	 */
-	dstring getString() const
-	{
-		return m_string;
-	}
-
-	/**
-	 * Get the text's style.
-	 * 
-	 * Returns: Text's style.
-	 */
-	Style getStyle() const
-	{
-		return m_style;
-	}
-
-	/**
-	 * Set the character size.
-	 * 
-	 * The default size is 30.
-	 * 
-	 * Params:
-	 * 		size	= New character size, in pixels.
-	 */
-	void setCharacterSize(uint size)
-	{
-		m_characterSize = size;
-		updateGeometry();
-	}
-
-	/**
-	 * Set the global color of the text.
-	 * 
-	 * By default, the text's color is opaque white.
-	 * 
-	 * Params:
-	 * 		color	= New color of the text.
-	 */
-	void setColor(Color color)
-	{
-		m_color = color;
-		updateGeometry();
-	}
-
-	/**
-	 * Set the text's font.
-	 * 
-	 * The font argument refers to a font that must exist as long as the text uses it. Indeed, the text doesn't store its own copy of the font, but rather keeps a pointer to the one that you passed to this function. If the font is destroyed and the text tries to use it, the behaviour is undefined.
-	 * 
-	 * Params:
-	 * 		font	= New font
-	 */
-	void setFont(const(Font) font)
-	{
-		m_font = font;
-		updateGeometry();
-	}
-
-	/**
-	 * Set the text's string.
-	 * 
-	 * A text's string is empty by default.
-	 * 
-	 * Params:
-	 * 		text	= New string
-	 */
-	void setString(dstring text)
-	{
-		m_string = text;
-		updateGeometry();
-	}
-
-	//TODO: Does doing binary operations on Styles like the docs suggest actually work?
-	/**
-	 * Set the text's style.
-	 * 
-	 * You can pass a combination of one or more styles, for example Style.Bold | Text.Italic.
-	 */
-	void setStyle(Style style)
-	{
-		m_style = style;
-		updateGeometry();
 	}
 
 	/**
