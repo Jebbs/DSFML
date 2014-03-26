@@ -23,18 +23,15 @@ Windows 64bit - Coming 2014(Unless someone else wants to build them for me)
 
 [OSX](https://dl.dropboxusercontent.com/u/167365084/DSFML%20for%20OSX.zip) - Compiled November 11th, 2013 on Mavericks by @jaredonline. Thanks, Jared!
 
-*Nightly builds are not actually built every night. Only when there have been changed.
+*Nightly builds are not actually built every night. Only when there have been changes.
 
-
-If problems are encountered!
+Contributing
 ===
-If you encounter an issue with this binding feel free to open up an issue in the tracker!
+If you would like to contribute, feel free! Issues, pull requests, and emails are always welcome.
 
-Or you can shoot me an email with feedback!
+Check out the [Road Map](https://github.com/Jebbs/DSFML/wiki/Roadmap) for the list of what needs to be worked on next!
 
 Email is <dehaan.jeremiah@gmail.com>
-
-Exclamation point!!!
 
 
 Unit Tests
