@@ -71,7 +71,6 @@ class View
 			Vector2f temp;
 			sfView_getCenter(sfPtr, &temp.x, &temp.y);
 			return temp;
-			//return Vector2f();
 		}	
 	}
 	

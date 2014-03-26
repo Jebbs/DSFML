@@ -55,9 +55,7 @@ class RenderTexture:RenderTarget
 	package sfRenderTexture* sfPtr;
 	private Texture m_texture;
 
-	this()
-	{
-	}
+	this(){}
 
 	~this()
 	{
@@ -112,11 +110,10 @@ class RenderTexture:RenderTarget
 			sfRenderTexture_setView(sfPtr, newView.sfPtr);
 			return newView;
 		}
-		override View view() const
+		override const(View) view() const
 		{
-			//try to fix
+			//try to fix. Maybe cache?
 			return new View( sfRenderTexture_getView(sfPtr));
-			
 		}
 	}
 
@@ -135,9 +132,7 @@ class RenderTexture:RenderTarget
 	IntRect getViewport(const(View) view) const
 	{
 		IntRect temp;
-		
 		sfRenderTexture_getViewport(sfPtr, view.sfPtr, &temp.left, &temp.top, &temp.width, &temp.height);
-		
 		return temp;
 	}
 
@@ -281,7 +276,7 @@ void sfRenderTexture_mapPixelToCoords(const sfRenderTexture* renderTexture, int 
 void sfRenderTexture_mapCoordsToPixel(const sfRenderTexture* renderTexture, float xIn, float yIn, int* xOut, int* yOut, const sfView* targetView);
 
 //Draw a drawable object to the render-target
-void sfRenderTexture_drawText(sfRenderTexture* renderTexture, const sfText* object, int blendMode,const float* transform, const sfTexture* texture, const sfShader* shader);
+//void sfRenderTexture_drawText(sfRenderTexture* renderTexture, const sfText* object, int blendMode,const float* transform, const sfTexture* texture, const sfShader* shader);
 
 
 //Draw primitives defined by an array of vertices to a render texture

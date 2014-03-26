@@ -45,7 +45,13 @@ struct Color
 	static immutable Magenta = Color(255, 0, 255, 255);
 	static immutable Cyan = Color(0, 255, 255, 255);
 	static immutable Transparent = Color(0, 0, 0, 0);
-	
+
+	string toString() const
+	{
+		import std.conv;
+		return "R: " ~ text(r) ~ " G: " ~ text(g) ~ " B: " ~ text(b) ~ " A: " ~ text(a);
+	}
+
 	Color opBinary(string op)(Color otherColor) const
 		if((op == "+") || (op == "-"))
 	{
@@ -131,9 +137,5 @@ struct Color
 		return ((r == otherColor.r) && (g == otherColor.g) && (b == otherColor.b) && (a == otherColor.a));
 	}
 	
-	string toString() const
-	{
-		import std.conv;
-		return "R: " ~ text(r) ~ " G: " ~ text(g) ~ " B: " ~ text(b) ~ " A: " ~ text(a);
-	}
+
 }

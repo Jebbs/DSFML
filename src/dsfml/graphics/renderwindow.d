@@ -1,4 +1,4 @@
-﻿/*
+/*
 DSFML - The Simple and Fast Multimedia Library for D
 
 Copyright (c) <2013> <Jeremy DeHaan>
@@ -57,7 +57,7 @@ import dsfml.graphics.color;
 
 import std.algorithm;
 import std.string;
-import std.utf;
+
 
 import dsfml.system.err;
 
@@ -68,10 +68,7 @@ class RenderWindow:Window,RenderTarget
 {
 	package sfRenderWindow* sfPtr;
 
-	package this()
-	{
-
-	}
+	package this(){}
 
 	this(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
@@ -145,31 +142,17 @@ class RenderWindow:Window,RenderTarget
 		}
 	}
 
-	override protected Vector2i getMousePosition()const
-	{
-		Vector2i temp;
-		sfMouse_getPositionRenderWindow(sfPtr, &temp.x, &temp.y);
-		return temp;
-	}
 
-	override ContextSettings getSettings() const
-	{
-		ContextSettings temp;
-		sfRenderWindow_getSettings(sfPtr,&temp.depthBits, &temp.stencilBits, &temp.antialiasingLevel, &temp.majorVersion, &temp.minorVersion);
-		return temp;
-	}
 
 	const(View) getDefaultView() const
 	{
 		return new View(sfRenderWindow_getDefaultView(sfPtr));
 	}
 
-	IntRect getViewport(const(View) view) const
+	override ContextSettings getSettings() const
 	{
-		IntRect temp;
-		
-		sfRenderWindow_getViewport(sfPtr, view.sfPtr, &temp.left, &temp.top, &temp.width, &temp.height);
-		
+		ContextSettings temp;
+		sfRenderWindow_getSettings(sfPtr,&temp.depthBits, &temp.stencilBits, &temp.antialiasingLevel, &temp.majorVersion, &temp.minorVersion);
 		return temp;
 	}
 
@@ -183,10 +166,18 @@ class RenderWindow:Window,RenderTarget
 		return temp;
 	}
 
-
 	override WindowHandle getSystemHandle() const
 	{
 		return sfRenderWindow_getSystemHandle(sfPtr);
+	}
+
+	IntRect getViewport(const(View) view) const
+	{
+		IntRect temp;
+		
+		sfRenderWindow_getViewport(sfPtr, view.sfPtr, &temp.left, &temp.top, &temp.width, &temp.height);
+		
+		return temp;
 	}
 
 	override bool setActive(bool active)
@@ -212,16 +203,16 @@ class RenderWindow:Window,RenderTarget
 		sfRenderWindow_setJoystickThreshold(sfPtr, threshhold);
 	}
 
-	override void setMouseCursorVisible(bool visible)
-	{
-		visible ? sfRenderWindow_setMouseCursorVisible(sfPtr,true): sfRenderWindow_setMouseCursorVisible(sfPtr,false);
-	}
-	
 	override void setKeyRepeatEnabled(bool enabled)
 	{
 		enabled ? sfRenderWindow_setKeyRepeatEnabled(sfPtr,true):sfRenderWindow_setKeyRepeatEnabled(sfPtr,false);
 	}
-	
+
+	override void setMouseCursorVisible(bool visible)
+	{
+		visible ? sfRenderWindow_setMouseCursorVisible(sfPtr,true): sfRenderWindow_setMouseCursorVisible(sfPtr,false);
+	}
+
 	override void setTitle(string newTitle)
 	{
 		sfRenderWindow_setTitle(sfPtr, toStringz(newTitle));
@@ -356,12 +347,16 @@ class RenderWindow:Window,RenderTarget
 		return (sfRenderWindow_waitEvent(sfPtr, &event));
 	}
 	
-
-	
 	//TODO: Consider adding these methods.
 	//void onCreate
 	//void onResize
-	
+
+	override protected Vector2i getMousePosition()const
+	{
+		Vector2i temp;
+		sfMouse_getPositionRenderWindow(sfPtr, &temp.x, &temp.y);
+		return temp;
+	}
 
 	//TODO: Fix these names or something.
 	override protected void setMousePosition(Vector2i pos) const
@@ -487,7 +482,7 @@ void sfRenderWindow_mapPixelToCoords(const sfRenderWindow* renderWindow, int xIn
 void sfRenderWindow_mapCoordsToPixel(const sfRenderWindow* renderWindow, float xIn, float yIn, int* xOut, int* yOut, const sfView* targetView);
 
 //Draw a drawable object to the render-target
-void sfRenderWindow_drawText(sfRenderWindow* renderWindow, const sfText* object, int blendMode,const float* transform, const sfTexture* texture, const sfShader* shader);
+//void sfRenderWindow_drawText(sfRenderWindow* renderWindow, const sfText* object, int blendMode,const float* transform, const sfTexture* texture, const sfShader* shader);
 
 
 //Draw primitives defined by an array of vertices to a render window

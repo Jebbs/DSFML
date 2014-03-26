@@ -34,8 +34,6 @@ import dsfml.network.tcplistener;
 import dsfml.network.tcpsocket;
 import dsfml.network.udpsocket;
 
-debug import std.stdio;
-
 import dsfml.system.time;
 
 class SocketSelector
@@ -49,6 +47,7 @@ class SocketSelector
 	
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying Socket Selector");
 		sfSocketSelector_destroy(sfPtr);
 	}
@@ -67,31 +66,12 @@ class SocketSelector
 	{
 		sfSocketSelector_addUdpSocket(sfPtr, socket.sfPtr);
 	}
-	
-	void remove(TcpListener listener)
-	{
-		sfSocketSelector_removeTcpListener(sfPtr, listener.sfPtr);
-	}
-	void remove(TcpSocket socket)
-	{
-		sfSocketSelector_removeTcpSocket(sfPtr, socket.sfPtr);
-	}
-	
-	void remove(UdpSocket socket)
-	{
-		sfSocketSelector_removeUdpSocket(sfPtr, socket.sfPtr);
-	}
-	
+
 	void clear()
 	{
 		sfSocketSelector_clear(sfPtr);
 	}
-	
-	bool wait(Time timeout = Time.Zero)
-	{
-		return (sfSocketSelector_wait(sfPtr, timeout.asMicroseconds()));
-	}
-	
+
 	bool isReady(TcpListener listener)
 	{
 		return (sfSocketSelector_isTcpListenerReady(sfPtr, listener.sfPtr));
@@ -105,7 +85,25 @@ class SocketSelector
 	{
 		return (sfSocketSelector_isUdpSocketReady(sfPtr, socket.sfPtr));
 	}
+
+	void remove(TcpListener listener)
+	{
+		sfSocketSelector_removeTcpListener(sfPtr, listener.sfPtr);
+	}
+	void remove(TcpSocket socket)
+	{
+		sfSocketSelector_removeTcpSocket(sfPtr, socket.sfPtr);
+	}
 	
+	void remove(UdpSocket socket)
+	{
+		sfSocketSelector_removeUdpSocket(sfPtr, socket.sfPtr);
+	}
+
+	bool wait(Time timeout = Time.Zero)
+	{
+		return (sfSocketSelector_wait(sfPtr, timeout.asMicroseconds()));
+	}
 }
 
 private extern(C):

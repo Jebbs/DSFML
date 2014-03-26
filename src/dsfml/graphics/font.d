@@ -40,7 +40,7 @@ class Font
 	package sfFont* sfPtr;
 
 	private Texture fontTexture;
-	private fontStream m_stream;//keeps an instance of the C++ interface stored if used
+	private fontStream m_stream;//keeps an instance of the C++ stream stored if used
 		
 	this()
 	{
@@ -151,7 +151,6 @@ class Font
 		sfFont_updateTexture(sfPtr, characterSize);
 
 		return fontTexture;
-
 	}
 
 	Font dup() const

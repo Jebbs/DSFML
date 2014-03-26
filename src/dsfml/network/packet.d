@@ -30,8 +30,6 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 
 module dsfml.network.packet;
 
-debug import std.stdio;
-
 import std.conv;
 
 class Packet
@@ -45,8 +43,19 @@ class Packet
 	
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying Packet");
 		sfPacket_destroy(sfPtr);
+	}
+
+	const(void)[] getData()
+	{
+		return sfPacket_getData(sfPtr)[0..sfPacket_getDataSize(sfPtr)];
+	}
+	
+	deprecated("Getting data as a void* is deprecated. No need to find its size.") size_t getDataSize()
+	{
+		return sfPacket_getDataSize(sfPtr);
 	}
 
 	void append(const(void)[] data)
@@ -58,32 +67,22 @@ class Packet
 	{
 		sfPacket_append(sfPtr, data, sizeInBytes);	
 	}
-		
-	void clear()
-	{
-		sfPacket_clear(sfPtr);
-	}
-	
-	const(void)[] getData()
-	{
-		return sfPacket_getData(sfPtr)[0..sfPacket_getDataSize(sfPtr)];
-	}
 
-	deprecated("Getting data as a void* is deprecated. No need to find its size.") size_t getDataSize()
-	{
-		return sfPacket_getDataSize(sfPtr);
-	}
-	
-	bool endOfPacket()
-	{
-		return (sfPacket_endOfPacket(sfPtr));
-	}
-	
 	bool canRead()
 	{
 		return (sfPacket_canRead(sfPtr));
 	}
-	
+
+	void clear()
+	{
+		sfPacket_clear(sfPtr);
+	}
+
+	bool endOfPacket()
+	{
+		return (sfPacket_endOfPacket(sfPtr));
+	}
+
 	bool readBool()
 	{
 		return cast(bool)readByte();
@@ -103,6 +102,7 @@ class Packet
 	{
 		return sfPacket_readInt16(sfPtr);
 	}
+
 	ushort readUshort()
 	{
 		return sfPacket_readUint16(sfPtr);
@@ -112,6 +112,7 @@ class Packet
 	{
 		return sfPacket_readInt32(sfPtr);
 	}
+
 	uint readUint()
 	{
 		return sfPacket_readUint32(sfPtr);
@@ -171,17 +172,17 @@ class Packet
 		
 		return temp.to!dstring();
 	}
-	
-	
+
 	void writeBool(bool value)
 	{
 		writeUbyte(cast(ubyte)value);
 	}
-	
+
 	void writeByte(byte value)
 	{
 		sfPacket_writeInt8(sfPtr,value);
 	}
+
 	void writeUbyte(ubyte value)
 	{
 		sfPacket_writeUint8(sfPtr, value);
@@ -247,7 +248,6 @@ class Packet
 			writeUint(cast(uint)value[i]);
 		}
 	}
-
 
 	const(void)[] onSend()
 	{

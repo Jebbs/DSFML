@@ -75,7 +75,5 @@ class RectangleShape:Shape
 			case 3: return Vector2f(0, m_size.y);
 		}
 	}
-
-
 }
 

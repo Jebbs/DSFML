@@ -37,9 +37,9 @@ import dsfml.network.packet;
 import dsfml.system.time;
 
 import dsfml.system.err;
-import std.conv;
 
-debug import std.stdio;
+
+
 
 class TcpSocket:Socket
 {
@@ -52,39 +52,35 @@ class TcpSocket:Socket
 	
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying Tcp Socket");
 		sfTcpSocket_destroy(sfPtr);
 	}
-	
-	void setBlocking(bool blocking)
-	{
-		sfTcpSocket_setBlocking(sfPtr, blocking);
-	}
-	
-	bool isBlocking()
-	{
-		return (sfTcpSocket_isBlocking(sfPtr));
-	}
-	
+
 	ushort getLocalPort()
 	{
 		return sfTcpSocket_getLocalPort(sfPtr);
 	}
-	
+
 	IpAddress getRemoteAddress()
 	{
 		IpAddress temp;
-
+		
 		sfTcpSocket_getRemoteAddress(sfPtr,temp.m_address.ptr);
-
+		
 		return temp;
 	}
-	
+
 	ushort getRemotePort()
 	{
 		return sfTcpSocket_getRemotePort(sfPtr);
 	}
-	
+
+	void setBlocking(bool blocking)
+	{
+		sfTcpSocket_setBlocking(sfPtr, blocking);
+	}
+
 	Status connect(IpAddress host, ushort port, Time timeout)
 	{
 		return sfTcpSocket_connect(sfPtr, host.m_address.ptr,port, timeout.asMicroseconds());
@@ -94,25 +90,21 @@ class TcpSocket:Socket
 	{
 		sfTcpSocket_disconnect(sfPtr);
 	}
-	
+
+	bool isBlocking()
+	{
+		return (sfTcpSocket_isBlocking(sfPtr));
+	}
+
 	Status send(const(void)[] data)
 	{
+		import std.conv;
+
 		Status toReturn = sfTcpSocket_send(sfPtr, data.ptr, data.length);
 		err.write(text(sfErrNetwork_getOutput()));
 		return toReturn;
 	}
 
-	Status receive(out void[] data, size_t maxSize)
-	{
-		void* dataPtr;
-		size_t sizeReceived;
-
-		Status status = sfTcpSocket_receive(sfPtr, dataPtr, maxSize, &sizeReceived);
-
-		data = dataPtr[0..sizeReceived];
-
-		return status;
-	}
 	Status send(Packet packet)
 	{
 
@@ -124,6 +116,18 @@ class TcpSocket:Socket
 
 		//send the data
 		return sfTcpSocket_sendPacket(sfPtr, temp.sfPtr);
+	}
+
+	Status receive(out void[] data, size_t maxSize)
+	{
+		void* dataPtr;
+		size_t sizeReceived;
+		
+		Status status = sfTcpSocket_receive(sfPtr, dataPtr, maxSize, &sizeReceived);
+		
+		data = dataPtr[0..sizeReceived];
+		
+		return status;
 	}
 	
 	Status receive(Packet packet)
@@ -139,8 +143,6 @@ class TcpSocket:Socket
 
 		return status;
 	}
-	
-	
 }
 
 

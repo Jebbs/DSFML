@@ -29,25 +29,24 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 */
 module dsfml.graphics.texture;
 
-import dsfml.system.vector2;
-import dsfml.graphics.rect;
-import dsfml.system.inputstream;
 
+import dsfml.graphics.rect;
 import dsfml.graphics.image;
-import dsfml.window.window;
 import dsfml.graphics.renderwindow;
 
+import dsfml.window.window;
+
+import dsfml.system.inputstream;
+import dsfml.system.vector2;
 import dsfml.system.err;
 
 class Texture
 {
-	
 	package sfTexture* sfPtr;
-	
-	
+
 	this()
 	{
-		//Creates a null Texture
+		//Creates a empty Texture
 	}
 	
 	package this(sfTexture* texturePointer)
@@ -59,22 +58,7 @@ class Texture
 	{
 		debug import std.stdio;
 		debug writeln("Destroying Texture");
-		sfTexture_destroy( sfPtr);
-		
-	}
-
-	bool create(uint height, uint width)
-	{
-		import std.conv;
-		//if the Texture already exists, destroy it first
-		if(sfPtr)
-		{
-			sfTexture_destroy(sfPtr);
-		}
-
-		sfPtr = sfTexture_create(width, height);
-		err.write(text(sfErrGraphics_getOutput()));
-		return (sfPtr == null)?false:true;
+		sfTexture_destroy( sfPtr);	
 	}
 	
 	bool loadFromFile(string filename, IntRect area = IntRect() )
@@ -154,6 +138,20 @@ class Texture
 	static void bind(Texture texture)
 	{
 		(texture is null)?sfTexture_bind(null):sfTexture_bind(texture.sfPtr);
+	}
+
+	bool create(uint height, uint width)
+	{
+		import std.conv;
+		//if the Texture already exists, destroy it first
+		if(sfPtr)
+		{
+			sfTexture_destroy(sfPtr);
+		}
+		
+		sfPtr = sfTexture_create(width, height);
+		err.write(text(sfErrGraphics_getOutput()));
+		return (sfPtr == null)?false:true;
 	}
 
 	Image copyToImage()

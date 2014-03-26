@@ -42,9 +42,9 @@ import dsfml.graphics.renderstates;
 import dsfml.graphics.primitivetype;
 
 import dsfml.system.vector2;
-import std.typecons;
 
-import std.stdio;
+
+
 
 class Sprite:Drawable,Transformable
 {
@@ -55,6 +55,7 @@ class Sprite:Drawable,Transformable
 		Vertex[4] m_vertices;
 		Rebindable!(const(Texture)) m_texture;
 		IntRect m_textureRect;
+
 	}
 
 	this()
@@ -72,6 +73,7 @@ class Sprite:Drawable,Transformable
 
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying Sprite");
 		
 	}
@@ -88,14 +90,13 @@ class Sprite:Drawable,Transformable
 			}
 			return rect;
 		}
-		
 		IntRect textureRect()
 		{
 			return m_textureRect;
 		}
 	}
 	
-	@property//color
+	@property
 	{
 		Color color(Color newColor)
 		{
@@ -106,7 +107,6 @@ class Sprite:Drawable,Transformable
 			m_vertices[3].color = newColor;
 			return newColor;
 		}
-		
 		Color color()
 		{
 			return m_vertices[0].color;
@@ -123,7 +123,6 @@ class Sprite:Drawable,Transformable
 	{
 		float width = (abs(m_textureRect.width));
 		float height = (abs(m_textureRect.height));
-		
 		return FloatRect(0f, 0f, width, height);
 	}
 	
@@ -142,7 +141,7 @@ class Sprite:Drawable,Transformable
 		m_texture = texture;
 	}
 		
-	override void draw(RenderTarget renderTarget, RenderStates renderStates)// const
+	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		if (m_texture)
 		{

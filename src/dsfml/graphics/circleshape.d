@@ -35,7 +35,7 @@ import dsfml.system.vector2;
 
 
 
-import std.math;
+
 
 class CircleShape:Shape
 {
@@ -90,7 +90,8 @@ class CircleShape:Shape
 
 	override Vector2f getPoint(uint index) const
 	{
-		
+		import std.math;
+
 		static const(float) pi = 3.141592654f;
 		
 		float angle = index * 2 * pi / m_pointCount - pi / 2;

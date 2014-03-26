@@ -199,7 +199,7 @@ class Image
 		return toReturn;
 	}
 }
-private:
+
 
 private extern(C++) interface sfmlInputStream
 {
@@ -248,70 +248,52 @@ package extern(C) struct sfImage;
 
 private extern(C):
 
-
-
 sfImage* sfImage_create(uint width, uint height);
-
 
 /// \brief Create an image and fill it with a unique color
 sfImage* sfImage_createFromColor(uint width, uint height, ubyte r, ubyte b, ubyte g, ubyte a);
 
-
 /// \brief Create an image from an array of pixels
 sfImage* sfImage_createFromPixels(uint width, uint height, const ubyte* pixels);
-
 
 /// \brief Create an image from a file on disk
 sfImage* sfImage_createFromFile(const char* filename);
 
-
 /// \brief Create an image from a file in memory
 sfImage* sfImage_createFromMemory(const void* data, size_t size);
-
 
 /// \brief Create an image from a custom stream
 sfImage* sfImage_createFromStream(sfmlInputStream stream);
 
-
 /// \brief Copy an existing image
 sfImage* sfImage_copy(const sfImage* image);
-
 
 /// \brief Destroy an existing image
 void sfImage_destroy(sfImage* image);
 
-
 /// \brief Save an image to a file on disk
 bool sfImage_saveToFile(const sfImage* image, const char* filename);
-
 
 /// \brief Return the size of an image
 void sfImage_getSize(const sfImage* image, uint* width, uint* height);
 
-
 /// \brief Create a transparency mask from a specified color-key
 void sfImage_createMaskFromColor(sfImage* image, ubyte r, ubyte b, ubyte g, ubyte a, ubyte alpha);
-
 
 /// \brief Copy pixels from an image onto another
 void sfImage_copyImage(sfImage* image, const(sfImage)* source, uint destX, uint destY, int sourceRectTop, int sourceRectLeft, int sourceRectWidth, int sourceRectHeight, bool applyAlpha);
 
-
 /// \brief Change the color of a pixel in an image
 void sfImage_setPixel(sfImage* image, uint x, uint y, ubyte r, ubyte b, ubyte g, ubyte a);
-
 
 /// \brief Get the color of a pixel in an image
 void sfImage_getPixel(const sfImage* image, uint x, uint y, ubyte* r, ubyte* b, ubyte* g, ubyte* a);
 
-
 /// \brief Get a read-only pointer to the array of pixels of an image
 const(ubyte)* sfImage_getPixelsPtr(const sfImage* image);
 
-
 /// \brief Flip an image horizontally (left <-> right)
 void sfImage_flipHorizontally(sfImage* image);
-
 
 /// \brief Flip an image vertically (top <-> bottom)
 void sfImage_flipVertically(sfImage* image);

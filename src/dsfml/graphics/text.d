@@ -32,58 +32,21 @@ module dsfml.graphics.text;
 import dsfml.graphics.font;
 import dsfml.graphics.glyph;
 import dsfml.graphics.color;
-
-import dsfml.system.vector2;
-
 import dsfml.graphics.rect;
-
 import dsfml.graphics.transformable;
 import dsfml.graphics.drawable;
 import dsfml.graphics.texture;
-import std.typecons;
-
 import dsfml.graphics.vertexarray;
 import dsfml.graphics.vertex;
-
 import dsfml.graphics.rendertarget;
 import dsfml.graphics.renderstates;
 import dsfml.graphics.primitivetype;
 
-import std.math;
-
-import std.string;
-import std.conv;
-
-import std.typecons;
-
-import std.utf;
-
-import std.algorithm;
-
-debug import std.stdio;
+import dsfml.system.vector2;
 
 
 class Text:Drawable,Transformable
 {
-	mixin NormalTransformable;
-
-	private
-	{
-
-	dstring m_string;
-	Rebindable!(const(Font)) m_font;
-	uint m_characterSize;
-	Style m_style;
-	Color m_color;
-	VertexArray m_vertices;
-	FloatRect m_bounds;
-
-	//used for caching the font texture
-	uint lastSizeUsed = 0;
-	Rebindable!(const(Texture)) lastTextureUsed;
-	}
-
-
 	enum Style
 	{
 		Regular = 0, ///< Regular characters, no style
@@ -91,7 +54,24 @@ class Text:Drawable,Transformable
 		Italic = 1 << 1, ///< Italic characters
 		Underlined = 1 << 2 ///< Underlined characters
 	}
-	
+
+	mixin NormalTransformable;
+
+	private
+	{
+		dstring m_string;
+		Rebindable!(const(Font)) m_font;
+		uint m_characterSize;
+		Style m_style;
+		Color m_color;
+		VertexArray m_vertices;
+		FloatRect m_bounds;
+
+		//used for caching the font texture
+		uint lastSizeUsed = 0;
+		Rebindable!(const(Texture)) lastTextureUsed;
+	}
+
 	this()
 	{
 		m_string = "";
@@ -113,46 +93,23 @@ class Text:Drawable,Transformable
 		m_font = font;
 		updateGeometry();
 	}
+
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying Text");
 	}
 
-	void setString(dstring text)
+	uint getCharacterSize() const
 	{
-		m_string = text;
-		updateGeometry();
-	}
-	
-	void setFont(const(Font) font)
-	{
-		m_font = font;
-		updateGeometry();
-	}
-	
-	void setCharacterSize(uint size)
-	{
-		m_characterSize = size;
-		updateGeometry();
-	}
-	
-	void setStyle(Style style)
-	{
-		m_style = style;
-		updateGeometry();
-	}
-	
-	void setColor(Color color)
-	{
-		m_color = color;
-		updateGeometry();
+		return m_characterSize;
 	}
 
-	dstring getString() const
+	Color getColor() const
 	{
-		return m_string;
+		return m_color;
 	}
-	
+
 	const(Font) getFont() const
 	{
 		if(m_font is null)
@@ -164,20 +121,76 @@ class Text:Drawable,Transformable
 			return m_font;
 		}
 	}
-	
-	uint getCharacterSize() const
+
+	FloatRect getGlobalBounds()
 	{
-		return m_characterSize;
+		return getTransform().transformRect(getLocalBounds());
 	}
-	
+
+	FloatRect getLocalBounds() const
+	{
+		return m_bounds;
+	}
+
+	dstring getString() const
+	{
+		return m_string;
+	}
+
 	Style getStyle() const
 	{
 		return m_style;
 	}
-	
-	Color getColor() const
+
+	void setCharacterSize(uint size)
 	{
-		return m_color;
+		m_characterSize = size;
+		updateGeometry();
+	}
+
+	void setColor(Color color)
+	{
+		m_color = color;
+		updateGeometry();
+	}
+
+	void setFont(const(Font) font)
+	{
+		m_font = font;
+		updateGeometry();
+	}
+
+	void setString(dstring text)
+	{
+		m_string = text;
+		updateGeometry();
+	}
+
+	void setStyle(Style style)
+	{
+		m_style = style;
+		updateGeometry();
+	}
+
+	void draw(RenderTarget renderTarget, RenderStates renderStates)
+	{
+		if ((m_font !is null) && (m_characterSize>0))
+		{
+			renderStates.transform *= getTransform();
+			
+			//only call getTexture if the size has changed
+			if(m_characterSize != lastSizeUsed)
+			{
+				//update the size
+				lastSizeUsed = m_characterSize;
+				//grab the new texture
+				lastTextureUsed = m_font.getTexture(m_characterSize);
+			}
+			updateGeometry();
+			renderStates.texture =  m_font.getTexture(m_characterSize);
+			
+			renderTarget.draw(m_vertices, renderStates);
+		}
 	}
 
 	Vector2f findCharacterPos(size_t index)
@@ -234,41 +247,12 @@ class Text:Drawable,Transformable
 		
 		
 	}
-	
-	FloatRect getLocalBounds() const
-	{
-		return m_bounds;
-	}
-	
-	FloatRect getGlobalBounds()
-	{
-		return getTransform().transformRect(getLocalBounds());
-	}
-	
-	void draw(RenderTarget renderTarget, RenderStates renderStates)
-	{
-		if ((m_font !is null) && (m_characterSize>0))
-		{
-			renderStates.transform *= getTransform();
-			
-			//only call getTexture if the size has changed
-			if(m_characterSize != lastSizeUsed)
-			{
-				//update the size
-				lastSizeUsed = m_characterSize;
-				//grab the new texture
-				lastTextureUsed = m_font.getTexture(m_characterSize);
-			}
-			updateGeometry();
-			renderStates.texture =  m_font.getTexture(m_characterSize);
-			
-			renderTarget.draw(m_vertices, renderStates);
-		}
-	}
 
 private:
 	void updateGeometry()
 	{
+		import std.algorithm;
+
 		// Clear the previous geometry
 		m_vertices.clear();
 		m_bounds = FloatRect();
@@ -392,8 +376,3 @@ private:
 	}
 }
 
-alias std.utf.toUTFz!(const(dchar)*) toUTF32z;
-
-package extern(C):
-
-struct sfText;

@@ -31,20 +31,14 @@ module dsfml.graphics.shader;
 
 import dsfml.graphics.texture;
 import dsfml.graphics.transform;
-
-import dsfml.system.inputstream;
-
-import dsfml.system.vector2;
-import dsfml.system.vector3;
-
 import dsfml.graphics.color;
 
+import dsfml.system.inputstream;
+import dsfml.system.vector2;
+import dsfml.system.vector3;
 import dsfml.system.err;
-import std.conv;
 
 import std.string;
-
-debug import std.stdio;
 
 class Shader
 {
@@ -54,34 +48,33 @@ class Shader
 		Fragment
 	}
 
+	package sfShader* sfPtr;
+
 	struct CurrentTextureType {};//are these
 	
 	static CurrentTextureType CurrentTexture;//even useful?
 	
-	
-	package sfShader* sfPtr;
-	
-	
-	//creates a null shader
+
 	this()
 	{
-		
+		//creates an empty shader
 	}
 	
 	package this(sfShader* shader)
 	{
 		sfPtr = shader;
-		
 	}
 	
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying Shader");
 		sfShader_destroy(sfPtr);
 	}
 	
 	bool loadFromFile(string filename, Type type)
 	{
+		import std.conv;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -102,6 +95,7 @@ class Shader
 	
 	bool loadFromFile(string vertexShaderFilename, string fragmentShaderFilename)
 	{
+		import std.conv;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -115,6 +109,7 @@ class Shader
 	
 	bool loadFromMemory(string shader, Type type)
 	{
+		import std.conv;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -136,6 +131,7 @@ class Shader
 	
 	bool loadFromMemory(string vertexShader, string fragmentShader)
 	{
+		import std.conv;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -150,6 +146,7 @@ class Shader
 	
 	bool loadFromStream(InputStream stream, Type type)
 	{
+		import std.conv;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -170,6 +167,7 @@ class Shader
 	
 	bool loadFromStream(InputStream vertexShaderStream, InputStream fragmentShaderStream)
 	{
+		import std.conv;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -223,6 +221,7 @@ class Shader
 	
 	void setParameter(string name, Texture texture)
 	{
+		import std.conv;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
 		err.write(text(sfErrGraphics_getOutput()));
 	}
@@ -231,8 +230,7 @@ class Shader
 	{
 		sfShader_setCurrentTextureParameter(sfPtr, toStringz(name));
 	}
-	
-	
+
 	static void bind(Shader shader)
 	{
 		(shader is null)?sfShader_bind(null):sfShader_bind(shader.sfPtr);
@@ -240,11 +238,11 @@ class Shader
 	
 	static bool isAvailable()
 	{
+		import std.conv;
 		bool toReturn = sfShader_isAvailable();
 		err.write(text(sfErrGraphics_getOutput()));
 		return toReturn;
 	}
-	
 }
 
 package extern(C):
@@ -254,54 +252,41 @@ private extern(C):
 //Load both the vertex and fragment shaders from files
 sfShader* sfShader_createFromFile(const char* vertexShaderFilename, const char* fragmentShaderFilename);
 
-
 //Load both the vertex and fragment shaders from source codes in memory
 sfShader* sfShader_createFromMemory(const char* vertexShader, const char* fragmentShader);
-
 
 //Load both the vertex and fragment shaders from custom streams
 sfShader* sfShader_createFromStream(void* vertexShaderStream, void* fragmentShaderStream);
 
-
 //Destroy an existing shader
 void sfShader_destroy(sfShader* shader);
-
 
 //Change a float parameter of a shader
 void sfShader_setFloatParameter(sfShader* shader, const char* name, float x);
 
-
 //Change a 2-components vector parameter of a shader
 void sfShader_setFloat2Parameter(sfShader* shader, const char* name, float x, float y);
-
 
 //Change a 3-components vector parameter of a shader
 void sfShader_setFloat3Parameter(sfShader* shader, const char* name, float x, float y, float z);
 
-
 //Change a 4-components vector parameter of a shader
 void sfShader_setFloat4Parameter(sfShader* shader, const char* name, float x, float y, float z, float w);
-
 
 //Change a color parameter of a shader
 void sfShader_setColorParameter(sfShader* shader, const char* name, ubyte r, ubyte g, ubyte b, ubyte a);
 
-
 //Change a matrix parameter of a shader
 void sfShader_setTransformParameter(sfShader* shader, const char* name, float* transform);
-
 
 //Change a texture parameter of a shader
 void sfShader_setTextureParameter(sfShader* shader, const char* name, const sfTexture* texture);
 
-
 //Change a texture parameter of a shader
 void sfShader_setCurrentTextureParameter(sfShader* shader, const char* name);
 
-
 //Bind a shader for rendering (activate it)
 void sfShader_bind(const sfShader* shader);
-
 
 //Tell whether or not the system supports shaders
 bool sfShader_isAvailable();

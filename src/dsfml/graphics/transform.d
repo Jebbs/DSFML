@@ -47,6 +47,13 @@ struct Transform
 		m_matrix = newMatrix.dup;
 	}
 
+	Transform getInverse() const
+	{
+		float[9] temp;
+		sfTransform_getInverse(m_matrix.ptr,temp.ptr);
+		return Transform(temp);
+	}
+
 	const(float)[] getMatrix()
 	{
 		static float[16] temp;
@@ -55,13 +62,6 @@ struct Transform
 		
 		return temp.dup;
 		
-	}
-	
-	Transform getInverse() const
-	{
-		float[9] temp;
-		sfTransform_getInverse(m_matrix.ptr,temp.ptr);
-		return Transform(temp);
 	}
 
 	void combine(Transform otherTransform)
@@ -102,16 +102,14 @@ struct Transform
 	
 	void scale(float scaleX, float scaleY)
 	{
-		sfTransform_scale(m_matrix.ptr, scaleX, scaleY);
-		
+		sfTransform_scale(m_matrix.ptr, scaleX, scaleY);	
 	}
 	
 	void scale(float scaleX, float scaleY, float centerX, float centerY)
 	{
 		sfTransform_scaleWithCenter(m_matrix.ptr, scaleX, scaleY, centerX, centerY);
 	}
-	
-	
+
 	string toString()
 	{
 		return "";//text(InternalsfTransform.matrix);
@@ -140,7 +138,6 @@ struct Transform
 	}
 
 	static const(Transform) Identity;
-	
 }
 
 private extern(C):

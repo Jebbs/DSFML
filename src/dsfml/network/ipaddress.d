@@ -55,10 +55,16 @@ struct IpAddress
 	{
 		sfIpAddress_fromInteger(address, m_address.ptr);
 	}
-	
+
+	int toInteger()
+	{
+		return sfIpAddress_toInteger(m_address.ptr);
+	}
 
 	string toString()
 	{
+		//TODO: possibly cache the string? Maybe with a needsUpdatingMethod?
+
 		//Remove any null characters from the string representation
 		int i = 0;
 		while((m_address[i] != 0) )
@@ -68,12 +74,7 @@ struct IpAddress
 		//and present the string.
 		return m_address[0..i].to!string();
 	}
-	
-	int toInteger()
-	{
-		return sfIpAddress_toInteger(m_address.ptr);
-	}
-	
+
 	static IpAddress getLocalAddress()
 	{
 		IpAddress temp;
@@ -88,7 +89,7 @@ struct IpAddress
 		return temp;
 	}
 	
-	static immutable IpAddress None;
+	static immutable(IpAddress) None;
 	static immutable(IpAddress) LocalHost;
 	static immutable(IpAddress) Broadcast;
 
@@ -97,10 +98,7 @@ struct IpAddress
 		LocalHost = IpAddress(127,0,0,1);
 		Broadcast = IpAddress(255,255,255,255);
 	}
-
 }
-
-
 
 private extern(C):
 //Note: These functions rely on passing an existing array for the ipAddress.
@@ -108,22 +106,17 @@ private extern(C):
 ///Create an address from a string
 void sfIpAddress_fromString(const(char)* address, char* ipAddress);
 
-
 ///Create an address from 4 bytes
 void sfIpAddress_fromBytes(ubyte byte0, ubyte byte1, ubyte byte2, ubyte byte3, char* ipAddress);
-
 
 ///Construct an address from a 32-bits integer
 void sfIpAddress_fromInteger(uint address, char* ipAddress);
 
-
 ///Get an integer representation of the address
 uint sfIpAddress_toInteger(const(char)* ipAddress);
 
-
 ///Get the computer's local address
 void sfIpAddress_getLocalAddress(char* ipAddress);
-
 
 ///Get the computer's public address
 void sfIpAddress_getPublicAddress(char* ipAddress, long timeout);

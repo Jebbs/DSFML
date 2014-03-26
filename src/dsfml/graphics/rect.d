@@ -48,7 +48,6 @@ struct Rect(T)
 		top = rectTop;
 		width = rectWidth;
 		height = rectHeight;
-		
 	}
 	
 	this(Vector2!(T) position, Vector2!(T) size)
@@ -58,9 +57,7 @@ struct Rect(T)
 		width = size.x;
 		height = size.y;
 	}
-	
 
-	
 	bool contains(E)(E X, E Y)
 		if(isNumeric!(E))
 	{
@@ -80,6 +77,7 @@ struct Rect(T)
 			return false;
 		}
 	}
+
 	bool contains(E)(Vector2!(E) point)
 		if(isNumeric!(E))
 	{
@@ -127,8 +125,7 @@ struct Rect(T)
 			return false;
 		}
 	}
-	
-	
+
 	string toString()
 	{
 		import std.conv;

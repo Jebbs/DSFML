@@ -54,6 +54,12 @@ class Shape:Drawable,Transformable
 {
 	mixin NormalTransformable;
 
+	protected this()
+	{
+		m_vertices = new VertexArray(PrimitiveType.TrianglesFan,0);
+		m_outlineVertices = new VertexArray(PrimitiveType.TrianglesStrip,0);
+	}
+
 	private
 	{
 		Rebindable!(const(Texture)) m_texture; /// Texture of the shape
@@ -136,17 +142,18 @@ class Shape:Drawable,Transformable
 		abstract uint pointCount();
 	}
 
-
 	//get global bounds
 	FloatRect getGlobalBounds()
 	{
 		return getTransform().transformRect(getLocalBounds());
 	}
+
 	//get local bounds
 	FloatRect getLocalBounds() const
 	{
 		return m_bounds;
 	}
+
 	abstract Vector2f getPoint(uint index) const;
 
 	//get texture
@@ -163,17 +170,12 @@ class Shape:Drawable,Transformable
 		}
 		
 		m_texture = (texture is null)? null:texture;
-		
 	}
 
 	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		renderStates.transform = renderStates.transform * getTransform();
-		
-		// Render the inside
 		renderStates.texture = m_texture;
-		
-	
 		renderTarget.draw(m_vertices, renderStates);
 
 		// Render the outline
@@ -182,8 +184,6 @@ class Shape:Drawable,Transformable
 			renderStates.texture = null;
 			renderTarget.draw(m_outlineVertices, renderStates);
 		}
-		
-		
 	}
 	
 	protected void update()
@@ -209,9 +209,7 @@ class Shape:Drawable,Transformable
 		// Update the bounding rectangle
 		m_vertices[0] = m_vertices[1]; // so that the result of getBounds() is correct
 		m_insideBounds = m_vertices.getBounds();
-		
-		
-		
+
 		// Compute the center and make it the first vertex
 		m_vertices[0].position.x = m_insideBounds.left + m_insideBounds.width / 2;
 		m_vertices[0].position.y = m_insideBounds.top + m_insideBounds.height / 2;
@@ -245,7 +243,6 @@ class Shape:Drawable,Transformable
 		}
 
 		//update methods
-		
 		void updateFillColors()
 		{
 			for(uint i = 0; i < m_vertices.getVertexCount(); ++i)
@@ -322,15 +319,6 @@ class Shape:Drawable,Transformable
 				m_outlineVertices[i].color = m_outlineColor;
 			}
 		}
-		
-		protected this()
-		{
-			m_vertices = new VertexArray(PrimitiveType.TrianglesFan,0);
-			m_outlineVertices = new VertexArray(PrimitiveType.TrianglesStrip,0);
-		}
-		
-		//Member data
-		//Can't make m_texture const, as const data can only be initialized in a constructor
 
 	}
 }

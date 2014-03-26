@@ -30,16 +30,17 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 
 module dsfml.network.tcplistener;
 
-debug import std.stdio;
+
 import dsfml.network.socket;
 import dsfml.network.tcpsocket;
 
 import dsfml.system.err;
-import std.conv;
+
 
 class TcpListener:Socket
 {
 	sfTcpListener* sfPtr;
+
 	this()
 	{
 		sfPtr = sfTcpListener_create();
@@ -47,39 +48,41 @@ class TcpListener:Socket
 	
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying Tcp Listener");
 		sfTcpListener_destroy(sfPtr);
 	}
-	
-	void setBlocking(bool blocking)
-	{
-		sfTcpListener_setBlocking(sfPtr, blocking);
-	}
-	
-	bool isBlocking()
-	{
-		return (sfTcpListener_isBlocking(sfPtr));
-	}
-	
+
 	ushort getLocalPort()
 	{
 		return sfTcpListener_getLocalPort(sfPtr);
 	}
-	
-	Status listen(ushort port)
+
+	void setBlocking(bool blocking)
 	{
-		Status toReturn = sfTcpListener_listen(sfPtr, port);
-		err.write(text(sfErrNetwork_getOutput()));
-		return toReturn;
+		sfTcpListener_setBlocking(sfPtr, blocking);
 	}
-	
+
 	Status accept(TcpSocket socket)
 	{
+		import std.conv;
 		Status toReturn = sfTcpListener_accept(sfPtr, &socket.sfPtr); 
 		err.write(text(sfErrNetwork_getOutput()));
 		return toReturn; 
 	}
-	
+
+	Status listen(ushort port)
+	{
+		import std.conv;
+		Status toReturn = sfTcpListener_listen(sfPtr, port);
+		err.write(text(sfErrNetwork_getOutput()));
+		return toReturn;
+	}
+
+	bool isBlocking()
+	{
+		return (sfTcpListener_isBlocking(sfPtr));
+	}
 }
 
 private extern(C):

@@ -33,7 +33,7 @@ module dsfml.network.socket;
 //base class for sockets
 abstract class Socket
 {
-	//TODO: Add methods to this so that they can be overridden by the socket classes
+	//TODO: Add methods to this so that they can be overridden by the socket classes?
 	enum Status
 	{
 		Done, /// The socket has sent / received the data

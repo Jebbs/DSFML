@@ -32,9 +32,8 @@ module dsfml.network.http;
 
 import dsfml.system.time;
 import std.string;
-import std.conv;
 
-debug import std.stdio;
+
 class Http
 {
 	sfHttp* sfPtr;
@@ -47,12 +46,12 @@ class Http
 	this(string host, ushort port = 0)
 	{
 		sfPtr = sfHttp_create();
-		
 		sfHttp_setHost(sfPtr, toStringz(host),port);
 	}
 	
 	~this()
 	{
+		debug import std.stdio;
 		debug writeln("Destroying Http");
 		sfHttp_destroy(sfPtr);
 	}
@@ -69,15 +68,15 @@ class Http
 	
 	class Request
 	{
-		sfHttpRequest* sfPtrRequest;
-		
 		enum Method
 		{
 			Get,
 			Post,
 			Head
 		}
-		
+
+		sfHttpRequest* sfPtrRequest;
+
 		this(string uri = "/", Method method = Method.Get, string requestBody = "")
 		{
 			sfPtrRequest = sfHttpRequest_create();
@@ -88,15 +87,26 @@ class Http
 		
 		~this()
 		{
+			debug import std.stdio;
 			debug writeln("Destroying HTTP Request");
 			sfHttpRequest_destroy(sfPtrRequest);
 		}
-		
+
+		void setBody(string requestBody)
+		{
+			sfHttpRequest_setBody(sfPtrRequest,toStringz(requestBody));
+		}
+
 		void setField(string feild, string value)
 		{
 			sfHttpRequest_setField(sfPtrRequest,toStringz(feild),toStringz(value));
 		}
-		
+
+		void setHttpVersion(uint major, uint minor)
+		{
+			sfHttpRequest_setHttpVersion(sfPtrRequest,major, minor);
+		}
+
 		void setMethod(Method method)
 		{
 			sfHttpRequest_setMethod(sfPtrRequest,method);
@@ -106,27 +116,10 @@ class Http
 		{
 			sfHttpRequest_setUri(sfPtrRequest,toStringz(uri));
 		}
-		
-		void setHttpVersion(uint major, uint minor)
-		{
-			sfHttpRequest_setHttpVersion(sfPtrRequest,major, minor);
-		}
-		
-		void setBody(string requestBody)
-		{
-			sfHttpRequest_setBody(sfPtrRequest,toStringz(requestBody));
-		}
-		
-		
 	}
 	
 	class Response
 	{
-		sfHttpResponse* sfPtrResponse;
-		package this(sfHttpResponse* response)
-		{
-			sfPtrResponse = response;
-		}
 		enum Status
 		{
 			Ok = 200,
@@ -154,17 +147,26 @@ class Http
 			ConnectionFailed = 1001
 			
 		}
-		
+
+		sfHttpResponse* sfPtrResponse;
+
+		package this(sfHttpResponse* response)
+		{
+			sfPtrResponse = response;
+		}
+
+		string getBody()
+		{
+			import std.conv;
+			return sfHttpResponse_getBody(sfPtrResponse).to!string();
+		}
+
 		string getField(string field)
 		{
+			import std.conv;
 			return (sfHttpResponse_getField(sfPtrResponse,toStringz(field))).to!string();
 		}
-		
-		Status getStatus()
-		{
-			return sfHttpResponse_getStatus(sfPtrResponse);
-		}
-		
+
 		uint getMajorHttpVersion()
 		{
 			return sfHttpResponse_getMajorVersion(sfPtrResponse);
@@ -175,17 +177,15 @@ class Http
 			return sfHttpResponse_getMinorVersion(sfPtrResponse);
 		}
 		
-		string getBody()
+		Status getStatus()
 		{
-			return sfHttpResponse_getBody(sfPtrResponse).to!string();
+			return sfHttpResponse_getStatus(sfPtrResponse);
 		}
 	}
 }
 
 
-
 private extern(C):
-
 
 struct sfHttpRequest;
 struct sfHttpResponse;

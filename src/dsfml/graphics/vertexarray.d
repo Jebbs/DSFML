@@ -31,39 +31,27 @@ module dsfml.graphics.vertexarray;
 
 import dsfml.graphics.vertex;
 import dsfml.graphics.primitivetype;
-
 import dsfml.graphics.rect;
-
 import dsfml.graphics.drawable;
-
 import dsfml.graphics.rendertarget;
-
 import dsfml.graphics.renderstates;
 
 import dsfml.system.vector2;
 
-
-
-
-
 class VertexArray:Drawable
 {
-	
 	PrimitiveType primativeType;
 	private Vertex[] Vertices;
-	
-	
+
 	this(PrimitiveType type, uint vertexCount)
 	{
 		primativeType = type;
-		
 		Vertices = new Vertex[vertexCount];
 	}
 	
 	private this(PrimitiveType type, Vertex[] vertices)
 	{
 		primativeType = type;
-		
 		Vertices = vertices;
 	}
 	
@@ -75,7 +63,6 @@ class VertexArray:Drawable
 
 	FloatRect getBounds()
 	{
-		
 		if (Vertices.length>0)
 		{
 			float left = Vertices[0].position.x;
@@ -106,8 +93,6 @@ class VertexArray:Drawable
 		{
 			return FloatRect(0,0,0,0);
 		}
-		
-		
 	}
 
 	uint getVertexCount()
@@ -120,6 +105,7 @@ class VertexArray:Drawable
 	{
 		Vertices ~= newVertex;
 	}
+
 	void clear()
 	{
 		Vertices.length = 0;
@@ -131,7 +117,6 @@ class VertexArray:Drawable
 		{
 			renderTarget.draw(Vertices, primativeType,renderStates);
 		}
-		
 	}
 
 	void resize(uint length)
@@ -143,5 +128,4 @@ class VertexArray:Drawable
 	{
 		return Vertices[index];
 	}
-	
 }
