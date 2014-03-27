@@ -42,6 +42,12 @@ class RectangleShape:Shape
 		size = theSize;
 	}
 
+	~this()
+	{
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
+	}
+
 	@property
 	{
 		override uint pointCount()

@@ -57,8 +57,8 @@ class VertexArray:Drawable
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Vertex Array");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
 	FloatRect getBounds()

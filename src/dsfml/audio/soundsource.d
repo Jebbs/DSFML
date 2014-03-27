@@ -32,10 +32,8 @@ module dsfml.audio.soundsource;
 
 import dsfml.system.vector3;
 
-import std.stdio;
-
 import dsfml.system.err;
-import std.conv;
+
 
 class SoundSource
 {
@@ -54,6 +52,8 @@ class SoundSource
 
 	protected this()
 	{
+		import std.conv;
+
 		sfSoundSource_ensureALInit();
 		err.write(text(sfErrAudio_getOutput()));
 		
@@ -63,7 +63,8 @@ class SoundSource
 
 	~this()
 	{
-		debug writeln("Destroying SoundSource");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfSoundSource_destroy(&m_source);
 	}
 

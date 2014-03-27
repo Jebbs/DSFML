@@ -60,9 +60,8 @@ class Sound : SoundSource
 
 	~this()
 	{
-		debug import std.stdio;
-
-		debug writeln("Destroying Sound");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		//stop the sound
 		stop();
 

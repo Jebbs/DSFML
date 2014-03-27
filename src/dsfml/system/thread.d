@@ -37,27 +37,34 @@ import core = core.thread;
 
 class Thread
 {
-	core.Thread InternalThread;
+	private core.Thread m_thread;
+
 	this(void function() fn, size_t sz = 0)
 	{
-		InternalThread = new core.Thread(fn,sz);
+		m_thread = new core.Thread(fn,sz);
 	}
 
 	this(void delegate() dg, size_t sz = 0)
 	{
-		InternalThread = new core.Thread(dg, sz);
+		m_thread = new core.Thread(dg, sz);
+	}
+
+	~this()
+	{
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
 	void launch()
 	{
-		InternalThread.start();
+		m_thread.start();
 	}
 
 	void wait()
 	{
-		if(InternalThread.isRunning())
+		if(m_thread.isRunning())
 		{
-			InternalThread.join(true);
+			m_thread.join(true);
 		}
 	}
 

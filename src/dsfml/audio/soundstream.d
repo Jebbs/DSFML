@@ -30,14 +30,14 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 
 module dsfml.audio.soundstream;
 
-import core.thread;
 
+import core.thread;
 
 import dsfml.audio.soundsource;
 
 import dsfml.system.time;
 
-import dsfml.system.err;
+
 
 class SoundStream:SoundSource
 {
@@ -74,8 +74,8 @@ class SoundStream:SoundSource
 
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("SoundStream Destroyed");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		stop();
 	}
 
@@ -153,6 +153,7 @@ class SoundStream:SoundSource
 
 	void play()
 	{
+		import dsfml.system.err;
 
 		//check to see if sound parameters ave been set
 		if(m_format == 0)
@@ -191,6 +192,8 @@ class SoundStream:SoundSource
 protected:
 	void initialize(uint theChannelCount, uint theSampleRate)
 	{
+		import dsfml.system.err;
+
 		m_channelCount = theChannelCount;
 		m_sampleRate = theSampleRate;
 

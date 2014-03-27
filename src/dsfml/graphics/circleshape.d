@@ -56,8 +56,8 @@ class CircleShape:Shape
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying CircleShape");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
 

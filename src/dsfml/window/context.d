@@ -29,8 +29,6 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 */
 module dsfml.window.context;
 
-debug import std.stdio;
-
 class Context
 {
 	package sfContext* sfPtr;
@@ -42,7 +40,8 @@ class Context
 	
 	~this()
 	{
-		debug writeln("Destroying Context");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfContext_destroy(sfPtr);	
 	}
 	

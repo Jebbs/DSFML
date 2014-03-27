@@ -54,8 +54,8 @@ class Font
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Font");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfFont_destroy(sfPtr);
 	}
 	

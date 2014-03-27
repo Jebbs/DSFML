@@ -67,8 +67,8 @@ class Shader
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Shader");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfShader_destroy(sfPtr);
 	}
 	

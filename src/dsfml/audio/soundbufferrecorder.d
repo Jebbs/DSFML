@@ -46,6 +46,12 @@ class SoundBufferRecorder:SoundRecorder
 		// Constructor code
 	}
 
+	~this()
+	{
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
+	}
+
 	SoundBuffer getBuffer()
 	{
 		return m_buffer;

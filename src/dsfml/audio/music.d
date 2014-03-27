@@ -37,9 +37,6 @@ import dsfml.system.inputstream;
 import dsfml.audio.soundstream;
 import dsfml.audio.soundfile;
 
-import std.string;
-
-
 
 class Music:SoundStream
 {
@@ -105,9 +102,8 @@ class Music:SoundStream
 
 	~this()
 	{
-		debug import std.stdio;
-
-		debug writeln("Destroying Music");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		stop();
 	}
 

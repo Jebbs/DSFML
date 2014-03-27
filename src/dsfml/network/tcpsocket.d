@@ -52,8 +52,8 @@ class TcpSocket:Socket
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Tcp Socket");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfTcpSocket_destroy(sfPtr);
 	}
 

@@ -96,8 +96,8 @@ class Text:Drawable,Transformable
 
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Text");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
 	uint getCharacterSize() const

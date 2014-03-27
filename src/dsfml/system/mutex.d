@@ -37,21 +37,21 @@ import core = core.sync.mutex;
 
 class Mutex
 {
-	core.Mutex InternalMutex;
+	private core.Mutex m_mutex;
 
 	this()
 	{
-		InternalMutex = new core.Mutex();
+		m_mutex = new core.Mutex();
 	}
 
 	void lock()
 	{
-		InternalMutex.lock();
+		m_mutex.lock();
 	}
 
 	void unlock()
 	{
-		InternalMutex.unlock();
+		m_mutex.unlock();
 	}
 }
 

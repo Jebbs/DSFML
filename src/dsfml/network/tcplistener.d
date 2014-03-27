@@ -48,8 +48,8 @@ class TcpListener:Socket
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Tcp Listener");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfTcpListener_destroy(sfPtr);
 	}
 

@@ -15,8 +15,8 @@ class ConvexShape:Shape
 
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying ConvexShape");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
 	@property

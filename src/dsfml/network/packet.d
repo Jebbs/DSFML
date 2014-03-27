@@ -43,8 +43,8 @@ class Packet
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Packet");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfPacket_destroy(sfPtr);
 	}
 

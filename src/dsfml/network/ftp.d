@@ -52,9 +52,8 @@ class Ftp
 	}
 	~this()
 	{
-		debug import std.stdio;
-
-		debug writeln("Destroying FTP");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfFtp_destroy(sfPtr);
 	}
 

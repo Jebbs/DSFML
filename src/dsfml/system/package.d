@@ -32,6 +32,7 @@ module dsfml.system;
 public
 {
 	import dsfml.system.clock;
+	import dsfml.system.config;
 	import dsfml.system.err;
 	import dsfml.system.inputstream;
 	import dsfml.system.lock;

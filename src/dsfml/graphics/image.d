@@ -55,8 +55,8 @@ class Image
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Image");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfImage_destroy(sfPtr);
 	}
 	

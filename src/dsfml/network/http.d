@@ -51,8 +51,8 @@ class Http
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Http");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfHttp_destroy(sfPtr);
 	}
 	

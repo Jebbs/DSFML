@@ -47,8 +47,8 @@ class SocketSelector
 	
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Socket Selector");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfSocketSelector_destroy(sfPtr);
 	}
 	

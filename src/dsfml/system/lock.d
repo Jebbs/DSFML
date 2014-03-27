@@ -35,7 +35,7 @@ import dsfml.system.mutex;
 
 struct Lock
 {
-	Mutex m_mutex;
+	private Mutex m_mutex;
 
 	this(Mutex mutex)
 	{

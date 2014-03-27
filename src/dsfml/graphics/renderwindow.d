@@ -55,14 +55,14 @@ import dsfml.system.vector2;
 import dsfml.graphics.rect;
 import dsfml.graphics.color;
 
-import std.algorithm;
-import std.string;
+
+
 
 
 import dsfml.system.err;
 
 
-debug import std.stdio;
+
 
 class RenderWindow:Window,RenderTarget
 {
@@ -74,6 +74,7 @@ class RenderWindow:Window,RenderTarget
 
 	this(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
+		import std.string;
 		import std.conv;
 		sfPtr = sfRenderWindow_create(mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(text(sfErrGraphics_getOutput()));
@@ -96,7 +97,8 @@ class RenderWindow:Window,RenderTarget
 
 	~this()
 	{
-		debug writeln("Destroying RenderWindow");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		sfRenderWindow_destroy(sfPtr);
 	}
 
@@ -143,8 +145,6 @@ class RenderWindow:Window,RenderTarget
 			return new View(sfRenderWindow_getView(sfPtr));
 		}
 	}
-
-
 
 	const(View) getDefaultView() const
 	{
@@ -217,6 +217,7 @@ class RenderWindow:Window,RenderTarget
 
 	override void setTitle(string newTitle)
 	{
+		import std.string;
 		sfRenderWindow_setTitle(sfPtr, toStringz(newTitle));
 	}
 	
@@ -267,6 +268,7 @@ class RenderWindow:Window,RenderTarget
 	
 	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default())
 	{
+		import std.algorithm;
 		//Confirms that even a blank render states struct won't break anything during drawing
 		if(states.texture is null)
 		{

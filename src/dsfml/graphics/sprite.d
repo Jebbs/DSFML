@@ -73,8 +73,8 @@ class Sprite:Drawable,Transformable
 
 	~this()
 	{
-		debug import std.stdio;
-		debug writeln("Destroying Sprite");
+		debug import dsfml.system.config;
+		mixin(destructorOutput);
 		
 	}
 	
