@@ -22,9 +22,8 @@ enum destructorOutput =`
 		}
 		else
 		{
-			import std.string;
 			import dsfml.system.err;
-			err.writeln(this.classinfo.name[1+lastIndexOf(this.classinfo.name,'.')..$]);
+			err.writeln("Destroying ", typeof(this).stringof);
 		}
 	}`;
 
