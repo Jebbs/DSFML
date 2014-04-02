@@ -128,7 +128,7 @@ class Sprite:Drawable,Transformable
 	
 	FloatRect getGlobalBounds()
 	{
-		return FloatRect();
+		return getTransform().transformRect(getLocalBounds());
 	}
 	
 	void setTexture(const(Texture) texture, bool rectReset = false)
