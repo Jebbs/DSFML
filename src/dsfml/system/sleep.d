@@ -41,14 +41,17 @@ void sleep(Time duration)
 
 unittest
 {
-	import std.stdio;
+	version(DSFML_Unittest_System)
+	{
+		import std.stdio;
 
-	writeln("Unit test for sleep function");
+		writeln("Unit test for sleep function");
 
-	writeln("Start!(sleeping for 1 second)");
-	sleep(dsfml.system.time.seconds(1));//need to specify because core.thread has a seconds function too.
-	writeln("Done! Now sleeping for 2 seconds.");
-	sleep(dsfml.system.time.seconds(2));
-	writeln("Done! I think you get the idea.");
-	writeln();
+		writeln("Start!(sleeping for 1 second)");
+		sleep(seconds(1));
+		writeln("Done! Now sleeping for 2 seconds.");
+		sleep(seconds(2));
+		writeln("Done! I think you get the idea.");
+		writeln();
+	}
 }

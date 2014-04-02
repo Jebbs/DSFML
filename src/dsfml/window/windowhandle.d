@@ -46,3 +46,5 @@ version(linux)
 {
 	alias void* WindowHandle;
 }
+
+//unittest?

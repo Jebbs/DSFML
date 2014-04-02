@@ -291,29 +291,32 @@ class SoundBuffer
 
 unittest
 {
-	import std.stdio;
-
-	writeln("Unit test for sound buffer");
-
-	auto soundbuffer = new SoundBuffer();
-
-	if(!soundbuffer.loadFromFile("cave1.ogg"))
+	version(DSFML_Unittest_Audio)
 	{
-		//error
-		return;
+		import std.stdio;
+
+		writeln("Unit test for sound buffer");
+
+		auto soundbuffer = new SoundBuffer();
+
+		if(!soundbuffer.loadFromFile("cave1.ogg"))
+		{
+			//error
+			return;
+		}
+
+		writeln("Sample Rate: ", soundbuffer.getSampleRate());
+
+		writeln("Channel Count: ", soundbuffer.getChannelCount());
+
+		writeln("Duration: ",soundbuffer.getDuration().asSeconds());
+
+		writeln("Sample Count: ",soundbuffer.getSamples().length);
+
+		//use sound buffer here
+
+		writeln();
 	}
-
-	writeln("Sample Rate: ", soundbuffer.getSampleRate());
-
-	writeln("Channel Count: ", soundbuffer.getChannelCount());
-
-	writeln("Duration: ",soundbuffer.getDuration().asSeconds());
-
-	writeln("Sample Count: ",soundbuffer.getSamples().length);
-
-	//use sound buffer here
-
-	writeln();
 }
 
 

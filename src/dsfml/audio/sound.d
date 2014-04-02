@@ -36,10 +36,6 @@ import dsfml.audio.soundsource;
 import dsfml.system.time;
 
 
-
-
-
-
 class Sound : SoundSource
 {
 	import std.typecons:Rebindable;
@@ -152,27 +148,30 @@ class Sound : SoundSource
 
 unittest
 {
-	import std.stdio;
-
-	writeln("Unit test for Sound class");
-
-	//first, get a sound buffer
-
-	auto soundbuffer = new SoundBuffer();
-	
-	if(!soundbuffer.loadFromFile("cave1.ogg"))
+	version(DSFML_Unittest_Audio)
 	{
-		//error
-		return;
+		import std.stdio;
+
+		writeln("Unit test for Sound class");
+
+		//first, get a sound buffer
+
+		auto soundbuffer = new SoundBuffer();
+	
+		if(!soundbuffer.loadFromFile("cave1.ogg"))
+		{
+			//error
+			return;
+		}
+
+		auto sound = new Sound(soundbuffer);
+
+		//play the sound!
+		sound.play();
+
+
+		writeln();
 	}
-
-	auto sound = new Sound(soundbuffer);
-
-	//play the sound!
-	sound.play();
-
-
-	writeln();
 }
 
 private extern(C):

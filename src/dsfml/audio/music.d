@@ -163,35 +163,38 @@ class Music:SoundStream
 
 unittest
 {
-	import std.stdio;
-	import dsfml.system.clock;
-
-	writeln("Unit test for Music Class");
-
-	auto music = new Music();
-
-	//TODO: update this for a real unit test users can run themselves.
-	if(!music.openFromFile("hal1.ogg"))
+	version(DSFML_Unittest_Audio)
 	{
-		return;
+		import std.stdio;
+		import dsfml.system.clock;
+
+		writeln("Unit test for Music Class");
+
+		auto music = new Music();
+
+		//TODO: update this for a real unit test users can run themselves.
+		if(!music.openFromFile("hal1.ogg"))
+		{
+			return;
+		}
+
+		auto clock = new Clock();
+
+		writeln("Playing music for 5 seconds");
+
+		music.play();
+		while(clock.getElapsedTime().asSeconds() < 5)
+		{
+			//playing music in seoarate thread while main thread is stuck here
+		}
+
+		music.stop();
+
+
+
+
+		writeln();
 	}
-
-	auto clock = new Clock();
-
-	writeln("Playing music for 5 seconds");
-
-	music.play();
-	while(clock.getElapsedTime().asSeconds() < 5)
-	{
-		//playing music in seoarate thread while main thread is stuck here
-	}
-
-	music.stop();
-
-
-
-
-	writeln();
 }
 
 

@@ -60,41 +60,44 @@ class Mutex
 
 unittest
 {
-	import dsfml.system.thread;
-	import dsfml.system.sleep;
-	import dsfml.system.time;
-	import std.stdio;
-
-	auto mutex = new Mutex();
-
-	void secondThreadHello()
+	version(DSFML_Unittest_System)
 	{
+		import dsfml.system.thread;
+		import dsfml.system.sleep;
+		import dsfml.system.time;
+		import std.stdio;
+
+		auto mutex = new Mutex();
+
+		void secondThreadHello()
+		{
+			mutex.lock();
+			for(int i = 0; i < 10; ++i)
+			{
+				writeln("Hello from the second thread!");
+			}
+			mutex.unlock();
+		}
+
+
+		writeln("Unit test for Mutex class");
+		writeln();
+	
+		writeln("Locking a mutex and then unlocking it later.");
+	
+		auto secondThread = new Thread(&secondThreadHello);
+
+		secondThread.launch();
+
 		mutex.lock();
+	
 		for(int i = 0; i < 10; ++i)
 		{
-			writeln("Hello from the second thread!");
+			writeln("Hello from the main thread!");
 		}
+
 		mutex.unlock();
+		sleep(seconds(1));//let's this unit test finish before moving on to the next one.
+		writeln();
 	}
-
-
-	writeln("Unit test for Mutex class");
-	writeln();
-	
-	writeln("Locking a mutex and then unlocking it later.");
-	
-	auto secondThread = new Thread(&secondThreadHello);
-
-	secondThread.launch();
-
-	mutex.lock();
-	
-	for(int i = 0; i < 10; ++i)
-	{
-		writeln("Hello from the main thread!");
-	}
-
-	mutex.unlock();
-	sleep(seconds(1));//let's this unit test finish before moving on to the next one.
-	writeln();
 }

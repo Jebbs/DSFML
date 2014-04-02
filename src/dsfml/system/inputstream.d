@@ -42,98 +42,99 @@ interface InputStream
 }
 
 unittest
-{
-	import dsfml.graphics.texture;
-	import std.stdio;
-
-
-
-	//File Stream ported from Laurent's example here: http://www.sfml-dev.org/tutorials/2.0/system-stream.php
-
-	class FileStream:InputStream
+{version(DSFML_Unittest_System)
 	{
-		File m_file;
+		import dsfml.graphics.texture;
+		import std.stdio;
+
+
+
+		//File Stream ported from Laurent's example here: http://www.sfml-dev.org/tutorials/2.0/system-stream.php
+
+		class FileStream:InputStream
+		{
+			File m_file;
 		
-		this()
-		{
-			// Constructor code
-		}
-		bool open(string fileName)
-		{
-			try
+			this()
 			{
-				m_file.open(fileName);
+				// Constructor code
 			}
-			catch(Exception e)
+			bool open(string fileName)
 			{
-				writeln(e.msg);
-			}
+				try
+				{
+					m_file.open(fileName);
+				}
+				catch(Exception e)
+				{
+					writeln(e.msg);
+				}
 			
-			return m_file.isOpen;
-		}
+				return m_file.isOpen;
+			}
 		
-		long read(void[] data)
-		{
+			long read(void[] data)
+			{
 			
-			if(m_file.isOpen)
-			{
-				return m_file.rawRead(data).length;
+				if(m_file.isOpen)
+				{
+					return m_file.rawRead(data).length;
+				}
+				else
+				{
+					return -1;
+				}
 			}
-			else
-			{
-				return -1;
-			}
-		}
 		
-		long seek(long position)
-		{
-			if(m_file.isOpen)
+			long seek(long position)
 			{
-				m_file.seek(position);
-				return tell();
+				if(m_file.isOpen)
+				{
+					m_file.seek(position);
+					return tell();
+				}
+				else
+				{
+					return -1;
+				}
 			}
-			else
-			{
-				return -1;
-			}
-		}
 		
-		long tell()
-		{
+			long tell()
+			{
 			
-			if(m_file.isOpen)
-			{
-				return m_file.tell;
+				if(m_file.isOpen)
+				{
+					return m_file.tell;
+				}
+				else
+				{
+					return -1;
+				}
 			}
-			else
-			{
-				return -1;
-			}
-		}
 		
-		long getSize()
-		{
-			if(m_file.isOpen)
+			long getSize()
 			{
-				long position = m_file.tell;
+				if(m_file.isOpen)
+				{
+					long position = m_file.tell;
 				
-				m_file.seek(0,SEEK_END);
+					m_file.seek(0,SEEK_END);
 				
-				long size = tell();
+					long size = tell();
 				
-				seek(position);
+					seek(position);
+					
+					return size;
 				
-				return size;
 				
-				
-			}
-			else
-			{
-				return -1;
+				}
+				else
+				{
+					return -1;
+				}
 			}
 		}
 	}
-
 
 
 

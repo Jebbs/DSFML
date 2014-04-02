@@ -114,9 +114,10 @@ class Sprite:Drawable,Transformable
 		
 	}
 
-	const(Texture) getTexture()
+
+	FloatRect getGlobalBounds()
 	{
-		return m_texture;
+		return getTransform().transformRect(getLocalBounds());
 	}
 
 	FloatRect getLocalBounds()
@@ -125,10 +126,10 @@ class Sprite:Drawable,Transformable
 		float height = (abs(m_textureRect.height));
 		return FloatRect(0f, 0f, width, height);
 	}
-	
-	FloatRect getGlobalBounds()
+
+	const(Texture) getTexture()
 	{
-		return getTransform().transformRect(getLocalBounds());
+		return m_texture;
 	}
 	
 	void setTexture(const(Texture) texture, bool rectReset = false)

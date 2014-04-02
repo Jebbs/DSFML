@@ -73,23 +73,26 @@ class Clock
 
 unittest
 {
-	import std.stdio;
-	import dsfml.system.sleep;
-	import std.math;
-
-	writeln("Unit test for Clock");
-
-	Clock clock = new Clock();
-
-	writeln("Counting Time for 5 seconds.(rounded to nearest second)");
-
-	while(clock.getElapsedTime().asSeconds()<5)
+	version(DSFML_Unittest_System)
 	{
-		writeln(ceil(clock.getElapsedTime().asSeconds()));
-		sleep(seconds(1));
-	}
+		import std.stdio;
+		import dsfml.system.sleep;
+		import std.math;
 
-	writeln();
+		writeln("Unit test for Clock");
+
+		Clock clock = new Clock();
+
+		writeln("Counting Time for 5 seconds.(rounded to nearest second)");
+
+		while(clock.getElapsedTime().asSeconds()<5)
+		{
+			writeln(ceil(clock.getElapsedTime().asSeconds()));
+			sleep(seconds(1));
+		}
+
+		writeln();
+	}
 }
 
 

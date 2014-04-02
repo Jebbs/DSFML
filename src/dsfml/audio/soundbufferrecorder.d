@@ -86,46 +86,48 @@ class SoundBufferRecorder:SoundRecorder
 
 unittest
 {
-	import std.stdio;
-	import dsfml.window.keyboard;
-	import dsfml.audio.sound;
-	import dsfml.system.time;
-	import dsfml.system.clock;
-
-	writeln("Unit test for SoundBufferRecorder.");
-
-	auto recorder = new SoundBufferRecorder();
-
-	writeln("Press Enter to start recording.");
-	if(Keyboard.isKeyPressed(Keyboard.Key.Return))
+	version(DSFML_Unittest_Audio)
 	{
-		recorder.start();
+		import std.stdio;
+		import dsfml.window.keyboard;
+		import dsfml.audio.sound;
+		import dsfml.system.time;
+		import dsfml.system.clock;
+
+		writeln("Unit test for SoundBufferRecorder.");
+
+		auto recorder = new SoundBufferRecorder();
+
+		writeln("Press Enter to start recording.");
+		if(Keyboard.isKeyPressed(Keyboard.Key.Return))
+		{
+			recorder.start();
+		}
+
+		writeln("Press Enter to stop recording.");
+
+		if(Keyboard.isKeyPressed(Keyboard.Key.Return))
+		{
+			recorder.stop();
+		}
+
+		auto recorderDuration = recorder.getBuffer().getDuration();
+
+		auto recorderSound = new Sound(recorder.getBuffer());
+
+		auto clock = new Clock();
+
+		recorderSound.play();
+		while(clock.getElapsedTime() < recorderDuration)
+		{
+			//sound playing
+		}
+
+
+
+
+		writeln();
 	}
-
-	writeln("Press Enter to stop recording.");
-
-	if(Keyboard.isKeyPressed(Keyboard.Key.Return))
-	{
-		recorder.stop();
-	}
-
-	auto recorderDuration = recorder.getBuffer().getDuration();
-
-	auto recorderSound = new Sound(recorder.getBuffer());
-
-	auto clock = new Clock();
-
-	recorderSound.play();
-	while(clock.getElapsedTime() < recorderDuration)
-	{
-		//sound playing
-	}
-
-
-
-
-	writeln();
-
 }
 
 

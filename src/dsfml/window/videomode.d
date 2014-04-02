@@ -94,31 +94,33 @@ struct VideoMode
 	}
 }
 
+unittest
+{
+	version(DSFML_Unittest_Window)
+	{
+		import std.stdio;
+		
+		writeln("Unit test for VideoMode struct");
+		
+		uint modesCount = VideoMode.getFullscreenModes().length;
+		
+		writeln("There are ", modesCount, " full screen modes available.");
+		writeln("Your current desktop video mode is ",VideoMode.getDesktopMode().toString());
+		
+		writeln("Confirming all fullscreen modes are valid.");
+		foreach(mode; VideoMode.getFullscreenModes())
+		{
+			assert(mode.isValid());
+		}
+		writeln("All video modes are valid.");
+		
+		writeln();
+	}
+}
+
 private extern(C)
 {
 	void sfVideoMode_getDesktopMode(uint* width, uint* height, uint* bitsPerPixel);
 	uint* sfVideoMode_getFullscreenModes(size_t* Count);
 	bool sfVideoMode_isValid(uint width, uint height, uint bitsPerPixel);
-}
-
-
-unittest
-{
-	import std.stdio;
-
-	writeln("Unit test for VideoMode struct");
-
-	uint modesCount = VideoMode.getFullscreenModes().length;
-
-	writeln("There are ", modesCount, " full screen modes available.");
-	writeln("Your current desktop video mode is ",VideoMode.getDesktopMode().toString());
-
-	writeln("Confirming all fullscreen modes are valid.");
-	foreach(mode; VideoMode.getFullscreenModes())
-	{
-		assert(mode.isValid());
-	}
-	writeln("All video modes are valid.");
-
-	writeln();
 }

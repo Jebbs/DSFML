@@ -37,7 +37,7 @@ import dsfml.system.vector2;
 import dsfml.system.err;
 import std.conv;
 import std.string;
-
+import std.utf;
 
 
 class Window
@@ -250,69 +250,71 @@ class Window
 
 unittest
 {
-	import std.stdio;
-	import dsfml.graphics.image;
-
-	//constructor
-	auto window = new Window(VideoMode(800,600),"Test Window");
-
-	//perform each window call
-	Vector2u windowSize = window.size;
-
-	windowSize.x = 1000;
-	windowSize.y = 1000;
-
-	window.size = windowSize;
-
-	Vector2i windowPosition = window.position;
-
-	windowPosition.x = 100;
-	windowPosition.y = 100;
-
-	window.position = windowPosition;
-
-	window.setTitle("thing");//uses the first set title
-
-	window.setTitle("素晴らしい ！"d);//forces the dstring override and uses unicode
-
-	window.setActive(true);
-
-	window.setJoystickThreshhold(1);
-
-	window.setVisible(true);
-
-	window.setFramerateLimit(60);
-
-	window.setMouseCursorVisible(true);
-
-	window.setVerticalSyncEnabled(true);
-
-	auto settings = window.getSettings();
-
-	auto image = new Image();
-	image.loadFromFile("Crono.png");//replace with something that won't get me in trouble
-
-	window.setIcon(image.getSize().x,image.getSize().x,image.getPixelArray());
-
-	if(window.isOpen())
+	version(DSFML_Unittest_Window)
 	{
-		Event event;
-		if(window.pollEvent(event))
+		import std.stdio;
+		import dsfml.graphics.image;
+
+		//constructor
+		auto window = new Window(VideoMode(800,600),"Test Window");
+
+		//perform each window call
+		Vector2u windowSize = window.size;
+
+		windowSize.x = 1000;
+		windowSize.y = 1000;
+
+		window.size = windowSize;
+
+		Vector2i windowPosition = window.position;
+
+		windowPosition.x = 100;
+		windowPosition.y = 100;
+
+		window.position = windowPosition;
+
+		window.setTitle("thing");//uses the first set title
+
+		window.setTitle("素晴らしい ！"d);//forces the dstring override and uses unicode
+
+		window.setActive(true);
+
+		window.setJoystickThreshhold(1);
+
+		window.setVisible(true);
+
+		window.setFramerateLimit(60);
+
+		window.setMouseCursorVisible(true);
+
+		window.setVerticalSyncEnabled(true);
+
+		auto settings = window.getSettings();
+
+		auto image = new Image();
+		image.loadFromFile("Crono.png");//replace with something that won't get me in trouble
+
+		window.setIcon(image.getSize().x,image.getSize().x,image.getPixelArray());
+
+		if(window.isOpen())
 		{
+			Event event;
+			if(window.pollEvent(event))
+			{
 
+			}
+			//requires users input
+			if(window.waitEvent(event))
+			{
+
+			}
+
+			window.display();
 		}
-		//requires users input
-		if(window.waitEvent(event))
-		{
 
-		}
+		window.close();
 
-		window.display();
 	}
-
-	window.close();
-
-
 }
 
 

@@ -52,48 +52,51 @@ struct Lock
 
 unittest
 {
-	import dsfml.system.thread;
-	import dsfml.system.mutex;
-	import dsfml.system.sleep;
-	import dsfml.system.time;
-	import std.stdio;
-	
-	Mutex mutex = new Mutex();
-
-	void mainThreadHello()
+	version(DSFML_Unittest_System)
 	{
-		auto lock = Lock(mutex);
-		for(int i = 0; i < 10; ++i)
-		{
-			writeln("Hello from the main thread!");
-		}
-		//unlock auto happens here
-	}
-	void secondThreadHello()
-	{
-		auto lock = Lock(mutex);
-		for(int i = 0; i < 10; ++i)
-		{
-			writeln("Hello from the second thread!");
-		}
-		//unlock auto happens here
-	}
+		import dsfml.system.thread;
+		import dsfml.system.mutex;
+		import dsfml.system.sleep;
+		import dsfml.system.time;
+		import std.stdio;
 	
-	
-	writeln("Unit test for Lock struct");
-	writeln();
-	
-	writeln("Using a lock in the main and second thread.");
-	
-	auto secondThread = new Thread(&secondThreadHello);
-	
-	secondThread.launch();
+		Mutex mutex = new Mutex();
 
-	mainThreadHello();
+		void mainThreadHello()
+		{
+			auto lock = Lock(mutex);
+			for(int i = 0; i < 10; ++i)
+			{
+				writeln("Hello from the main thread!");
+			}
+			//unlock auto happens here
+		}
+		void secondThreadHello()
+		{
+			auto lock = Lock(mutex);
+			for(int i = 0; i < 10; ++i)
+			{
+				writeln("Hello from the second thread!");
+			}
+			//unlock auto happens here
+		}
+	
+	
+		writeln("Unit test for Lock struct");
+		writeln();
+	
+		writeln("Using a lock in the main and second thread.");
+	
+		auto secondThread = new Thread(&secondThreadHello);
+	
+		secondThread.launch();
+
+		mainThreadHello();
 	
 
-	sleep(seconds(1));//let's this unit test finish before moving on to the next one.
-	writeln();
+		sleep(seconds(1));//let's this unit test finish before moving on to the next one.
+		writeln();
+	}
 }
 
 
