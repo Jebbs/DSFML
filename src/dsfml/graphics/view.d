@@ -121,6 +121,7 @@ class View
 		}
 	}
 
+	@property
 	View dup() const
 	{
 		return new View(sfView_copy(sfPtr));

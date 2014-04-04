@@ -159,6 +159,7 @@ class Texture
 		return new Image(sfTexture_copyToImage(sfPtr));
 	}
 
+	@property
 	Texture dup() const
 	{
 		return new Texture(sfTexture_copy(sfPtr));

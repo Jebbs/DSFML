@@ -101,7 +101,7 @@ class CircleShape:Shape
 		return Vector2f(m_radius + x, m_radius + y);
 	}
 	
-
+	@property
 	CircleShape dup() const
 	{
 		CircleShape temp = new CircleShape(m_radius, m_pointCount);

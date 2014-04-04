@@ -176,6 +176,7 @@ class Image
 		sfImage_createMaskFromColor(sfPtr,maskColor.r,maskColor.b, maskColor.g, maskColor.a, alpha);
 	}
 	
+	@property
 	Image dup() const
 	{
 		return new Image(sfImage_copy(sfPtr));
