@@ -146,7 +146,7 @@ class Font
 	const(Texture) getTexture (uint characterSize) const
 	{
 		//ToDo: cache texture somehow?
-		//Possible: cache last size used using sound method(mutable instance storage
+		//Possible: cache last size used using sound method(mutable instance storage)
 
 		sfFont_updateTexture(sfPtr, characterSize);
 
@@ -160,8 +160,9 @@ class Font
 
 }
 
-private:
 
+
+private:
 private extern(C++) interface sfmlInputStream
 {
 	long read(void* data, long size);

@@ -165,38 +165,42 @@ Time microseconds(long amount)
 
 unittest
 {
-	import std.stdio;
+	version(DSFML_Unittest_System)
+	{
 
-	writeln("Unit test for Time Struct");
+		import std.stdio;
 
-	auto time = seconds(1);
+		writeln("Unit test for Time Struct");
 
-	assert(time.asSeconds() == 1);
+		auto time = seconds(1);
 
-	assert((time*2).asSeconds() == 2);
+		assert(time.asSeconds() == 1);
 
-	assert((time/2).asSeconds() == .5f);
+		assert((time*2).asSeconds() == 2);
 
-	assert((time+seconds(1)).asSeconds() == 2);
+		assert((time/2).asSeconds() == .5f);
 
-	assert((time-seconds(1)).asSeconds() == 0);
+		assert((time+seconds(1)).asSeconds() == 2);
 
-	time += seconds(1);
+		assert((time-seconds(1)).asSeconds() == 0);
 
-	assert(time.asSeconds() == 2);
+		time += seconds(1);
 
-	time -= seconds(1);
+		assert(time.asSeconds() == 2);
 
-	assert(time.asSeconds() == 1);
+		time -= seconds(1);
 
-	time/=2;
+		assert(time.asSeconds() == 1);
 
-	assert(time.asSeconds() == .5f);
+		time/=2;
 
-	time*=2;
+		assert(time.asSeconds() == .5f);
 
-	assert(time.asSeconds() == 1);
+		time*=2;
 
-	writeln("Time Struct passes all tests.");
-	writeln();
+		assert(time.asSeconds() == 1);
+
+		writeln("Time Struct passes all tests.");
+		writeln();
+	}
 }

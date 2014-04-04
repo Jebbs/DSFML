@@ -141,3 +141,13 @@ struct Color
 	
 
 }
+
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		Color color = Color(100,100,100);
+
+		color*= 2;
+	}
+}

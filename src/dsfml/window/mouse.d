@@ -76,6 +76,24 @@ final abstract class Mouse
 
 }
 
+unittest
+{
+	version(DSFML_Unittest_Window)
+	{
+		import std.stdio;
+	
+		writeln("Unit test for Mouse class");
+	
+		writeln("Current mouse position: ", Mouse.getPosition().toString());
+	
+		Mouse.setPosition(Vector2i(100,400));
+	
+		writeln("New mouse position: ", Mouse.getPosition().toString());
+	
+	}
+	
+}
+
 private extern(C)
 {
 
@@ -89,18 +107,3 @@ private extern(C)
 	void sfMouse_setPosition(int x, int y, const(sfWindow)* relativeTo);
 }
 
-unittest
-{
-	import std.stdio;
-
-	writeln("Unit test for Mouse class");
-
-	writeln("Current mouse position: ", Mouse.getPosition().toString());
-
-	Mouse.setPosition(Vector2i(100,400));
-
-	writeln("New mouse position: ", Mouse.getPosition().toString());
-
-
-
-}

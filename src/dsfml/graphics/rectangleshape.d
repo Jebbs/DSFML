@@ -83,3 +83,45 @@ class RectangleShape:Shape
 	}
 }
 
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+		import dsfml.graphics;
+		
+		writeln("Unit test for RectangleShape");
+		auto window = new RenderWindow(VideoMode(800,600), "RectangleShape unittest");
+		
+		auto rectangleShape = new RectangleShape(Vector2(10, 20));
+		
+		rectangleShape.fillColor = Color.Blue;
+		
+		rectangleShape.outlineColor = Color.Green;
+		
+		auto clock = new Clock();
+		
+		
+		while(window.isOpen())
+		{
+			Event event;
+			
+			while(window.pollEvent(event))
+			{
+				//no events gonna do stuffs!
+			}
+			
+			//draws the shape for a while before closing the window
+			if(clock.getElapsedTime().asSeconds >5)
+			{
+				window.close();
+			}
+			
+			window.clear();
+			window.draw(rectangleShape);
+			window.display();
+		}
+		
+		writeln();
+	}
+}

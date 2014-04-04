@@ -158,39 +158,42 @@ alias Vector3!(float) Vector3f;
 
 unittest
 {
-	import std.stdio;
+	version(DSFML_Unittest_System)
+	{
+		import std.stdio;
 	
-	writeln("Unit test for Vector3");
+		writeln("Unit test for Vector3");
 	
-	auto floatVector3 = Vector3f(100,100,100);
+		auto floatVector3 = Vector3f(100,100,100);
 	
-	assert((floatVector3/2) == Vector3f(50,50,50));
+		assert((floatVector3/2) == Vector3f(50,50,50));
 	
-	assert((floatVector3*2) == Vector3f(200,200,200));
+		assert((floatVector3*2) == Vector3f(200,200,200));
 	
-	assert((floatVector3 + Vector3f(50, 0,100)) == Vector3f(150, 100,200));
+		assert((floatVector3 + Vector3f(50, 0,100)) == Vector3f(150, 100,200));
 
-	assert((floatVector3 - Vector3f(50,0,300)) == Vector3f(50,100,-200));
+		assert((floatVector3 - Vector3f(50,0,300)) == Vector3f(50,100,-200));
 	
-	floatVector3/=2;
+		floatVector3/=2;
 	
-	assert(floatVector3 == Vector3f(50,50,50));
+		assert(floatVector3 == Vector3f(50,50,50));
 	
-	floatVector3*=2;
+		floatVector3*=2;
 	
-	assert(floatVector3 == Vector3f(100,100,100));
+		assert(floatVector3 == Vector3f(100,100,100));
 	
-	floatVector3+= Vector3f(50,0,100);
+		floatVector3+= Vector3f(50,0,100);
 	
-	assert(floatVector3 == Vector3f(150,100,200));
+		assert(floatVector3 == Vector3f(150,100,200));
 	
-	floatVector3-=Vector3f(50,100,50);
+		floatVector3-=Vector3f(50,100,50);
 	
-	assert(floatVector3 == Vector3f(100,0,150));
+		assert(floatVector3 == Vector3f(100,0,150));
 	
 	
-	writeln("Vector3 tests passed");
-	writeln();
+		writeln("Vector3 tests passed");
+		writeln();
+	}
 
 }
 
