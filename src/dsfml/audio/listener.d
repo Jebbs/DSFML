@@ -32,14 +32,39 @@ module dsfml.audio.listener;
 
 import dsfml.system.vector3;
 
+/++
+ + The audio listener is the point in the scene from where all the sounds are heard.
+ + 
+ + The audio listener defines the global properties of the audio environment, it defines where and how sounds and musics are heard.
+ + 
+ + If View is the eyes of the user, then Listener is his ears (by the way, they are often linked together – same position, orientation, etc.).
+ + 
+ + Listener is a simple interface, which allows to setup the listener in the 3D audio environment (position and direction), and to adjust the global volume.
+ + 
+ + Because the listener is unique in the scene, Listener only contains static functions and doesn't have to be instanciated.
+ + 
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Listener.php#details
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ +/
 final abstract class Listener
 {
 	@property
 	{
+		/** 
+		 * The orientation of the listener in the scene.
+		 * The orientation defines the 3D axes of the listener (left, up, front) in the scene. The orientation vector doesn't have to be normalized. 
+		 * The default listener's orientation is (0, 0, -1).
+		 * 
+		 * Params:
+		 * 		orientation =	X, Y, and Z of the listener's orientation
+		 */
 		static void Direction(Vector3f orientation)
 		{
 			sfListener_setDirection(orientation.x, orientation.y, orientation.z);
 		}
+
+		/// Get the current orientation of the listener in the scene.
+		/// Returns: Listener's orientation
 		static Vector3f Direction()
 		{
 			Vector3f temp;
@@ -52,10 +77,20 @@ final abstract class Listener
 
 	@property
 	{
+		/** 
+		 * The global volume of all the sounds and musics.
+		 * The volume is a number between 0 and 100; it is combined with the individual volume of each sound / music. 
+		 * The default value for the volume is 100 (maximum).
+		 * 
+		 * Params:
+		 * 		volume = 	New global volume, in the range [0, 100]
+		 */
 		static void GlobalVolume(float volume)
 		{
 			sfListener_setGlobalVolume(volume);
 		}
+		/// The global volume of all sounds and musics
+		/// Returns: Current global volume, in the range [0, 100]
 		static float GlobalVolume()
 		{
 			return sfListener_getGlobalVolume();
@@ -65,10 +100,16 @@ final abstract class Listener
 	
 	@property
 	{
+		/// The position of the listener in the scene.
+		/// The default listener's position is (0, 0, 0).
+		/// 
+		/// Params: position = 	X, Y, and Z of the listener's position.
 		static void Position(Vector3f position)
 		{
 			sfListener_setPosition(position.x, position.y, position.z);
 		}
+		/// The position of the listener in the scene
+		/// Returns: The position of the listener in the scene
 		static Vector3f Position()
 		{
 			Vector3f temp;

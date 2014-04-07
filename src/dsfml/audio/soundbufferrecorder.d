@@ -33,6 +33,18 @@ module dsfml.audio.soundbufferrecorder;
 import dsfml.audio.soundrecorder;
 import dsfml.audio.soundbuffer;
 
+/++
+ + Specialized SoundRecorder which stores the captured audio data into a sound buffer.
+ + 
+ + SoundBufferRecorder allows to access a recorded sound through a SoundBuffer, so that it can be played, saved to a file, etc.
+ + 
+ + It has the same simple interface as its base class (start(), stop()) and adds a function to retrieve the recorded sound buffer (getBuffer()).
+ + 
+ + As usual, don't forget to call the isAvailable() function before using this class (see SoundRecorder for more details about this).
+ + 
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1SoundBufferRecorder.php#details
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ +/
 class SoundBufferRecorder:SoundRecorder
 {
 	private
@@ -52,6 +64,14 @@ class SoundBufferRecorder:SoundRecorder
 		mixin(destructorOutput);
 	}
 
+	/**
+	 * Get the sound buffer containing the captured audio data.
+	 * 
+	 * The sound buffer is valid only after the capture has ended. 
+	 * This function provides a read-only access to the internal sound buffer, but it can be copied if you need to make any modification to it.
+	 * 
+	 * Returns: Read-only access to the sound buffer
+	 */
 	SoundBuffer getBuffer()
 	{
 		return m_buffer;
@@ -59,6 +79,8 @@ class SoundBufferRecorder:SoundRecorder
 
 	protected
 	{
+		/// Start capturing audio data.
+		/// Returns: True to start the capture, or false to abort it
 		override bool onStart()
 		{
 			m_samples.length = 0;
@@ -67,6 +89,14 @@ class SoundBufferRecorder:SoundRecorder
 			return true;
 		}
 
+		/**
+		 * Process a new chunk of recorded samples.
+		 * 
+		 * Params:
+		 * 		samples =	Array of the new chunk of recorded samples'
+		 * 
+		 * Returns: True to continue the capture, or false to stop it
+		 */
 		override bool onProcessSamples(short[] samples)
 		{
 			m_samples ~= samples;
@@ -74,6 +104,9 @@ class SoundBufferRecorder:SoundRecorder
 			return true;
 		}
 
+		/// Stop capturing audio data.
+		/// 
+		/// Reimplemented from SoundRecorder.
 		override void onStop()
 		{
 			if(m_samples.length >0)
