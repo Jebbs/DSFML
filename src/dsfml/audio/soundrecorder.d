@@ -69,7 +69,7 @@ class SoundRecorder
 		bool m_isCapturing;
 	}
 
-	 protected this()
+	protected this()
 	{
 		sfSoundSource_ensureALInit();
 		err.write(text(sfErrAudio_getOutput()));
@@ -127,16 +127,14 @@ class SoundRecorder
 		m_thread.join(true);
 	}
 
+	/**
+	 * Get the sample rate in samples per second.
+	 * 
+	 * The sample rate defines the number of audio samples captured per second.
+	 * The higher, the better the quality (for example, 44100 samples/sec is CD quality).
+	 */
 	@property
 	{
-		/**
-		 * Get the sample rate.
-		 * 
-		 * The sample rate defines the number of audio samples captured per second.
-		 * The higher, the better the quality (for example, 44100 samples/sec is CD quality).
-		 * 
-		 * Returns: Sample rate, in samples per second
-		 */
 		uint sampleRate()
 		{
 			return m_sampleRate;

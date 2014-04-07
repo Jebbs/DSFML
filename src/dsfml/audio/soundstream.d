@@ -102,40 +102,40 @@ class SoundStream:SoundSource
 		stop();
 	}
 
+	/**
+	 * The number of channels of the stream.
+	 * 
+	 * 1 channel means mono sound, 2 means stereo, etc.
+	 * 
+	 * Returns: Number of channels
+	 */
 	@property
 	{
-		/**
-		 * The number of channels of the stream.
-		 * 
-		 * 1 channel means mono sound, 2 means stereo, etc.
-		 * 
-		 * Returns: Number of channels
-		 */
 		uint channelCount()
 		{
 			return m_channelCount;
 		}
 	}
 
+	/**
+	 * The stream sample rate of the stream
+	 * 
+	 * The sample rate is the number of audio samples played per second. The higher, the better the quality.
+	 * 
+	 * Returns: Sample rate, in number of samples per second.
+	 */
 	@property
 	{
-		/**
-		 * The stream sample rate of the stream
-		 * 
-		 * The sample rate is the number of audio samples played per second. The higher, the better the quality.
-		 * 
-		 * Returns: Sample rate, in number of samples per second.
-		 */
 		uint sampleRate()
 		{
 			return m_sampleRate;
 		}
 	}
 	
+	/// The current status of the stream (stopped, paused, playing)
+	/// Returns: Current status
 	@property
 	{
-		/// The current status of the stream (stopped, paused, playing)
-		/// Returns: Current status
 		Status status()
 		{
 			Status temp = super.getStatus();
@@ -150,16 +150,13 @@ class SoundStream:SoundSource
 		}
 	}
 	
+	/**
+	 * The current playing position (from the beginning) of the stream.
+	 * 
+	 * The playing position can be changed when the stream is either paused or playing.
+	 */
 	@property
 	{
-		/**
-		 * The current playing position of the stream.
-		 * 
-		 * The playing position can be changed when the stream is either paused or playing.
-		 * 
-		 * Params:
-		 * 		timeOffset =	New playing position, from the beginning of the stream
-		 */
 		void playingOffset(Time offset)
 		{
 			stop();
@@ -170,8 +167,7 @@ class SoundStream:SoundSource
 			m_thread.start();
 			
 		}
-		/// The current playing position of the stream
-		/// Returns: The current playing position
+
 		Time playingOffset()
 		{
 			if((m_sampleRate!=0) && (m_channelCount !=0))
@@ -183,26 +179,21 @@ class SoundStream:SoundSource
 		}
 	}
 	
+	/**
+	 * Whether or not the stream should loop after reaching the end.
+	 * 
+	 * If set, the stream will restart from the beginning after reaching the end and so on,
+	 * until it is stopped or looping is set to false.
+	 * 
+	 * Default looping state for streams is false.
+	 */
 	@property
 	{
-		/**
-		 * Whether or not the stream should loop after reaching the end.
-		 * 
-		 * If set, the stream will restart from the beginning after reaching the end and so on,
-		 * until it is stopped or looping is set to false.
-		 * 
-		 * Default looping state for streams is false.
-		 * 
-		 * Params:
-		 * 		loop =	True to play in loop, false to play once.
-		 */
 		void isLooping(bool loop)
 		{
 			m_loop = loop;
 		}
 
-		/// Whether or not the stream should loop after reaching the end
-		/// Returns: Whether to loop or not
 		bool isLooping()
 		{
 			return m_loop;

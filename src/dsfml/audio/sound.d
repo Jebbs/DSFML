@@ -87,55 +87,47 @@ class Sound : SoundSource
 		}
 	}
 
+	/** 
+	 * Whether or not the sound should loop after reaching the end.
+	 * 
+	 * If set, the sound will restart from beginning after reaching the end and so on, until it is stopped or setLoop(false) is called.
+	 * The default looping state for sound is false.
+	 */
 	@property
 	{
-		/** 
-		 * Set whether or not the sound should loop after reaching the end.
-		 * 
-		 * If set, the sound will restart from beginning after reaching the end and so on, until it is stopped or setLoop(false) is called.
-		 * The default looping state for sound is false.
-		 * 
-		 * Params:
-		 * 		loop = 	True to play in loop, false to play once
-		 */
 		void isLooping(bool loop)
 		{
 			sfSound_setLoop(m_source, loop);
 		}
-		/// Tell whether or not the sound is in loop mode.
-		/// Returns: True if the sound is looping, false otherwise
+
 		bool isLooping()
 		{
 			return sfSound_getLoop(m_source);
 		}
 	}
 	
+	/**
+	 * Change the current playing position (from the beginning) of the sound.
+	 * 
+	 * The playing position can be changed when the sound is either paused or playing.
+	 */
 	@property
 	{
-		/**
-		 * Change the current playing position of the sound.
-		 * 
-		 * The playing position can be changed when the sound is either paused or playing.
-		 * 
-		 * Params:
-		 * 		timeOffset =	New playing position, from the beginning of the sound
-		 */
 		void playingOffset(Time offset)
 		{
 			sfSound_setPlayingOffset(m_source, offset.asSeconds());
 		}
-		/// Get the current playing position of the sound.
-		/// Returns: Current playing position, from the beginning of the sound
+
 		Time playingOffset()
 		{
 			return seconds(sfSound_getPlayingOffset(m_source));
 		}
 	}
 
+	/// Get the current status of the sound (stopped, paused, playing).
+	/// Returns: Current status of the sound
 	@property
 	{
-		/// Get the current status of the sound (stopped, paused, playing).
-		/// Returns: Current status of the sound
 		Status status()
 		{
 			return super.getStatus();
