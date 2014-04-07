@@ -152,10 +152,20 @@ class Sprite:Drawable,Transformable
 		}
 	}
 
-	//TODO: Fix this. Whoops.
+	@property
 	Sprite dup() const
 	{
-		return new Sprite();
+		Sprite temp = new Sprite();
+		// properties from Transformable
+		temp.origin = origin;
+		temp.position = position;
+		temp.rotation = rotation;
+		temp.scale = scale;
+		// properties from Sprite:
+		temp.setTexture(m_texture);
+		temp.color = m_vertices[0].color;
+		temp.textureRect = m_textureRect;
+		return temp;
 	}
 	
 	void updatePositions()

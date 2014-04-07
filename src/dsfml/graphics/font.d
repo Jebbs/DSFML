@@ -153,6 +153,7 @@ class Font
 		return fontTexture;
 	}
 
+	@property
 	Font dup() const
 	{
 		return new Font(sfFont_copy(sfPtr));

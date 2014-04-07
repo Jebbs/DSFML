@@ -64,6 +64,7 @@ class Clock
 		return Time(sfClock_restart(sfPtr));
 	}
 	
+	@property
 	Clock dup() const
 	{
 		return new Clock(sfClock_copy(sfPtr));
