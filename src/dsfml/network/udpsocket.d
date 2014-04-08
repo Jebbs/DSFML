@@ -52,7 +52,7 @@ class UdpSocket:Socket
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfUdpSocket_destroy(sfPtr);
 	}
 

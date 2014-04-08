@@ -50,7 +50,7 @@ class Clock
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfClock_destroy(sfPtr);
 	}
 	

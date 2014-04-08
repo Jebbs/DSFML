@@ -62,7 +62,7 @@ class RenderTexture:RenderTarget
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfRenderTexture_destroy(sfPtr);
 	}
 

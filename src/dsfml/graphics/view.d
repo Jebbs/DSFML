@@ -56,7 +56,7 @@ class View
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfView_destroy(sfPtr);
 	}
 

@@ -53,7 +53,7 @@ class TcpSocket:Socket
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfTcpSocket_destroy(sfPtr);
 	}
 

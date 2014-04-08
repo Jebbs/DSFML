@@ -55,7 +55,7 @@ class Font
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfFont_destroy(sfPtr);
 	}
 	

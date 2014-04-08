@@ -41,7 +41,7 @@ class Context
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfContext_destroy(sfPtr);	
 	}
 	

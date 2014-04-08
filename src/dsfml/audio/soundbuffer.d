@@ -93,7 +93,7 @@ class SoundBuffer
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		
 		//Detach 
 		foreach(Sound sound;m_sounds[m_buffer])

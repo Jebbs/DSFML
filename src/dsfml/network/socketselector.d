@@ -48,7 +48,7 @@ class SocketSelector
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfSocketSelector_destroy(sfPtr);
 	}
 	

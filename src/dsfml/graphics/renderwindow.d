@@ -98,7 +98,7 @@ class RenderWindow:Window,RenderTarget
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfRenderWindow_destroy(sfPtr);
 	}
 

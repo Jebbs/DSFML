@@ -56,7 +56,7 @@ class Image
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfImage_destroy(sfPtr);
 	}
 	
