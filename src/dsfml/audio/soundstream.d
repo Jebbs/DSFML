@@ -38,7 +38,26 @@ import dsfml.audio.soundsource;
 import dsfml.system.time;
 
 
-
+/++
+ + Abstract base class for streamed audio sources.
+ + 
+ + Unlike audio buffers (see SoundBuffer), audio streams are never completely loaded in memory.
+ + 
+ + Instead, the audio data is acquired continuously while the stream is playing. This behaviour allows to play a sound with no loading delay, and keeps the memory consumption very low.
+ + 
+ + Sound sources that need to be streamed are usually big files (compressed audio musics that would eat hundreds of MB in memory) or files that would take a lot of time to be received (sounds played over the network).
+ + 
+ + SoundStream is a base class that doesn't care about the stream source, which is left to the derived class. SFML provides a built-in specialization for big files (see Music). No network stream source is provided, but you can write your own by combining this class with the network module.
+ + 
+ + A derived class has to override two virtual functions:
+ + 		- onGetData fills a new chunk of audio data to be played.
+ + 		- onSeek changes the current playing position in the source
+ + 
+ + It is important to note that each SoundStream is played in its own separate thread, so that the streaming loop doesn't block the rest of the program. In particular, the OnGetData and OnSeek virtual functions may sometimes be called from this separate thread. It is important to keep this in mind, because you may have to take care of synchronization issues if you share data between threads.
+ + 
+ + See_Also: http://sfml-dev.org/documentation/2.0/classsf_1_1SoundStream.php#details
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ +/
 class SoundStream:SoundSource
 {
 	private
@@ -79,6 +98,13 @@ class SoundStream:SoundSource
 		stop();
 	}
 
+	/**
+	 * The number of channels of the stream.
+	 * 
+	 * 1 channel means mono sound, 2 means stereo, etc.
+	 * 
+	 * Returns: Number of channels
+	 */
 	@property
 	{
 		uint channelCount()
@@ -87,6 +113,13 @@ class SoundStream:SoundSource
 		}
 	}
 
+	/**
+	 * The stream sample rate of the stream
+	 * 
+	 * The sample rate is the number of audio samples played per second. The higher, the better the quality.
+	 * 
+	 * Returns: Sample rate, in number of samples per second.
+	 */
 	@property
 	{
 		uint sampleRate()
@@ -95,6 +128,8 @@ class SoundStream:SoundSource
 		}
 	}
 	
+	/// The current status of the stream (stopped, paused, playing)
+	/// Returns: Current status
 	@property
 	{
 		Status status()
@@ -111,6 +146,11 @@ class SoundStream:SoundSource
 		}
 	}
 	
+	/**
+	 * The current playing position (from the beginning) of the stream.
+	 * 
+	 * The playing position can be changed when the stream is either paused or playing.
+	 */
 	@property
 	{
 		void playingOffset(Time offset)
@@ -123,6 +163,7 @@ class SoundStream:SoundSource
 			m_thread.start();
 			
 		}
+
 		Time playingOffset()
 		{
 			if((m_sampleRate!=0) && (m_channelCount !=0))
@@ -134,23 +175,37 @@ class SoundStream:SoundSource
 		}
 	}
 	
+	/**
+	 * Whether or not the stream should loop after reaching the end.
+	 * 
+	 * If set, the stream will restart from the beginning after reaching the end and so on, until it is stopped or looping is set to false.
+	 * 
+	 * Default looping state for streams is false.
+	 */
 	@property
 	{
 		void isLooping(bool loop)
 		{
 			m_loop = loop;
 		}
+
 		bool isLooping()
 		{
 			return m_loop;
 		}
 	}
 
+	/// Pause the audio stream.
+	/// 
+	/// This function pauses the stream if it was playing, otherwise (stream already paused or stopped) it has no effect.
 	void pause()
 	{
 		sfSoundStream_alSourcePause(m_source);
 	}
 
+	/// Play or resume playing the audio stream.
+	/// 
+	/// This function starts the stream if it was stopped, resumes it if it was paused, and restarts it from beginning if it was it already playing. This function uses its own thread so that it doesn't block the rest of the program while the stream is played.
 	void play()
 	{
 		import dsfml.system.err;
@@ -178,6 +233,9 @@ class SoundStream:SoundSource
 		m_thread.start();
 	}
 
+	/// Stop playing the audio stream
+	/// 
+	/// This function stops the stream if it was playing or paused, and does nothing if it was already stopped. It also resets the playing position (unlike pause()).
 	void stop()
 	{
 		m_isStreaming = false;
@@ -190,6 +248,15 @@ class SoundStream:SoundSource
 	}
 
 protected:
+	/**
+	 * Define the audio stream parameters.
+	 * 
+	 * This function must be called by derived classes as soon as they know the audio settings of the stream to play. Any attempt to manipulate the stream (play(), ...) before calling this function will fail. It can be called multiple times if the settings of the audio stream change, but only when the stream is stopped.
+	 * 
+	 * Params:
+	 * 		theChannelCount =	Number of channels of the stream
+	 * 		theSampleRate =		Sample rate, in samples per second
+	 */
 	void initialize(uint theChannelCount, uint theSampleRate)
 	{
 		import dsfml.system.err;
@@ -210,8 +277,28 @@ protected:
 		}
 	}
 
+	/**
+	 * Request a new chunk of audio.
+	 * 
+	 * This function must be overridden by derived classes to provide the audio samples to play. It is called continuously by the streaming loop, in a separate thread. The source can choose to stop the streaming loop at any time, by returning false to the caller.
+	 * 
+	 * Params:
+	 * 		data =	Chunk of data to fill
+	 * 
+	 * Returns: True to continue playback, false to stop.
+	 */
 	abstract bool onGetData(ref Chunk data);
 
+	/**
+	 * Change the current playing position in the stream source.
+	 * 
+	 * This function must be overriden by derived classes to allow random seeking into the stream source.
+	 * 
+	 * Params:
+	 * 		timeOffset =	New playing position, relative to the beginning of the stream.
+	 * 
+	 * Implemented in Music.
+	 */
 	abstract void onSeek(Time timeOffset);
 
 
