@@ -74,6 +74,7 @@ class Music : SoundStream
 	 * Open a music from an audio file.
 	 * 
 	 * This function doesn't start playing the music (call play() to do so). 
+	 * 
 	 * Here is a complete list of all the supported audio formats: ogg, wav, flac, aiff, au, raw, paf, svx, nist, voc, ircam, w64, mat4, mat5 pvf, htk, sds, avr, sd2, caf, wve, mpc2k, rf64.
 	 * 
 	 * Params:
@@ -98,8 +99,10 @@ class Music : SoundStream
 	/**
 	 * Open a music from an audio file in memory.
 	 * 
-	 * This function doesn't start playing the music (call play() to do so). 
+	 * This function doesn't start playing the music (call play() to do so).
+	 *
 	 * Here is a complete list of all the supported audio formats: ogg, wav, flac, aiff, au, raw, paf, svx, nist, voc, ircam, w64, mat4, mat5 pvf, htk, sds, avr, sd2, caf, wve, mpc2k, rf64.
+	 * 
 	 * Since the music is not loaded completely but rather streamed continuously, the data must remain available as long as the music is playing (ie. you can't deallocate it right after calling this function).
 	 * 
 	 * Params:
@@ -123,7 +126,9 @@ class Music : SoundStream
 	 * Open a music from an audio file in memory.
 	 * 
 	 * This function doesn't start playing the music (call play() to do so). 
+	 * 
 	 * Here is a complete list of all the supported audio formats: ogg, wav, flac, aiff, au, raw, paf, svx, nist, voc, ircam, w64, mat4, mat5 pvf, htk, sds, avr, sd2, caf, wve, mpc2k, rf64.
+	 * 
 	 * Since the music is not loaded completely but rather streamed continuously, the stream must remain available as long as the music is playing (ie. you can't deallocate it right after calling this function).
 	 * 
 	 * Params:
@@ -205,8 +210,8 @@ class Music : SoundStream
 		/**
 		 * Define the audio stream parameters.
 		 * 
-		 * This function must be called by derived classes as soon as they know the audio settings of the stream to play. 
-		 * Any attempt to manipulate the stream (play(), ...) before calling this function will fail. 
+		 * This function must be called by derived classes as soon as they know the audio settings of the stream to play. Any attempt to manipulate the stream (play(), ...) before calling this function will fail. 
+		 * 
 		 * It can be called multiple times if the settings of the audio stream change, but only when the stream is stopped.
 		 * 
 		 * Params:

@@ -39,22 +39,20 @@ import std.conv;
  + 
  + SoundBuffer provides a simple interface to access the audio recording capabilities of the computer (the microphone).
  + 
- + As an abstract base class, it only cares about capturing sound samples, the task of making something useful with them is left to the derived class. 
- + Note that SFML provides a built-in specialization for saving the captured data to a sound buffer (see SoundBufferRecorder).
+ + As an abstract base class, it only cares about capturing sound samples, the task of making something useful with them is left to the derived class. Note that SFML provides a built-in specialization for saving the captured data to a sound buffer (see SoundBufferRecorder).
  + 
  + A derived class has only one virtual function to override:
  + 
  + onProcessSamples provides the new chunks of audio samples while the capture happens
+ + 
  + Moreover, two additionnal virtual functions can be overriden as well if necessary:
  + 
  + onStart is called before the capture happens, to perform custom initializations
  + onStop is called after the capture ends, to perform custom cleanup
- + The audio capture feature may not be supported or activated on every platform, thus it is recommended to check its availability with the isAvailable() function. 
- + If it returns false, then any attempt to use an audio recorder will fail.
  + 
- + It is important to note that the audio capture happens in a separate thread, so that it doesn't block the rest of the program. 
- + In particular, the onProcessSamples and onStop virtual functions (but not onStart) will be called from this separate thread. 
- + It is important to keep this in mind, because you may have to take care of synchronization issues if you share data between threads.
+ + The audio capture feature may not be supported or activated on every platform, thus it is recommended to check its availability with the isAvailable() function. If it returns false, then any attempt to use an audio recorder will fail.
+ + 
+ + It is important to note that the audio capture happens in a separate thread, so that it doesn't block the rest of the program. In particular, the onProcessSamples and onStop virtual functions (but not onStart) will be called from this separate thread. It is important to keep this in mind, because you may have to take care of synchronization issues if you share data between threads.
  + 
  + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1SoundRecorder.php#details
  + Authors: Laurent Gomila, Jeremy DeHaan
@@ -88,10 +86,7 @@ class SoundRecorder
 
 	/**
 	 * Start the capture.
-	 * The sampleRate parameter defines the number of audio samples captured per second. 
-	 * The higher, the better the quality (for example, 44100 samples/sec is CD quality).
-	 * This function uses its own thread so that it doesn't block the rest of the program while the capture runs.
-	 * Please note that only one capture can happen at the same time.
+	 * The sampleRate parameter defines the number of audio samples captured per second. The higher, the better the quality (for example, 44100 samples/sec is CD quality). This function uses its own thread so that it doesn't block the rest of the program while the capture runs. Please note that only one capture can happen at the same time.
 	 * 
 	 * Params:
 	 * 		sampleRate =	Desired capture rate, in number of samples per second
@@ -130,8 +125,7 @@ class SoundRecorder
 	/**
 	 * Get the sample rate in samples per second.
 	 * 
-	 * The sample rate defines the number of audio samples captured per second.
-	 * The higher, the better the quality (for example, 44100 samples/sec is CD quality).
+	 * The sample rate defines the number of audio samples captured per second. The higher, the better the quality (for example, 44100 samples/sec is CD quality).
 	 */
 	@property
 	{
@@ -144,8 +138,7 @@ class SoundRecorder
 	/**
 	 * Check if the system supports audio capture.
 	 * 
-	 * This function should always be called before using the audio capture features. 
-	 * If it returns false, then any attempt to use SoundRecorder or one of its derived classes will fail.
+	 * This function should always be called before using the audio capture features. If it returns false, then any attempt to use SoundRecorder or one of its derived classes will fail.
 	 * 
 	 * Returns: True if audio capture is supported, false otherwise
 	 */
@@ -159,8 +152,7 @@ class SoundRecorder
 		/**
 		 * Start capturing audio data.
 		 * 
-		 * This virtual function may be overriden by a derived class if something has to be done every time a new capture starts. 
-		 * If not, this function can be ignored; the default implementation does nothing.
+		 * This virtual function may be overriden by a derived class if something has to be done every time a new capture starts. If not, this function can be ignored; the default implementation does nothing.
 		 * 
 		 * Returns: True to the start the capture, or false to abort it.
 		 */
@@ -169,8 +161,7 @@ class SoundRecorder
 		/**
 		 * Process a new chunk of recorded samples.
 		 * 
-		 * This virtual function is called every time a new chunk of recorded data is available. 
-		 * The derived class can then do whatever it wants with it (storing it, playing it, sending it over the network, etc.).
+		 * This virtual function is called every time a new chunk of recorded data is available. The derived class can then do whatever it wants with it (storing it, playing it, sending it over the network, etc.).
 		 * 
 		 * Params:
 		 * 		samples =	Array of the new chunk of recorded samples
@@ -182,8 +173,7 @@ class SoundRecorder
 		/**
 		 * Stop capturing audio data.
 		 * 
-		 * This virtual function may be overriden by a derived class if something has to be done every time the capture ends. 
-		 * If not, this function can be ignored; the default implementation does nothing.
+		 * This virtual function may be overriden by a derived class if something has to be done every time the capture ends. If not, this function can be ignored; the default implementation does nothing.
 		 */
 		abstract void onStop();
 

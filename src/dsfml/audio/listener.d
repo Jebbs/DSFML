@@ -49,8 +49,8 @@ import dsfml.system.vector3;
 final abstract class Listener
 {
 	/** 
-	 * The orientation of the listener in the scene.
-	 * The orientation defines the 3D axes of the listener (left, up, front) in the scene. The orientation vector doesn't have to be normalized. 
+	 * The orientation of the listener in the scene. The orientation defines the 3D axes of the listener (left, up, front) in the scene. The orientation vector doesn't have to be normalized. 
+	 * 
 	 * The default listener's orientation is (0, 0, -1).
 	 */
 	@property
@@ -71,8 +71,8 @@ final abstract class Listener
 	}
 
 	/** 
-	 * The global volume of all the sounds and musics.
-	 * The volume is a number between 0 and 100; it is combined with the individual volume of each sound / music. 
+	 * The global volume of all the sounds and musics. The volume is a number between 0 and 100; it is combined with the individual volume of each sound / music. 
+	 * 
 	 * The default value for the volume is 100 (maximum).
 	 */
 	@property

@@ -67,8 +67,7 @@ class SoundBufferRecorder:SoundRecorder
 	/**
 	 * Get the sound buffer containing the captured audio data.
 	 * 
-	 * The sound buffer is valid only after the capture has ended. 
-	 * This function provides a read-only access to the internal sound buffer, but it can be copied if you need to make any modification to it.
+	 * The sound buffer is valid only after the capture has ended. This function provides a read-only access to the internal sound buffer, but it can be copied if you need to make any modification to it.
 	 * 
 	 * Returns: Read-only access to the sound buffer
 	 */
