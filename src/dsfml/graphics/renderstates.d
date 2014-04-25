@@ -159,6 +159,7 @@ struct RenderStates
 		}
 	}
 
+	@property
 	static RenderStates Default()
 	{
 		RenderStates temp;//make a static variable?

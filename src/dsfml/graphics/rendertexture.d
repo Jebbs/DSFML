@@ -119,9 +119,9 @@ class RenderTexture:RenderTarget
 		}
 	}
 
-	const(View) getDefaultView() const
+	View getDefaultView() const
 	{
-		return new View( sfRenderTexture_getDefaultView(sfPtr));
+		return new View(sfRenderTexture_getDefaultView(sfPtr));
 	}
 
 	Vector2u getSize() const
@@ -158,7 +158,7 @@ class RenderTexture:RenderTarget
 		sfRenderTexture_display(sfPtr);
 	}
 
-	override void draw(Drawable drawable, RenderStates states = RenderStates.Default())
+	override void draw(Drawable drawable, RenderStates states = RenderStates.Default)
 	{
 		//Confirms that even a blank render states struct won't break anything during drawing
 		if(states.texture is null)
@@ -173,7 +173,7 @@ class RenderTexture:RenderTarget
 		drawable.draw(this, states);
 	}
 	
-	override void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default())
+	override void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default)
 	{
 		import std.algorithm;
 		
