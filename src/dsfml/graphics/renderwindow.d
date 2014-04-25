@@ -240,7 +240,7 @@ class RenderWindow:Window,RenderTarget
 		sfRenderWindow_display(sfPtr);
 	}
 
-	void draw(Drawable drawable, RenderStates states = RenderStates.Default())
+	void draw(Drawable drawable, RenderStates states = RenderStates.Default)
 	{
 		//Confirms that even a blank render states struct won't break anything during drawing
 		if(states.texture is null)
@@ -255,7 +255,7 @@ class RenderWindow:Window,RenderTarget
 		drawable.draw(this,states);
 	}
 	
-	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default())
+	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default)
 	{
 		import std.algorithm;
 		//Confirms that even a blank render states struct won't break anything during drawing

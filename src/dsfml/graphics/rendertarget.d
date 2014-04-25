@@ -59,9 +59,9 @@ interface RenderTarget
 
 	void clear(Color color = Color.Black);
 
-	void draw(Drawable drawable, RenderStates states = RenderStates.Default());
+	void draw(Drawable drawable, RenderStates states = RenderStates.Default);
 	
-	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default());
+	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default);
 
 	Vector2f mapPixelToCoords(Vector2i point) const;
 
