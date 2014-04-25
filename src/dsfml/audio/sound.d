@@ -72,7 +72,7 @@ class Sound : SoundSource
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		//stop the sound
 		stop();
 

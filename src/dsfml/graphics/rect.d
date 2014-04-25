@@ -58,7 +58,7 @@ struct Rect(T)
 		height = size.y;
 	}
 
-	bool contains(E)(E X, E Y)
+	bool contains(E)(E X, E Y) const
 		if(isNumeric!(E))
 	{
 		if(left <= X && X<= (left + width))
@@ -78,7 +78,7 @@ struct Rect(T)
 		}
 	}
 
-	bool contains(E)(Vector2!(E) point)
+	bool contains(E)(Vector2!(E) point) const
 		if(isNumeric!(E))
 	{
 		if(left <= point.x && point.x<= (left + width))
@@ -98,15 +98,15 @@ struct Rect(T)
 		}
 	}
 	
-	bool intersects(E)(Rect!(E) rectangle)
-		if(isNumeric!(E))
+	bool intersects(E)(Rect!(E) rectangle) const
+	if(isNumeric!(E))
 	{
 		Rect!(T) rect;
 		
 		return intersects(rectangle, rect);
 	}
 	
-	bool intersects(E,O)(Rect!(E) rectangle, out Rect!(O) intersection)
+	bool intersects(E,O)(Rect!(E) rectangle, out Rect!(O) intersection) const
 		if(isNumeric!(E) && isNumeric!(O))
 	{
 		O interLeft = intersection.max(left, rectangle.left);
@@ -124,6 +124,12 @@ struct Rect(T)
 			intersection = Rect!(O)(0, 0, 0, 0);
 			return false;
 		}
+	}
+
+	bool opEquals(E)(const Rect!(E) otherRect) const
+		if(isNumeric!(E))
+	{
+		return ((left == otherRect.left) && (top == otherRect.top) && (width == otherRect.width) && (height == otherRect.height) );
 	}
 
 	string toString()
@@ -156,6 +162,37 @@ struct Rect(T)
 		}
 	}
 
+}
+
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+
+		writeln("Unit test for Rect");
+
+		auto rect1 = IntRect(0,0,100,100);
+		auto rect2 = IntRect(10,10,100,100);
+		auto rect3 = IntRect(10,10,10,10);
+		auto point = Vector2f(-20,-20);
+
+
+
+		assert(rect1.intersects(rect2));
+
+		FloatRect interRect;
+
+		rect1.intersects(rect2, interRect);
+
+		assert(interRect == IntRect(10,10, 90, 90));
+
+		assert(rect1.contains(10,10));
+
+		assert(!rect1.contains(point));
+
+		writeln();
+	}
 }
 
 alias Rect!(int) IntRect;

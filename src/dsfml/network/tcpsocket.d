@@ -35,11 +35,7 @@ import dsfml.network.ipaddress;
 import dsfml.network.packet;
 
 import dsfml.system.time;
-
 import dsfml.system.err;
-
-
-
 
 class TcpSocket:Socket
 {
@@ -53,7 +49,7 @@ class TcpSocket:Socket
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfTcpSocket_destroy(sfPtr);
 	}
 

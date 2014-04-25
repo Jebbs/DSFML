@@ -7,7 +7,7 @@ class ConvexShape:Shape
 {
 	private Vector2f[] m_points;
 
-	this(uint thePointCount)
+	this(uint thePointCount = 0)
 	{
 		this.pointCount = thePointCount;
 		update();
@@ -16,7 +16,7 @@ class ConvexShape:Shape
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 	}
 
 	@property
@@ -62,7 +62,7 @@ unittest
 		writeln("Unit test for ConvexShape");
 		auto window = new RenderWindow(VideoMode(800,600), "ConvexShape unittest");
 		
-		auto convexShape = new ConvexShape(6);
+		auto convexShape = new ConvexShape();
 
 		convexShape.addPoint(Vector2f(0,20));
 		convexShape.addPoint(Vector2f(10,10));
@@ -88,7 +88,7 @@ unittest
 			}
 			
 			//draws the shape for a while before closing the window
-			if(clock.getElapsedTime().asSeconds >5)
+			if(clock.getElapsedTime().asSeconds >1)
 			{
 				window.close();
 			}

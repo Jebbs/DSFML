@@ -36,8 +36,6 @@ import dsfml.network.socket;
 
 import dsfml.system.err;
 
-
-
 class UdpSocket:Socket
 {
 	sfUdpSocket* sfPtr;
@@ -52,7 +50,7 @@ class UdpSocket:Socket
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfUdpSocket_destroy(sfPtr);
 	}
 

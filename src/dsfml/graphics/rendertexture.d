@@ -62,7 +62,7 @@ class RenderTexture:RenderTarget
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfRenderTexture_destroy(sfPtr);
 	}
 
@@ -236,6 +236,33 @@ class RenderTexture:RenderTarget
 	}
 }
 
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+		import dsfml.graphics.sprite;
+
+		writeln("Unit tests for RenderTexture");
+
+		auto renderTexture = new RenderTexture();
+
+		assert(renderTexture.create(100,100));
+
+		Sprite testSprite = new Sprite();//doesn't need a texture for this unit test
+
+		//clear before doing anything
+		renderTexture.clear();
+
+		renderTexture.draw(testSprite);
+
+		//prepare the RenderTexture for usage after drawing
+		renderTexture.display();
+
+		writeln();
+
+	}
+}
 
 package extern(C) struct sfRenderTexture;
 

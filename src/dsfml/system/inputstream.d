@@ -42,7 +42,8 @@ interface InputStream
 }
 
 unittest
-{version(DSFML_Unittest_System)
+{
+	version(DSFML_Unittest_System)
 	{
 		import dsfml.graphics.texture;
 		import std.stdio;
@@ -134,35 +135,34 @@ unittest
 				}
 			}
 		}
+	
+
+
+
+		writeln("Unit test for InputStream");
+
+		auto streamTexture = new Texture();
+
+		writeln();
+		writeln("Using a basic file stream to load a non existant texture to confirm correct errors are found.");
+
+
+		auto failStream = new FileStream();
+		failStream.open("nonexistantTexture.png");//doesn't open the stream, but you should be checking if open returns true
+		streamTexture.loadFromStream(failStream);//prints errors to err
+
+		writeln();
+		writeln("Using a basic file stream to load a texture that exists.");
+		auto successStream = new FileStream();
+		successStream.open("Crono.png");//using a png of Crono for now. Will replace with something that won't get me in trouble
+		if(streamTexture.loadFromStream(successStream))
+		{
+			writeln("Texture loaded!");
+		}
+
+		writeln();
+
 	}
-
-
-
-	writeln("Unit test for InputStream");
-
-	auto streamTexture = new Texture();
-
-	writeln();
-	writeln("Using a basic file stream to load a non existant texture to confirm correct errors are found.");
-
-
-	auto failStream = new FileStream();
-	failStream.open("nonexistantTexture.png");//doesn't open the stream, but you should be checking if open returns true
-	streamTexture.loadFromStream(failStream);//prints errors to err
-
-	writeln();
-	writeln("Using a basic file stream to load a texture that exists.");
-	auto successStream = new FileStream();
-	successStream.open("Crono.png");//using a png of Crono for now. Will replace with something that won't get me in trouble
-	if(streamTexture.loadFromStream(successStream))
-	{
-		writeln("Texture loaded!");
-	}
-
-	writeln();
-
-
-
 }
 
 
