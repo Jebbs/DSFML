@@ -86,8 +86,6 @@ class Window
 		sfWindow_destroy(sfPtr);
 	}
 
-
-
 	@property
 	{
 		Vector2i position(Vector2i newPosition)

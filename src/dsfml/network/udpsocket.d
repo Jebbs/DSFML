@@ -36,8 +36,6 @@ import dsfml.network.socket;
 
 import dsfml.system.err;
 
-
-
 class UdpSocket:Socket
 {
 	sfUdpSocket* sfPtr;

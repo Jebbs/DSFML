@@ -161,6 +161,28 @@ class Font
 
 }
 
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+
+		import dsfml.graphics.text;
+
+		writeln("Unitest for Font");
+
+		auto font = new Font();
+		assert(font.loadFromFile("res/unifont_upper.ttf"));
+
+		Text text;
+		text = new Text("Sample String", font);
+
+
+		//draw text or something
+
+		writeln();
+	}
+}
 
 
 private:

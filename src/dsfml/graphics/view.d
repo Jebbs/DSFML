@@ -143,6 +143,45 @@ class View
 	}
 }
 
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+
+		import dsfml.graphics.rendertexture;
+
+		writeln("Unit test for View");
+
+		//the portion of the screen the view is displaying is at position (0,0) with a width of 100 and a height of 100
+		auto view = new View(FloatRect(0,0,100,100));
+
+		//the portion of the screen the view is displaying is at position (0,0) and takes up the remaining size of the screen.(expressed as a ratio)
+		view.viewport = FloatRect(0,0,1,1);
+
+		auto renderTexture = new RenderTexture();
+		
+		assert(renderTexture.create(1000,1000));
+
+		renderTexture.clear();
+
+		//set the view of the renderTexture
+		renderTexture.view = view;
+
+		//draw some things using this view
+
+		//get it ready for rendering
+		renderTexture.display();
+
+
+
+
+
+		writeln();
+	}
+}
+
+
 package extern(C) struct sfView;
 
 private extern(C):

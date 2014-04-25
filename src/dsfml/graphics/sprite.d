@@ -192,3 +192,34 @@ class Sprite:Drawable,Transformable
 	}
 
 }
+
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+
+		import dsfml.graphics.rendertexture;
+
+		writeln("Unit test for Sprite");
+
+		auto texture = new Texture();
+
+		assert(texture.loadFromFile("res/star.png"));
+
+		auto sprite = new Sprite(texture);
+
+
+		auto renderTexture = new RenderTexture();
+
+		assert(renderTexture.create(100,100));
+
+		renderTexture.clear();
+
+		renderTexture.draw(sprite);
+
+		renderTexture.display();
+
+		writeln();
+	}
+}

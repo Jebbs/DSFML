@@ -245,6 +245,11 @@ class Shader
 	}
 }
 
+unittest
+{
+	//find some examples of interesting shaders and use them here
+}
+
 package extern(C):
 struct sfShader;
 

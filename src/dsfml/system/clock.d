@@ -32,7 +32,6 @@ module dsfml.system.clock;
 
 public import dsfml.system.time;
 
-
 class Clock
 {
 	package sfClock* sfPtr;

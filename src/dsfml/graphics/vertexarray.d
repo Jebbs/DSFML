@@ -129,3 +129,49 @@ class VertexArray:Drawable
 		return Vertices[index];
 	}
 }
+
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+		import dsfml.graphics.texture;
+		import dsfml.graphics.rendertexture;
+		import dsfml.graphics.color;
+
+		writeln("Unit test for VertexArray");
+
+		auto texture = new Texture();
+
+		assert(texture.loadFromFile("res/star.png"));
+
+
+
+		auto dimensions = FloatRect(0,0,texture.getSize().x,texture.getSize().y);
+
+		auto vertexArray = new VertexArray(PrimitiveType.Quads, 0);
+
+		//Creates a vertex array at position (0,0) the width and height of the loaded texture
+		vertexArray.append(Vertex(Vector2f(dimensions.left,dimensions.top), Color.Blue, Vector2f(dimensions.left,dimensions.top)));
+		vertexArray.append(Vertex(Vector2f(dimensions.left,dimensions.height), Color.Blue, Vector2f(dimensions.left,dimensions.height)));
+		vertexArray.append(Vertex(Vector2f(dimensions.width,dimensions.height), Color.Blue, Vector2f(dimensions.width,dimensions.height)));
+		vertexArray.append(Vertex(Vector2f(dimensions.width,dimensions.top), Color.Blue, Vector2f(dimensions.width,dimensions.top)));
+
+
+		auto renderStates = RenderStates(texture);
+
+
+		auto renderTexture = new RenderTexture();
+		
+		assert(renderTexture.create(100,100));
+
+		renderTexture.clear();
+
+		//draw the VertexArray with the texture we loaded
+		renderTexture.draw(vertexArray, renderStates);
+
+		renderTexture.display();
+
+		writeln();
+	}
+}

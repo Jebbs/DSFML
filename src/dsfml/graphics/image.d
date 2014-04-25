@@ -201,6 +201,39 @@ class Image
 	}
 }
 
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+
+		writeln("Unit test for Image");
+
+		auto image = new Image();
+
+		assert(image.create(100,100,Color.Blue));
+
+		assert(image.getPixel(0,0) == Color.Blue);
+
+		image.setPixel(0,0,Color.Green);
+
+		assert(image.getPixel(0,0) == Color.Green);
+
+
+		image.flipHorizontally();
+
+		assert(image.getPixel(99,0) == Color.Green);
+
+		image.flipVertically();
+
+		assert(image.getPixel(99,99) == Color.Green);
+
+		assert(image.getSize() == Vector2u(100,100));
+
+		writeln();
+	}
+}
+
 
 private extern(C++) interface sfmlInputStream
 {

@@ -35,11 +35,7 @@ import dsfml.network.ipaddress;
 import dsfml.network.packet;
 
 import dsfml.system.time;
-
 import dsfml.system.err;
-
-
-
 
 class TcpSocket:Socket
 {

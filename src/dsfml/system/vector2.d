@@ -147,6 +147,7 @@ return Vector2!(T)(0,0);
 	
 	//Compare operator
 	bool opEquals(E)(const Vector2!(E) otherVector) const
+	if(isNumeric!(E))
 	{
 		return ((x == otherVector.x) && (y == otherVector.y));
 	}

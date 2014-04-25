@@ -197,6 +197,24 @@ class Texture
 	}
 }
 
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+		
+		writeln("Unit test for Texture");
+
+		auto texture = new Texture();
+
+		assert(texture.loadFromFile("res/star.png"));
+
+		//do things with the texture
+
+		writeln();
+	}
+}
+
 private extern(C++) interface sfmlInputStream
 {
 	long read(void* data, long size);
