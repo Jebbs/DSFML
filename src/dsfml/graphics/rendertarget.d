@@ -51,7 +51,7 @@ interface RenderTarget
 		const(View) view() const;
 	}  
 
-	const(View) getDefaultView() const;
+	View getDefaultView() const;
 
 	Vector2u getSize() const;
 

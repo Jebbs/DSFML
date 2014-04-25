@@ -135,7 +135,7 @@ class RenderWindow:Window,RenderTarget
 		}
 	}
 
-	const(View) getDefaultView() const
+	View getDefaultView() const
 	{
 		return new View(sfRenderWindow_getDefaultView(sfPtr));
 	}

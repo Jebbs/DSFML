@@ -119,9 +119,9 @@ class RenderTexture:RenderTarget
 		}
 	}
 
-	const(View) getDefaultView() const
+	View getDefaultView() const
 	{
-		return new View( sfRenderTexture_getDefaultView(sfPtr));
+		return new View(sfRenderTexture_getDefaultView(sfPtr));
 	}
 
 	Vector2u getSize() const
