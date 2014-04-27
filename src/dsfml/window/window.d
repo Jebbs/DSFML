@@ -82,11 +82,9 @@ class Window
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfWindow_destroy(sfPtr);
 	}
-
-
 
 	@property
 	{

@@ -74,7 +74,7 @@ class Sprite:Drawable,Transformable
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		
 	}
 	
@@ -191,4 +191,35 @@ class Sprite:Drawable,Transformable
 		m_vertices[3].texCoords = Vector2f(right, top);
 	}
 
+}
+
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+
+		import dsfml.graphics.rendertexture;
+
+		writeln("Unit test for Sprite");
+
+		auto texture = new Texture();
+
+		assert(texture.loadFromFile("res/star.png"));
+
+		auto sprite = new Sprite(texture);
+
+
+		auto renderTexture = new RenderTexture();
+
+		assert(renderTexture.create(100,100));
+
+		renderTexture.clear();
+
+		renderTexture.draw(sprite);
+
+		renderTexture.display();
+
+		writeln();
+	}
 }

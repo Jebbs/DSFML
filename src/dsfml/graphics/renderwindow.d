@@ -29,40 +29,29 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 */
 module dsfml.graphics.renderwindow;
 
-import dsfml.window.window;
-import dsfml.window.windowhandle;
-import dsfml.window.event;
-import dsfml.graphics.rendertarget;
-import dsfml.graphics.view;
-
-import dsfml.graphics.text;
-import dsfml.graphics.texture;
-import dsfml.graphics.shader;
-
+import dsfml.graphics.color;
 import dsfml.graphics.image;
+import dsfml.graphics.rect;
 
 import dsfml.graphics.drawable;
-import dsfml.graphics.renderstates;
-
-import dsfml.graphics.vertex;
 import dsfml.graphics.primitivetype;
+import dsfml.graphics.renderstates;
+import dsfml.graphics.rendertarget;
+import dsfml.graphics.shader;
+import dsfml.graphics.text;
+import dsfml.graphics.texture;
+import dsfml.graphics.view;
+import dsfml.graphics.vertex;
 
-import dsfml.window.videomode;
+
 import dsfml.window.contextsettings;
-
-import dsfml.system.vector2;
-
-import dsfml.graphics.rect;
-import dsfml.graphics.color;
-
-
-
-
+import dsfml.window.windowhandle;
+import dsfml.window.event;
+import dsfml.window.window;
+import dsfml.window.videomode;
 
 import dsfml.system.err;
-
-
-
+import dsfml.system.vector2;
 
 class RenderWindow:Window,RenderTarget
 {
@@ -98,7 +87,7 @@ class RenderWindow:Window,RenderTarget
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfRenderWindow_destroy(sfPtr);
 	}
 
@@ -146,7 +135,7 @@ class RenderWindow:Window,RenderTarget
 		}
 	}
 
-	const(View) getDefaultView() const
+	View getDefaultView() const
 	{
 		return new View(sfRenderWindow_getDefaultView(sfPtr));
 	}
@@ -251,7 +240,7 @@ class RenderWindow:Window,RenderTarget
 		sfRenderWindow_display(sfPtr);
 	}
 
-	void draw(Drawable drawable, RenderStates states = RenderStates.Default())
+	void draw(Drawable drawable, RenderStates states = RenderStates.Default)
 	{
 		//Confirms that even a blank render states struct won't break anything during drawing
 		if(states.texture is null)
@@ -266,7 +255,7 @@ class RenderWindow:Window,RenderTarget
 		drawable.draw(this,states);
 	}
 	
-	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default())
+	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default)
 	{
 		import std.algorithm;
 		//Confirms that even a blank render states struct won't break anything during drawing
@@ -383,6 +372,92 @@ class RenderWindow:Window,RenderTarget
 		return temp.getWindowPtr(window); 
 	}
 
+}
+
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+		import dsfml.graphics.image;
+		import dsfml.system.clock;
+		import dsfml.graphics.sprite;
+
+		writeln("Unit test for RenderWindow");
+
+		//constructor
+		auto window = new RenderWindow(VideoMode(800,600),"Test Window");
+		
+		//perform each window call
+		Vector2u windowSize = window.size;
+		
+		windowSize.x = 1000;
+		windowSize.y = 1000;
+		
+		window.size = windowSize;
+		
+		Vector2i windowPosition = window.position;
+		
+		windowPosition.x = 100;
+		windowPosition.y = 100;
+		
+		window.position = windowPosition;
+		
+		window.setTitle("thing");//uses the first set title
+		
+		window.setTitle("素晴らしい ！"d);//forces the dstring override and uses unicode
+		
+		window.setActive(true);
+		
+		window.setJoystickThreshhold(1);
+		
+		window.setVisible(true);
+		
+		window.setFramerateLimit(60);
+		
+		window.setMouseCursorVisible(true);
+		
+		window.setVerticalSyncEnabled(true);
+		
+		auto settings = window.getSettings();
+		
+		auto image = new Image();
+		image.loadFromFile("res/star.png");//replace with something that won't get me in trouble
+		
+		window.setIcon(image.getSize().x,image.getSize().x,image.getPixelArray());
+
+		auto texture = new Texture();
+
+		texture.loadFromImage(image);
+
+		auto sprite = new Sprite(texture);
+
+		auto clock = new Clock();
+
+		while(window.isOpen())
+		{
+			Event event;
+			if(window.pollEvent(event))
+			{
+				//no events
+			}
+
+			if(clock.getElapsedTime().asSeconds()>1)
+			{
+				window.close();
+			}
+
+			window.clear();
+			
+			window.draw(sprite);
+			
+			window.display();
+
+		}
+
+
+		writeln();
+	}
 }
 
 alias toUTF32z = std.utf.toUTFz!(const(dchar)*);

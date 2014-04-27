@@ -97,7 +97,7 @@ class Text:Drawable,Transformable
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 	}
 
 	uint getCharacterSize() const
@@ -376,3 +376,32 @@ private:
 	}
 }
 
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+		import dsfml.graphics.rendertexture;
+
+		writeln("Unit test for Font");
+
+		auto renderTexture = new RenderTexture();
+		
+		assert(renderTexture.create(100,100));
+
+		auto font = new Font();
+		assert(font.loadFromFile("res/unifont_upper.ttf"));
+
+		Text text;
+		text = new Text("Sample String", font);
+
+
+		renderTexture.clear();
+
+		renderTexture.draw(text);
+
+		renderTexture.display();
+
+		writeln();
+	}
+}

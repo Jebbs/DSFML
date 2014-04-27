@@ -45,7 +45,7 @@ class RectangleShape:Shape
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 	}
 
 	@property
@@ -93,7 +93,7 @@ unittest
 		writeln("Unit test for RectangleShape");
 		auto window = new RenderWindow(VideoMode(800,600), "RectangleShape unittest");
 		
-		auto rectangleShape = new RectangleShape(Vector2(10, 20));
+		auto rectangleShape = new RectangleShape(Vector2f(10, 20));
 		
 		rectangleShape.fillColor = Color.Blue;
 		
@@ -112,7 +112,7 @@ unittest
 			}
 			
 			//draws the shape for a while before closing the window
-			if(clock.getElapsedTime().asSeconds >5)
+			if(clock.getElapsedTime().asSeconds() >1)
 			{
 				window.close();
 			}

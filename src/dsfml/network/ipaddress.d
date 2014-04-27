@@ -100,6 +100,33 @@ struct IpAddress
 	}
 }
 
+unittest
+{
+	version(DSFML_Unittest_Network)
+	{
+		import std.stdio;
+		
+		writeln("Unittest for IpAdress");
+
+
+		IpAddress address1;
+
+		assert(address1 == IpAddress.None);
+
+		assert(IpAddress.LocalHost == IpAddress("127.0.0.1"));
+
+		IpAddress googleIP = IpAddress("google.com");
+
+		writeln("Google's Ip address: ",googleIP.toString());
+
+		writeln("Your local Ip Address: ", IpAddress.getLocalAddress());
+
+		writeln("Your public Ip Address: ", IpAddress.getPublicAddress());
+
+		writeln();
+	}
+}
+
 private extern(C):
 //Note: These functions rely on passing an existing array for the ipAddress.
 

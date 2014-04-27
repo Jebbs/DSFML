@@ -323,3 +323,7 @@ class Shape:Drawable,Transformable
 	}
 }
 
+unittest
+{
+	//meant to be inherited. Unit test?
+}

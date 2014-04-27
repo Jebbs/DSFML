@@ -32,7 +32,6 @@ module dsfml.system.clock;
 
 public import dsfml.system.time;
 
-
 class Clock
 {
 	package sfClock* sfPtr;
@@ -50,7 +49,7 @@ class Clock
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfClock_destroy(sfPtr);
 	}
 	

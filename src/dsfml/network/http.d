@@ -52,7 +52,7 @@ class Http
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfHttp_destroy(sfPtr);
 	}
 	
@@ -66,7 +66,7 @@ class Http
 		return new Response(sfHttp_sendRequest(sfPtr,request.sfPtrRequest,timeout.asMicroseconds()));
 	}
 	
-	class Request
+	static class Request
 	{
 		enum Method
 		{
@@ -184,6 +184,38 @@ class Http
 	}
 }
 
+unittest
+{
+	version(DSFML_Unittest_Network)
+	{
+		import std.stdio;
+		
+		writeln("Unittest for Http");
+
+		auto http = new Http();
+
+		http.setHost("http://www.sfml-dev.org");
+		
+		// Prepare a request to get the 'features.php' page
+		auto request = new Http.Request("resources.php");
+
+		// Send the request
+		auto response = http.sendRequest(request);
+
+		// Check the status code and display the result
+		auto status = response.getStatus();
+
+		if (status == Http.Response.Status.Ok)
+		{
+			writeln(response.getBody());
+		}
+		else
+		{
+			writeln("Error ", status);
+		}   
+		writeln();
+	}
+}
 
 private extern(C):
 

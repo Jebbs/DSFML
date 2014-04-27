@@ -68,7 +68,7 @@ class Shader
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfShader_destroy(sfPtr);
 	}
 	
@@ -243,6 +243,11 @@ class Shader
 		err.write(text(sfErrGraphics_getOutput()));
 		return toReturn;
 	}
+}
+
+unittest
+{
+	//find some examples of interesting shaders and use them here
 }
 
 package extern(C):

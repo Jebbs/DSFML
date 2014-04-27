@@ -53,7 +53,7 @@ class Ftp
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfFtp_destroy(sfPtr);
 	}
 
@@ -270,8 +270,76 @@ class Ftp
 		}
 	}
 }
+unittest
+{
+	version(DSFML_Unittest_Network)
+	{
+		import std.stdio;
+		import dsfml.system.err;
+
+		writeln("Unittest for Ftp");
+
+		auto ftp = new Ftp();
+
+		auto responce = ftp.connect("ftp.digitalmars.com");
+
+		if(responce.isOk())
+		{
+			writeln("Connected! Huzzah!");
+		}
+		else
+		{
+			writeln("Uh-oh");
+			writeln(responce.getStatus());
+			assert(0);
+		}
+
+		//annonymous log in
+		responce = ftp.login();
+		if(responce.isOk())
+		{
+			writeln("Logged in! Huzzah!");
+		}
+		else
+		{
+			writeln("Uh-oh");
+			writeln(responce.getStatus());
+			assert(0);
+		}
 
 
+		auto directory = ftp.getWorkingDirectory();
+		if (directory.isOk())
+		{
+			writeln("Working directory: ", directory.getDirectory());
+		}
+
+		auto listing = ftp.getDirectoryListing();
+
+		if(listing.isOk())
+		{
+			const(string[]) list = listing.getFilenames();
+
+			size_t length;
+
+			if(list.length > 10)
+			{
+				length = 10;
+			}
+			else
+			{
+				length = list.length;
+			}
+
+			for(int i= 0; i < length; ++i)
+			{
+				writeln(list[i]);
+			}
+		}
+
+		writeln();
+	}
+}
 
 private extern(C):
 

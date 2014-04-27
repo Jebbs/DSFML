@@ -56,7 +56,7 @@ class Image
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfImage_destroy(sfPtr);
 	}
 	
@@ -198,6 +198,39 @@ class Image
 		bool toReturn = sfImage_saveToFile(sfPtr, fileName.ptr);
 		err.write(text(sfErrGraphics_getOutput()));
 		return toReturn;
+	}
+}
+
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+
+		writeln("Unit test for Image");
+
+		auto image = new Image();
+
+		assert(image.create(100,100,Color.Blue));
+
+		assert(image.getPixel(0,0) == Color.Blue);
+
+		image.setPixel(0,0,Color.Green);
+
+		assert(image.getPixel(0,0) == Color.Green);
+
+
+		image.flipHorizontally();
+
+		assert(image.getPixel(99,0) == Color.Green);
+
+		image.flipVertically();
+
+		assert(image.getPixel(99,99) == Color.Green);
+
+		assert(image.getSize() == Vector2u(100,100));
+
+		writeln();
 	}
 }
 

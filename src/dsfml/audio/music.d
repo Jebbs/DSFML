@@ -152,7 +152,7 @@ class Music : SoundStream
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		stop();
 	}
 
@@ -252,7 +252,7 @@ unittest
 		auto music = new Music();
 
 		//TODO: update this for a real unit test users can run themselves.
-		if(!music.openFromFile("hal1.ogg"))
+		if(!music.openFromFile("res/hal1.ogg"))
 		{
 			return;
 		}

@@ -36,8 +36,6 @@ import dsfml.network.socket;
 
 import dsfml.system.err;
 
-
-
 class UdpSocket:Socket
 {
 	sfUdpSocket* sfPtr;
@@ -52,7 +50,7 @@ class UdpSocket:Socket
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfUdpSocket_destroy(sfPtr);
 	}
 
@@ -112,7 +110,7 @@ class UdpSocket:Socket
 		return status;
 	}
 
-	Status receive(Packet packet, IpAddress address, out ushort port)
+	Status receive(Packet packet, out IpAddress address, out ushort port)
 	{
 		//temporary packet to be removed on function exit
 		scope Packet temp = new Packet();
@@ -131,6 +129,47 @@ class UdpSocket:Socket
 		sfUdpSocket_unbind(sfPtr);
 	}
 	
+}
+
+unittest
+{
+	version(DSFML_Unittest_Network)
+	{
+		import std.stdio;
+		
+		writeln("Unittest for Udp Socket");
+
+		auto clientSocket = new UdpSocket();
+
+		//bind this socket to this port for receiving data
+		clientSocket.bind(56001);
+
+		auto serverSocket = new UdpSocket();
+
+		serverSocket.bind(56002);
+
+
+		auto sendingPacket = new Packet();
+
+		sendingPacket.writeString("I sent you data!");
+
+		//send the data to the port our server is listening to
+		clientSocket.send(sendingPacket, IpAddress.LocalHost, 56002);
+
+
+		IpAddress receivedFrom;
+		ushort receivedPort;
+		auto receivedPacket = new Packet();
+
+		//get the information received as well as information about the sender
+		serverSocket.receive(receivedPacket,receivedFrom, receivedPort);
+
+		//What did we get?!
+		writeln("The data received from ", receivedFrom.toString(), " at port ", receivedPort, " was: ", receivedPacket.readString());
+
+
+		writeln();
+	}
 }
 
 private extern(C):

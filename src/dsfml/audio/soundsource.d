@@ -77,7 +77,7 @@ class SoundSource
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfSoundSource_destroy(&m_source);
 	}
 

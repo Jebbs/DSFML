@@ -57,7 +57,7 @@ class Texture
 	~this()
 	{
 		debug import dsfml.system.config;
-		mixin(destructorOutput);
+		debug mixin(destructorOutput);
 		sfTexture_destroy( sfPtr);	
 	}
 	
@@ -194,6 +194,24 @@ class Texture
 	void updateFromWindow(RenderWindow window, uint x, uint y)
 	{
 		sfTexture_updateFromRenderWindow(sfPtr, window.sfPtr, x, y);
+	}
+}
+
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+		
+		writeln("Unit test for Texture");
+
+		auto texture = new Texture();
+
+		assert(texture.loadFromFile("res/star.png"));
+
+		//do things with the texture
+
+		writeln();
 	}
 }
 
