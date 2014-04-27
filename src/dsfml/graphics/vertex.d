@@ -32,11 +32,27 @@ module dsfml.graphics.vertex;
 import dsfml.graphics.color;
 import dsfml.system.vector2;
 
+/++
+ + Define a point with color and texture coordinates.
+ + 
+ + A vertex is an improved point.
+ + 
+ + It has a position and other extra attributes that will be used for drawing: in SFML, vertices also have a color and a pair of texture coordinates.
+ + 
+ + The vertex is the building block of drawing. Everything which is visible on screen is made of vertices. They are grouped as 2D primitives (triangles, quads, ...), and these primitives are grouped to create even more complex 2D entities such as sprites, texts, etc.
+ + 
+ + If you use the graphical entities of SFML (sprite, text, shape) you won't have to deal with vertices directly. But if you want to define your own 2D entities, such as tiled maps or particle systems, using vertices will allow you to get maximum performances.
+ + 
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Vertex.php#details
+ +/
 struct Vertex
 {
-	
+	/// 2D position of the vertex
 	Vector2f position = Vector2f(0,0);
+	/// Color of the vertex. Default is White.
 	Color color = Color.White;
+	/// 2D coordinates of the texture's pixel map to the vertex.
 	Vector2f texCoords = Vector2f(0,0);
 	
 	

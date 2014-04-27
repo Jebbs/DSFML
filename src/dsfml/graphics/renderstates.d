@@ -35,6 +35,28 @@ import dsfml.graphics.texture;
 import dsfml.graphics.shader;
 import std.typecons:Rebindable;
 
+/++
+ + Define the states used for drawing to a RenderTarget.
+ + 
+ + There are four global states that can be applied to the drawn objects:
+ + - the blend mode: how pixels of the object are blended with the background
+ + - the transform: how the object is positioned/rotated/scaled
+ + - the texture: what image is mapped to the object
+ + - the shader: what custom effect is applied to the object
+ + 
+ + High-level objects such as sprites or text force some of these states when they are drawn. For example, a sprite will set its own texture, so that you don't have to care about it when drawing the sprite.
+ + 
+ + The transform is a special case: sprites, texts and shapes (and it's a good idea to do it with your own drawable classes too) combine their transform with the one that is passed in the RenderStates structure. So that you can use a "global" transform on top of each object's transform.
+ + 
+ + Most objects, especially high-level drawables, can be drawn directly without defining render states explicitely – the default set of states is ok in most cases.
+ + 
+ + If you want to use a single specific render state, for example a shader, you can pass it directly to the Draw function: RenderStates has an implicit one-argument constructor for each state.
+ + 
+ + When you're inside the Draw function of a drawable object (inherited from sf::Drawable), you can either pass the render states unmodified, or change some of them. For example, a transformable object will combine the current transform with its own transform. A sprite will set its texture. Etc.
+ + 
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1RenderStates.php#details
+ +/
 struct RenderStates
 {
 	BlendMode blendMode;
@@ -118,6 +140,7 @@ struct RenderStates
 		}
 	}
 
+	/// The shader to apply while rendering.
 	@property
 	{
 		const(Shader) shader(const(Shader) theShader)
@@ -138,6 +161,7 @@ struct RenderStates
 		}
 	}
 
+	/// The texture to apply while rendering.
 	@property
 	{
 		const(Texture) texture(const(Texture) theTexture)
@@ -159,6 +183,7 @@ struct RenderStates
 		}
 	}
 
+	/// A default, empty render state.
 	@property
 	static RenderStates Default()
 	{

@@ -32,8 +32,26 @@ module dsfml.graphics.drawable;
 import dsfml.graphics.rendertarget;
 import dsfml.graphics.renderstates;
 
+/++
+ + Abstract base interface for objects that can be drawn to a render target.
+ + 
+ + Drawable is a very simple base interface that allows objects of derived classes to be drawn to a RenderTarget.
+ + 
+ + All you have to do in your derived class is to override the draw virtual function.
+ + 
+ + Note that inheriting from Drawable is not mandatory, but it allows this nice syntax "window.draw(object)" rather than "object.draw(window)", which is more consistent with other SFML classes.
+ + 
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Drawable.php#details
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ +/
 interface Drawable
 {
+	/**
+	 * Draw the object to a render target.
+	 * 
+	 * Params:
+	 *  		renderTarget =	Render target to draw to
+	 *  		renderStates =	Current render states
+	 */
 	void draw(RenderTarget renderTarget, RenderStates renderStates);
-
 }

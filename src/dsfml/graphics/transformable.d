@@ -35,39 +35,80 @@ import dsfml.system.vector2;
 //importing transform when they import transformable
 public import dsfml.graphics.transform; 
 
-
+/++
+ + Decomposed transform defined by a position, a rotation, and a scale.
+ + 
+ + This interface is provided for convenience, on top of Transform.
+ + 
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Transformable.php#details
+ +/
 interface Transformable
 {
+	/**
+	 * The local origin of the object.
+	 * 
+	 * The origin of an object defines the center point for all transformations (position, scale, ratation).
+	 * 
+	 * The coordinates of this point must be relative to the top-left corner of the object, and ignore all transformations (position, scale, rotation). The default origin of a transformable object is (0, 0).
+	 */
 	@property
 	{
 		Vector2f origin(Vector2f newOrigin);
 		Vector2f origin() const;
 	}
 
+	/// The position of the object. The default is (0, 0).
 	@property
 	{
 		Vector2f position(Vector2f newPosition);
 		Vector2f position() const;
 	}
-	
+
+	/// The orientation of the object, in degrees. The default is 0 degrees. 
 	@property
 	{
 		float rotation(float newRotation);
 		float rotation() const;
 	}
-	
+
+	/// The scale factors of the object. The default is (1, 1).
 	@property
 	{
 		Vector2f scale(Vector2f newScale);
 		Vector2f scale() const;
 	}
 
+	/**
+	 * Get the inverse of the combined transform of the object.
+	 * 
+	 * Returns: Inverse of the combined transformations applied to the object.
+	 */
 	const(Transform) getTransform();
-	
+
+	/**
+	 * Get the combined transform of the object.
+	 * 
+	 * Returns: Transform combining the position/rotation/scale/origin of the object.
+	 */
 	const(Transform) getInverseTransform();
 	
 }
 
+/++
+ + Decomposed transform defined by a position, a rotation, and a scale.
+ + 
+ + This template is provided for convenience, on top of Transformable (and Transform).
+ + 
+ + Transform, as a low-level class, offers a great level of flexibility but it is not always convenient to manage. Indeed, one can easily combine any kind of operation, such as a translation followed by a rotation followed by a scaling, but once the result transform is built, there's no way to go backward and, let's say, change only the rotation without modifying the translation and scaling.
+ + 
+ + The entire transform must be recomputed, which means that you need to retrieve the initial translation and scale factors as well, and combine them the same way you did before updating the rotation. This is a tedious operation, and it requires to store all the individual components of the final transform.
+ + 
+ + That's exactly what Transformable was written for: it hides these variables and the composed transform behind an easy to use interface. You can set or get any of the individual components without worrying about the others. It also provides the composed transform (as a Transform), and keeps it up-to-date.
+ + 
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Transformable.php#details
+ +/
 mixin template NormalTransformable()
 {
 	private
@@ -82,6 +123,13 @@ mixin template NormalTransformable()
 		bool m_inverseTransformNeedUpdate; ///< Does the transform need to be recomputed?
 	}
 
+	/**
+	 * The local origin of the object.
+	 * 
+	 * The origin of an object defines the center point for all transformations (position, scale, ratation).
+	 * 
+	 * The coordinates of this point must be relative to the top-left corner of the object, and ignore all transformations (position, scale, rotation). The default origin of a transformable object is (0, 0).
+	 */
 	@property
 	{
 		Vector2f origin(Vector2f newOrigin)
@@ -98,6 +146,7 @@ mixin template NormalTransformable()
 		}
 	}
 
+	/// The position of the object. The default is (0, 0).
 	@property
 	{
 		Vector2f position(Vector2f newPosition)
@@ -113,7 +162,8 @@ mixin template NormalTransformable()
 			return m_position;
 		}
 	}
-	
+
+	/// The orientation of the object, in degrees. The default is 0 degrees. 
 	@property
 	{
 		float rotation(float newRotation)
@@ -133,7 +183,8 @@ mixin template NormalTransformable()
 			return m_rotation;
 		}
 	}
-	
+
+	/// The scale factors of the object. The default is (1, 1).
 	@property
 	{
 		Vector2f scale(Vector2f newScale)
@@ -150,6 +201,11 @@ mixin template NormalTransformable()
 		}
 	}
 
+	/**
+	 * Get the inverse of the combined transform of the object.
+	 * 
+	 * Returns: Inverse of the combined transformations applied to the object.
+	 */
 	const(Transform) getInverseTransform()
 	{
 		if (m_inverseTransformNeedUpdate)
@@ -161,6 +217,11 @@ mixin template NormalTransformable()
 		return m_inverseTransform;
 	}
 
+	/**
+	 * Get the combined transform of the object.
+	 * 
+	 * Returns: Transform combining the position/rotation/scale/origin of the object.
+	 */
 	const(Transform) getTransform()
 	{
 		

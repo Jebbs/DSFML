@@ -33,12 +33,18 @@ import std.math, std.traits;
 
 import std.algorithm;
 
+/++
+ + Color is a utility struct for manipulating 32-bits RGBA colors.
+ + 
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ + See_Also: http://sfml-dev.org/documentation/2.0/classsf_1_1Color.php#details
+ +/
 struct Color
 {
-	ubyte r;
-	ubyte g;
-	ubyte b;
-	ubyte a = 255;
+	ubyte r; /// Red component
+	ubyte g; /// Green component
+	ubyte b; /// Blue component
+	ubyte a = 255; /// Alpha component
 
 	static immutable Black = Color(0, 0, 0, 255);
 	static immutable White = Color(255, 255, 255, 255);

@@ -29,28 +29,47 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 */
 module dsfml.graphics.shape;
 
-import dsfml.graphics.drawable;
-import dsfml.graphics.transformable;
-
-import dsfml.graphics.texture;
-
 import dsfml.system.vector2;
 
-import dsfml.graphics.rect;
-
 import dsfml.graphics.color;
-
-import dsfml.graphics.renderstates;
-
+import dsfml.graphics.drawable;
+import dsfml.graphics.primitivetype;
+import dsfml.graphics.rect;
 import dsfml.graphics.rendertarget;
-
+import dsfml.graphics.renderstates;
+import dsfml.graphics.texture;
+import dsfml.graphics.transformable;
 import dsfml.graphics.vertexarray;
 
-import dsfml.graphics.primitivetype;
+import std.typecons : Rebindable;
 
-import std.typecons:Rebindable;
-
-class Shape:Drawable,Transformable
+/++
+ + Base class for textured shapes with outline.
+ + 
+ + Shape is a drawable class that allows to define and display a custom convex shape on a render target.
+ + 
+ + It's only an abstract base, it needs to be specialized for concrete types of shapes (circle, rectangle, convex polygon, star, ...).
+ + 
+ + In addition to the attributes provided by the specialized shape classes, a shape always has the following attributes:
+ + - a texture
+ + - a texture rectangle
+ + - a fill color
+ + - an outline color
+ + - an outline thickness
+ + 
+ + Each feature is optional, and can be disabled easily:
+ + - the texture can be null
+ + - the fill/outline colors can be sf::Color::Transparent
+ + - the outline thickness can be zero
+ + 
+ + You can write your own derived shape class, there are only two virtual functions to override:
+ + - getPointCount must return the number of points of the shape
+ + - getPoint must return the points of the shape
+ + 
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Shape.php#details
+ +/
+class Shape : Drawable, Transformable
 {
 	mixin NormalTransformable;
 
@@ -73,6 +92,11 @@ class Shape:Drawable,Transformable
 		FloatRect m_bounds; /// Bounding rectangle of the whole shape (outline + fill)
 	}
 
+	/**
+	 * The sub-rectangle of the texture that the shape will display.
+	 * 
+	 * The texture rect is useful when you don't want to display the whole texture, but rather a part of it. By default, the texture rect covers the entire texture.
+	 */
 	@property
 	{
 		//Set Texture Rect
@@ -88,7 +112,12 @@ class Shape:Drawable,Transformable
 			return m_textureRect;
 		}
 	}
-	
+
+	/**
+	 * The fill color of the shape.
+	 * 
+	 * This color is modulated (multiplied) with the shape's texture if any. It can be used to colorize the shape, or change its global opacity. You can use Color.Transparent to make the inside of the shape transparent, and have the outline alone. By default, the shape's fill color is opaque white.
+	 */
 	@property
 	{
 		//set Fill color
@@ -104,7 +133,12 @@ class Shape:Drawable,Transformable
 			return m_fillColor;
 		}
 	}
-	
+
+	/**
+	 * The outline color of the shape.
+	 * 
+	 * By default, the shape's outline color is opaque white.
+	 */
 	@property
 	{
 		//set outline color
@@ -120,7 +154,12 @@ class Shape:Drawable,Transformable
 			return m_outlineColor;
 		}
 	}
-	
+
+	/**
+	 * The thickness of the shape's outline.
+	 * 
+	 * Note that negative values are allowed (so that the outline expands towards the center of the shape), and using zero disables the outline. By default, the outline thickness is 0.
+	 */
 	@property
 	{
 		//set ouline thickness
@@ -136,32 +175,76 @@ class Shape:Drawable,Transformable
 			return m_outlineThickness;
 		}
 	}
-	
+
+	/**
+	 * Get the total number of points in the shape.
+	 * 
+	 * Returns: Number of points in the shape.
+	 */
 	@property
 	{
 		abstract uint pointCount();
 	}
 
-	//get global bounds
+	/**
+	 * Get the global bounding rectangle of the entity.
+	 * 
+	 * The returned rectangle is in global coordinates, which means that it takes in account the transformations (translation, rotation, scale, ...) that are applied to the entity. In other words, this function returns the bounds of the sprite in the global 2D world's coordinate system.
+	 * 
+	 * Returns: Global bounding rectangle of the entity
+	 */
 	FloatRect getGlobalBounds()
 	{
 		return getTransform().transformRect(getLocalBounds());
 	}
 
-	//get local bounds
+	/**
+	 * Get the local bounding rectangle of the entity.
+	 * 
+	 * The returned rectangle is in local coordinates, which means that it ignores the transformations (translation, rotation, scale, ...) that are applied to the entity. In other words, this function returns the bounds of the entity in the entity's coordinate system.
+	 * 
+	 * Returns: Local bounding rectangle of the entity
+	 */
 	FloatRect getLocalBounds() const
 	{
 		return m_bounds;
 	}
 
+	/**
+	 * Get a point of the shape.
+	 * 
+	 * The result is undefined if index is out of the valid range.
+	 * 
+	 * Params:
+	 * 		index	= Index of the point to get, in range [0 .. getPointCount() - 1]
+	 * 
+	 * Returns: Index-th point of the shape
+	 */
 	abstract Vector2f getPoint(uint index) const;
 
-	//get texture
+	/**
+	 * Get the source texture of the shape.
+	 * 
+	 * If the shape has no source texture, a NULL pointer is returned. The returned pointer is const, which means that you can't modify the texture when you retrieve it with this function.
+	 * 
+	 * Returns: The shape's texture
+	 */
 	const(Texture) getTexture() const
 	{
 		return m_texture;
 	}
 
+	/**
+	 * Change the source texture of the shape.
+	 * 
+	 * The texture argument refers to a texture that must exist as long as the shape uses it. Indeed, the shape doesn't store its own copy of the texture, but rather keeps a pointer to the one that you passed to this function. If the source texture is destroyed and the shape tries to use it, the behaviour is undefined. texture can be NULL to disable texturing.
+	 * 
+	 * If resetRect is true, the TextureRect property of the shape is automatically adjusted to the size of the new texture. If it is false, the texture rect is left unchanged.
+	 * 
+	 * Params:
+	 * 		texture		= New texture
+	 * 		resetRect	= Should the texture rect be reset to the size of the new texture?
+	 */
 	void setTexture(const(Texture) texture, bool resetRect = false)
 	{
 		if((texture !is null) && (resetRect || (m_texture is null)))
@@ -172,6 +255,13 @@ class Shape:Drawable,Transformable
 		m_texture = (texture is null)? null:texture;
 	}
 
+	/**
+	 * Draw the shape to a render target.
+	 * 
+	 * Params:
+	 * 		renderTarget	= Target to draw to
+	 * 		renderStates	= Current render states
+	 */
 	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		renderStates.transform = renderStates.transform * getTransform();
@@ -185,7 +275,12 @@ class Shape:Drawable,Transformable
 			renderTarget.draw(m_outlineVertices, renderStates);
 		}
 	}
-	
+
+	/**
+	 * Recompute the internal geometry of the shape.
+	 * 
+	 * This function must be called by the derived class everytime the shape's points change (ie. the result of either getPointCount or getPoint is different).
+	 */
 	protected void update()
 	{
 		// Get the total number of points of the shape
