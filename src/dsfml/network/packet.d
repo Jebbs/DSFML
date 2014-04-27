@@ -261,6 +261,73 @@ class Packet
 	
 }
 
+unittest
+{
+	//TODO: Expand to use more of the mehtods found in Packet
+	version(DSFML_Unittest_Network)
+	{
+		import std.stdio;
+		import dsfml.network.tcpsocket;
+		import dsfml.network.tcplistener;
+		import dsfml.network.ipaddress;
+		
+		writeln("Unittest for Packet");
+
+		//socket connecting to server
+		auto clientSocket = new TcpSocket();
+
+		//listener looking for new sockets
+		auto listener = new TcpListener();
+		listener.listen(55001);
+
+		//get our client socket to connect to the server
+		clientSocket.connect(IpAddress.LocalHost, 55001);
+		
+
+		
+		//packet to send data
+		auto sendPacket = new Packet();
+
+
+		//Packet to receive data
+		auto receivePacket = new Packet();
+	
+		//socket on the server side connected to the client's socket
+		auto serverSocket = new TcpSocket();
+
+		//accepts a new connection and binds it to the socket in the parameter
+		listener.accept(serverSocket);
+
+		//Let's greet the server!
+		sendPacket.writeString("Hello, I'm a client!");
+		clientSocket.send(sendPacket);
+
+		//And get the data on the server side
+		serverSocket.receive(receivePacket);
+
+		//What did we get from the client?
+		writeln("Gotten from client: " ,receivePacket.readString());
+
+		//clear the packets to send/get new information
+		sendPacket.clear();
+		receivePacket.clear();
+
+		//Respond back to the client
+		sendPacket.writeString("Hello, I'm your server.");
+
+		serverSocket.send(sendPacket);
+		clientSocket.receive(receivePacket);
+		
+		
+		writeln("Gotten from server: ", receivePacket.readString());
+
+		clientSocket.disconnect();
+
+		
+		writeln();
+	}
+}
+
 private extern(C):
 
 struct sfPacket;

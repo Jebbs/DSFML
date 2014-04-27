@@ -33,6 +33,7 @@ module dsfml.audio.soundbufferrecorder;
 import dsfml.audio.soundrecorder;
 import dsfml.audio.soundbuffer;
 
+
 /++
  + Specialized SoundRecorder which stores the captured audio data into a sound buffer.
  + 
@@ -71,7 +72,7 @@ class SoundBufferRecorder:SoundRecorder
 	 * 
 	 * Returns: Read-only access to the sound buffer
 	 */
-	SoundBuffer getBuffer()
+	const(SoundBuffer) getBuffer() const
 	{
 		return m_buffer;
 	}
@@ -118,6 +119,8 @@ class SoundBufferRecorder:SoundRecorder
 
 unittest
 {
+	//When this unit test is run it occasionally throws an error which will vary, and
+	//is obviously in OpenAL. Probably something to do with the way the binding is done. Will be fixed in 2.1.
 	version(DSFML_Unittest_Audio)
 	{
 		import std.stdio;
@@ -125,27 +128,52 @@ unittest
 		import dsfml.audio.sound;
 		import dsfml.system.time;
 		import dsfml.system.clock;
+		import dsfml.system.sleep;
+
 
 		writeln("Unit test for SoundBufferRecorder.");
 
 		auto recorder = new SoundBufferRecorder();
 
+		assert(SoundRecorder.isAvailable());
+
+
 		writeln("Press Enter to start recording.");
+		while(!Keyboard.isKeyPressed(Keyboard.Key.Return))
+		{
+			//wait for the user to press enter
+			if(Keyboard.isKeyPressed(Keyboard.Key.Return))
+			{
+
+				recorder.start();
+			}
+		}
+		//make sure the next one diesn't trigger immediately
 		if(Keyboard.isKeyPressed(Keyboard.Key.Return))
 		{
-			recorder.start();
+			//wait until they release the key
+			while(Keyboard.isKeyPressed(Keyboard.Key.Return))
+			{
+				//writeln(true);
+			}
 		}
+
 
 		writeln("Press Enter to stop recording.");
 
-		if(Keyboard.isKeyPressed(Keyboard.Key.Return))
+		while(!Keyboard.isKeyPressed(Keyboard.Key.Return))
 		{
-			recorder.stop();
+			if(Keyboard.isKeyPressed(Keyboard.Key.Return))
+			{
+				recorder.stop();
+			}
 		}
 
-		auto recorderDuration = recorder.getBuffer().getDuration();
+		auto buffer = recorder.getBuffer();
 
-		auto recorderSound = new Sound(recorder.getBuffer());
+		auto recorderDuration = buffer.getDuration();
+
+		auto recorderSound = new Sound(buffer);
 
 		auto clock = new Clock();
 

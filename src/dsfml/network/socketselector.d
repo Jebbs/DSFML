@@ -106,6 +106,47 @@ class SocketSelector
 	}
 }
 
+unittest
+{
+	version(DSFML_Unittest_Network)
+	{
+		import std.stdio;
+		import dsfml.network.ipaddress;
+
+		
+		writeln("Unittest for SocketSelector");
+
+		auto selector = new SocketSelector();
+
+		//get a listener and start listening to a new port
+		auto listener = new TcpListener();
+		listener.listen(55004);
+
+		//add the listener to the selector
+		selector.add(listener);
+
+		//The client tries to connect to the server
+		auto clientSocket = new TcpSocket();
+		clientSocket.connect(IpAddress.LocalHost, 55004);
+
+
+		//wait for the selector to be informed of new things!
+		selector.wait();
+
+		auto serverSocket = new TcpSocket();
+		//the listener is ready! New connections are available 
+		if(selector.isReady(listener))
+		{	
+			writeln("Accepted the connection.");
+			listener.accept(serverSocket);
+		}
+
+
+
+		writeln();
+	}
+}
+
 private extern(C):
 
 struct sfSocketSelector;

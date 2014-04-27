@@ -112,7 +112,7 @@ unittest
 			}
 			
 			//draws the shape for a while before closing the window
-			if(clock.getElapsedTime().asSeconds >1)
+			if(clock.getElapsedTime().asSeconds() >1)
 			{
 				window.close();
 			}

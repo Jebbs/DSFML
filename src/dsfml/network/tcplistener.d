@@ -85,6 +85,39 @@ class TcpListener:Socket
 	}
 }
 
+unittest
+{
+	version(DSFML_Unittest_Network)
+	{
+		import std.stdio;
+		import dsfml.network.ipaddress;
+
+		writeln("Unittest for Listener");
+		//socket connecting to server
+		auto clientSocket = new TcpSocket();
+		
+		//listener looking for new sockets
+		auto listener = new TcpListener();
+		listener.listen(55002);
+
+		writeln("The listener is listening to port ", listener.getLocalPort());
+
+		//get our client socket to connect to the server
+		clientSocket.connect(IpAddress.LocalHost, 55002);
+
+
+		//socket on the server side connected to the client's socket
+		auto serverSocket = new TcpSocket();
+		
+		//accepts a new connection and binds it to the socket in the parameter
+		listener.accept(serverSocket);
+
+		
+		clientSocket.disconnect();
+		writeln();
+	}
+}
+
 private extern(C):
 
 struct sfTcpListener;

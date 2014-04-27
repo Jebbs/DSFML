@@ -79,7 +79,7 @@ class Sound : SoundSource
 		//detach the buffer
 		if(m_buffer !is null)
 		{
-			m_buffer.detachSound(this);
+			//m_buffer.detachSound(this);
 		}
 	}
 
@@ -206,6 +206,9 @@ unittest
 	version(DSFML_Unittest_Audio)
 	{
 		import std.stdio;
+		import dsfml.system.clock;
+		import dsfml.system.time;
+
 
 		writeln("Unit test for Sound class");
 
@@ -213,16 +216,26 @@ unittest
 
 		auto soundbuffer = new SoundBuffer();
 	
-		if(!soundbuffer.loadFromFile("cave1.ogg"))
+		if(!soundbuffer.loadFromFile("res/cave1.ogg"))
 		{
 			//error
 			return;
 		}
 
+		float duration = soundbuffer.getDuration().asSeconds();
+
 		auto sound = new Sound(soundbuffer);
 
+
+		auto clock = new Clock();
 		//play the sound!
 		sound.play();
+
+
+		while(clock.getElapsedTime().asSeconds()< duration)
+		{
+			//wait for sound to finish
+		}
 
 
 		writeln();

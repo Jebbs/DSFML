@@ -77,7 +77,7 @@ class TcpSocket:Socket
 		sfTcpSocket_setBlocking(sfPtr, blocking);
 	}
 
-	Status connect(IpAddress host, ushort port, Time timeout)
+	Status connect(IpAddress host, ushort port, Time timeout = Time.Zero)
 	{
 		return sfTcpSocket_connect(sfPtr, host.m_address.ptr,port, timeout.asMicroseconds());
 	}
@@ -120,8 +120,12 @@ class TcpSocket:Socket
 		size_t sizeReceived;
 		
 		Status status = sfTcpSocket_receive(sfPtr, dataPtr, maxSize, &sizeReceived);
-		
+		//TODO: catch when maxSize is < than Size received?
 		data = dataPtr[0..sizeReceived];
+
+		import std.stdio;
+
+		//writeln(sizeReceived);
 		
 		return status;
 	}
@@ -141,6 +145,69 @@ class TcpSocket:Socket
 	}
 }
 
+unittest
+{
+	//TODO: Expand to use more methods in TcpSocket
+	version(DSFML_Unittest_Network)
+	{
+		import std.stdio;
+		import dsfml.network.tcplistener;
+
+		writeln("Unittest for Tcp Socket");
+
+		//socket connecting to server
+		auto clientSocket = new TcpSocket();
+		
+		//listener looking for new sockets
+		auto listener = new TcpListener();
+		listener.listen(55003);
+		
+		//get our client socket to connect to the server
+		clientSocket.connect(IpAddress.LocalHost, 55003);
+		
+		
+		
+		//packet to send data
+		auto sendPacket = new Packet();
+		
+		
+		//Packet to receive data
+		auto receivePacket = new Packet();
+		
+		//socket on the server side connected to the client's socket
+		auto serverSocket = new TcpSocket();
+		
+		//accepts a new connection and binds it to the socket in the parameter
+		listener.accept(serverSocket);
+		
+		//Let's greet the server!
+		sendPacket.writeString("Hello, I'm a client!");
+		clientSocket.send(sendPacket);
+		
+		//And get the data on the server side
+		serverSocket.receive(receivePacket);
+		
+		//What did we get from the client?
+		writeln("Gotten from client: " ,receivePacket.readString());
+		
+		//clear the packets to send/get new information
+		sendPacket.clear();
+		receivePacket.clear();
+		
+		//Respond back to the client
+		sendPacket.writeString("Hello, I'm your server.");
+		
+		serverSocket.send(sendPacket);
+
+		clientSocket.receive(receivePacket);
+
+
+		
+		writeln("Gotten from server: ", receivePacket.readString());
+		
+		clientSocket.disconnect();
+	}
+}
 
 private extern(C):
 

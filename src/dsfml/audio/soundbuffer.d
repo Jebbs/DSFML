@@ -94,16 +94,18 @@ class SoundBuffer
 	{
 		debug import dsfml.system.config;
 		debug mixin(destructorOutput);
-		
+
+
+		//No longer works in 2.065
 		//Detach 
-		foreach(Sound sound;m_sounds[m_buffer])
-		{
-			sound.toString();
-			sound.resetBuffer();
-		}
+		//foreach(Sound sound;m_sounds[m_buffer])
+		//{
+			//sound.toString();
+			//sound.resetBuffer();
+		//}
 		
 		
-		m_sounds.remove(m_buffer);
+		//m_sounds.remove(m_buffer);
 		
 		
 		sfSoundBuffer_alDeleteBuffer(&m_buffer);
@@ -118,7 +120,7 @@ class SoundBuffer
 	 * 
 	 *  Returns: Read-only pointer to the array of sound samples
 	 */
-	const(short[]) getSamples()
+	const(short[]) getSamples() const
 	{
 		return m_samples;
 	}
@@ -130,7 +132,7 @@ class SoundBuffer
 	 * 
 	 * Returns: Sample rate (number of samples per second)
 	 */
-	uint getSampleRate()
+	uint getSampleRate() const
 	{
 		return sfSoundBuffer_getSampleRate(m_buffer);
 	}
@@ -142,7 +144,7 @@ class SoundBuffer
 	 * 
 	 * Returns: Number of channels
 	 */
-	uint getChannelCount()
+	uint getChannelCount() const
 	{
 		return sfSoundBuffer_getChannelCount(m_buffer);
 	}
@@ -152,7 +154,7 @@ class SoundBuffer
 	 * 
 	 * Returns: Sound duration
 	 */
-	Time getDuration()
+	Time getDuration() const
 	{
 		return m_duration;
 	}
@@ -171,7 +173,6 @@ class SoundBuffer
 	{
 		SoundFile file;
 		file.create();
-		
 		
 		if(file.openReadFromFile(filename))
 		{
@@ -313,7 +314,7 @@ class SoundBuffer
 	
 	private
 	{
-		bool initialize(SoundFile file)
+		bool initialize(ref SoundFile file)
 		{
 
 			// Retrieve the sound parameters
@@ -389,7 +390,7 @@ unittest
 
 		auto soundbuffer = new SoundBuffer();
 
-		if(!soundbuffer.loadFromFile("cave1.ogg"))
+		if(!soundbuffer.loadFromFile("res/cave1.ogg"))
 		{
 			//error
 			return;
