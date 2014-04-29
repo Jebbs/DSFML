@@ -38,8 +38,29 @@ import dsfml.graphics.renderstates;
 
 import dsfml.system.vector2;
 
-class VertexArray:Drawable
+/++
+ + Define a set of one or more 2D primitives.
+ + 
+ + VertexArray is a very simple wrapper around a dynamic array of vertices and a primitives type.
+ + 
+ + It inherits Drawable, but unlike other drawables it is not transformable.
+ + 
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1VertexArray.php#details
+ +/
+class VertexArray : Drawable
 {
+	/**
+	 * The type of primitive to draw.
+	 * 
+	 * Can be any of the following:
+	 * - Points
+	 * - Lines
+	 * - Triangles
+	 * - Quads
+	 * 
+	 * The default primitive type is Points.
+	 */
 	PrimitiveType primativeType;
 	private Vertex[] Vertices;
 
@@ -61,6 +82,13 @@ class VertexArray:Drawable
 		debug mixin(destructorOutput);
 	}
 
+	/**
+	 * Compute the bounding rectangle of the vertex array.
+	 * 
+	 * This function returns the axis-aligned rectangle that contains all the vertices of the array.
+	 * 
+	 * Returns: Bounding rectangle of the vertex array.
+	 */
 	FloatRect getBounds()
 	{
 		if (Vertices.length>0)
@@ -95,22 +123,45 @@ class VertexArray:Drawable
 		}
 	}
 
+	/**
+	 * Return the vertex count.
+	 * 
+	 * Returns: Number of vertices in the array
+	 */
 	uint getVertexCount()
 	{
 		import std.algorithm;
 		return cast(uint)min(uint.max, Vertices.length);
 	}
 
+	/**
+	 * Add a vertex to the array.
+	 * 
+	 * Params:
+	 * 		vertex	= Vertex to add.
+	 */
 	void append(Vertex newVertex)
 	{
 		Vertices ~= newVertex;
 	}
 
+	/**
+	 * Clear the vertex array.
+	 * 
+	 * This function removes all the vertices from the array. It doesn't deallocate the corresponding memory, so that adding new vertices after clearing doesn't involve reallocating all the memory.
+	 */
 	void clear()
 	{
 		Vertices.length = 0;
 	}
 
+	/**
+	 * Draw the object to a render target.
+	 * 
+	 * Params:
+	 *  		renderTarget =	Render target to draw to
+	 *  		renderStates =	Current render states
+	 */
 	override void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
 		if(Vertices.length != 0)
@@ -119,6 +170,14 @@ class VertexArray:Drawable
 		}
 	}
 
+	/**
+	 * Resize the vertex array.
+	 * 
+	 * If vertexCount is greater than the current size, the previous vertices are kept and new (default-constructed) vertices are added. If vertexCount is less than the current size, existing vertices are removed from the array.
+	 * 
+	 * Params:
+	 * 		vertexCount	= New size of the array (number of vertices).
+	 */
 	void resize(uint length)
 	{
 		Vertices.length = length;

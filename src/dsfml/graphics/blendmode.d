@@ -29,10 +29,20 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 */
 module dsfml.graphics.blendmode;
 
+/++
+ + Available blending modes for drawing.
+ + 
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/group__graphics.php#ga80c52fe2f7050d7f7573b7ed3c995388
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ +/
 enum BlendMode
 {
+	/// Pixel = Source * Source.a + Dest * (1 - Source.a)
 	Alpha,
+	/// Pixel = Source + Dest.
 	Add,
+	/// Pixel = Source * Dest.
 	Multiply,
+	/// Pixel = Source.
 	None
 }

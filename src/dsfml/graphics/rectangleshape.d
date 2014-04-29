@@ -33,6 +33,14 @@ module dsfml.graphics.rectangleshape;
 import dsfml.graphics.shape;
 import dsfml.system.vector2;
 
+/++
+ + Specialized shape representing a rectangle.
+ + 
+ + This class inherits all the functions of Transformable (position, rotation, scale, bounds, ...) as well as the functions of Shape (outline, color, texture, ...).
+ + 
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1RectangleShape.php#details
+ +/
 class RectangleShape:Shape
 {
 	private Vector2f m_size;
@@ -48,6 +56,7 @@ class RectangleShape:Shape
 		debug mixin(destructorOutput);
 	}
 
+	/// The point count for a rectangle is always 4.
 	@property
 	{
 		override uint pointCount()
@@ -56,6 +65,7 @@ class RectangleShape:Shape
 		}
 	}
 
+	/// The size of the rectangle.
 	@property
 	{
 		Vector2f size(Vector2f theSize)
@@ -70,6 +80,16 @@ class RectangleShape:Shape
 		}
 	}
 
+	/**
+	 * Get a point of the rectangle.
+	 * 
+	 * The result is undefined if index is out of the valid range.
+	 * 
+	 * Params:
+	 * 		index	= Index of the point to get, in range [0 .. pointCount - 1]
+	 * 
+	 * Returns: Index-th point of the shape.
+	 */
 	override Vector2f getPoint(uint index) const
 	{
 		switch (index)

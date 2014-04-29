@@ -33,15 +33,27 @@ import dsfml.graphics.shape;
 
 import dsfml.system.vector2;
 
-
-class CircleShape:Shape
+/++
+ + Specialized shape representing a circle.
+ + 
+ + This class inherits all the functions of Transformable (position, rotation, scale, bounds, ...) as well as the functions of Shape (outline, color, texture, ...).
+ + 
+ + Since the graphics card can't draw perfect circles, we have to fake them with multiple triangles connected to each other. The "points count" property of CircleShape defines how many of these triangles to use, and therefore defines the quality of the circle.
+ + 
+ + Authors: Laurent Gomila, Jeremy DeHaan
+ + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1CircleShape.php#details
+ +/
+class CircleShape : Shape
 {
 	private
 	{
 		float m_radius; /// Radius of the circle
 		uint m_pointCount; /// Number of points composing the circle
 	}
-	
+
+	/// Params:
+	/// 		radius =		Radius of the circle
+	/// 		pointCount =	Number of points composing the circle
 	this(float radius = 0, uint pointCount = 30)
 	{
 		m_radius = radius;
@@ -57,7 +69,7 @@ class CircleShape:Shape
 		debug mixin(destructorOutput);
 	}
 
-
+	/// The number of points of the circle
 	@property
 	{
 		uint pointCount(uint newPointCount)
@@ -71,6 +83,7 @@ class CircleShape:Shape
 		}
 	}
 
+	/// The radius of the circle
 	@property
 	{
 		float radius(float newRadius)
@@ -85,6 +98,16 @@ class CircleShape:Shape
 		}
 	}
 
+	/**
+	 * Get a point of the shape.
+	 * 
+	 * The result is undefined if index is out of the valid range.
+	 * 
+	 * Params:
+	 * 		index =	Index of the point to get, in range [0 .. pointCount - 1].
+	 * 
+	 * Returns: Index-th point of the shape.
+	 */
 	override Vector2f getPoint(uint index) const
 	{
 		import std.math;
@@ -100,7 +123,8 @@ class CircleShape:Shape
 		
 		return Vector2f(m_radius + x, m_radius + y);
 	}
-	
+
+	/// Clones this CircleShape
 	@property
 	CircleShape dup() const
 	{
