@@ -85,7 +85,7 @@ class View
 			return newCenter;
 		}
 		
-		Vector2f center()
+		Vector2f center() const
 		{
 			Vector2f temp;
 			sfView_getCenter(sfPtr, &temp.x, &temp.y);
@@ -101,7 +101,7 @@ class View
 			sfView_setRotation(sfPtr, newRotation);
 			return newRotation;
 		}
-		float rotation()
+		float rotation() const
 		{
 			return sfView_getRotation(sfPtr);
 			
@@ -117,7 +117,7 @@ class View
 			return newSize;
 		}
 		
-		Vector2f size()
+		Vector2f size() const
 		{
 			Vector2f temp;
 			sfView_getSize(sfPtr, &temp.x, &temp.y);
@@ -137,7 +137,7 @@ class View
 			sfView_setViewport(sfPtr, newTarget.left, newTarget.top, newTarget.width, newTarget.height);
 			return newTarget;
 		}
-		FloatRect viewport()
+		FloatRect viewport() const
 		{
 			FloatRect temp;
 			sfView_getViewport(sfPtr, &temp.left, &temp.top, &temp.width, &temp.height);
