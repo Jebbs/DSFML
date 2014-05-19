@@ -190,7 +190,7 @@ class Text : Drawable, Transformable
 	 */
 	auto getString() const
 	{
-		return m_string;
+		return m_string.save();
 	}
 
 	/**
