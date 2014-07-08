@@ -1,7 +1,7 @@
 Opening a new Issue
 ===
 
-When opening a new issue, please remember that while I want this library to feel very D-like, I also want to keep it as true to SFML as possible. If you have a suggestion, I am always willing to discuss it, but I want it to make sense for the library. Just because it isn't a part of SFML doesn't mean it wouldn't be something that could make the library better either. If we can do something better in D than we could in C++, then we should (See #100).
+When opening a new issue, please remember that while I want this library to feel very D-like, I also want to keep it as true to SFML as possible. If you have a suggestion, I am always willing to discuss it, but I want it to make sense for the library. Just because it isn't a part of SFML doesn't mean it wouldn't be something that could make the library better either. If we can do something better in D than we could in C++, then we should (See https://github.com/Jebbs/DSFML/pull/109).
 
 Opening a Pull Request
 ===
