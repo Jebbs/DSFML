@@ -107,7 +107,7 @@ class Texture
 		}
 
 		sfPtr = sfTexture_createFromFile(toStringz(filename) ,area.left, area.top,area.width, area.height);
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -138,7 +138,7 @@ class Texture
 		}
 
 		sfPtr = sfTexture_createFromMemory(data,sizeInBytes,area.left, area.top,area.width, area.height);
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -167,7 +167,7 @@ class Texture
 		}
 
 		sfPtr = sfTexture_createFromStream(new sfmlStream(stream), area.left, area.top,area.width, area.height);
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -196,7 +196,7 @@ class Texture
 		}
 
 		sfPtr = sfTexture_createFromImage(image.sfPtr, area.left, area.top,area.width, area.height);
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr != null);
 	}
 
@@ -274,7 +274,7 @@ class Texture
 		}
 		
 		sfPtr = sfTexture_create(width, height);
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -377,7 +377,7 @@ class Texture
 		sfTexture_updateFromWindow(sfPtr, RenderWindow.windowPointer(window), x, y);
 	}
 
-	//Is this even safe? RenderWindow inherits from Window, so what happens? Is this the bottom used or the top?
+	//Is this even safe? RenderWindow inherits from Window, so what happens? Is this bottom used or the top?
 	/**
 	 * Update a part of the texture from the contents of a window.
 	 * 
@@ -518,4 +518,4 @@ void sfTexture_bind(const sfTexture* texture);
 //Get the maximum texture size allowed
 uint sfTexture_getMaximumSize();
 
-const(char)* sfErrGraphics_getOutput();
+const(char)* sfErr_getOutput();

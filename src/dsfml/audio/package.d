@@ -43,9 +43,3 @@ public
 	import dsfml.audio.soundsource;
 	import dsfml.audio.soundstream;
 }
-static this()
-{
-	sfErrAudio_redirect();
-}
-
-private extern(C) void sfErrAudio_redirect();

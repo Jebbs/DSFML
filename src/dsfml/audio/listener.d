@@ -118,8 +118,9 @@ unittest
 		writeln("Unit test for Listener");
 
 		float volume = Listener.GlobalVolume;
-		volume-=30;
+		volume-=10;
 		Listener.GlobalVolume = volume;
+
 
 		Vector3f pos = Listener.Position;
 		pos.x += 10;

@@ -101,7 +101,7 @@ class Font
 			fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
 		}
 		
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		
 		return (sfPtr != null);
 	}
@@ -132,7 +132,7 @@ class Font
 			fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
 		}
 
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 
 		return (sfPtr != null);
 	}
@@ -164,7 +164,7 @@ class Font
 			fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
 		}
 
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		
 		return (sfPtr == null)?false:true;
 	}
@@ -366,4 +366,4 @@ void sfFont_updateTexture(const(sfFont)* font, uint characterSize);
 
 
 
-const(char)* sfErrGraphics_getOutput();
+const(char)* sfErr_getOutput();

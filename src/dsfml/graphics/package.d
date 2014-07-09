@@ -59,9 +59,3 @@ public
 	import dsfml.graphics.vertexarray;
 	import dsfml.graphics.view;
 }
-static this()
-{
-	sfErrGraphics_redirect();
-}
-
-private extern(C) void sfErrGraphics_redirect();

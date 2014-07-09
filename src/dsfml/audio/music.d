@@ -35,7 +35,7 @@ import dsfml.system.time;
 import dsfml.system.inputstream;
 
 import dsfml.audio.soundstream;
-import dsfml.audio.soundfile;
+
 
 /++
  + Streamed music played from an audio file.
@@ -53,6 +53,8 @@ import dsfml.audio.soundfile;
  +/
 class Music : SoundStream
 {
+	import dsfml.audio.soundfile;
+
 	private
 	{
 		SoundFile m_file;
@@ -242,7 +244,7 @@ class Music : SoundStream
 
 unittest
 {
-	version(DSFML_Unittest_Audio)
+	version(DSFML_Unittest_Audi)
 	{
 		import std.stdio;
 		import dsfml.system.clock;

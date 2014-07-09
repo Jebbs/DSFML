@@ -34,6 +34,7 @@ import dsfml.audio.soundbuffer;
 import dsfml.audio.soundsource;
 
 import dsfml.system.time;
+import dsfml.system.vector3;
 
 /++
  + Regular sound that can be played in the audio environment.
@@ -57,15 +58,19 @@ class Sound : SoundSource
 
 	//Const AND able to be rebound. Word.
 	private Rebindable!(const(SoundBuffer)) m_buffer;
+	package sfSound* sfPtr;
 
 	this()
 	{
-		// Constructor code
+		sfPtr = sfSound_create();
 	}
 
 	this(const(SoundBuffer) buffer)
 	{
+		this();
+
 		setBuffer(buffer);
+
 	}
 	//TODO: copy constructor?
 
@@ -76,11 +81,7 @@ class Sound : SoundSource
 		//stop the sound
 		stop();
 
-		//detach the buffer
-		if(m_buffer !is null)
-		{
-			//m_buffer.detachSound(this);
-		}
+		sfSound_destroy(sfPtr);
 	}
 
 	/** 
@@ -94,12 +95,12 @@ class Sound : SoundSource
 	{
 		void isLooping(bool loop)
 		{
-			sfSound_setLoop(m_source, loop);
+			sfSound_setLoop(sfPtr, loop);
 		}
 
 		bool isLooping()
 		{
-			return sfSound_getLoop(m_source);
+			return sfSound_getLoop(sfPtr);
 		}
 	}
 	
@@ -112,12 +113,12 @@ class Sound : SoundSource
 	{
 		void playingOffset(Time offset)
 		{
-			sfSound_setPlayingOffset(m_source, offset.asSeconds());
+			sfSound_setPlayingOffset(sfPtr, offset.asMicroseconds());
 		}
 
 		Time playingOffset()
 		{
-			return seconds(sfSound_getPlayingOffset(m_source));
+			return microseconds(sfSound_getPlayingOffset(sfPtr));
 		}
 	}
 
@@ -127,9 +128,127 @@ class Sound : SoundSource
 	{
 		Status status()
 		{
-			return super.getStatus();
+			return cast(Status)sfSound_getStatus(sfPtr);
 		}
 	}
+
+	//from SoundSource
+	/**
+	 * The pitch of the sound.
+	 * 
+	 * The pitch represents the perceived fundamental frequency of a sound; thus you can make a sound more acute or grave by changing its pitch. A side effect of changing the pitch is to modify the playing speed of the sound as well. The default value for the pitch is 1.
+	 */
+	@property
+	{
+		void pitch(float newPitch)
+		{
+			sfSound_setPitch(sfPtr, newPitch);
+		}
+		
+		float pitch()
+		{
+			return sfSound_getPitch(sfPtr);
+		}
+	}
+	
+	/**
+	 * The volume of the sound.
+	 * 
+	 * The volume is a vlue between 0 (mute) and 100 (full volume). The default value for the volume is 100.
+	 */
+	@property
+	{
+		void volume(float newVolume)
+		{
+			sfSound_setVolume(sfPtr, newVolume);
+		}
+		
+		float volume()
+		{
+			return sfSound_getVolume(sfPtr);
+		}
+	}
+	
+	/**
+	 * The 3D position of the sound in the audio scene.
+	 * 
+	 * Only sounds with one channel (mono sounds) can be spatialized. The default position of a sound is (0, 0, 0).
+	 */
+	@property
+	{
+		void position(Vector3f newPosition)
+		{
+			sfSound_setPosition(sfPtr, newPosition.x, newPosition.y, newPosition.z);
+		}
+		
+		Vector3f position()
+		{
+			Vector3f temp;
+			sfSound_getPosition(sfPtr, &temp.x, &temp.y, &temp.z);
+			return temp;
+		}
+	}
+	
+	/**
+	 * Make the sound's position relative to the listener (true) or absolute (false).
+	 * 
+	 * Making a sound relative to the listener will ensure that it will always be played the same way regardless the position of the listener.  This can be useful for non-spatialized sounds, sounds that are produced by the listener, or sounds attached to it. The default value is false (position is absolute).
+	 */
+	@property
+	{
+		void relativeToListener(bool relative)
+		{
+			sfSound_setRelativeToListener(sfPtr, relative);
+		}
+		
+		bool relativeToListener()
+		{
+			return sfSound_isRelativeToListener(sfPtr);
+		}
+	}
+	
+	/**
+	 * The minimum distance of the sound.
+	 * 
+	 * The "minimum distance" of a sound is the maximum distance at which it is heard at its maximum volume. Further than the minimum distance, it will start to fade out according to its attenuation factor. A value of 0 ("inside the head of the listener") is an invalid value and is forbidden. The default value of the minimum distance is 1.
+	 */
+	@property
+	{
+		void minDistance(float distance)
+		{
+			sfSound_setMinDistance(sfPtr, distance);
+		}
+		
+		float minDistance()
+		{
+			return sfSound_getMinDistance(sfPtr);
+		}
+	}
+	
+	/**
+	 * The attenuation factor of the sound.
+	 * 
+	 * The attenuation is a multiplicative factor which makes the sound more or less loud according to its distance from the listener. An attenuation of 0 will produce a non-attenuated sound, i.e. its volume will always be the same whether it is heard from near or from far. 
+	 * 
+	 * On the other hand, an attenuation value such as 100 will make the sound fade out very quickly as it gets further from the listener. The default value of the attenuation is 1.
+	 */
+	@property
+	{
+		void attenuation(float newAttenuation)
+		{
+			sfSound_setAttenuation(sfPtr, newAttenuation);
+		}
+		
+		float attenuation()
+		{
+			return sfSound_getAttenuation(sfPtr);
+		}
+	}
+
+
+
+	//soundsource
+
 
 	// Property? 
 	// (note: if this is changed to a property, change the 
@@ -142,20 +261,8 @@ class Sound : SoundSource
 	 */
 	void setBuffer(const(SoundBuffer) buffer)
 	{
-		//First detach from the previous buffer
-		if(m_buffer !is null)
-		{
-			stop();
-			
-			m_buffer.detachSound(this);
-		}
-		
-		//assign the new buffer
 		m_buffer = buffer;
-		m_buffer.attachSound(this);
-		sfSound_assignBuffer(m_source, m_buffer.m_buffer);
-		
-		
+		sfSound_setBuffer(sfPtr, buffer.sfPtr);
 	}
 
 	/// Pause the sound.
@@ -163,7 +270,7 @@ class Sound : SoundSource
 	/// This function pauses the sound if it was playing, otherwise (sound already paused or stopped) it has no effect.
 	void pause()
 	{
-		sfSoundStream_alSourcePause(m_source);
+		sfSound_pause(sfPtr);
 	}
 
 	/**
@@ -175,20 +282,7 @@ class Sound : SoundSource
 	 */
 	void play()
 	{
-		sfSoundStream_alSourcePlay(m_source);
-	}
-
-	/// Reset the internal buffer of the sound.
-	/// 
-	/// This function is for internal use only, you don't have to use it. It is called by the SoundBuffer that this sound uses, when it is destroyed in order to prevent the sound from using a dead buffer.
-	void resetBuffer()
-	{
-		//stop the current sound;
-		stop();
-		//Detach the buffer
-		sfSound_detachBuffer(m_source);
-		//reset this sound's buffer
-		m_buffer = null;
+		sfSound_play(sfPtr);
 	}
 
 	/// Stop playing the sound.
@@ -196,7 +290,7 @@ class Sound : SoundSource
 	/// This function stops the sound if it was playing or paused, and does nothing if it was already stopped. It also resets the playing position (unlike pause()).
 	void stop()
 	{
-		sfSoundStream_alSourceStop(m_source);
+		sfSound_stop(sfPtr);
 	}
 
 }
@@ -226,6 +320,7 @@ unittest
 
 		auto sound = new Sound(soundbuffer);
 
+		//sound.relativeToListener(true);
 
 		auto clock = new Clock();
 		//play the sound!
@@ -237,6 +332,11 @@ unittest
 			//wait for sound to finish
 		}
 
+		//clock.restart();
+
+		//sound.relativeToListener(false);
+
+
 
 		writeln();
 	}
@@ -244,23 +344,53 @@ unittest
 
 private extern(C):
 
-void sfSoundStream_alSourcePlay(uint sourceID);
+struct sfSound;
 
-void sfSoundStream_alSourcePause(uint sourceID);
+sfSound* sfSound_create();
 
-void sfSoundStream_alSourceStop(uint sourceID);
+sfSound* sfSound_copy(const sfSound* sound);
 
-void sfSound_assignBuffer(uint sourceID, uint bufferID);
+void sfSound_destroy(sfSound* sound);
 
-void sfSound_detachBuffer(uint sourceID);
+void sfSound_play(sfSound* sound);
 
-void sfSound_setLoop(uint sourceID,bool loop);
+void sfSound_pause(sfSound* sound);
 
-bool sfSound_getLoop(uint sourceID);
+void sfSound_stop(sfSound* sound);
 
-void sfSound_setPlayingOffset(uint sourceID, float offset);
+void sfSound_setBuffer(sfSound* sound, const sfSoundBuffer* buffer);
 
-float sfSound_getPlayingOffset(uint sourceID);
+void sfSound_setLoop(sfSound* sound, bool loop);
 
+bool sfSound_getLoop(const sfSound* sound);
 
+int sfSound_getStatus(const sfSound* sound);
+
+void sfSound_setPitch(sfSound* sound, float pitch);
+
+void sfSound_setVolume(sfSound* sound, float volume);
+
+void sfSound_setPosition(sfSound* sound, float positionX, float positionY, float positionZ);
+
+void sfSound_setRelativeToListener(sfSound* sound, bool relative);
+
+void sfSound_setMinDistance(sfSound* sound, float distance);
+
+void sfSound_setAttenuation(sfSound* sound, float attenuation);
+
+void sfSound_setPlayingOffset(sfSound* sound, long timeOffset);
+
+float sfSound_getPitch(const sfSound* sound);
+
+float sfSound_getVolume(const sfSound* sound);
+
+void sfSound_getPosition(const sfSound* sound, float* positionX, float* positionY, float* positionZ);
+
+bool sfSound_isRelativeToListener(const sfSound* sound);
+
+float sfSound_getMinDistance(const sfSound* sound);
+
+float sfSound_getAttenuation(const sfSound* sound);
+
+long sfSound_getPlayingOffset(const sfSound* sound);
 

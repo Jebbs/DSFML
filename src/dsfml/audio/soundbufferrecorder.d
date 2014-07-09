@@ -53,18 +53,19 @@ class SoundBufferRecorder:SoundRecorder
 		short[] m_samples;
 		SoundBuffer m_buffer;
 	}
-
+	
 	this()
 	{
 		// Constructor code
+		m_buffer = new SoundBuffer();
 	}
-
+	
 	~this()
 	{
 		debug import dsfml.system.config;
 		debug mixin(destructorOutput);
 	}
-
+	
 	/**
 	 * Get the sound buffer containing the captured audio data.
 	 * 
@@ -76,7 +77,7 @@ class SoundBufferRecorder:SoundRecorder
 	{
 		return m_buffer;
 	}
-
+	
 	protected
 	{
 		/// Start capturing audio data.
@@ -85,10 +86,10 @@ class SoundBufferRecorder:SoundRecorder
 		{
 			m_samples.length = 0;
 			m_buffer = new SoundBuffer();
-
+			
 			return true;
 		}
-
+		
 		/**
 		 * Process a new chunk of recorded samples.
 		 * 
@@ -97,13 +98,13 @@ class SoundBufferRecorder:SoundRecorder
 		 * 
 		 * Returns: True to continue the capture, or false to stop it
 		 */
-		override bool onProcessSamples(short[] samples)
+		override bool onProcessSamples(const(short)[] samples)
 		{
 			m_samples ~= samples;
-				
+			
 			return true;
 		}
-
+		
 		/// Stop capturing audio data.
 		/// 
 		/// Reimplemented from SoundRecorder.
@@ -129,22 +130,22 @@ unittest
 		import dsfml.system.time;
 		import dsfml.system.clock;
 		import dsfml.system.sleep;
-
-
+		
+		
 		writeln("Unit test for SoundBufferRecorder.");
-
+		
 		auto recorder = new SoundBufferRecorder();
-
+		
 		assert(SoundRecorder.isAvailable());
-
-
+		
+		
 		writeln("Press Enter to start recording.");
 		while(!Keyboard.isKeyPressed(Keyboard.Key.Return))
 		{
 			//wait for the user to press enter
 			if(Keyboard.isKeyPressed(Keyboard.Key.Return))
 			{
-
+				
 				recorder.start();
 			}
 		}
@@ -157,10 +158,10 @@ unittest
 				//writeln(true);
 			}
 		}
-
-
+		
+		
 		writeln("Press Enter to stop recording.");
-
+		
 		while(!Keyboard.isKeyPressed(Keyboard.Key.Return))
 		{
 			if(Keyboard.isKeyPressed(Keyboard.Key.Return))
@@ -169,23 +170,25 @@ unittest
 			}
 		}
 
+
+
 		auto buffer = recorder.getBuffer();
-
+		
 		auto recorderDuration = buffer.getDuration();
-
+		
 		auto recorderSound = new Sound(buffer);
-
+		
 		auto clock = new Clock();
-
+		
 		recorderSound.play();
 		while(clock.getElapsedTime() < recorderDuration)
 		{
 			//sound playing
 		}
-
-
-
-
+		
+		
+		
+		
 		writeln();
 	}
 }

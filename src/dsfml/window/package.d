@@ -29,8 +29,6 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 */
 module dsfml.window;
 
-//pragma(lib,"dsfml-window");
-
 public
 {
 	import dsfml.system;
@@ -45,10 +43,5 @@ public
 	import dsfml.window.window;
 	import dsfml.window.windowhandle;
 }
-static this()
-{
-	sfErrWindow_redirect();
-}
 
-private extern(C) void sfErrWindow_redirect();
 

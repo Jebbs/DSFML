@@ -124,7 +124,7 @@ class Shader
 		{
 			sfPtr = sfShader_createFromFile(null , toStringz(filename) );
 		}
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -149,7 +149,7 @@ class Shader
 		}
 
 		sfPtr = sfShader_createFromFile(toStringz(vertexShaderFilename) , toStringz(fragmentShaderFilename));
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr != null);
 	}
 
@@ -181,7 +181,7 @@ class Shader
 		{
 			sfPtr = sfShader_createFromMemory(null , toStringz(shader) );
 		}
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
@@ -206,7 +206,7 @@ class Shader
 		}
 
 		sfShader_createFromMemory(toStringz(vertexShader) , toStringz(fragmentShader));
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
@@ -238,7 +238,7 @@ class Shader
 		{
 			sfPtr = sfShader_createFromStream(null , &stream );
 		}
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -263,7 +263,7 @@ class Shader
 		}
 
 		sfPtr = sfShader_createFromStream(&vertexShaderStream, &fragmentShaderStream);
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -386,7 +386,7 @@ class Shader
 	{
 		import std.conv;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 	}
 
 	/**
@@ -426,7 +426,7 @@ class Shader
 	{
 		import std.conv;
 		bool toReturn = sfShader_isAvailable();
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return toReturn;
 	}
 }
@@ -482,4 +482,4 @@ void sfShader_bind(const sfShader* shader);
 //Tell whether or not the system supports shaders
 bool sfShader_isAvailable();
 
-const(char)* sfErrGraphics_getOutput();
+const(char)* sfErr_getOutput();

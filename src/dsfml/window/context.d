@@ -63,3 +63,4 @@ private extern(C)
 	void sfContext_setActive(sfContext* context, bool active);
 }
 //unittest?
+//I'll probably write one just to confirm no segfaults happen and to up the coverage amount

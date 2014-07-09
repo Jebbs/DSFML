@@ -44,3 +44,9 @@ public
 	import dsfml.system.vector3;
 }
 
+static this()
+{
+	sfErr_redirect();
+}
+
+private extern(C) void sfErr_redirect();

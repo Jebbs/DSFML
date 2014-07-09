@@ -97,7 +97,7 @@ class TcpSocket:Socket
 		import std.conv;
 
 		Status toReturn = sfTcpSocket_send(sfPtr, data.ptr, data.length);
-		err.write(text(sfErrNetwork_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return toReturn;
 	}
 
@@ -265,5 +265,5 @@ Socket.Status sfTcpSocket_sendPacket(sfTcpSocket* socket, sfPacket* packet);
 //Receive a formatted packet of data from the remote peer
 Socket.Status sfTcpSocket_receivePacket(sfTcpSocket* socket, sfPacket* packet);
 
-const(char)* sfErrNetwork_getOutput();
+const(char)* sfErr_getOutput();
 

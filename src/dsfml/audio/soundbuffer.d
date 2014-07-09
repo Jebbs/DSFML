@@ -47,6 +47,7 @@ import core.memory;
 
 import dsfml.system.err;
 import std.conv;
+import std.string;
 
 /++
  + Storage for audio samples defining a sound.
@@ -66,53 +67,24 @@ import std.conv;
  +/
 class SoundBuffer
 {
-	private 
-	{
+	package sfSoundBuffer* sfPtr;
 
-		Time m_duration; 
-		short[] m_samples;
-	
-		//Allows a sound buffer to remain const while still having a mutable list of sounds attached to it.
-		static SoundList m_sounds;
-	}
-	
 	this()
 	{
-		//create the buffer
-		sfSoundSource_ensureALInit();
-		err.write(text(sfErrAudio_getOutput()));
-		
-		//Create the buffer
-		sfSoundBuffer_alGenBuffers(&m_buffer);
-
-		//use the existing buffer ID to create a mutable list of sounds attached to it
-		m_sounds.add(m_buffer);
-
+		sfPtr = sfSoundBuffer_create();
+		err.write(text(sfErr_getOutput));
 	}
 
 	~this()
 	{
 		debug import dsfml.system.config;
 		debug mixin(destructorOutput);
-
-
-		//No longer works in 2.065
-		//Detach 
-		//foreach(Sound sound;m_sounds[m_buffer])
-		//{
-			//sound.toString();
-			//sound.resetBuffer();
-		//}
-		
-		
-		//m_sounds.remove(m_buffer);
-		
-		
-		sfSoundBuffer_alDeleteBuffer(&m_buffer);
+		sfSoundBuffer_destroy(sfPtr);
 	}
 	
 	//TODO: copy constructor?
 	//So many possible properties....
+
 	/** 
 	 * Get the array of audio samples stored in the buffer.
 	 * 
@@ -122,7 +94,14 @@ class SoundBuffer
 	 */
 	const(short[]) getSamples() const
 	{
-		return m_samples;
+		if(sfSoundBuffer_getSampleCount(sfPtr) > 0)
+		{
+			return sfSoundBuffer_getSamples(sfPtr)[0 .. sfSoundBuffer_getSampleCount(sfPtr)];
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	/**
@@ -134,7 +113,7 @@ class SoundBuffer
 	 */
 	uint getSampleRate() const
 	{
-		return sfSoundBuffer_getSampleRate(m_buffer);
+		return sfSoundBuffer_getSampleRate(sfPtr);
 	}
 
 	/**
@@ -146,7 +125,7 @@ class SoundBuffer
 	 */
 	uint getChannelCount() const
 	{
-		return sfSoundBuffer_getChannelCount(m_buffer);
+		return sfSoundBuffer_getChannelCount(sfPtr);
 	}
 
 	/**
@@ -156,7 +135,7 @@ class SoundBuffer
 	 */
 	Time getDuration() const
 	{
-		return m_duration;
+		return microseconds(sfSoundBuffer_getDuration(sfPtr));
 	}
 
 	/**
@@ -171,15 +150,17 @@ class SoundBuffer
 	 */
 	bool loadFromFile(string filename)
 	{
-		SoundFile file;
-		file.create();
+		sfPtr = sfSoundBuffer_createFromFile(toStringz(filename));
 		
-		if(file.openReadFromFile(filename))
+		if(sfPtr)
 		{
-			return initialize(file);
+			return true;
 		}
-		
-		return false;
+		else
+		{
+			err.write(text(sfErr_getOutput()));
+			return false;
+		}
 	}
 
 	/**
@@ -194,17 +175,20 @@ class SoundBuffer
 	 */
 	bool loadFromMemory(const(void)[] data)
 	{
-		SoundFile file;
-		file.create();
-
-		if(file.openReadFromMemory(data))
+		sfPtr = sfSoundBuffer_createFromMemory(data.ptr, data.length);
+		
+		if(sfPtr)
 		{
-			return initialize(file);
+			return true;
 		}
-		return false;
+		else
+		{
+			err.write(text(sfErr_getOutput()));
+			return false;
+		}
 	}
 
-	/**
+	/*
 	 * Load the sound buffer from a custom stream.
 	 * 
 	 * Here is a complete list of all the supported audio formats: ogg, wav, flac, aiff, au, raw, paf, svx, nist, voc, ircam, w64, mat4, mat5 pvf, htk, sds, avr, sd2, caf, wve, mpc2k, rf64.
@@ -216,15 +200,18 @@ class SoundBuffer
 	 */
 	bool loadFromStream(InputStream stream)
 	{
-		SoundFile file;
-		file.create();
 
-		if(file.openReadFromStream(stream))
-		{
-			return initialize(file);
-		}
+		sfPtr = sfSoundBuffer_createFromStream(stream);
 		
-		return false;
+		if(sfPtr)
+		{
+			return true;
+		}
+		else
+		{
+			err.write(text(sfErr_getOutput()));
+			return false;
+		}
 	}
 
 	/**
@@ -241,29 +228,18 @@ class SoundBuffer
 	 */
 	bool loadFromSamples(const(short[]) samples, uint channelCount, uint sampleRate)
 	{
-		if((samples.length >0) && (channelCount>0) && (sampleRate>0))
+
+		sfPtr = sfSoundBuffer_createFromSamples(samples.ptr, samples.length, channelCount, sampleRate);
+
+		if(sfPtr)
 		{
-			//resize m_samples' length to match
-			m_samples.length = samples.length;
-			//copy new samples
-			m_samples[] = samples[];
-			//update Internal Buffer
-			return update(channelCount, sampleRate);
-			
+			return true;
 		}
 		else
 		{
-			//Error...
-			
-			err.write("Failed to load sound buffer from samples (");
-			err.write("array: ", samples, ",");
-			err.write("");
-			err.write("");
-
+			err.write(text(sfErr_getOutput()));
 			return false;
 		}
-		
-		
 	}
 
 	/**
@@ -278,105 +254,19 @@ class SoundBuffer
 	 */
 	bool saveToFile(string filename)
 	{
-		SoundFile file;
-		file.create();
+		sfSoundBuffer_saveToFile(sfPtr, toStringz(filename));
 		
-		if(file.openWrite(filename,getChannelCount(),getSampleRate()))
+		if(sfPtr)
 		{
-			file.write( m_samples);
-			
 			return true;
 		}
-		
-		return false;
-	}
-	
-	
-
-	
-	package
-	{
-		void attachSound(Sound sound) const
+		else
 		{
-			//TODO: Check to see if sound already exists in m_sounds
-			//Sounds in m_sounds should always be unique
-			m_sounds[m_buffer] ~=sound;
-		}
-		
-		void detachSound(Sound sound) const
-		{
-			m_sounds.removeSound(m_buffer, sound);
-		}
-		
-		uint m_buffer; /// OpenAL buffer identifier
-	}
-
-	
-	private
-	{
-		bool initialize(ref SoundFile file)
-		{
-
-			// Retrieve the sound parameters
-			size_t sampleCount = cast(size_t)file.getSampleCount();
-			uint channelCount = file.getChannelCount();
-			uint sampleRate = file.getSampleRate();
-			
-			
-			// Read the samples from the provided file
-			m_samples.length = sampleCount;
-
-			
-			if (file.read(m_samples) == sampleCount)
-			{
-				// Update the internal buffer with the new samples
-				return update(channelCount, sampleRate);
-			}
-			else
-			{
-				return false;
-			}
-			
-			
-		}
-		
-		//TODO: Get this one set up later
-		bool initialize(uint channelCount, uint sampleRate)
-		{
+			err.write(text(sfErr_getOutput()));
 			return false;
 		}
-		
-		bool update(uint channelCount, uint sampleRate)
-		{
-			// Check parameters
-			if ((channelCount == 0) || (sampleRate== 0) || (m_samples.length == 0))
-			{
-				return false;
-			}
-			
-			
-			// Find the good format according to the number of channels
-			uint format = sfSoundStream_getFormatFromChannelCount(channelCount);
-			
-			
-			// Check if the format is valid
-			if (format == 0)
-			{
-				stderr.writeln("Failed to load sound buffer (unsupported number of channels: " ,channelCount, ")");
-				return false;
-			}
-			
-			//Fill the Buffer
-			sfSoundBuffer_fillBuffer(m_buffer,&m_samples[0],m_samples.length,sampleRate, format);
-			
-			//Computer Duration
-			m_duration = milliseconds(cast(int)(1000 * m_samples.length / sampleRate / channelCount));
-			
-			
-			return true;
-		}
-
 	}
+	
 
 }
 
@@ -411,86 +301,35 @@ unittest
 }
 
 
-
-///SoundList is a map of sorts that allows an array of sounds to be bound to a particular key.
-///Being made of arrays intead of using an associative array allows items to be removed
-///during a GC cycle since it is done with slices.
-private struct SoundList
-{
-	uint[] m_keys;
-	Sound[][] m_sounds;
-
-	ref Sound[] opIndex(uint key)
-	{
-		return m_sounds[indexSearch(key)];
-	}
-
-	void add(uint key)
-	{
-		m_keys ~=key;
-		m_sounds.length +=1;
-	}
-
-	void remove(uint key)
-	{
-		size_t removeIndex = indexSearch(key);
-
-		m_keys.remove(removeIndex);
-		m_sounds.remove(removeIndex);
-	}
-
-	void removeSound(uint key, Sound sound)
-	{
-
-		size_t index = indexSearch(key);
-
-		int soundIndex;
-
-		for(soundIndex = 0; soundIndex<m_sounds[index].length;++soundIndex)
-		{
-			if(sound is m_sounds[index][soundIndex])
-			{
-				break;
-			}
-		}
-		
-		
-		m_sounds[index].remove(soundIndex);
-	}
-
-
-	size_t indexSearch(uint key)
-	{
-		size_t i;
-		for(i = 0; i<m_keys.length;++i)
-		{
-			if(key == m_keys[i])
-			{
-				break;
-			}
-			
-		}//Index search
-
-		return i;
-	}
-
-
-}//SoundList
-
+package struct sfSoundBuffer;
 
 private extern(C):
 
-void sfSoundSource_ensureALInit();
-uint sfSoundStream_getFormatFromChannelCount(uint channelCount);
+sfSoundBuffer* sfSoundBuffer_create();
 
+sfSoundBuffer* sfSoundBuffer_createFromFile(const char* filename);
 
-void sfSoundBuffer_alGenBuffers(uint* bufferID);
-void sfSoundBuffer_alDeleteBuffer(uint* bufferID);
-uint sfSoundBuffer_getSampleRate(uint bufferID);
-uint sfSoundBuffer_getChannelCount(uint bufferID);
-void sfSoundBuffer_fillBuffer(uint bufferID, short* samples, long sampleSize, uint sampleRate, uint format);
+sfSoundBuffer* sfSoundBuffer_createFromMemory(const void* data, size_t sizeInBytes);
 
-const(char)* sfErrAudio_getOutput();
+sfSoundBuffer* sfSoundBuffer_createFromStream(InputStream stream);
 
+sfSoundBuffer* sfSoundBuffer_createFromSamples(const short* samples, size_t sampleCount, uint channelCount, uint sampleRate);
 
+sfSoundBuffer* sfSoundBuffer_copy(const sfSoundBuffer* soundBuffer);
+
+void sfSoundBuffer_destroy(sfSoundBuffer* soundBuffer);
+
+bool sfSoundBuffer_saveToFile(const sfSoundBuffer* soundBuffer, const char* filename);
+
+const short* sfSoundBuffer_getSamples(const sfSoundBuffer* soundBuffer);
+
+size_t sfSoundBuffer_getSampleCount(const sfSoundBuffer* soundBuffer);
+
+uint sfSoundBuffer_getSampleRate(const sfSoundBuffer* soundBuffer);
+
+uint sfSoundBuffer_getChannelCount(const sfSoundBuffer* soundBuffer);
+
+long sfSoundBuffer_getDuration(const sfSoundBuffer* soundBuffer);
+
+const(char)* sfErr_getOutput();
 

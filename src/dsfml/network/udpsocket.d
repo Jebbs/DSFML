@@ -69,7 +69,7 @@ class UdpSocket:Socket
 		import std.conv;
 		
 		Status toReturn = sfUdpSocket_bind(sfPtr,port);
-		err.write(text(sfErrNetwork_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return toReturn;
 	}
 
@@ -105,7 +105,7 @@ class UdpSocket:Socket
 		
 		Status status = sfUdpSocket_receive(sfPtr, data.ptr, data.length, &sizeReceived, address.m_address.ptr, &port);
 		
-		err.write(text(sfErrNetwork_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		
 		return status;
 	}
@@ -209,7 +209,7 @@ Socket.Status sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, cons
 //Receive a formatted packet of data from a remote peer with a UDP socket
 Socket.Status sfUdpSocket_receivePacket(sfUdpSocket* socket, sfPacket* packet, char* address, ushort* port);
 
-const(char)* sfErrNetwork_getOutput();
+const(char)* sfErr_getOutput();
 
 
 

@@ -67,7 +67,7 @@ class TcpListener:Socket
 	{
 		import std.conv;
 		Status toReturn = sfTcpListener_accept(sfPtr, &socket.sfPtr); 
-		err.write(text(sfErrNetwork_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return toReturn; 
 	}
 
@@ -75,7 +75,7 @@ class TcpListener:Socket
 	{
 		import std.conv;
 		Status toReturn = sfTcpListener_listen(sfPtr, port);
-		err.write(text(sfErrNetwork_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return toReturn;
 	}
 
@@ -148,4 +148,4 @@ Socket.Status sfTcpListener_listen(sfTcpListener* listener, ushort port);
 //Accept a new connection
 Socket.Status sfTcpListener_accept(sfTcpListener* listener, sfTcpSocket** connected);
 
-const(char)* sfErrNetwork_getOutput();
+const(char)* sfErr_getOutput();

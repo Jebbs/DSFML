@@ -43,9 +43,3 @@ public
 	import dsfml.network.tcpsocket;
 	import dsfml.network.udpsocket;
 }
-static this()
-{
-	sfErrNetwork_redirect();
-}
-
-private extern(C) void sfErrNetwork_redirect();

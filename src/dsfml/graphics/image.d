@@ -141,7 +141,7 @@ class Image
 
 		sfPtr = sfImage_createFromFile(toStringz(fileName));
 
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 
 		return (sfPtr != null);
 	}
@@ -166,7 +166,7 @@ class Image
 		}
 
 		sfPtr = sfImage_createFromMemory(data.ptr, data.length);
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr != null);
 	}
 
@@ -190,7 +190,7 @@ class Image
 		}
 
 		sfPtr = sfImage_createFromStream(new imageStream(stream));
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -327,7 +327,7 @@ class Image
 	{
 		import std.conv;
 		bool toReturn = sfImage_saveToFile(sfPtr, fileName.ptr);
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return toReturn;
 	}
 }
@@ -463,4 +463,4 @@ void sfImage_flipHorizontally(sfImage* image);
 /// \brief Flip an image vertically (top <-> bottom)
 void sfImage_flipVertically(sfImage* image);
 
-const(char)* sfErrGraphics_getOutput();
+const(char)* sfErr_getOutput();
