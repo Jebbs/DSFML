@@ -8,6 +8,7 @@ Getting Started
 ===
 Check out the wiki for information on [getting started](https://github.com/Jebbs/DSFML/wiki#getting-started) with DSFML.
 
+DSFML is currently in the process of getting updated. All the information in the wiki is relevant to the DSFML 2.0 branch, but should be close enough to where you can use it for the master branch.
 
 Nightlies
 ===
