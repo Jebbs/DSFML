@@ -44,7 +44,12 @@ struct Vector2(T)
 		x = X;
 		y = Y;	
 	}
-	
+
+	this(E)(Vector2!(E) otherVector)
+	{
+		x = cast(T)(otherVector.x);
+		y = cast(T)(otherVector.y);
+	}
 
 	
 	//I think it could be a useful function, but
@@ -143,7 +148,14 @@ return Vector2!(T)(0,0);
 			return this;
 		}
 	}
-	
+
+	//assign operator
+	ref Vector2!(T) opAssign(E)(Vector2!(E) otherVector)
+	{
+		x = cast(T)(otherVector.x);
+		y = cast(T)(otherVector.y);
+		return this;
+	}
 	
 	//Compare operator
 	bool opEquals(E)(const Vector2!(E) otherVector) const

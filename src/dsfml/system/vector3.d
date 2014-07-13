@@ -49,6 +49,13 @@ struct Vector3(T)
 		
 	}
 
+	this(E)(Vector3!(E) otherVector)
+	{
+		x = cast(T)(otherVector.x);
+		y = cast(T)(otherVector.y);
+		z = cast(T)(otherVector.z);
+	}
+
 	
 	Vector3!(T) opUnary(string s)() const
 	if(s == "-")
@@ -128,7 +135,15 @@ struct Vector3(T)
 			return this;
 		}
 	}
-	
+
+	//assign operator
+	ref Vector3!(T) opAssign(E)(Vector3!(E) otherVector)
+	{
+		x = cast(T)(otherVector.x);
+		y = cast(T)(otherVector.y);
+		z = cast(T)(otherVector.z);
+		return this;
+	}
 	
 	/* Omitted for the same reason as Vector3's normalize.
 * I very much would like to include it though!
