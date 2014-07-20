@@ -14,7 +14,7 @@ Nightlies
 ===
 DSFML uses a C wrapper for SFML in order to run, called DSFML-C. There are tutorials in the wiki for building this from source, but if you would rather download these nightly* builds, feel free.
 
-[Windows 32bit](https://dl.dropboxusercontent.com/u/167365084/DSFML%20for%20Windows.zip) - Compiled December 19th, 2013
+[Windows 32bit](https://dl.dropboxusercontent.com/u/167365084/DSFML%20for%20Windows.zip) - Compiled July 19th, 2014
 
 Windows 64bit - Coming 2014(Unless someone else wants to build them for me)
 
