@@ -72,7 +72,7 @@ class SoundBuffer
 	this()
 	{
 		sfPtr = sfSoundBuffer_create();
-		err.write(text(sfErr_getOutput));
+		err.write(text(sfErr_getOutput()));
 	}
 
 	~this()

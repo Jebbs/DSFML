@@ -68,7 +68,7 @@ class SoundRecorder
 		callBacks = new SoundRecorderCallBacks(this);
 		sfPtr = sfSoundRecorder_create(callBacks);
 
-		err.write(text(sfErr_getOutput));
+		err.write(text(sfErr_getOutput()));
 	}
 
 	~this()
@@ -89,7 +89,7 @@ class SoundRecorder
 	{
 		sfSoundRecorder_start(sfPtr, sampleRate);
 
-		err.write(text(sfErr_getOutput));
+		err.write(text(sfErr_getOutput()));
 	}
 
 	/// Stop the capture.
