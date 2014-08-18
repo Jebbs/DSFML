@@ -64,11 +64,6 @@ import dsfml.system.err;
  +/
 class SoundStream:SoundSource
 {
-	struct Chunk
-	{
-		const(short)* samples;
-		size_t sampleCount;
-	}
 
 
 
@@ -310,17 +305,26 @@ class SoundStream:SoundSource
 		sfSoundStream_stop(sfPtr);
 	}
 
-	abstract bool onGetData(ref Chunk chunk);
+	abstract bool onGetData(ref const(short)[] samples);
 
 	abstract void onSeek(Time timeOffset);
 	
 
 }
 
+private extern(C++)
+{
+	struct Chunk
+	{
+		const(short)* samples;
+		size_t sampleCount;
+	}
+}
+
 private extern(C++) interface sfmlSoundStreamCallBacks
 {
 public:
-	bool onGetData(SoundStream.Chunk* chunk);
+	bool onGetData(Chunk* chunk);
 	void onSeek(long time);
 }
 
@@ -334,9 +338,16 @@ class SoundStreamCallBacks: sfmlSoundStreamCallBacks
 		m_stream = stream;
 	}
 	
-	extern(C++) bool onGetData(SoundStream.Chunk* chunk)
+	extern(C++) bool onGetData(Chunk* chunk)
 	{
-		return m_stream.onGetData(*chunk);
+		const(short)[] samples;
+
+		auto ret = m_stream.onGetData(samples);
+
+		(*chunk).samples = samples.ptr;
+		(*chunk).sampleCount = samples.length;
+
+		return ret;
 
 	}
 	

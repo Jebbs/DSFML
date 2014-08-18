@@ -55,14 +55,14 @@ struct SoundFile
 	bool openReadFromFile(string filename)
 	{
 		bool toReturn = sfSoundFile_openReadFromFile(m_soundFile, toStringz(filename));
-		err.write(text(sfErrAudio_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return toReturn;
 	}
 
 	bool openReadFromMemory(const(void)[] data)
 	{
 		bool toReturn = sfSoundFile_openReadFromMemory(m_soundFile, data.ptr, data.length);
-		err.write(text(sfErrAudio_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return toReturn;
 	}
 	bool openReadFromStream(InputStream stream)
@@ -70,18 +70,18 @@ struct SoundFile
 		m_stream = new soundFileStream(stream);
 
 		bool toReturn  = sfSoundFile_openReadFromStream(m_soundFile, m_stream);
-		err.write(text(sfErrAudio_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return toReturn;
 	}
 
 	bool openWrite(string filename,uint channelCount,uint sampleRate)
 	{
 		bool toReturn = sfSoundFile_openWrite(m_soundFile, toStringz(filename),channelCount,sampleRate);
-		err.write(text(sfErrAudio_getOutput()));
+		err.write(text(sfErr_getOutput()));
 		return toReturn;
 	}
 
-	long read(short[] data)
+	long read(ref short[] data)
 	{
 		return sfSoundFile_read(m_soundFile,data.ptr, data.length);
 
@@ -95,7 +95,7 @@ struct SoundFile
 	void seek(long timeOffset)
 	{
 		sfSoundFile_seek(m_soundFile, timeOffset);
-		err.write(text(sfErrAudio_getOutput()));
+		err.write(text(sfErr_getOutput()));
 	}
 
 	long getSampleCount()
@@ -162,7 +162,7 @@ class soundFileStream:sfmlInputStream
 }
 
 
-extern(C) const(char)* sfErrAudio_getOutput();
+extern(C) const(char)* sfErr_getOutput();
 
 
 extern(C)
