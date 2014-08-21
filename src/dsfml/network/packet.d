@@ -328,9 +328,9 @@ unittest
 	}
 }
 
-private extern(C):
+extern(C) struct sfPacket;
 
-struct sfPacket;
+private extern(C):
 
 ///Create a new packet
 sfPacket* sfPacket_create();

@@ -118,9 +118,9 @@ unittest
 	}
 }
 
-private extern(C):
+extern(C) struct sfTcpListener;
 
-struct sfTcpListener;
+private extern(C):
 
 sfTcpListener* sfTcpListener_create();
 
