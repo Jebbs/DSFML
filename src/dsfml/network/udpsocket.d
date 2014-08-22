@@ -172,7 +172,7 @@ unittest
 	}
 }
 
-private extern(C):
+package extern(C):
 
 struct sfUdpSocket;
 

@@ -118,7 +118,7 @@ unittest
 	}
 }
 
-private extern(C):
+package extern(C):
 
 struct sfTcpListener;
 
