@@ -321,7 +321,7 @@ void sfSoundBuffer_destroy(sfSoundBuffer* soundBuffer);
 
 bool sfSoundBuffer_saveToFile(const sfSoundBuffer* soundBuffer, const char* filename);
 
-const(short)* sfSoundBuffer_getSamples(const sfSoundBuffer* soundBuffer);
+const(short*) sfSoundBuffer_getSamples(const sfSoundBuffer* soundBuffer);
 
 size_t sfSoundBuffer_getSampleCount(const sfSoundBuffer* soundBuffer);
 
