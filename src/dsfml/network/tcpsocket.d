@@ -209,9 +209,9 @@ unittest
 	}
 }
 
-extern(C) struct sfTcpSocket;
+package extern(C):
 
-private extern(C):
+struct sfTcpSocket;
 
 //Create a new TCP socket
 sfTcpSocket* sfTcpSocket_create();

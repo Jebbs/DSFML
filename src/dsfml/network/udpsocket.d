@@ -172,9 +172,9 @@ unittest
 	}
 }
 
-extern(C) struct sfUdpSocket;
+package extern(C):
 
-private extern(C):
+struct sfUdpSocket;
 
 //Create a new UDP socket
 sfUdpSocket* sfUdpSocket_create();
