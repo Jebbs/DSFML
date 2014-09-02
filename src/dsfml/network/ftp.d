@@ -34,7 +34,7 @@ import dsfml.system.time;
 import dsfml.network.ipaddress;
 import std.string;
 
-
+///A FTP client.
 class Ftp
 {
 	enum TransferMode
