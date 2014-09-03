@@ -325,7 +325,7 @@ void buildUnittests()
 		}
 	}
 
-	string buildCommand = "dmd "~filelist ~"-version=DSFML_Unittest_Audio "~ unittestCompilerSwitches~" -of"~unittestDirectory~"unittest";
+	string buildCommand = "dmd "~filelist ~"-version=DSFML_Unittest_System -version=DSFML_Unittest_Window -version=DSFML_Unittest_Graphics -version=DSFML_Unittest_Audio -version=DSFML_Unittest_Network "~ unittestCompilerSwitches~" -of"~unittestDirectory~"unittest";
 
 	if(isWindows)
 	{
