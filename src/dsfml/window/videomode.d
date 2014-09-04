@@ -102,7 +102,7 @@ unittest
 		
 		writeln("Unit test for VideoMode struct");
 		
-		uint modesCount = VideoMode.getFullscreenModes().length;
+		size_t modesCount = VideoMode.getFullscreenModes().length;
 		
 		writeln("There are ", modesCount, " full screen modes available.");
 		writeln("Your current desktop video mode is ",VideoMode.getDesktopMode().toString());
