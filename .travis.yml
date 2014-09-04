@@ -18,6 +18,6 @@ before_install:
   - cd $TRAVIS_BUILD_DIR
  
 install:
-script: dmd build.d -unittest
+script: rdmd build.d -unittest
 
 
