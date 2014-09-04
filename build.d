@@ -288,7 +288,8 @@ void initialize()
 	writeln();
 }
 
-void buildLibs()
+//build the static libraries. Returns true on successful build, false on unsuccessful build
+bool buildLibs()
 {
 	writeln("Building static libraries!");
 	foreach(theModule;modules)
@@ -309,11 +310,14 @@ void buildLibs()
 		if(status.status !=0)
 		{
 			writeln(status.output);
+			return false;
 		}
+		return true;
 	}
 }
 
-void buildUnittests()
+//build the unit test. Returns true on successful build, false on unsuccessful build
+bool buildUnittests()
 {
 	writeln("Building unit tests!");
 	string filelist = "";
@@ -341,10 +345,12 @@ void buildUnittests()
 
 	auto status = executeShell(buildCommand);
 
-		if(status.status !=0)
-		{
-			writeln(status.output);
-		}
+	if(status.status !=0)
+	{
+		writeln(status.output);
+		return false;
+	}
+	return true;
 }
 
 void buildDoc()
@@ -422,7 +428,7 @@ void showHelp()
 
 }
 
-void main(string[] args)
+int main(string[] args)
 {
 
 
@@ -430,7 +436,7 @@ void main(string[] args)
 
 	if(!checkSwitchErrors())
 	{
-		return;
+		return -1;
 	}
 
 
@@ -442,19 +448,28 @@ void main(string[] args)
 		}
 
 		showHelp();
-		return;
+		return -1;
 	}
 
 	writeln();
 	initialize();
 	if(buildingLibs)
 	{
-		buildLibs();
+		if(!buildLibs())
+		{
+			return -1;
+		}
 	}
 	if(buildingUnittests)
 	{
-		buildLibs();
-		buildUnittests();
+		if(!buildLibs())
+		{
+			return -1;
+		}
+		if(!buildUnittests())
+		{
+			return -1;
+		}
 	}
 	if(buildingDoc)
 	{
@@ -466,13 +481,20 @@ void main(string[] args)
 	}
 	if(buildingAll)
 	{
-		buildLibs();
+		if(!buildLibs())
+		{
+			return -1;
+		}
 		buildDoc();
 		buildInterfaceFiles();
-		buildUnittests();
+		if(!buildUnittests())
+		{
+			return -1;
+		}
 	}
 
 
 
 	writeln("Done!");
+	return 0;
 }
