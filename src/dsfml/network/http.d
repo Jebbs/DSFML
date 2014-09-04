@@ -31,7 +31,6 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 module dsfml.network.http;
 
 import dsfml.system.time;
-import std.string;
 
 
 class Http
@@ -45,6 +44,7 @@ class Http
 	
 	this(string host, ushort port = 0)
 	{
+		import dsfml.system.string;
 		sfPtr = sfHttp_create();
 		sfHttp_setHost(sfPtr, toStringz(host),port);
 	}
@@ -58,6 +58,7 @@ class Http
 	
 	void setHost(string host, ushort port = 0)
 	{
+		import dsfml.system.string;
 		sfHttp_setHost(sfPtr, toStringz(host),port);
 	}
 	
@@ -79,6 +80,7 @@ class Http
 
 		this(string uri = "/", Method method = Method.Get, string requestBody = "")
 		{
+			import dsfml.system.string;
 			sfPtrRequest = sfHttpRequest_create();
 			sfHttpRequest_setUri(sfPtrRequest, toStringz(uri));
 			sfHttpRequest_setMethod(sfPtrRequest, method);
@@ -94,11 +96,13 @@ class Http
 
 		void setBody(string requestBody)
 		{
+			import dsfml.system.string;
 			sfHttpRequest_setBody(sfPtrRequest,toStringz(requestBody));
 		}
 
 		void setField(string feild, string value)
 		{
+			import dsfml.system.string;
 			sfHttpRequest_setField(sfPtrRequest,toStringz(feild),toStringz(value));
 		}
 
@@ -114,6 +118,7 @@ class Http
 		
 		void setUri(string uri)
 		{
+			import dsfml.system.string;
 			sfHttpRequest_setUri(sfPtrRequest,toStringz(uri));
 		}
 	}
@@ -157,14 +162,14 @@ class Http
 
 		string getBody()
 		{
-			import std.conv;
-			return sfHttpResponse_getBody(sfPtrResponse).to!string();
+			import dsfml.system.string;
+			return toString(sfHttpResponse_getBody(sfPtrResponse));
 		}
 
 		string getField(string field)
 		{
-			import std.conv;
-			return (sfHttpResponse_getField(sfPtrResponse,toStringz(field))).to!string();
+			import dsfml.system.string;
+			return toString(sfHttpResponse_getField(sfPtrResponse,toStringz(field)));
 		}
 
 		uint getMajorHttpVersion()

@@ -94,10 +94,10 @@ class TcpSocket:Socket
 
 	Status send(const(void)[] data)
 	{
-		import std.conv;
+		import dsfml.system.string;
 
 		Status toReturn = sfTcpSocket_send(sfPtr, data.ptr, data.length);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
 

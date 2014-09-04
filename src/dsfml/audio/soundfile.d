@@ -33,7 +33,6 @@ module dsfml.audio.soundfile;
 import std.string;
 import dsfml.system.inputstream;
 import dsfml.system.err;
-import std.conv;
 
 package:
 
@@ -54,30 +53,34 @@ struct SoundFile
 
 	bool openReadFromFile(string filename)
 	{
+		import dsfml.system.string;
 		bool toReturn = sfSoundFile_openReadFromFile(m_soundFile, toStringz(filename));
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
 	bool openReadFromMemory(const(void)[] data)
 	{
+		import dsfml.system.string;
 		bool toReturn = sfSoundFile_openReadFromMemory(m_soundFile, data.ptr, data.length);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
 	bool openReadFromStream(InputStream stream)
 	{
+		import dsfml.system.string;
 		m_stream = new soundFileStream(stream);
 
 		bool toReturn  = sfSoundFile_openReadFromStream(m_soundFile, m_stream);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
 	bool openWrite(string filename,uint channelCount,uint sampleRate)
 	{
+		import dsfml.system.string;
 		bool toReturn = sfSoundFile_openWrite(m_soundFile, toStringz(filename),channelCount,sampleRate);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
@@ -94,8 +97,9 @@ struct SoundFile
 
 	void seek(long timeOffset)
 	{
+		import dsfml.system.string;
 		sfSoundFile_seek(m_soundFile, timeOffset);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 	}
 
 	long getSampleCount()

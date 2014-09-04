@@ -30,7 +30,6 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 
 module dsfml.system.vector2;
 
-import std.conv;
 import std.traits;
 
 struct Vector2(T)
@@ -167,6 +166,7 @@ return Vector2!(T)(0,0);
 	//figured it would be useful for testing, debugging, etc
 	string toString() const
 	{
+		import std.conv;
 		return "X: " ~ text(x) ~ " Y: " ~ text(y);
 	}
 }

@@ -32,7 +32,7 @@ module dsfml.audio.soundrecorder;
 
 import core.thread;
 import dsfml.system.err;
-import std.conv;
+
 
 /++
  + Abstract base class for capturing sound data.
@@ -65,10 +65,11 @@ class SoundRecorder
 
 	protected this()
 	{
+		import dsfml.system.string;
 		callBacks = new SoundRecorderCallBacks(this);
 		sfPtr = sfSoundRecorder_create(callBacks);
 
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 	}
 
 	~this()
@@ -87,9 +88,10 @@ class SoundRecorder
 	 */
    	void start(uint theSampleRate = 44100)
 	{
+		import dsfml.system.string;
 		sfSoundRecorder_start(sfPtr, sampleRate);
 
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 	}
 
 	/// Stop the capture.

@@ -65,17 +65,19 @@ class TcpListener:Socket
 
 	Status accept(TcpSocket socket)
 	{
-		import std.conv;
+		import dsfml.system.string;
+
 		Status toReturn = sfTcpListener_accept(sfPtr, &socket.sfPtr); 
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return toReturn; 
 	}
 
 	Status listen(ushort port)
 	{
-		import std.conv;
+		import dsfml.system.string;
+
 		Status toReturn = sfTcpListener_listen(sfPtr, port);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
 

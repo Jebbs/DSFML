@@ -131,8 +131,8 @@ class Image
 	 */
 	bool loadFromFile(string fileName)
 	{
-		import std.conv;
-		import std.string;
+		import dsfml.system.string;
+
 		//if the Image already exists, destroy it first
 		if(sfPtr)
 		{
@@ -141,7 +141,7 @@ class Image
 
 		sfPtr = sfImage_createFromFile(toStringz(fileName));
 
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 
 		return (sfPtr != null);
 	}
@@ -158,7 +158,7 @@ class Image
 	 */
 	bool loadFromMemory(const(void)[] data)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Image already exists, destroy it first
 		if(sfPtr)
 		{
@@ -166,7 +166,7 @@ class Image
 		}
 
 		sfPtr = sfImage_createFromMemory(data.ptr, data.length);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr != null);
 	}
 
@@ -182,7 +182,7 @@ class Image
 	 */
 	bool loadFromStream(InputStream stream)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Image already exists, destroy it first
 		if(sfPtr)
 		{
@@ -190,7 +190,7 @@ class Image
 		}
 
 		sfPtr = sfImage_createFromStream(new imageStream(stream));
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -325,9 +325,9 @@ class Image
 	 */
 	bool saveToFile(string fileName)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		bool toReturn = sfImage_saveToFile(sfPtr, fileName.ptr);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
 }

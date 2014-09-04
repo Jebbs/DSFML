@@ -32,8 +32,6 @@ module dsfml.network.ipaddress;
 
 import dsfml.system.time;
 
-import std.string;
-import std.conv;
 
 struct IpAddress
 {
@@ -42,7 +40,7 @@ struct IpAddress
 
 	this(string address)
 	{
-
+		import dsfml.system.string;
 		sfIpAddress_fromString(toStringz(address) ,m_address.ptr);
 	}
 	
@@ -63,6 +61,7 @@ struct IpAddress
 
 	string toString()
 	{
+		import std.conv;
 		//TODO: possibly cache the string? Maybe with a needsUpdatingMethod?
 
 		//Remove any null characters from the string representation

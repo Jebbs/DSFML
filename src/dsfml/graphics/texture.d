@@ -98,8 +98,7 @@ class Texture
 	 */
 	bool loadFromFile(string filename, IntRect area = IntRect() )
 	{
-		import std.conv;
-		import std.string;
+		import dsfml.system.string;
 		//if the Texture already exists, destroy it first
 		if(sfPtr)
 		{
@@ -107,7 +106,7 @@ class Texture
 		}
 
 		sfPtr = sfTexture_createFromFile(toStringz(filename) ,area.left, area.top,area.width, area.height);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -130,7 +129,7 @@ class Texture
 	 */
 	bool loadFromMemory(const(void)* data, size_t sizeInBytes, IntRect area = IntRect())
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Texture already exists, destroy it first
 		if(sfPtr)
 		{
@@ -138,7 +137,7 @@ class Texture
 		}
 
 		sfPtr = sfTexture_createFromMemory(data,sizeInBytes,area.left, area.top,area.width, area.height);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -159,7 +158,7 @@ class Texture
 	 */
 	bool loadFromStream(InputStream stream, IntRect area = IntRect())
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Texture already exists, destroy it first
 		if(sfPtr)
 		{
@@ -167,7 +166,7 @@ class Texture
 		}
 
 		sfPtr = sfTexture_createFromStream(new sfmlStream(stream), area.left, area.top,area.width, area.height);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -188,7 +187,7 @@ class Texture
 	 */
 	bool loadFromImage(Image image, IntRect area = IntRect())
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Texture already exists, destroy it first
 		if(sfPtr)
 		{
@@ -196,7 +195,7 @@ class Texture
 		}
 
 		sfPtr = sfTexture_createFromImage(image.sfPtr, area.left, area.top,area.width, area.height);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr != null);
 	}
 
@@ -266,7 +265,7 @@ class Texture
 	 */
 	bool create(uint height, uint width)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Texture already exists, destroy it first
 		if(sfPtr)
 		{
@@ -274,7 +273,7 @@ class Texture
 		}
 		
 		sfPtr = sfTexture_create(width, height);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 

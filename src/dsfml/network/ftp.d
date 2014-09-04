@@ -32,7 +32,7 @@ module dsfml.network.ftp;
 
 import dsfml.system.time;
 import dsfml.network.ipaddress;
-import std.string;
+
 
 ///A FTP client.
 class Ftp
@@ -64,11 +64,13 @@ class Ftp
 	
 	ListingResponse getDirectoryListing(string directory = "")
 	{
+		import dsfml.system.string;
 		return new ListingResponse(sfFtp_getDirectoryListing(sfPtr, toStringz(directory)));
 	}
 
 	Response changeDirectory(string directory)
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_changeDirectory(sfPtr,toStringz(directory)));
 	}
 
@@ -85,21 +87,25 @@ class Ftp
 
 	Response deleteDirectory(string name)
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_deleteDirectory(sfPtr, toStringz(name)));
 	}
 
 	Response deleteFile(string name)
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_deleteFile(sfPtr, toStringz(name)));
 	}
 
 	Response disconnect()
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_disconnect(sfPtr));
 	}
 
 	Response download(string remoteFile, string localPath, TransferMode mode = TransferMode.Binary)
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_download(sfPtr, toStringz(remoteFile),toStringz(localPath),mode));
 	}
 
@@ -116,25 +122,30 @@ class Ftp
 	
 	Response login(string name, string password)
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_login(sfPtr,toStringz(name), toStringz(password)));
 	}
 
 	Response parentDirectory()
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_parentDirectory(sfPtr));
 	}
 	Response createDirectory(string name)
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_createDirectory(sfPtr, toStringz(name)));
 	}
 
 	Response renameFile(string name, string newName)
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_renameFile(sfPtr,toStringz(name),toStringz(newName)));
 	}
 
 	Response upload(string localFile, string remotePath, TransferMode mode = TransferMode.Binary)
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_upload(sfPtr,toStringz(localFile),toStringz(remotePath),mode));
 	}
 
@@ -144,9 +155,9 @@ class Ftp
 
 		package this(sfFtpDirectoryResponse* FtpDirectoryResponce)
 		{
-			import std.conv;
+			import dsfml.system.string;
 			
-			Directory = sfFtpDirectoryResponse_getDirectory(FtpDirectoryResponce).to!string();
+			Directory = toString(sfFtpDirectoryResponse_getDirectory(FtpDirectoryResponce));
 			
 			super(sfFtpDirectoryResponse_getStatus(FtpDirectoryResponce), sfFtpDirectoryResponse_getMessage(FtpDirectoryResponce));
 			
@@ -165,12 +176,12 @@ class Ftp
 
 		package this(sfFtpListingResponse* FtpListingResponce)
 		{
-			import std.conv;
+			import dsfml.system.string;
 
 			Filenames.length = sfFtpListingResponse_getCount(FtpListingResponce);
 			for(int i = 0; i < Filenames.length; i++)
 			{
-				Filenames[i] = text(sfFtpListingResponse_getName(FtpListingResponce,i));
+				Filenames[i] = toString(sfFtpListingResponse_getName(FtpListingResponce,i));
 			}
 			
 			super(sfFtpListingResponse_getStatus(FtpListingResponce), sfFtpListingResponse_getMessage(FtpListingResponce));
@@ -249,9 +260,9 @@ class Ftp
 		
 		package this(Ftp.Response.Status status = Ftp.Response.Status.InvalidResponse, const(char)* message = "")
 		{
-			import std.conv;
+			import dsfml.system.string;
 			FtpStatus = status;
-			Message = message.to!string();
+			Message = toString(message);
 		}
 
 		string getMessage()

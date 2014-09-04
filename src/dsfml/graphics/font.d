@@ -86,8 +86,8 @@ class Font
 	 */
 	bool loadFromFile(string filename)
 	{
-		import std.conv;
-		import std.string;
+		import dsfml.system.string;
+
 		//if the Font already exists, destroy it first
 		if(sfPtr)
 		{
@@ -101,7 +101,7 @@ class Font
 			fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
 		}
 		
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		
 		return (sfPtr != null);
 	}
@@ -118,7 +118,7 @@ class Font
 	 */
 	bool loadFromMemory(const(void)[] data)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Font already exists, destroy it first
 		if(sfPtr)
 		{
@@ -132,7 +132,7 @@ class Font
 			fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
 		}
 
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 
 		return (sfPtr != null);
 	}
@@ -149,7 +149,7 @@ class Font
 	 */
 	bool loadFromStream(InputStream stream)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Font already exists, destroy it first
 		if(sfPtr)
 		{
@@ -164,7 +164,7 @@ class Font
 			fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
 		}
 
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		
 		return (sfPtr == null)?false:true;
 	}

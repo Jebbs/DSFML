@@ -66,10 +66,10 @@ class UdpSocket:Socket
 
 	Status bind(ushort port)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		
 		Status toReturn = sfUdpSocket_bind(sfPtr,port);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
@@ -99,13 +99,13 @@ class UdpSocket:Socket
 
 	Status receive(void[] data, IpAddress address, out ushort port)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		
 		size_t sizeReceived;
 		
 		Status status = sfUdpSocket_receive(sfPtr, data.ptr, data.length, &sizeReceived, address.m_address.ptr, &port);
 		
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		
 		return status;
 	}

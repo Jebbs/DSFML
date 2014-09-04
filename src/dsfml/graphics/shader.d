@@ -38,7 +38,6 @@ import dsfml.system.vector2;
 import dsfml.system.vector3;
 import dsfml.system.err;
 
-import std.string;
 
 /++
  + Shader class (vertex and fragment).
@@ -109,7 +108,7 @@ class Shader
 	 */
 	bool loadFromFile(string filename, Type type)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -124,7 +123,7 @@ class Shader
 		{
 			sfPtr = sfShader_createFromFile(null , toStringz(filename) );
 		}
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -141,7 +140,7 @@ class Shader
 	 */
 	bool loadFromFile(string vertexShaderFilename, string fragmentShaderFilename)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -149,7 +148,7 @@ class Shader
 		}
 
 		sfPtr = sfShader_createFromFile(toStringz(vertexShaderFilename) , toStringz(fragmentShaderFilename));
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr != null);
 	}
 
@@ -166,7 +165,7 @@ class Shader
 	 */
 	bool loadFromMemory(string shader, Type type)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -181,7 +180,7 @@ class Shader
 		{
 			sfPtr = sfShader_createFromMemory(null , toStringz(shader) );
 		}
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
@@ -198,7 +197,7 @@ class Shader
 	 */
 	bool loadFromMemory(string vertexShader, string fragmentShader)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -206,7 +205,7 @@ class Shader
 		}
 
 		sfShader_createFromMemory(toStringz(vertexShader) , toStringz(fragmentShader));
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 	
@@ -223,7 +222,7 @@ class Shader
 	 */
 	bool loadFromStream(InputStream stream, Type type)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -238,7 +237,7 @@ class Shader
 		{
 			sfPtr = sfShader_createFromStream(null , &stream );
 		}
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -255,7 +254,7 @@ class Shader
 	 */
 	bool loadFromStream(InputStream vertexShaderStream, InputStream fragmentShaderStream)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		//if the Shader exists, destroy it first
 		if(sfPtr)
 		{
@@ -263,7 +262,7 @@ class Shader
 		}
 
 		sfPtr = sfShader_createFromStream(&vertexShaderStream, &fragmentShaderStream);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return (sfPtr == null)?false:true;
 	}
 
@@ -276,6 +275,7 @@ class Shader
 	 */
 	void setParameter(string name, float x)
 	{
+		import dsfml.system.string;
 		sfShader_setFloatParameter(sfPtr, toStringz(name), x);
 	}
 
@@ -289,6 +289,7 @@ class Shader
 	 */
 	void setParameter(string name, float x, float y)
 	{
+		import dsfml.system.string;
 		sfShader_setFloat2Parameter(sfPtr, toStringz(name), x, y);
 	}
 
@@ -303,6 +304,7 @@ class Shader
 	 */
 	void setParameter(string name, float x, float y, float z)
 	{
+		import dsfml.system.string;
 		sfShader_setFloat3Parameter(sfPtr, toStringz(name), x,y,z);
 	}
 
@@ -318,6 +320,7 @@ class Shader
 	 */
 	void setParameter(string name, float x, float y, float z, float w)
 	{
+		import dsfml.system.string;
 		sfShader_setFloat4Parameter(sfPtr, toStringz(name), x, y, z, w);
 	}
 
@@ -330,6 +333,7 @@ class Shader
 	 */
 	void setParameter(string name, Vector2f vector)
 	{
+		import dsfml.system.string;
 		sfShader_setFloat2Parameter(sfPtr, toStringz(name), vector.x, vector.y);
 	}
 
@@ -342,6 +346,7 @@ class Shader
 	 */
 	void setParameter(string name, Vector3f vector)
 	{
+		import dsfml.system.string;
 		sfShader_setFloat3Parameter(sfPtr, toStringz(name), vector.x, vector.y, vector.z);
 	}
 
@@ -356,6 +361,7 @@ class Shader
 	 */
 	void setParameter(string name, Color color)
 	{
+		import dsfml.system.string;
 		sfShader_setColorParameter(sfPtr, toStringz(name), color.r, color.g, color.b, color.a);
 	}
 
@@ -368,6 +374,7 @@ class Shader
 	 */
 	void setParameter(string name, Transform transform)
 	{
+		import dsfml.system.string;
 		sfShader_setTransformParameter(sfPtr, toStringz(name), transform.m_matrix.ptr);
 	}
 
@@ -384,9 +391,9 @@ class Shader
 	 */
 	void setParameter(string name, Texture texture)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 	}
 
 	/**
@@ -399,6 +406,7 @@ class Shader
 	 */
 	void setParameter(string name, CurrentTextureType)
 	{
+		import dsfml.system.string;
 		sfShader_setCurrentTextureParameter(sfPtr, toStringz(name));
 	}
 
@@ -424,9 +432,9 @@ class Shader
 	 */
 	static bool isAvailable()
 	{
-		import std.conv;
+		import dsfml.system.string;
 		bool toReturn = sfShader_isAvailable();
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
 }

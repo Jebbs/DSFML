@@ -35,9 +35,6 @@ import dsfml.window.contextsettings;
 import dsfml.window.windowhandle;
 import dsfml.system.vector2;
 import dsfml.system.err;
-import std.conv;
-import std.string;
-import std.utf;
 
 
 class Window
@@ -62,21 +59,24 @@ class Window
 	
 	this(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
+		import dsfml.system.string;
 		sfPtr = sfWindow_create(mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 	}
 	
 	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
 	this(VideoMode mode, dstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
-		sfPtr = sfWindow_createUnicode(mode.width, mode.height, mode.bitsPerPixel, toUTF32z(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(text(sfErr_getOutput()));
+		import dsfml.system.string;
+		sfPtr = sfWindow_createUnicode(mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(toString(sfErr_getOutput()));
 	}
 
 	this(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
+		import dsfml.system.string;
 		sfPtr = sfWindow_createFromHandle(handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 	}
 	
 	~this()
@@ -119,8 +119,9 @@ class Window
 
 	bool setActive(bool active)
 	{
+		import dsfml.system.string;
 		bool toReturn = sfWindow_setActive(sfPtr, active);
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
@@ -151,12 +152,14 @@ class Window
 
 	void setTitle(string newTitle)
 	{
+		import dsfml.system.string;
 		sfWindow_setTitle(sfPtr, toStringz(newTitle));
 	}
 	
 	void setTitle(dstring newTitle)
 	{
-		sfWindow_setUnicodeTitle(sfPtr, toUTF32z(newTitle));
+		import dsfml.system.string;
+		sfWindow_setUnicodeTitle(sfPtr, toStringz(newTitle));
 	}
 
 	void setVisible(bool visible)
@@ -316,7 +319,7 @@ unittest
 }
 
 
-alias std.utf.toUTFz!(const(dchar)*) toUTF32z;
+//alias std.utf.toUTFz!(const(dchar)*) toUTF32z;
 
 package extern(C)
 {

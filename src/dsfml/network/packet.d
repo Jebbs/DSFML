@@ -30,7 +30,7 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 
 module dsfml.network.packet;
 
-import std.conv;
+
 
 class Packet
 {
@@ -130,6 +130,8 @@ class Packet
 	
 	string readString()
 	{
+		import std.conv;
+
 		//get string length
 		uint length = readUint();
 		char[] temp = new char[](length);
@@ -145,6 +147,8 @@ class Packet
 	
 	wstring readWstring()
 	{
+		import std.conv;
+
 		//get string length
 		uint length = readUint();
 		wchar[] temp = new wchar[](length);
@@ -160,6 +164,8 @@ class Packet
 
 	dstring readDstring()
 	{
+		import std.conv;
+
 		//get string length
 		uint length = readUint();
 		dchar[] temp = new dchar[](length);

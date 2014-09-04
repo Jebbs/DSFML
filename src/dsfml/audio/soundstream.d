@@ -89,14 +89,14 @@ class SoundStream:SoundSource
 
 	protected void initialize(uint channelCount, uint sampleRate)
 	{
-		import std.conv;
+		import dsfml.system.string;
 
 		//destroy the blank pointer so we can create the real instance
 		sfSoundStream_destroy(sfPtr);
 
 		sfPtr = sfSoundStream_create(channelCount, sampleRate, callBacks);
 
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 	}
 
 
@@ -288,11 +288,11 @@ class SoundStream:SoundSource
 
 	void play()
 	{
-		import std.conv;
+		import dsfml.system.string;
 
 		sfSoundStream_play(sfPtr);
 
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 	}
 
 	void pause()

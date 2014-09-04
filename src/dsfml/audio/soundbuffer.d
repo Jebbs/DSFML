@@ -43,11 +43,9 @@ import std.string;
 import std.algorithm;
 import std.array;
 
-import core.memory;
+//import core.memory;
 
 import dsfml.system.err;
-import std.conv;
-import std.string;
 
 /++
  + Storage for audio samples defining a sound.
@@ -71,8 +69,9 @@ class SoundBuffer
 
 	this()
 	{
+		import dsfml.system.string;
 		sfPtr = sfSoundBuffer_create();
-		err.write(text(sfErr_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 	}
 
 	~this()
@@ -158,7 +157,8 @@ class SoundBuffer
 		}
 		else
 		{
-			err.write(text(sfErr_getOutput()));
+			import dsfml.system.string;
+			err.write(toString(sfErr_getOutput()));
 			return false;
 		}
 	}
@@ -183,7 +183,8 @@ class SoundBuffer
 		}
 		else
 		{
-			err.write(text(sfErr_getOutput()));
+			import dsfml.system.string;
+			err.write(toString(sfErr_getOutput()));
 			return false;
 		}
 	}
@@ -209,7 +210,8 @@ class SoundBuffer
 		}
 		else
 		{
-			err.write(text(sfErr_getOutput()));
+			import dsfml.system.string;
+			err.write(toString(sfErr_getOutput()));
 			return false;
 		}
 	}
@@ -237,7 +239,8 @@ class SoundBuffer
 		}
 		else
 		{
-			err.write(text(sfErr_getOutput()));
+			import dsfml.system.string;
+			err.write(toString(sfErr_getOutput()));
 			return false;
 		}
 	}
@@ -254,6 +257,7 @@ class SoundBuffer
 	 */
 	bool saveToFile(string filename)
 	{
+		import dsfml.system.string;
 		sfSoundBuffer_saveToFile(sfPtr, toStringz(filename));
 		
 		if(sfPtr)
@@ -262,7 +266,8 @@ class SoundBuffer
 		}
 		else
 		{
-			err.write(text(sfErr_getOutput()));
+
+			err.write(toString(sfErr_getOutput()));
 			return false;
 		}
 	}
