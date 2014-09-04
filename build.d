@@ -312,8 +312,9 @@ bool buildLibs()
 			writeln(status.output);
 			return false;
 		}
-		return true;
+		
 	}
+	return true;
 }
 
 //build the unit test. Returns true on successful build, false on unsuccessful build
