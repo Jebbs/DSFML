@@ -216,7 +216,7 @@ bool checkSwitchErrors()
 	{
 		if(unittestLibraryLocation == "")
 		{
-			writeln("Not putting in a location for shared libraries will work if they are in a standard location.");
+			writeln("Note: Not putting in a location for shared libraries will work only if they are in a standard location.");
 		}
 	}
 
