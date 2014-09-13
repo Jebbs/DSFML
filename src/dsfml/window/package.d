@@ -27,6 +27,8 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
+///Provides OpenGL-based windows, and abstractions for events and input handling.
 module dsfml.window;
 
 public

@@ -27,6 +27,8 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
+///Socket-based communication, utilities and higher-level network protocols (HTTP, FTP).
 module dsfml.network;
 
 public
