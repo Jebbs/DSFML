@@ -33,6 +33,11 @@ module dsfml.system.inputstream;
 
 /**
 *Abstract class for custom file input streams.
+*
+*This class allows users to define their own file input sources from which SFML can load resources.
+*
+*SFML resource classes like sf::Texture and sf::SoundBuffer provide loadFromFile and loadFromMemory functions, which read data from conventional sources.
+*However, if you have data coming from a different source (over a network, embedded, encrypted, compressed, etc) you can derive your own class from sf::InputStream and load SFML resources with their loadFromStream function.
 */
 interface InputStream
 {

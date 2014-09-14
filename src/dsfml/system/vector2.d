@@ -35,6 +35,12 @@ import std.traits;
 
 /**
  *Utility template struct for manipulating 2-dimensional vectors
+ *
+ *sf::Vector2 is a simple class that defines a mathematical vector with two coordinates (x and y).
+ *
+ *It can be used to represent anything that has two dimensions: a size, a point, a velocity, etc.
+ *
+ *The template parameter T is the type of the coordinates. It can be any type that supports arithmetic operations (+, -, /, *) and comparisons (==, !=), for example int or float.
  */
 struct Vector2(T)
 	if(isNumeric!(T))

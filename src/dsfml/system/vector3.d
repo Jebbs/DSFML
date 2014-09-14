@@ -35,6 +35,12 @@ import std.traits;
 
 /**
  *Utility template struct for manipulating 3-dimensional vectors
+ *
+ *sf::Vector3 is a simple class that defines a mathematical vector with three coordinates (x, y and z).
+ *
+ *It can be used to represent anything that has three dimensions: a size, a point, a velocity, etc.
+ *
+ *The template parameter T is the type of the coordinates. It can be any type that supports arithmetic operations (+, -, /, *) and comparisons (==, !=), for example int or float.
  */
 struct Vector3(T)
 	if(isNumeric!(T))

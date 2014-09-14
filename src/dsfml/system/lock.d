@@ -35,6 +35,13 @@ import dsfml.system.mutex;
 
 /**
 *Automatic wrapper for locking and unlocking mutexes.
+*
+*Lock is a RAII wrapper for DSFML's Mutex.
+*
+*By unlocking it in its destructor, it ensures that the mutex will always be released when the current scope (most likely a function) ends.
+*This is even more important when an exception or an early return statement can interrupt the execution flow of the function.
+*
+*For maximum robustness, Lock should always be used to lock/unlock a mutex.
 */
 struct Lock
 {

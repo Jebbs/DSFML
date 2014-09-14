@@ -32,8 +32,19 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 module dsfml.system.time;
 
 import std.traits;
+
 /**
  *Represents a time value
+ *
+ *The Time struct encapsulates a time value in a flexible way.
+ *
+ *It allows to define a time value either as a number of seconds, milliseconds or microseconds. It also works the other way round: you can read a time value as either a number of seconds, milliseconds or microseconds.
+ *
+ *By using such a flexible interface, the API doesn't impose any fixed type or resolution for time values, and let the user choose its own favorite representation.
+ *
+ *Time values support the usual mathematical operations: you can add or subtract two times, multiply or divide a time by a number, compare two times, etc.
+ *
+ *Since they represent a time span and not an absolute time value, times can also be negative.
  */
 struct Time
 {

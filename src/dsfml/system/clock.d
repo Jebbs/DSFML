@@ -35,6 +35,11 @@ public import dsfml.system.time;
 
 /**
  *Utility class that measures the elapsed time.
+ *
+ *Clock is a lightweight class for measuring time.
+ *
+ *Its provides the most precise time that the underlying OS can achieve (generally microseconds or nanoseconds).
+ *It also ensures monotonicity, which means that the returned time can never go backward, even if the system time is changed.
  */
 class Clock
 {

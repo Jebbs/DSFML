@@ -34,7 +34,11 @@ module dsfml.system.err;
 import std.stdio;
 
 /**
-*Standard std.stdio.File instance used by DSFML to output warnings and errors. 
+*Standard std.stdio.File instance used by DSFML to output warnings and errors.
+*
+*By default, err outputs to the same location as stderr, which is the console if there's one available.
+*
+*err can be redirected to write to another output, independantly of stderr, by using the open function. 
 */
 File err;
 

@@ -34,7 +34,13 @@ module dsfml.system.thread;
 import core = core.thread;
 
 /**
- *Utility class to manipulate threads
+ *Utility class to manipulate threads.
+ *
+ *Threads provide a way to run multiple parts of the code in parallel.
+ *
+ *When you launch a new thread, the execution is split and both the new thread and the caller run in parallel. 
+ *
+ *To use a sf::Thread, you construct it directly with the function to execute as the entry point of the thread.
  */
 class Thread
 {
