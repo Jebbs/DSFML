@@ -28,24 +28,31 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing the Clock class.
 module dsfml.system.clock;
 
 public import dsfml.system.time;
 
+/**
+ *Utility class that measures the elapsed time.
+ */
 class Clock
 {
 	package sfClock* sfPtr;
 	
+	///Default constructor.
 	this()
 	{
 		sfPtr = sfClock_create();
 	}
 	
+	//Internally used constructor
 	package this(sfClock* clock)
 	{
 		sfPtr = clock;
 	}
 	
+	///Destructor
 	~this()
 	{
 		debug import dsfml.system.config;
@@ -53,16 +60,19 @@ class Clock
 		sfClock_destroy(sfPtr);
 	}
 	
+	///Get the elapsed time. 
 	Time getElapsedTime() const
 	{
 		return Time(sfClock_getElapsedTime(sfPtr));
 	}
 	
+	///Restart the clock.  
 	Time restart()
 	{
 		return Time(sfClock_restart(sfPtr));
 	}
 	
+	///Create a copy of the clock.
 	@property
 	Clock dup() const
 	{

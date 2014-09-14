@@ -28,34 +28,43 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing the Time struct
 module dsfml.system.time;
 
 import std.traits;
-
+/**
+ *Represents a time value
+ */
 struct Time
 {
 	private long m_microseconds;
 	
+	//Internal constructor
 	package this(long microseconds)
 	{
 		m_microseconds = microseconds;
 	}
 	
-	public float asSeconds()
+	///Return the time value as a number of seconds
+	float asSeconds() const
 	{
 		return m_microseconds/1000000f;
 	}
-	int asMilliseconds()
+
+	///Return the time value as a number of milliseconds
+	int asMilliseconds() const
 	{
 		return cast(int)(m_microseconds / 1000);
 	}
-	long asMicroseconds()
+
+	///Return the time value as a number of microseconds
+	long asMicroseconds() const
 	{
 		return m_microseconds;
 	}
 	
 
-	
+	///Predefined "zero" time value
 	static immutable(Time) Zero;
 	
 	bool opEquals(const ref Time rhs)
@@ -148,16 +157,19 @@ struct Time
 	
 }
 
+///Construct a time value from a number of seconds
 Time seconds(float amount)
 {
 	return Time(cast(long)(amount * 1000000));
 }
 
+///Construct a time value from a number of milliseconds
 Time milliseconds(int amount)
 {
 	return Time(amount*1000);
 }
 
+///Construct a time value from a number of microseconds
 Time microseconds(long amount)
 {
 	return Time( amount);

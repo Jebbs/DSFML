@@ -28,22 +28,28 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing a numeric 2D vector type.
 module dsfml.system.vector2;
 
 import std.traits;
 
+/**
+ *Utility template struct for manipulating 2-dimensional vectors
+ */
 struct Vector2(T)
 	if(isNumeric!(T))
 {
 	public T x;
 	public T y;
 	
+	///Construct the vector from its coordinates
 	this(T X,T Y)
 	{	
 		x = X;
 		y = Y;	
 	}
 
+	///Construct the vector from another type of vector
 	this(E)(Vector2!(E) otherVector)
 	{
 		x = cast(T)(otherVector.x);

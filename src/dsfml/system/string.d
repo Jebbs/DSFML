@@ -28,23 +28,27 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-///This module contains functions for interacting with strings going to and from 
-///a C/C++ library. This module has no dependencies.
+/**
+ *A module containing functions for interacting with strings going to and from 
+ *a C/C++ library. This module has no dependencies.
+ */
 module dsfml.system.string;
 
-//Returns a string copy of a zero terminated C style string
+///Returns a D string copy of a zero terminated C style string
 immutable(T)[] toString(T)(in const(T)* str) pure
 	if (is(T == dchar)||is(T == wchar)||is(T == char))
 {
 	return str[0..strlen(str)].idup;
 }
 
-//returns a C style string from a D string type
+///Returns a pointer to a C style string created from a D string type
 const(T)* toStringz(T)(in immutable(T)[] str) nothrow 
 	if (is(T == dchar)||is(T == wchar)||is(T == char))
 {
-	//TODO: get rid of GC usage
-	static T[] copy;//a means to store the copy after returning the address
+	//TODO: get rid of GC usage without adding dependencies?
+
+	//a means to store the copy after returning the address
+	static T[] copy;
 
 	//Already zero terminated
 	if(str[$-1] == 0)
@@ -63,7 +67,7 @@ const(T)* toStringz(T)(in immutable(T)[] str) nothrow
 	}
 }
 
-//get's the length of a C style string
+///Get the length of a C style string
 size_t strlen(T)(in const(T)* str) pure nothrow
 if (is(T == dchar)||is(T == wchar)||is(T == char))
 {
@@ -78,8 +82,19 @@ unittest
 	{
 		import std.stdio;
 		
-		writeln("Unit test for sleep function");
+		writeln("Unit test for string functions");
 
+		string str1 = "Hello, World";
+		wstring str1 = "Hello, World";
+		dstring str1 = "Hello, World";
+
+		const(char)* cstr1 = toStringz(str1);
+		const(wchar)* cstr2 = toStringz(str2);
+		const(dchar)* cstr3 = toStringz(str3);
+
+		assert(strlen(cstr1) == 12);
+		assert(strlen(cstr2) == 12);
+		assert(strlen(cstr3) == 12);
 
 	}
 

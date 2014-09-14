@@ -28,15 +28,19 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-//Only useful for DSFML mutexes! Can easily be rewritten for built in mutexes.
+///A module containing the Lock struct for locking DSFML mutexes.
 module dsfml.system.lock;
 
 import dsfml.system.mutex;
 
+/**
+*Automatic wrapper for locking and unlocking mutexes.
+*/
 struct Lock
 {
 	private Mutex m_mutex;
 
+	///Construct the lock with a target mutex. 
 	this(Mutex mutex)
 	{
 		m_mutex = mutex;
@@ -44,6 +48,7 @@ struct Lock
 		m_mutex.lock();
 	}
 
+	///Destructor
 	~this()
 	{
 		m_mutex.unlock();

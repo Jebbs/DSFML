@@ -28,10 +28,14 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing a numeric 3D vector type.
 module dsfml.system.vector3;
 
 import std.traits;
 
+/**
+ *Utility template struct for manipulating 3-dimensional vectors
+ */
 struct Vector3(T)
 	if(isNumeric!(T))
 {
@@ -39,6 +43,7 @@ struct Vector3(T)
 	T y;
 	T z;
 	
+	///Construct the vector from its coordinates
 	this(T X,T Y,T Z)
 	{
 		
@@ -48,6 +53,7 @@ struct Vector3(T)
 		
 	}
 
+	///Construct the vector from another type of vector
 	this(E)(Vector3!(E) otherVector)
 	{
 		x = cast(T)(otherVector.x);

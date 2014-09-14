@@ -28,10 +28,12 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing the sleep function.
 module dsfml.system.sleep;
 
 import dsfml.system.time;
 
+///Make the current thread sleep for a given duration
 void sleep(Time duration)
 {
 	import core.thread; 

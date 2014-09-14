@@ -28,27 +28,31 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-//This class should only be used for initial porting!
-//Please use D's regular thread functionality when you can!
-
+///A module containing the Mutex class used by DSFML.
 module dsfml.system.mutex;
 
 import core = core.sync.mutex;
 
+/**
+ *Blocks concurrent access to shared resources from multiple threads
+ */
 class Mutex
 {
 	private core.Mutex m_mutex;
 
+	///Default Constructor
 	this()
 	{
 		m_mutex = new core.Mutex();
 	}
 
+	///Lock the mutex
 	void lock()
 	{
 		m_mutex.lock();
 	}
 
+	//Unlock the mutex
 	void unlock()
 	{
 		m_mutex.unlock();

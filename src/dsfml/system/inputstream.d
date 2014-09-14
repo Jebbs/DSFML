@@ -28,16 +28,24 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing the InputStream interface.
 module dsfml.system.inputstream;
 
+/**
+*Abstract class for custom file input streams.
+*/
 interface InputStream
 {
+	///Read data from the stream. 
 	long read(void[] data);
 
+	///Change the current reading position. 
 	long seek(long position);
 
+	///Get the current reading position in the stream.
 	long tell();
 
+	///Return the size of the stream.
 	long getSize();
 }
 

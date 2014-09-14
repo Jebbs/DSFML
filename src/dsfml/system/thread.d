@@ -28,38 +28,44 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-//This class should only be used for initial porting!
-//Please use D's regular thread functionality when you can!
-
+///A module containing the DSFML Thread class
 module dsfml.system.thread;
 
 import core = core.thread;
 
+/**
+ *Utility class to manipulate threads
+ */
 class Thread
 {
 	private core.Thread m_thread;
 
+	///Construct the thread from a functor with no argument
 	this(void function() fn, size_t sz = 0)
 	{
 		m_thread = new core.Thread(fn,sz);
 	}
 
+	///Construct the thread from a delegate with no argument
 	this(void delegate() dg, size_t sz = 0)
 	{
 		m_thread = new core.Thread(dg, sz);
 	}
 
+	///Destructor
 	~this()
 	{
 		debug import dsfml.system.config;
 		debug mixin(destructorOutput);
 	}
 
+	///Run the thread
 	void launch()
 	{
 		m_thread.start();
 	}
 
+	///Wait until the thread finishes
 	void wait()
 	{
 		if(m_thread.isRunning())
@@ -67,10 +73,6 @@ class Thread
 			m_thread.join(true);
 		}
 	}
-
-	//There is no way to stop threads in D! Mostly because it is considered unsafe. I'll leave this here for now.
-	//void terminate()
-
 
 }
 
