@@ -85,8 +85,8 @@ unittest
 		writeln("Unit test for string functions");
 
 		string str1 = "Hello, World";
-		wstring str1 = "Hello, World";
-		dstring str1 = "Hello, World";
+		wstring str2 = "Hello, World";
+		dstring str3 = "Hello, World";
 
 		const(char)* cstr1 = toStringz(str1);
 		const(wchar)* cstr2 = toStringz(str2);
