@@ -28,6 +28,7 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing the TcpSocket class.
 module dsfml.network.tcpsocket;
 
 import dsfml.network.socket;
@@ -37,15 +38,35 @@ import dsfml.network.packet;
 import dsfml.system.time;
 import dsfml.system.err;
 
+/**
+ *Specialized socket using the TCP protocol.
+ *
+ *TCP is a connected protocol, which means that a TCP socket can only communicate with the host it is connected to.
+ *
+ *It can't send or receive anything if it is not connected.
+ *
+ *The TCP protocol is reliable but adds a slight overhead. It ensures that your data will always be received in order and without errors (no data corrupted, lost or duplicated).
+ *
+ *When a socket is connected to a remote host, you can retrieve informations about this host with the getRemoteAddress and getRemotePort functions.
+ *You can also get the local port to which the socket is bound (which is automatically chosen when the socket is connected), with the getLocalPort function.
+ *
+ *Sending and receiving data can use either the low-level or the high-level functions. The low-level functions process a raw sequence of bytes, and cannot ensure that one call to Send will exactly match one call to Receive at the other end of the socket.
+ *
+ *The high-level interface uses packets (see sf::Packet), which are easier to use and provide more safety regarding the data that is exchanged. You can look at the sf::Packet class to get more details about how they work.
+ *
+ *The socket is automatically disconnected when it is destroyed, but if you want to explicitely close the connection while the socket instance is still alive, you can call disconnect.
+ */
 class TcpSocket:Socket
 {
-	sfTcpSocket* sfPtr;
+	package sfTcpSocket* sfPtr;
 	
+	///Default constructor
 	this()
 	{
 		sfPtr = sfTcpSocket_create();
 	}
 	
+	///Destructor
 	~this()
 	{
 		debug import dsfml.system.config;
@@ -53,11 +74,17 @@ class TcpSocket:Socket
 		sfTcpSocket_destroy(sfPtr);
 	}
 
+	///Get the port to which the socket is bound locally.
+	///
+	///If the socket is not connected, this function returns 0.
 	ushort getLocalPort()
 	{
 		return sfTcpSocket_getLocalPort(sfPtr);
 	}
 
+	///Get the address of the connected peer.
+	///
+	///It the socket is not connected, this function returns IpAddress.None.
 	IpAddress getRemoteAddress()
 	{
 		IpAddress temp;
@@ -67,31 +94,49 @@ class TcpSocket:Socket
 		return temp;
 	}
 
+	///Get the port of the connected peer to which the socket is connected.
+	///
+	///If the socket is not connected, this function returns 0.
 	ushort getRemotePort()
 	{
 		return sfTcpSocket_getRemotePort(sfPtr);
 	}
 
+	///Set the blocking state of the socket.
+	///
+	///In blocking mode, calls will not return until they have completed their task. For example, a call to Receive in blocking mode won't return until some data was actually received.
+	///In non-blocking mode, calls will always return immediately, using the return code to signal whether there was data available or not. By default, all sockets are blocking.
 	void setBlocking(bool blocking)
 	{
 		sfTcpSocket_setBlocking(sfPtr, blocking);
 	}
 
+	///Connect the socket to a remote peer.
+	///
+	///In blocking mode, this function may take a while, especially if the remote peer is not reachable. The last parameter allows you to stop trying to connect after a given timeout.
+	///If the socket was previously connected, it is first disconnected.
 	Status connect(IpAddress host, ushort port, Time timeout = Time.Zero)
 	{
 		return sfTcpSocket_connect(sfPtr, host.m_address.ptr,port, timeout.asMicroseconds());
 	}
 	
+	///Disconnect the socket from its remote peer.
+	///
+	///This function gracefully closes the connection. If the socket is not connected, this function has no effect.
 	void disconnect()
 	{
 		sfTcpSocket_disconnect(sfPtr);
 	}
 
+	///Tell whether the socket is in blocking or non-blocking mode. 
 	bool isBlocking()
 	{
 		return (sfTcpSocket_isBlocking(sfPtr));
 	}
 
+	///Send raw data to the remote peer.
+	///
+	///This function will fail if the socket is not connected.
 	Status send(const(void)[] data)
 	{
 		import dsfml.system.string;
@@ -101,6 +146,9 @@ class TcpSocket:Socket
 		return toReturn;
 	}
 
+	///Send a formatted packet of data to the remote peer.
+	///
+	///This function will fail if the socket is not connected.
 	Status send(Packet packet)
 	{
 
@@ -113,7 +161,9 @@ class TcpSocket:Socket
 		//send the data
 		return sfTcpSocket_sendPacket(sfPtr, temp.sfPtr);
 	}
-
+	///Receive raw data from the remote peer.
+	///
+	///In blocking mode, this function will wait until some bytes are actually received. This function will fail if the socket is not connected.
 	Status receive(out void[] data, size_t maxSize)
 	{
 		void* dataPtr;
@@ -129,7 +179,10 @@ class TcpSocket:Socket
 		
 		return status;
 	}
-	
+
+	//Receive a formatted packet of data from the remote peer.
+	///
+	///In blocking mode, this function will wait until the whole packet has been received. This function will fail if the socket is not connected.
 	Status receive(Packet packet)
 	{
 		//temporary packet to be removed on function exit

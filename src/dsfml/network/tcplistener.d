@@ -28,6 +28,7 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing the TcpListener class.
 module dsfml.network.tcplistener;
 
 
@@ -36,16 +37,30 @@ import dsfml.network.tcpsocket;
 
 import dsfml.system.err;
 
-
+/**
+ *Socket that listens to new TCP connections.
+ *
+ *A listener socket is a special type of socket that listens to a given port and waits for connections on that port.
+ *
+ *This is all it can do.
+ *
+ *When a new connection is received, you must call accept and the listener returns a new instance of sf::TcpSocket that is properly initialized and can be used to communicate with the new client.
+ *
+ *Listener sockets are specific to the TCP protocol, UDP sockets are connectionless and can therefore communicate directly. As a consequence, a listener socket will always return the new connections as sf::TcpSocket instances.
+ *
+ *A listener is automatically closed on destruction, like all other types of socket. However if you want to stop listening before the socket is destroyed, you can call its close() function.
+ */
 class TcpListener:Socket
 {
-	sfTcpListener* sfPtr;
+	package sfTcpListener* sfPtr;
 
+	///Default constructor
 	this()
 	{
 		sfPtr = sfTcpListener_create();
 	}
 	
+	///Destructor
 	~this()
 	{
 		debug import dsfml.system.config;
@@ -53,16 +68,23 @@ class TcpListener:Socket
 		sfTcpListener_destroy(sfPtr);
 	}
 
+	///Get the port to which the socket is bound locally.
+	///
+	///If the socket is not listening to a port, this function returns 0.
 	ushort getLocalPort()
 	{
 		return sfTcpListener_getLocalPort(sfPtr);
 	}
 
+	///Tell whether the socket is in blocking or non-blocking mode. 
 	void setBlocking(bool blocking)
 	{
 		sfTcpListener_setBlocking(sfPtr, blocking);
 	}
 
+	///Accept a new connection.
+	//
+	///If the socket is in blocking mode, this function will not return until a connection is actually received.
 	Status accept(TcpSocket socket)
 	{
 		import dsfml.system.string;
@@ -72,6 +94,9 @@ class TcpListener:Socket
 		return toReturn; 
 	}
 
+	///Start listening for connections.
+	///
+	///This functions makes the socket listen to the specified port, waiting for new connections. If the socket was previously listening to another port, it will be stopped first and bound to the new port.
 	Status listen(ushort port)
 	{
 		import dsfml.system.string;
@@ -81,10 +106,15 @@ class TcpListener:Socket
 		return toReturn;
 	}
 
+	///Set the blocking state of the socket.
+	///
+	///In blocking mode, calls will not return until they have completed their task. For example, a call to Receive in blocking mode won't return until some data was actually received. In non-blocking mode, calls will always return immediately, using the return code to signal whether there was data available or not. By default, all sockets are blocking.
 	bool isBlocking()
 	{
 		return (sfTcpListener_isBlocking(sfPtr));
 	}
+
+	static ushort AnyPort = 0;
 }
 
 unittest

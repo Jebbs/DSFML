@@ -28,28 +28,42 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing the Ftp class.
 module dsfml.network.ftp;
 
 import dsfml.system.time;
 import dsfml.network.ipaddress;
 
 
-///A FTP client.
+/**
+ *A FTP client.
+ *
+ *The Ftp class is a very simple FTP client that allows you to communicate with a FTP server.
+ *
+ *The FTP protocol allows you to manipulate a remote file system (list files, upload, download, create, remove, ...).
+ */
 class Ftp
 {
+	///Enumeration of transfer modes.
 	enum TransferMode
 	{
+		///Binary mode (file is transfered as a sequence of bytes) 
 		Binary,
+		///Text mode using ASCII encoding.
 		Ascii,
+		///Text mode using EBCDIC encoding. 
 		Ebcdic,
 	}
 	
-	sfFtp* sfPtr;
+	package sfFtp* sfPtr;
 	
+	///Default Constructor.
 	this()
 	{
 		sfPtr = sfFtp_create();
 	}
+
+	///Destructor
 	~this()
 	{
 		debug import dsfml.system.config;
@@ -109,7 +123,6 @@ class Ftp
 		return new Response(sfFtp_download(sfPtr, toStringz(remoteFile),toStringz(localPath),mode));
 	}
 
-
 	Response keepAlive()
 	{
 		return new Response(sfFtp_keepAlive(sfPtr));
@@ -149,10 +162,12 @@ class Ftp
 		return new Response(sfFtp_upload(sfPtr,toStringz(localFile),toStringz(remotePath),mode));
 	}
 
+	//////Specialization of FTP response returning a directory.
 	class DirectoryResponse:Response
 	{
 		private string Directory;
 
+		//Internally used constructor
 		package this(sfFtpDirectoryResponse* FtpDirectoryResponce)
 		{
 			import dsfml.system.string;
@@ -163,17 +178,20 @@ class Ftp
 			
 			sfFtpDirectoryResponse_destroy(FtpDirectoryResponce);
 		}
-		
+
+		///Get the directory returned in the response.
 		string getDirectory()
 		{
 			return Directory;
 		}
 	}
 	
+	///Specialization of FTP response returning a filename lisiting. 
 	class ListingResponse:Response
 	{
 		private string[] Filenames;
 
+		//Internally used constructor
 		package this(sfFtpListingResponse* FtpListingResponce)
 		{
 			import dsfml.system.string;
@@ -190,14 +208,17 @@ class Ftp
 			
 		}
 		
+		///Return the array of directory/file names. 
 		const(string[]) getFilenames()
 		{
 			return Filenames;
 		}
 	}
 	
+	///Define a FTP response. 
 	class Response
 	{
+		///Status codes possibly returned by a FTP response.
 		enum Status
 		{
 			RestartMarkerReply = 110,
@@ -252,12 +273,14 @@ class Ftp
 		private Status FtpStatus;
 		private string Message;
 
+		//Internally used constructor.
 		package this(sfFtpResponse* FtpResponce)
 		{
 			this(sfFtpResponse_getStatus(FtpResponce),sfFtpResponse_getMessage(FtpResponce));
 			sfFtpResponse_destroy(FtpResponce);
 		}
-		
+
+		//Internally used constructor.
 		package this(Ftp.Response.Status status = Ftp.Response.Status.InvalidResponse, const(char)* message = "")
 		{
 			import dsfml.system.string;
@@ -265,17 +288,22 @@ class Ftp
 			Message = toString(message);
 		}
 
-		string getMessage()
+		///Get the full message contained in the response. 
+		string getMessage() const
 		{
 			return Message;
 		}
 		
-		Status getStatus()
+		///Get the status code of the response. 
+		Status getStatus() const
 		{
 			return FtpStatus;
 		}
 
-		bool isOk()
+		///Check if the status code means a success.
+		///
+		///This function is defined for convenience, it is equivalent to testing if the status code is < 400.
+		bool isOk() const
 		{
 			return FtpStatus< 400;
 		}

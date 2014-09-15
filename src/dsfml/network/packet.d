@@ -28,19 +28,25 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module contianing the Packet class.
 module dsfml.network.packet;
 
-
-
+/**
+ *Utility class to build blocks of data to transfer over the network.
+ *
+ *Packets provide a safe and easy way to serialize data, in order to send it over the network using sockets (sf::TcpSocket, sf::UdpSocket).
+ */
 class Packet
 {
-	sfPacket* sfPtr;
+	package sfPacket* sfPtr;
 	
+	///Default constructor
 	this()
 	{
 		sfPtr = sfPacket_create();
 	}
 	
+	///Destructor
 	~this()
 	{
 		debug import dsfml.system.config;
@@ -48,86 +54,105 @@ class Packet
 		sfPacket_destroy(sfPtr);
 	}
 
-	const(void)[] getData()
+	///Get a pointer to the data contained in the packet.
+	///
+	///Warning: the returned array may become invalid after you append data to the packet, therefore it should never be stored.
+	const(void)[] getData() const
 	{
 		return sfPacket_getData(sfPtr)[0..sfPacket_getDataSize(sfPtr)];
 	}
-	
-	deprecated("Getting data as a void* is deprecated. No need to find its size.") size_t getDataSize()
-	{
-		return sfPacket_getDataSize(sfPtr);
-	}
 
+	///Append data to the end of the packet. 
 	void append(const(void)[] data)
 	{
 		sfPacket_append(sfPtr, data.ptr, void.sizeof*data.length);
 	}
 
-	deprecated("Appending with a void* is deprecated. Use append(void[] data) instead.") void append(const(void)* data, size_t sizeInBytes)
-	{
-		sfPacket_append(sfPtr, data, sizeInBytes);	
-	}
-
-	bool canRead()
+	/**
+	*Test the validity of a packet, for reading
+	*
+	*This function allows to test the packet, to check if
+	*a reading operation was successful.
+	*
+	*A packet will be in an invalid state if it has no more
+	*data to read.
+	*/
+	bool canRead() const
 	{
 		return (sfPacket_canRead(sfPtr));
 	}
 
+	///Clear the packet.
+	///
+	///After calling Clear, the packet is empty.
 	void clear()
 	{
 		sfPacket_clear(sfPtr);
 	}
 
-	bool endOfPacket()
+	///Tell if the reading position has reached the end of the packet.
+	///
+	///This function is useful to know if there is some data left to be read, without actually reading it.
+	bool endOfPacket() const
 	{
 		return (sfPacket_endOfPacket(sfPtr));
 	}
 
+	///Reads a bool from the packet.
 	bool readBool()
 	{
 		return cast(bool)readByte();
 	}
 
+	///Reads a byte from the packet.
 	byte readByte()
 	{
 		return sfPacket_readInt8(sfPtr);
 	}
 	
+	///Reads a ubyte from the packet.
 	ubyte readUbyte()
 	{
 		return sfPacket_readUint8(sfPtr);
 	}
 	
+	///Reads a short from the packet.
 	short readShort()
 	{
 		return sfPacket_readInt16(sfPtr);
 	}
 
+	///Reads a ushort from the packet.
 	ushort readUshort()
 	{
 		return sfPacket_readUint16(sfPtr);
 	}
-	
+
+	///Reads a int from the packet.
 	int readInt()
 	{
 		return sfPacket_readInt32(sfPtr);
 	}
 
+	///Reads a uint from the packet.
 	uint readUint()
 	{
 		return sfPacket_readUint32(sfPtr);
 	}
 	
+	///Reads a float from the packet.
 	float readFloat()
 	{
 		return sfPacket_readFloat(sfPtr);
 	}
 	
+	///Reads a double from the packet.
 	double readDouble()
 	{
 		return sfPacket_readDouble(sfPtr);
 	}
 	
+	///Reads a string from the packet.
 	string readString()
 	{
 		import std.conv;
@@ -145,6 +170,7 @@ class Packet
 		return temp.to!string();
 	}
 	
+	///Reads a wstring from the packet.
 	wstring readWstring()
 	{
 		import std.conv;
@@ -162,6 +188,7 @@ class Packet
 		return temp.to!wstring();
 	}
 
+	///Reads a dstring from the packet.
 	dstring readDstring()
 	{
 		import std.conv;
@@ -179,51 +206,61 @@ class Packet
 		return temp.to!dstring();
 	}
 
+	///Write a bool the the end of the packet.
 	void writeBool(bool value)
 	{
 		writeUbyte(cast(ubyte)value);
 	}
 
+	///Write a byte the the end of the packet.
 	void writeByte(byte value)
 	{
 		sfPacket_writeInt8(sfPtr,value);
 	}
 
+	///Write a ubyte the the end of the packet.
 	void writeUbyte(ubyte value)
 	{
 		sfPacket_writeUint8(sfPtr, value);
 	}
 	
+	///Write a short the the end of the packet.
 	void writeShort(short value)
 	{
 		sfPacket_writeInt16(sfPtr, value);
 	}
 	
+	///Write a ushort the the end of the packet.
 	void writeUshort(ushort value)
 	{
 		sfPacket_writeUint16(sfPtr, value);
 	}
 	
+	///Write a int the the end of the packet.
 	void writeInt(int value)
 	{
 		sfPacket_writeInt32(sfPtr, value);
 	}
 	
+	///Write a uint the the end of the packet.
 	void writeUint(uint value)
 	{
 		sfPacket_writeUint32(sfPtr, value);
 	}
 	
+	///Write a float the the end of the packet.
 	void writeFloat(float value)
 	{
 		sfPacket_writeFloat(sfPtr, value);
 	}
-	
+
+	///Write a double the the end of the packet.
 	void writeDouble(double value)
 	{
 		sfPacket_writeDouble(sfPtr, value);
 	}
 	
+	///Write a string the the end of the packet.
 	void writeString(string value)
 	{
 		//write length of string.
@@ -233,7 +270,8 @@ class Packet
 		append(value);
 	}
 	
-	void writeWideString(wstring value)
+	///Write a wstring the the end of the packet.
+	void writeWstring(wstring value)
 	{
 		//write length of string.
 		writeUint(cast(uint)value.length);
@@ -244,6 +282,7 @@ class Packet
 		}
 	}
 
+	///Write a dstring the the end of the packet.
 	void writeDstring(dstring value)
 	{
 		//write length of string.
@@ -255,11 +294,19 @@ class Packet
 		}
 	}
 
+	///Called before the packet is sent over the network.
+	///
+	///This function can be defined by derived classes to transform the data before it is sent; this can be used for compression, encryption, etc.
+	///The function must return an array of the modified data, as well as the number of bytes pointed. The default implementation provides the packet's data without transforming it.
 	const(void)[] onSend()
 	{
 		return getData();
 	}
 
+	///Called after the packet is received over the network.
+	///
+	///This function can be defined by derived classes to transform the data after it is received; this can be used for uncompression, decryption, etc.
+	///The function receives an array of the received data, and must fill the packet with the transformed bytes. The default implementation fills the packet directly without transforming the data.
 	void onRecieve(const(void)[] data)
 	{
 		append(data);

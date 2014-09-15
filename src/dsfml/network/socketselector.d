@@ -28,6 +28,7 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module contianing the SocketSelector class
 module dsfml.network.socketselector;
 
 import dsfml.network.tcplistener;
@@ -36,15 +37,25 @@ import dsfml.network.udpsocket;
 
 import dsfml.system.time;
 
+/**
+ *Multiplexer that allows to read from multiple sockets.
+ *
+ *Socket selectors provide a way to wait until some data is available on a set of sockets, instead of just one.
+ *
+ *This is convenient when you have multiple sockets that may possibly receive data, but you don't know which one will be ready first.
+ *In particular, it avoids to use a thread for each socket; with selectors, a single thread can handle all the sockets.
+ */
 class SocketSelector
 {
-	sfSocketSelector* sfPtr;
+	package sfSocketSelector* sfPtr;
 	
+	///Default constructor
 	this()
 	{
 		sfPtr = sfSocketSelector_create();
 	}
 	
+	///Destructor
 	~this()
 	{
 		debug import dsfml.system.config;
@@ -52,54 +63,67 @@ class SocketSelector
 		sfSocketSelector_destroy(sfPtr);
 	}
 	
+	//Add a new TcpListener to the selector. 
 	void add(TcpListener listener)
 	{
 		sfSocketSelector_addTcpListener(sfPtr, listener.sfPtr);
 	}
 	
+	///Add a new TcpSocket to the selector. 
 	void add(TcpSocket socket)
 	{
 		sfSocketSelector_addTcpSocket(sfPtr, socket.sfPtr);
 	}
 	
+	///Add a new UdpSocket to the selector. 
 	void add(UdpSocket socket)
 	{
 		sfSocketSelector_addUdpSocket(sfPtr, socket.sfPtr);
 	}
 
+	///Remove all the sockets stored in the selector.
 	void clear()
 	{
 		sfSocketSelector_clear(sfPtr);
 	}
 
+	///Test a socket to know if it is ready to receive data. 
 	bool isReady(TcpListener listener)
 	{
 		return (sfSocketSelector_isTcpListenerReady(sfPtr, listener.sfPtr));
 	}
+
+	///Test a socket to know if it is ready to receive data. 
 	bool isReady(TcpSocket socket)
 	{
 		return (sfSocketSelector_isTcpSocketReady(sfPtr, socket.sfPtr));
 	}
 	
+	///Test a socket to know if it is ready to receive data. 
 	bool isReady(UdpSocket socket)
 	{
 		return (sfSocketSelector_isUdpSocketReady(sfPtr, socket.sfPtr));
 	}
 
+	///Remove a TcpListener from the selector. 
 	void remove(TcpListener listener)
 	{
 		sfSocketSelector_removeTcpListener(sfPtr, listener.sfPtr);
 	}
+
+	///Remove a TcpSocket from the selector. 
 	void remove(TcpSocket socket)
 	{
 		sfSocketSelector_removeTcpSocket(sfPtr, socket.sfPtr);
 	}
 	
+	///Remove a UdpSocket from the selector. 
 	void remove(UdpSocket socket)
 	{
 		sfSocketSelector_removeUdpSocket(sfPtr, socket.sfPtr);
 	}
 
+	///Wait until one or more sockets are ready to receive.
 	bool wait(Time timeout = Time.Zero)
 	{
 		return (sfSocketSelector_wait(sfPtr, timeout.asMicroseconds()));

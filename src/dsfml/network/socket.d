@@ -28,18 +28,25 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module contianing the Socket abstract class
 module dsfml.network.socket;
 
-//base class for sockets
+///Base class for all the socket types. 
 abstract class Socket
 {
 	//TODO: Add methods to this so that they can be overridden by the socket classes?
+
+	///Status codes that may be returned by socket functions.
 	enum Status
 	{
-		Done, /// The socket has sent / received the data
-		NotReady, /// The socket is not ready to send / receive data yet
-		Disconnected, /// The TCP socket has been disconnected
-		Error /// An unexpected error happened
+		/// The socket has sent / received the data
+		Done, 
+		/// The socket is not ready to send / receive data yet
+		NotReady, 
+		/// The TCP socket has been disconnected
+		Disconnected, 
+		/// An unexpected error happened
+		Error 
 	}
 }
 
