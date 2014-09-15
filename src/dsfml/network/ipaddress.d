@@ -43,7 +43,7 @@ import dsfml.system.time;
 struct IpAddress
 {
 	//Initialize m_address with "0.0.0.0" and finish filling it out with /0 characters.
-	private char[16] m_address = ['0','.','0','.','0','.','0', 0,0,0,0,0,0,0,0,0];
+	package char[16] m_address = ['0','.','0','.','0','.','0', 0,0,0,0,0,0,0,0,0];
 
 	///Construct the address from a string.
 	///
