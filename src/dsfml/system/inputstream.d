@@ -41,16 +41,30 @@ module dsfml.system.inputstream;
 */
 interface InputStream
 {
-	///Read data from the stream. 
+	///Read data from the stream.
+	///
+	///Params:
+ 	///	data =	Buffer where to copy the read data
+ 	///			and sized to the amount of bytes to be read.
+ 	///
+ 	///Returns: The number of bytes actually read, or -1 on error.
 	long read(void[] data);
 
-	///Change the current reading position. 
+	///Change the current reading position.
+	///Params:
+    ///			position = The position to seek to, from the beginning.
+    ///
+	///Returns: The position actually sought to, or -1 on error.
 	long seek(long position);
 
 	///Get the current reading position in the stream.
+	///
+	///Returns: The current position, or -1 on error. 
 	long tell();
 
 	///Return the size of the stream.
+	///
+	///Returns: The total number of bytes available in the stream, or -1 on error.
 	long getSize();
 }
 

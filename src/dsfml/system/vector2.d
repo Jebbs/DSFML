@@ -36,7 +36,7 @@ import std.traits;
 /**
  *Utility template struct for manipulating 2-dimensional vectors
  *
- *sf::Vector2 is a simple class that defines a mathematical vector with two coordinates (x and y).
+ *Vector2 is a simple class that defines a mathematical vector with two coordinates (x and y).
  *
  *It can be used to represent anything that has two dimensions: a size, a point, a velocity, etc.
  *
@@ -45,10 +45,16 @@ import std.traits;
 struct Vector2(T)
 	if(isNumeric!(T))
 {
-	public T x;
-	public T y;
+	///X coordinate of the vector
+	T x;
+	///Y coordinate of the vector
+	T y;
 	
 	///Construct the vector from its coordinates
+	///
+	///Params:
+	///		X = X coordinate.
+	///		Y = Y coordinate.
 	this(T X,T Y)
 	{	
 		x = X;
@@ -56,6 +62,9 @@ struct Vector2(T)
 	}
 
 	///Construct the vector from another type of vector
+	///
+	///Params:
+	///	otherVector = Vector to convert.
 	this(E)(Vector2!(E) otherVector)
 	{
 		x = cast(T)(otherVector.x);

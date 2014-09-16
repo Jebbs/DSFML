@@ -47,7 +47,12 @@ struct Lock
 {
 	private Mutex m_mutex;
 
-	///Construct the lock with a target mutex. 
+	///Construct the lock with a target mutex.
+	///
+	///The mutex passed to sf::Lock is automatically locked.
+	///
+	///Params:
+	///  	mutex =	Mutex to lock.
 	this(Mutex mutex)
 	{
 		m_mutex = mutex;

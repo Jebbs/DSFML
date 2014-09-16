@@ -40,19 +40,27 @@ import core = core.thread;
  *
  *When you launch a new thread, the execution is split and both the new thread and the caller run in parallel. 
  *
- *To use a sf::Thread, you construct it directly with the function to execute as the entry point of the thread.
+ *To use a Thread, you construct it directly with the function to execute as the entry point of the thread.
  */
 class Thread
 {
 	private core.Thread m_thread;
 
 	///Construct the thread from a functor with no argument
+	///
+	///Params:
+	///		fn  = The function to use as the entry point of the thread.
+	///		sz  = The size of the stack.
 	this(void function() fn, size_t sz = 0)
 	{
 		m_thread = new core.Thread(fn,sz);
 	}
 
 	///Construct the thread from a delegate with no argument
+	///
+	///Params:
+	///		dg  = The delegate to use as the entry point of the thread.
+	///		sz  = The size of the stack.
 	this(void delegate() dg, size_t sz = 0)
 	{
 		m_thread = new core.Thread(dg, sz);
@@ -65,13 +73,13 @@ class Thread
 		debug mixin(destructorOutput);
 	}
 
-	///Run the thread
+	///Run the thread.
 	void launch()
 	{
 		m_thread.start();
 	}
 
-	///Wait until the thread finishes
+	///Wait until the thread finishes.
 	void wait()
 	{
 		if(m_thread.isRunning())

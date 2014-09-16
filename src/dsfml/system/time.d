@@ -56,26 +56,32 @@ struct Time
 		m_microseconds = microseconds;
 	}
 	
-	///Return the time value as a number of seconds
+	///Return the time value as a number of seconds.
+	///
+	///Returns: Time in seconds.
 	float asSeconds() const
 	{
 		return m_microseconds/1000000f;
 	}
 
-	///Return the time value as a number of milliseconds
+	///Return the time value as a number of milliseconds.
+	///
+	///Returns: Time in milliseconds.
 	int asMilliseconds() const
 	{
 		return cast(int)(m_microseconds / 1000);
 	}
 
-	///Return the time value as a number of microseconds
+	///Return the time value as a number of microseconds.
+	///
+	///Returns: Time in microseconds.
 	long asMicroseconds() const
 	{
 		return m_microseconds;
 	}
 	
 
-	///Predefined "zero" time value
+	///Predefined "zero" time value.
 	static immutable(Time) Zero;
 	
 	bool opEquals(const ref Time rhs)
@@ -168,19 +174,34 @@ struct Time
 	
 }
 
-///Construct a time value from a number of seconds
+///Construct a time value from a number of seconds.
+///
+///Params:
+///  amount = Number of seconds.
+///
+///Returns : Time value constructed from the amount of microseconds.
 Time seconds(float amount)
 {
 	return Time(cast(long)(amount * 1000000));
 }
 
-///Construct a time value from a number of milliseconds
+///Construct a time value from a number of milliseconds.
+///
+/// Params:
+///  	amount = Number of milliseconds.
+///
+/// Returns: Time value constructed from the amount of microseconds.
 Time milliseconds(int amount)
 {
 	return Time(amount*1000);
 }
 
-///Construct a time value from a number of microseconds
+///Construct a time value from a number of microseconds.
+///
+///Params:
+///  amount = Number of microseconds.
+///
+///Returns : Time value constructed from the amount of microseconds.
 Time microseconds(long amount)
 {
 	return Time( amount);

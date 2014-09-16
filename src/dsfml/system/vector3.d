@@ -36,7 +36,7 @@ import std.traits;
 /**
  *Utility template struct for manipulating 3-dimensional vectors
  *
- *sf::Vector3 is a simple class that defines a mathematical vector with three coordinates (x, y and z).
+ *Vector3 is a simple class that defines a mathematical vector with three coordinates (x, y and z).
  *
  *It can be used to represent anything that has three dimensions: a size, a point, a velocity, etc.
  *
@@ -45,11 +45,19 @@ import std.traits;
 struct Vector3(T)
 	if(isNumeric!(T))
 {
+	///X coordinate of the vector.
 	T x;
+	///Y coordinate of the vector.
 	T y;
+	///Z coordinate of the vector.
 	T z;
 	
 	///Construct the vector from its coordinates
+	///
+	///Params:
+	///		X = X coordinate.
+	///		Y = Y coordinate.
+	///		Z = Z coordinate.
 	this(T X,T Y,T Z)
 	{
 		
@@ -60,6 +68,9 @@ struct Vector3(T)
 	}
 
 	///Construct the vector from another type of vector
+	///
+	///Params:
+	///	otherVector = Vector to convert.
 	this(E)(Vector3!(E) otherVector)
 	{
 		x = cast(T)(otherVector.x);

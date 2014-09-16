@@ -55,6 +55,8 @@ class Mutex
 	}
 
 	///Lock the mutex
+	///
+	///If the mutex is already locked in another thread, this call will block the execution until the mutex is released.
 	void lock()
 	{
 		m_mutex.lock();

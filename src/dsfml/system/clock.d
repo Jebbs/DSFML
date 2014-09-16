@@ -65,13 +65,21 @@ class Clock
 		sfClock_destroy(sfPtr);
 	}
 	
-	///Get the elapsed time. 
+	///Get the elapsed time.
+	///
+	///This function returns the time elapsed since the last call to restart() (or the construction of the instance if restart() has not been called).
+	///
+	///Returns: Time elapsed .
 	Time getElapsedTime() const
 	{
 		return Time(sfClock_getElapsedTime(sfPtr));
 	}
 	
 	///Restart the clock.  
+	///
+	///This function puts the time counter back to zero. It also returns the time elapsed since the clock was started.
+	///
+	///Returns: Time elapsed.
 	Time restart()
 	{
 		return Time(sfClock_restart(sfPtr));

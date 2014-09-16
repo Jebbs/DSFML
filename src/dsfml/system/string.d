@@ -35,6 +35,11 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 module dsfml.system.string;
 
 ///Returns a D string copy of a zero terminated C style string
+///
+///Params:
+///		str = The C style string to convert.
+///
+///Returns: the D style string copy.
 immutable(T)[] toString(T)(in const(T)* str) pure
 	if (is(T == dchar)||is(T == wchar)||is(T == char))
 {
@@ -42,6 +47,11 @@ immutable(T)[] toString(T)(in const(T)* str) pure
 }
 
 ///Returns a pointer to a C style string created from a D string type
+///
+///Params:
+///		str = The D style string to convert.
+///
+///Returns: the C style string pointer.
 const(T)* toStringz(T)(in immutable(T)[] str) nothrow 
 	if (is(T == dchar)||is(T == wchar)||is(T == char))
 {
@@ -68,6 +78,11 @@ const(T)* toStringz(T)(in immutable(T)[] str) nothrow
 }
 
 ///Get the length of a C style string
+///
+///Params:
+///		str = The C style string.
+///
+///Returns: The C string's length.
 size_t strlen(T)(in const(T)* str) pure nothrow
 if (is(T == dchar)||is(T == wchar)||is(T == char))
 {
