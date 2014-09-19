@@ -267,7 +267,7 @@ void initialize()
 		unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" -ldsfml-graphics-2 -ldsfml-window-2 -ldsfml-audio-2 -ldsfml-network-2 -ldsfml-system-2 -ldsfml-graphics -ldsfml-window -ldsfml-audio -ldsfml-network -ldsfml-system -L-L"~libDirectory;
 	}
 
-	libCompilerSwitches = "-lib -O -release -inline -property -I"~impDirectory;
+	libCompilerSwitches = "-lib -O -release -inline -I"~impDirectory;
 	docCompilerSwitches = "-D -Dd"~docDirectory~" -c -o- -op";
 	interfaceCompilerSwitches = "-H -Hd"~interfaceDirectory~" -c -o- -op";
 	
