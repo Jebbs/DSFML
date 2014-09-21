@@ -63,67 +63,105 @@ class SocketSelector
 		sfSocketSelector_destroy(sfPtr);
 	}
 	
-	//Add a new TcpListener to the selector. 
+	//Add a new TcpListener to the selector.
+	///
+	///This function keeps a weak reference to the socket, so you have to make sure that the socket is not destroyed while it is stored in the selector. This function does nothing if the socket is not valid.
+	///
+	///Params:
+    ///		listener = Reference to the listener to add.
 	void add(TcpListener listener)
 	{
 		sfSocketSelector_addTcpListener(sfPtr, listener.sfPtr);
 	}
 	
-	///Add a new TcpSocket to the selector. 
+	///Add a new TcpSocket to the selector.
+	///
+	///This function keeps a weak reference to the socket, so you have to make sure that the socket is not destroyed while it is stored in the selector. This function does nothing if the socket is not valid.
+	///
+	///Params:
+    ///			socket = Reference to the socket to add,
 	void add(TcpSocket socket)
 	{
 		sfSocketSelector_addTcpSocket(sfPtr, socket.sfPtr);
 	}
 	
 	///Add a new UdpSocket to the selector. 
+	///
+	///This function keeps a weak reference to the socket, so you have to make sure that the socket is not destroyed while it is stored in the selector. This function does nothing if the socket is not valid.
+	///
+	///Params:
+    ///			socket = Reference to the socket to add,
 	void add(UdpSocket socket)
 	{
 		sfSocketSelector_addUdpSocket(sfPtr, socket.sfPtr);
 	}
 
 	///Remove all the sockets stored in the selector.
+	///
+	///This function doesn't destroy any instance, it simply removes all the references that the selector has to external sockets.
 	void clear()
 	{
 		sfSocketSelector_clear(sfPtr);
 	}
 
 	///Test a socket to know if it is ready to receive data. 
+	///
+	///This function must be used after a call to Wait, to know which sockets are ready to receive data. If a socket is ready, a call to receive will never block because we know that there is data available to read. Note that if this function returns true for a TcpListener, this means that it is ready to accept a new connection.
+	///
 	bool isReady(TcpListener listener)
 	{
 		return (sfSocketSelector_isTcpListenerReady(sfPtr, listener.sfPtr));
 	}
 
 	///Test a socket to know if it is ready to receive data. 
+	///
+	///This function must be used after a call to Wait, to know which sockets are ready to receive data. If a socket is ready, a call to receive will never block because we know that there is data available to read. Note that if this function returns true for a TcpListener, this means that it is ready to accept a new connection.
+	///
 	bool isReady(TcpSocket socket)
 	{
 		return (sfSocketSelector_isTcpSocketReady(sfPtr, socket.sfPtr));
 	}
 	
 	///Test a socket to know if it is ready to receive data. 
+	///
+	///This function must be used after a call to Wait, to know which sockets are ready to receive data. If a socket is ready, a call to receive will never block because we know that there is data available to read. Note that if this function returns true for a TcpListener, this means that it is ready to accept a new connection.
+	///
 	bool isReady(UdpSocket socket)
 	{
 		return (sfSocketSelector_isUdpSocketReady(sfPtr, socket.sfPtr));
 	}
 
-	///Remove a TcpListener from the selector. 
-	void remove(TcpListener listener)
+	///Remove a socket from the selector. 
+	///
+	///This function doesn't destroy the socket, it simply removes the reference that the selector has to it.
+	///
+	///Parameters
+    ///		socket = Reference to the socket to remove.
+	void remove(TcpListener socket)
 	{
-		sfSocketSelector_removeTcpListener(sfPtr, listener.sfPtr);
+		sfSocketSelector_removeTcpListener(sfPtr, socket.sfPtr);
 	}
 
-	///Remove a TcpSocket from the selector. 
+	///ditto
 	void remove(TcpSocket socket)
 	{
 		sfSocketSelector_removeTcpSocket(sfPtr, socket.sfPtr);
 	}
 	
-	///Remove a UdpSocket from the selector. 
+	///ditto
 	void remove(UdpSocket socket)
 	{
 		sfSocketSelector_removeUdpSocket(sfPtr, socket.sfPtr);
 	}
 
 	///Wait until one or more sockets are ready to receive.
+	///
+	///This function returns as soon as at least one socket has some data available to be received. To know which sockets are ready, use the isReady function. If you use a timeout and no socket is ready before the timeout is over, the function returns false.
+	///
+	///Parameters
+    ///		timeout = Maximum time to wait, (use Time::Zero for infinity).
+    ///
+	///Returns: True if there are sockets ready, false otherwise.
 	bool wait(Time timeout = Time.Zero)
 	{
 		return (sfSocketSelector_wait(sfPtr, timeout.asMicroseconds()));

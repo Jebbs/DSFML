@@ -60,6 +60,7 @@ class UdpSocket:Socket
 {
 	package sfUdpSocket* sfPtr;
 
+	///The maximum number of bytes that can be sent in a single UDP datagram.
 	enum maxDatagramSize = 65507;
 
 	///Default constructor
@@ -79,6 +80,8 @@ class UdpSocket:Socket
 	///Get the port to which the socket is bound locally.
 	///
 	///If the socket is not bound to a port, this function returns 0.
+	///
+	///Returns: Port to which the socket is bound.
 	ushort getLocalPort()
 	{
 		return sfUdpSocket_getLocalPort(sfPtr);
@@ -87,6 +90,9 @@ class UdpSocket:Socket
 	///Set the blocking state of the socket.
 	///
 	///In blocking mode, calls will not return until they have completed their task. For example, a call to Receive in blocking mode won't return until some data was actually received. In non-blocking mode, calls will always return immediately, using the return code to signal whether there was data available or not. By default, all sockets are blocking.
+	///
+	///Params:
+    ///		blocking = True to set the socket as blocking, false for non-blocking.
 	void setBlocking(bool blocking)
 	{
 		sfUdpSocket_setBlocking(sfPtr,blocking);
@@ -95,6 +101,11 @@ class UdpSocket:Socket
 	///Bind the socket to a specific port.
 	///
 	///Binding the socket to a port is necessary for being able to receive data on that port. You can use the special value Socket::AnyPort to tell the system to automatically pick an available port, and then call getLocalPort to retrieve the chosen port.
+	///
+	///Params:
+    ///		port = Port to bind the socket to.
+    ///
+	///Returns: Status code.
 	Status bind(ushort port)
 	{
 		import dsfml.system.string;
@@ -105,6 +116,8 @@ class UdpSocket:Socket
 	}
 
 	///Tell whether the socket is in blocking or non-blocking mode. 
+	///
+	///Returns: True if the socket is blocking, false otherwise.
 	bool isBlocking()
 	{
 		return (sfUdpSocket_isBlocking(sfPtr));
@@ -113,6 +126,13 @@ class UdpSocket:Socket
 	///Send raw data to a remote peer.
 	///
 	///Make sure that the size is not greater than UdpSocket.MaxDatagramSize, otherwise this function will fail and no data will be sent.
+	///
+	///Params:
+    ///		data = Pointer to the sequence of bytes to send.
+    ///		address = Address of the receiver.
+    ///		port = Port of the receiver to send the data to.
+    ///
+    ///Returns: Status code.
 	Status send(const(void)[] data, IpAddress address, ushort port)
 	{
 		Status toReturn = sfUdpSocket_send(sfPtr,data.ptr, data.length,address.m_address.ptr,port);
@@ -123,6 +143,13 @@ class UdpSocket:Socket
 	///Send a formatted packet of data to a remote peer.
 	///
 	///Make sure that the packet size is not greater than UdpSocket.MaxDatagramSize, otherwise this function will fail and no data will be sent.
+	///
+	///Params:
+    ///		packet = Packet to send.
+    ///		address = Address of the receiver.
+    ///		port = Port of the receiver to send the data to.
+    ///
+	///Returns: Status code
 	Status send(Packet packet, IpAddress address, ushort port)
 	{
 		//temporary packet to be removed on function exit
@@ -139,7 +166,14 @@ class UdpSocket:Socket
 	///
 	///In blocking mode, this function will wait until some bytes are actually received.
 	///Be careful to use a buffer which is large enough for the data that you intend to receive, if it is too small then an error will be returned and all the data will be lost.
-	Status receive(void[] data, IpAddress address, out ushort port)
+	///
+	///Params:
+    ///		data = The array to fill with the received bytes
+    ///		address = Address of the peer that sent the data
+    ///		port = Port of the peer that sent the data
+    ///
+	///Returns: Status code.
+	Status receive(void[] data, out IpAddress address, out ushort port)
 	{
 		import dsfml.system.string;
 		
@@ -155,6 +189,13 @@ class UdpSocket:Socket
 	///Receive a formatted packet of data from a remote peer.
 	///
 	///In blocking mode, this function will wait until the whole packet has been received.
+	///
+	///Params:
+    ///		packet = Packet to fill with the received data.
+    ///		address = Address of the peer that sent the data.
+    ///		port = Port of the peer that sent the data.
+    ///
+	///Returns: Status code.
 	Status receive(Packet packet, out IpAddress address, out ushort port)
 	{
 		//temporary packet to be removed on function exit

@@ -48,5 +48,8 @@ abstract class Socket
 		/// An unexpected error happened
 		Error 
 	}
+
+	///Special value that tells the system to pick any available port.
+	enum AnyPort = 0;
 }
 

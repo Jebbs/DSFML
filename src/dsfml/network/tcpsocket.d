@@ -77,6 +77,8 @@ class TcpSocket:Socket
 	///Get the port to which the socket is bound locally.
 	///
 	///If the socket is not connected, this function returns 0.
+	///
+	///Returns: Port to which the socket is bound.
 	ushort getLocalPort()
 	{
 		return sfTcpSocket_getLocalPort(sfPtr);
@@ -85,6 +87,8 @@ class TcpSocket:Socket
 	///Get the address of the connected peer.
 	///
 	///It the socket is not connected, this function returns IpAddress.None.
+	///
+	///Returns: Address of the remote peer.
 	IpAddress getRemoteAddress()
 	{
 		IpAddress temp;
@@ -97,6 +101,8 @@ class TcpSocket:Socket
 	///Get the port of the connected peer to which the socket is connected.
 	///
 	///If the socket is not connected, this function returns 0.
+	///
+	///Returns: Remote port to which the socket is connected.
 	ushort getRemotePort()
 	{
 		return sfTcpSocket_getRemotePort(sfPtr);
@@ -106,6 +112,9 @@ class TcpSocket:Socket
 	///
 	///In blocking mode, calls will not return until they have completed their task. For example, a call to Receive in blocking mode won't return until some data was actually received.
 	///In non-blocking mode, calls will always return immediately, using the return code to signal whether there was data available or not. By default, all sockets are blocking.
+	///
+	///Params:
+    ///		blocking = True to set the socket as blocking, false for non-blocking.
 	void setBlocking(bool blocking)
 	{
 		sfTcpSocket_setBlocking(sfPtr, blocking);
@@ -115,6 +124,13 @@ class TcpSocket:Socket
 	///
 	///In blocking mode, this function may take a while, especially if the remote peer is not reachable. The last parameter allows you to stop trying to connect after a given timeout.
 	///If the socket was previously connected, it is first disconnected.
+	///
+	///Params:
+    ///		host = Address of the remote peer.
+    ///		port = Port of the remote peer.
+    ///		timeout = Optional maximum time to wait.
+    ///
+    ///Returns: Status code.
 	Status connect(IpAddress host, ushort port, Time timeout = Time.Zero)
 	{
 		return sfTcpSocket_connect(sfPtr, host.m_address.ptr,port, timeout.asMicroseconds());
@@ -129,6 +145,8 @@ class TcpSocket:Socket
 	}
 
 	///Tell whether the socket is in blocking or non-blocking mode. 
+	///
+	///Returns: True if the socket is blocking, false otherwise.
 	bool isBlocking()
 	{
 		return (sfTcpSocket_isBlocking(sfPtr));
@@ -137,6 +155,11 @@ class TcpSocket:Socket
 	///Send raw data to the remote peer.
 	///
 	///This function will fail if the socket is not connected.
+	///
+	///Params:
+    ///		data = Sequence of bytes to send.
+    ///
+    ///Returns: Status code.
 	Status send(const(void)[] data)
 	{
 		import dsfml.system.string;
@@ -149,6 +172,11 @@ class TcpSocket:Socket
 	///Send a formatted packet of data to the remote peer.
 	///
 	///This function will fail if the socket is not connected.
+	///
+	///Params:
+    ///		packet = Packet to send.
+	///
+	///Returns: Status code.
 	Status send(Packet packet)
 	{
 
@@ -164,6 +192,12 @@ class TcpSocket:Socket
 	///Receive raw data from the remote peer.
 	///
 	///In blocking mode, this function will wait until some bytes are actually received. This function will fail if the socket is not connected.
+	///
+	///Params:
+    ///		data = Array to fill with the received bytes.
+    ///		maxSize = Maximum number of bytes that can be received.
+    ///
+    ///Returns: Status code.
 	Status receive(out void[] data, size_t maxSize)
 	{
 		void* dataPtr;
@@ -183,6 +217,11 @@ class TcpSocket:Socket
 	//Receive a formatted packet of data from the remote peer.
 	///
 	///In blocking mode, this function will wait until the whole packet has been received. This function will fail if the socket is not connected.
+	///
+	///Params:
+    ///		packet = Packet to fill with the received data.
+    ///
+	///Returns: Status code.
 	Status receive(Packet packet)
 	{
 		//temporary packet to be removed on function exit

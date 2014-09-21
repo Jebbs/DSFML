@@ -54,29 +54,32 @@ class Packet
 		sfPacket_destroy(sfPtr);
 	}
 
-	///Get a pointer to the data contained in the packet.
+	///Get a slice of the data contained in the packet.
 	///
-	///Warning: the returned array may become invalid after you append data to the packet, therefore it should never be stored.
+	///Returns: Slice containing the data.
 	const(void)[] getData() const
 	{
 		return sfPacket_getData(sfPtr)[0..sfPacket_getDataSize(sfPtr)];
 	}
 
-	///Append data to the end of the packet. 
+	///Append data to the end of the packet.
+	///Params:
+    ///		data = Pointer to the sequence of bytes to append.
 	void append(const(void)[] data)
 	{
 		sfPacket_append(sfPtr, data.ptr, void.sizeof*data.length);
 	}
 
-	/**
-	*Test the validity of a packet, for reading
-	*
-	*This function allows to test the packet, to check if
-	*a reading operation was successful.
-	*
-	*A packet will be in an invalid state if it has no more
-	*data to read.
-	*/
+	
+	///Test the validity of a packet, for reading
+	///
+	///This function allows to test the packet, to check if
+	///a reading operation was successful.
+	///
+	///A packet will be in an invalid state if it has no more
+	///data to read.
+	///
+	///Returns: True if last data extraction from packet was successful.
 	bool canRead() const
 	{
 		return (sfPacket_canRead(sfPtr));
@@ -93,6 +96,8 @@ class Packet
 	///Tell if the reading position has reached the end of the packet.
 	///
 	///This function is useful to know if there is some data left to be read, without actually reading it.
+	///
+	///Returns: True if all data was read, false otherwise.
 	bool endOfPacket() const
 	{
 		return (sfPacket_endOfPacket(sfPtr));
@@ -298,6 +303,8 @@ class Packet
 	///
 	///This function can be defined by derived classes to transform the data before it is sent; this can be used for compression, encryption, etc.
 	///The function must return an array of the modified data, as well as the number of bytes pointed. The default implementation provides the packet's data without transforming it.
+	///
+	///Returns:  Array of bytes to send
 	const(void)[] onSend()
 	{
 		return getData();
@@ -307,6 +314,9 @@ class Packet
 	///
 	///This function can be defined by derived classes to transform the data after it is received; this can be used for uncompression, decryption, etc.
 	///The function receives an array of the received data, and must fill the packet with the transformed bytes. The default implementation fills the packet directly without transforming the data.
+	///
+	///Params:
+    //		data = Array of the received bytes. 
 	void onRecieve(const(void)[] data)
 	{
 		append(data);

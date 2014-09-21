@@ -48,6 +48,9 @@ struct IpAddress
 	///Construct the address from a string.
 	///
 	///Here address can be either a decimal address (ex: "192.168.1.56") or a network name (ex: "localhost").
+	///
+	///Params:
+    ///		address = IP address or network name.
 	this(string address)
 	{
 		import dsfml.system.string;
@@ -57,6 +60,12 @@ struct IpAddress
 	///Construct the address from 4 bytes.
 	///
 	///Calling IpAddress(a, b, c, d) is equivalent to calling IpAddress("a.b.c.d"), but safer as it doesn't have to parse a string to get the address components.
+	///
+	///Parameters
+    ///		byte0 = First byte of the address.
+    ///		byte1 = Second byte of the address.
+    ///		byte2 = Third byte of the address.
+    ///		byte3 = Fourth byte of the address.
 	this(ubyte byte0,ubyte byte1,ubyte byte2,ubyte byte3)
 	{
 		sfIpAddress_fromBytes(byte0,byte1, byte2, byte3, m_address.ptr);
@@ -64,7 +73,10 @@ struct IpAddress
 	
 	///Construct the address from a 32-bits integer.
 	///
-	///This constructor uses the internal representation of the address directly. It should be used for optimization purposes, and only if you got that representation from IpAddress::ToInteger().
+	///This constructor uses the internal representation of the address directly. It should be used only if you got that representation from IpAddress::ToInteger().
+	///
+	///Params:
+    ///		address = 4 bytes of the address packed into a 32-bits integer.
 	this(uint address)
 	{
 		sfIpAddress_fromInteger(address, m_address.ptr);
@@ -73,7 +85,9 @@ struct IpAddress
 	///Get an integer representation of the address.
 	///
 	///The returned number is the internal representation of the address, and should be used for optimization purposes only (like sending the address through a socket). The integer produced by this function can then be converted back to a sf::IpAddress with the proper constructor.
-	int toInteger()
+	///
+	///Returns: 32-bits unsigned integer representation of the address.
+	int toInteger() const
 	{
 		return sfIpAddress_toInteger(m_address.ptr);
 	}
@@ -81,7 +95,9 @@ struct IpAddress
 	///Get a string representation of the address.
 	///
 	///The returned string is the decimal representation of the IP address (like "192.168.1.56"), even if it was constructed from a host name.
-	string toString()
+	///
+	///Returns: String representation of the address
+	string toString() const
 	{
 		import std.conv;
 		//TODO: possibly cache the string? Maybe with a needsUpdatingMethod?
@@ -99,6 +115,8 @@ struct IpAddress
 	///Get the computer's local address.
 	///
 	///The local address is the address of the computer from the LAN point of view, i.e. something like 192.168.1.56. It is meaningful only for communications over the local network. Unlike getPublicAddress, this function is fast and may be used safely anywhere.
+	///
+	///Returns: Local IP address of the computer.
 	static IpAddress getLocalAddress()
 	{
 		IpAddress temp;
@@ -108,7 +126,14 @@ struct IpAddress
 	
 	///Get the computer's public address.
 	///
-	///The public address is the address of the computer from the internet point of view, i.e. something like 89.54.1.169. It is necessary for communications over the world wide web. The only way to get a public address is to ask it to a distant website; as a consequence, this function depends on both your network connection and the server, and may be very slow. You should use it as few as possible. Because this function depends on the network connection and on a distant server, you may use a time limit if you don't want your program to be possibly stuck waiting in case there is a problem; this limit is deactivated by default.
+	///The public address is the address of the computer from the internet point of view, i.e. something like 89.54.1.169.
+	///It is necessary for communications over the world wide web. The only way to get a public address is to ask it to a distant website; as a consequence, this function depends on both your network connection and the server, and may be very slow. You should use it as few as possible.
+	///Because this function depends on the network connection and on a distant server, you may use a time limit if you don't want your program to be possibly stuck waiting in case there is a problem; this limit is deactivated by default.
+	///
+	///Params:
+    ///		timeout = Maximum time to wait.
+    ///
+	///Returns: Public IP address of the computer.
 	static IpAddress getPublicAddress(Time timeout = Time.Zero)
 	{
 		IpAddress temp;

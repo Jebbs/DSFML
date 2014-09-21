@@ -71,12 +71,19 @@ class TcpListener:Socket
 	///Get the port to which the socket is bound locally.
 	///
 	///If the socket is not listening to a port, this function returns 0.
+	///
+	///Returns: Port to which the socket is bound.
 	ushort getLocalPort()
 	{
 		return sfTcpListener_getLocalPort(sfPtr);
 	}
 
 	///Tell whether the socket is in blocking or non-blocking mode. 
+	///
+	///In blocking mode, calls will not return until they have completed their task. For example, a call to Receive in blocking mode won't return until some data was actually received. In non-blocking mode, calls will always return immediately, using the return code to signal whether there was data available or not. By default, all sockets are blocking.
+	///
+	///Params:
+    ///		blocking = True to set the socket as blocking, false for non-blocking.
 	void setBlocking(bool blocking)
 	{
 		sfTcpListener_setBlocking(sfPtr, blocking);
@@ -85,6 +92,11 @@ class TcpListener:Socket
 	///Accept a new connection.
 	//
 	///If the socket is in blocking mode, this function will not return until a connection is actually received.
+	///
+	///Params:
+    ///		socket = Socket that will hold the new connection.
+    ///
+    ///Returns: Status code.
 	Status accept(TcpSocket socket)
 	{
 		import dsfml.system.string;
@@ -97,6 +109,11 @@ class TcpListener:Socket
 	///Start listening for connections.
 	///
 	///This functions makes the socket listen to the specified port, waiting for new connections. If the socket was previously listening to another port, it will be stopped first and bound to the new port.
+	///
+	///Params:
+    ///		port = Port to listen for new connections.
+    ///
+	///Returns: Status code.
 	Status listen(ushort port)
 	{
 		import dsfml.system.string;
@@ -109,12 +126,13 @@ class TcpListener:Socket
 	///Set the blocking state of the socket.
 	///
 	///In blocking mode, calls will not return until they have completed their task. For example, a call to Receive in blocking mode won't return until some data was actually received. In non-blocking mode, calls will always return immediately, using the return code to signal whether there was data available or not. By default, all sockets are blocking.
+	///
+	///Returns: True if the socket is blocking, false otherwise.
 	bool isBlocking()
 	{
 		return (sfTcpListener_isBlocking(sfPtr));
 	}
 
-	static ushort AnyPort = 0;
 }
 
 unittest
