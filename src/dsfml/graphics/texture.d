@@ -199,6 +199,18 @@ class Texture
 		return (sfPtr != null);
 	}
 
+    /**
+     * Get the maximum texture size allowed.
+     * 
+     * This Maximum size is defined by the graphics driver. You can expect a value of 512 pixels for low-end graphics card, and up to 8192 pixels or more for newer hardware.
+     * 
+     * Returns: Maximum size allowed for textures, in pixels.
+     */
+    static uint getMaximumSize()
+    {
+        return sfTexture_getMaximumSize();
+    }
+
 	/**
 	 * Return the size of the texture.
 	 * 
