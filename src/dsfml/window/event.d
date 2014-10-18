@@ -28,107 +28,201 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing the Event struct and other event structs.
 module dsfml.window.event;
 
+import dsfml.window.keyboard;
+import dsfml.window.mouse;
+
+/**
+*Defines a system event and its parameters.
+*
+*Event holds all the informations about a system event that just happened.
+*
+*Events are retrieved using the sWindow.pollEvent and Window.waitEvent functions.
+*
+*A Event instance contains the type of the event (mouse moved, key pressed, window closed, ...) 
+*as well as the details about this particular event. Please note that the event parameters are defined
+*in a union, which means that only the member matching the type of the event will be properly filled;
+*all other members will have undefined values and must not be read if the type of the event doesn't match. 
+*For example, if you received a KeyPressed event, then you must read the event.key member, all other members
+*such as event.MouseMove or event.text will have undefined values.
+*/
 struct Event
 {
-
-	struct SizeEvent
-	{
-		uint width; /// New width, in pixels
-		uint height; /// New height, in pixels
-	}
-
-	struct KeyEvent
-	{
-		//TODO: Replace code with a Keyboad KeyCode?
-		int code; /// Code of the key that has been pressed
-		bool alt; /// Is the Alt key pressed?
-		bool control; /// Is the Control key pressed?
-		bool shift; /// Is the Shift key pressed?
-		bool system; /// Is the System key pressed?
-	}
-
-	struct TextEvent
-	{
-		dchar unicode; /// UTF-32 unicode value of the character
-	}
-
-	struct MouseMoveEvent
-	{
-		int x; /// X position of the mouse pointer, relative to the left of the owner window
-		int y; /// Y position of the mouse pointer, relative to the top of the owner window
-	}
-	
-	struct MouseButtonEvent
-	{
-		int button; /// Code of the button that has been pressed
-		int x; /// X position of the mouse pointer, relative to the left of the owner window
-		int y; /// Y position of the mouse pointer, relative to the top of the owner window
-	}
-	
-	struct MouseWheelEvent
-	{
-		int delta; /// Number of ticks the wheel has moved (positive is up, negative is down)
-		int x; /// X position of the mouse pointer, relative to the left of the owner window
-		int y; /// Y position of the mouse pointer, relative to the top of the owner window
-	}
-	
-	struct JoystickConnectEvent
-	{
-		uint joystickId; /// Index of the joystick (in range [0 .. Joystick::Count - 1])
-	}
-	
-	struct JoystickMoveEvent
-	{
-		uint joystickId; /// Index of the joystick (in range [0 .. Joystick::Count - 1])
-		int axis; /// Axis on which the joystick moved
-		float position; /// New position on the axis (in range [-100 .. 100])
-	}
-	
+	/**
+	*Joystick buttons events parameters (JoystickButtonPressed, JoystickButtonReleased) 
+	*/
 	struct JoystickButtonEvent
 	{
-		uint joystickId; /// Index of the joystick (in range [0 .. Joystick::Count - 1])
-		uint button; /// Index of the button that has been pressed (in range [0 .. Joystick::ButtonCount - 1])
+		///Index of the joystick (in range [0 .. Joystick::Count - 1])
+		uint joystickId; 
+		///Index of the button that has been pressed (in range [0 .. Joystick::ButtonCount - 1])
+		uint button;
+	}
+
+	/**
+	*Joystick connection events parameters (JoystickConnected, JoystickDisconnected)
+	*/
+	struct JoystickConnectEvent
+	{
+		///Index of the joystick (in range [0 .. Joystick::Count - 1])
+		uint joystickId;
+	}
+
+	/**
+	 *Joystick connection events parameters (JoystickConnected, JoystickDisconnected)
+	 */
+	struct JoystickMoveEvent
+	{
+		///Index of the joystick (in range [0 .. Joystick::Count - 1])
+		uint joystickId;
+		///Axis on which the joystick moved
+		int axis;
+		///New position on the axis (in range [-100 .. 100])
+		float position;
+	}
+
+	/**
+	 *Keyboard event parameters (KeyPressed, KeyReleased)
+	 */
+	struct KeyEvent
+	{
+		///Code of the key that has been pressed.
+		Keyboard.Key code;
+		///Is the Alt key pressed?
+		bool alt;
+		///Is the Control key pressed?
+		bool control;
+		///Is the Shift key pressed?
+		bool shift;
+		///Is the System key pressed?
+		bool system;
+	}
+
+	/**
+	 *Mouse buttons events parameters (MouseButtonPressed, MouseButtonReleased) 
+	 */
+	struct MouseButtonEvent
+	{
+		///Code of the button that has been pressed
+		Mouse.Button button;
+		///X position of the mouse pointer, relative to the left of the owner window
+		int x;
+		///Y position of the mouse pointer, relative to the top of the owner window
+		int y;
+	}
+
+	/**
+	 *Mouse move event parameters (MouseMoved) 
+	 */
+	struct MouseMoveEvent
+	{
+		///X position of the mouse pointer, relative to the left of the owner window
+		int x;
+		///Y position of the mouse pointer, relative to the top of the owner window
+		int y;
+	}
+
+	/**
+	 *Mouse wheel events parameters (MouseWheelMoved) 
+	 */
+	struct MouseWheelEvent
+	{
+		///Number of ticks the wheel has moved (positive is up, negative is down)
+		int delta;
+		///X position of the mouse pointer, relative to the left of the owner window
+		int x;
+		///Y position of the mouse pointer, relative to the top of the owner window
+		int y;
+	}
+
+	/**
+	 *Size events parameters (Resized)
+	 */
+	struct SizeEvent
+	{
+		///New width, in pixels
+		uint width;
+		///New height, in pixels
+		uint height;
+	}
+
+	/**
+	 *Text event parameters (TextEntered)
+	 */
+	struct TextEvent
+	{
+		/// UTF-32 unicode value of the character
+		dchar unicode;
 	}
 
 	enum EventType
 	{
-		Closed, /// The window requested to be closed (no data)
-		Resized, /// The window was resized (data in event.size)
-		LostFocus, /// The window lost the focus (no data)
-		GainedFocus, /// The window gained the focus (no data)
-		TextEntered, /// A character was entered (data in event.text)
-		KeyPressed, /// A key was pressed (data in event.key)
-		KeyReleased, /// A key was released (data in event.key)
-		MouseWheelMoved, /// The mouse wheel was scrolled (data in event.mouseWheel)
-		MouseButtonPressed, /// A mouse button was pressed (data in event.mouseButton)
-		MouseButtonReleased, /// A mouse button was released (data in event.mouseButton)
-		MouseMoved, /// The mouse cursor moved (data in event.mouseMove)
-		MouseEntered, /// The mouse cursor entered the area of the window (no data)
-		MouseLeft, /// The mouse cursor left the area of the window (no data)
-		JoystickButtonPressed, /// A joystick button was pressed (data in event.joystickButton)
-		JoystickButtonReleased, /// A joystick button was released (data in event.joystickButton)
-		JoystickMoved, /// The joystick moved along an axis (data in event.joystickMove)
-		JoystickConnected, /// A joystick was connected (data in event.joystickConnect)
-		JoystickDisconnected, /// A joystick was disconnected (data in event.joystickConnect)
+		///The window requested to be closed (no data)
+		Closed,
+		///The window was resized (data in event.size)
+		Resized,
+		///The window lost the focus (no data)
+		LostFocus,
+		///The window gained the focus (no data)
+		GainedFocus,
+		///A character was entered (data in event.text)
+		TextEntered,
+		///A key was pressed (data in event.key)
+		KeyPressed,
+		///A key was released (data in event.key)
+		KeyReleased,
+		///The mouse wheel was scrolled (data in event.mouseWheel)
+		MouseWheelMoved,
+		///A mouse button was pressed (data in event.mouseButton)
+		MouseButtonPressed,
+		///A mouse button was released (data in event.mouseButton)
+		MouseButtonReleased,
+		///The mouse cursor moved (data in event.mouseMove)
+		MouseMoved,
+		///The mouse cursor entered the area of the window (no data)
+		MouseEntered,
+		///The mouse cursor left the area of the window (no data)
+		MouseLeft,
+		///A joystick button was pressed (data in event.joystickButton)
+		JoystickButtonPressed,
+		///A joystick button was released (data in event.joystickButton)
+		JoystickButtonReleased,
+		///The joystick moved along an axis (data in event.joystickMove)
+		JoystickMoved,
+		///A joystick was connected (data in event.joystickConnect)
+		JoystickConnected,
+		///A joystick was disconnected (data in event.joystickConnect)
+		JoystickDisconnected,
 		
-		Count /// Keep last -- the total number of event types
+		///Keep last -- the total number of event types
+		Count
 	}
 	
-	EventType type; /// Type of the event
+	///Type of the event
+	EventType type;
 	
 	union
 	{
-		SizeEvent size; ///< Size event parameters (Event::Resized)
-		KeyEvent key; ///< Key event parameters (Event::KeyPressed, Event::KeyReleased)
-		TextEvent text; ///< Text event parameters (Event::TextEntered)
-		MouseMoveEvent mouseMove; ///< Mouse move event parameters (Event::MouseMoved)
-		MouseButtonEvent mouseButton; ///< Mouse button event parameters (Event::MouseButtonPressed, Event::MouseButtonReleased)
-		MouseWheelEvent mouseWheel; ///< Mouse wheel event parameters (Event::MouseWheelMoved)
-		JoystickMoveEvent joystickMove; ///< Joystick move event parameters (Event::JoystickMoved)
-		JoystickButtonEvent joystickButton; ///< Joystick button event parameters (Event::JoystickButtonPressed, Event::JoystickButtonReleased)
-		JoystickConnectEvent joystickConnect; ///< Joystick (dis)connect event parameters (Event::JoystickConnected, Event::JoystickDisconnected)
+		///Size event parameters (Event::Resized)
+		SizeEvent size;
+		///Key event parameters (Event::KeyPressed, Event::KeyReleased)
+		KeyEvent key;
+		///Text event parameters (Event::TextEntered)
+		TextEvent text;
+		///Mouse move event parameters (Event::MouseMoved)
+		MouseMoveEvent mouseMove;
+		///Mouse button event parameters (Event::MouseButtonPressed, Event::MouseButtonReleased)
+		MouseButtonEvent mouseButton;
+		///Mouse wheel event parameters (Event::MouseWheelMoved)
+		MouseWheelEvent mouseWheel;
+		///Joystick move event parameters (Event::JoystickMoved)
+		JoystickMoveEvent joystickMove;
+		///Joystick button event parameters (Event::JoystickButtonPressed, Event::JoystickButtonReleased)
+		JoystickButtonEvent joystickButton;
+		///Joystick (dis)connect event parameters (Event::JoystickConnected, Event::JoystickDisconnected)
+		JoystickConnectEvent joystickConnect;
 		
 	}
 }
@@ -398,7 +492,6 @@ unittest
 			window.draw(joystickEventText);
 
 			window.display();
-
 
 		}
 

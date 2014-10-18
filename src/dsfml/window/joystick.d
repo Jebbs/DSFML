@@ -27,54 +27,128 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
+///A module containing the Joystick class.
 module dsfml.window.joystick;
 
+/**
+ *Give access to the real-time state of the joysticks.
+ *
+ *Joystick provides an interface to the state of the joysticks.
+ *
+ *It only contains static functions, so it's not meant to be instanciated. Instead, each joystick is identified
+  *by an index that is passed to the functions of this class.
+ *
+ *This class allows users to query the state of joysticks at any time and directly, without having to deal with
+ *a window and its events. Compared to the JoystickMoved, JoystickButtonPressed and JoystickButtonReleased events, 
+ *Joystick can retrieve the state of axes and buttons of joysticks at any time (you don't need to store and update 
+ *a boolean on your side in order to know if a button is pressed or released), and you always get the real state of 
+ *joysticks, even if they are moved, pressed or released when your window is out of focus and no event is triggered.
+*/
 final abstract class Joystick
 {
+	//Constants related to joysticks capabilities.
 	enum
 	{
+		///Maximum number of supported joysticks.
 		JoystickCount = 8,
+		///Maximum number of supported buttons.
 		JoystickButtonCount = 32,
+		///Maximum number of supported axes.
 		JoystickAxisCount = 8
 	}
 	
+	///Axes supported by SFML joysticks.
 	enum Axis
 	{
+		///The X axis.
 		X,
+		///The Y axis.
 		Y,
+		///The Z axis.
 		Z,
+		///The R axis.
 		R,
+		///The U axis.
 		U,
+		///The V axis.
 		V,
+		///The X axis of the point-of-view hat.
 		PovX,
+		///The Y axis of the point-of-view hat.
 		PovY
 	}
 
+	///Return the number of buttons supported by a joystick.
+	///
+	///If the joystick is not connected, this function returns 0.
+	///
+	//////Params:
+	///		joystick = Index of the joystick.
+	///
+	///Returns: Number of buttons supported by the joystick.
 	static uint getButtonCount(uint joystick)
 	{
 		return sfJoystick_getButtonCount(joystick);
 	}
-
+	
+	///Get the current position of a joystick axis.
+	///
+	///If the joystick is not connected, this function returns 0.
+	///
+	///Params:
+	///		joystick = 	Index of the joystick.
+	///		axis = Axis to check.
+	///
+	///Returns: Current position of the axis, in range [-100 .. 100].
 	static float getAxisPosition(uint joystick, Axis axis)
 	{
 		return sfJoystick_getAxisPosition(joystick, axis);
 	}
 	
+	///Check if a joystick supports a given axis.
+	///
+	///If the joystick is not connected, this function returns false.
+	///
+	///Params:
+	///		joystick = 	Index of the joystick.
+	///		axis = Axis to check.
+	///
+	///Returns: True if the joystick supports the axis, false otherwise.
 	static bool hasAxis(uint joystick, Axis axis)
 	{
 		return (sfJoystick_hasAxis(joystick, axis));
 	}
-
-	static bool isConnected(uint joystick)
-	{
-		return (sfJoystick_isConnected(joystick));
-	}
-
+	
+	///Check if a joystick button is pressed.
+	///
+	///If the joystick is not connected, this function returns false.
+	///
+	///Params:
+	///		joystick = 	Index of the joystick.
+	///		button = Button to check.
+	///
+	///Returns: True if the button is pressed, false otherwise.
 	static bool isButtonPressed(uint joystick, uint button)
 	{
 		return sfJoystick_isButtonPressed(joystick, button);
 	}
 
+	///Check if a joystick is connected.
+	///
+	///Params:
+	///		joystick = 	Index of the joystick.
+	///
+	///Returns: True if the joystick is connected, false otherwise.
+	static bool isConnected(uint joystick)
+	{
+		return (sfJoystick_isConnected(joystick));
+	}
+
+	///Update the states of all joysticks.
+	///
+	///This function is used internally by SFML, so you normally don't have to call it explicitely.
+	///However, you may need to call it if you have no window yet (or no window at all): in this case the joysticks states are not updated automatically.
 	static void update()
 	{
 		sfJoystick_update();
