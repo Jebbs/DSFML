@@ -40,10 +40,8 @@ div.nav {
         overflow: hidden;
 	}
 	li.hnav {
-        float: left;
-        padding: 10;
+        float: left;padding: 10;
 		}
 	a.hnav { 
-        display: block;
-        padding-right: 10;
+        display: block;padding-right: 10;
 		}
