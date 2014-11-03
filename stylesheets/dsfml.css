@@ -44,5 +44,6 @@ div.nav {
         padding: 10;
 		}
 	a.hnav { 
-        display: block; 
+        display: block;
+        padding-right: 10;
 		}
