@@ -19,7 +19,6 @@ div.nav {
 	}
 	dl.nav {
         list-style-type: none;
-		//margin-left: -20;
 			}
 	dt.nav {
             font-size: small;
@@ -46,7 +45,4 @@ div.nav {
 		}
 	a.hnav { 
         display: block; 
-        
-        //background-color: #dddddd; 
-        //text-align: center;
 		}
