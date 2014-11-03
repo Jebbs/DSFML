@@ -1,0 +1,267 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.graphics.font</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.graphics.font</h2>
+       <!-- Generated by Ddoc from dsfml/graphics/font.d -->
+<br><br>
+<dl><dt><big><a name="Font"></a>class <u>Font</u>;
+</big></dt>
+<dd>Class for loading and manipulating character fonts.
+<br><br>
+Fonts can be loaded from a file, from memory or from a custom stream, and supports the most common types of fonts.
+<br><br>
+
+ See the loadFromFile function for the complete list of supported formats.
+<br><br>
+
+ Once it is loaded, a <u>Font</u> instance provides three types of information about the font:
+ - Global metrics, such as the line spacing
+ - Per-glyph metrics, such as bounding box or kerning
+ - Pixel representation of glyphs
+
+<br><br>
+<b>Authors:</b><br>
+Laurent Gomila, Jeremy DeHaan
+<br><br>
+<b>See Also:</b><br>
+<br><br>
+<b>http:</b><br>
+//sfml-dev.org/documentation/2.0/classsf_1_1Font.php#details<br><br>
+
+<dl><dt><big><a name="Font.this"></a> this();
+</big></dt>
+<dd>Defines an empty font<br><br>
+
+</dd>
+<dt><big><a name="Font.loadFromFile"></a>bool <u>loadFromFile</u>(string <i>filename</i>);
+</big></dt>
+<dd>Load the font from a file.
+<br><br>
+The supported font formats are: TrueType, Type 1, CFF, OpenType, SFNT, X11 PCF, Windows FNT, BDF, PFR and Type 42. Note that this function know nothing about the standard fonts installed on the user's system, thus you can't load them directly.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>filename</i></td>
+<td>Path of the font file to load</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading succeeded, <b>false</b> if it failed.<br><br>
+
+</dd>
+<dt><big><a name="Font.loadFromMemory"></a>bool <u>loadFromMemory</u>(const(void)[] <i>data</i>);
+</big></dt>
+<dd>Load the font from a file in memory.
+<br><br>
+The supported font formats are: TrueType, Type 1, CFF, OpenType, SFNT, X11 PCF, Windows FNT, BDF, PFR and Type 42. Warning: SFML cannot preload all the font <i>data</i> in this function, so the buffer pointed by <i>data</i> has to remain valid as long as the font is used.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>const(void)[] <i>data</i></td>
+<td><i>data</i> holding the font file</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading succeeded, <b>false</b> if it failed.<br><br>
+
+</dd>
+<dt><big><a name="Font.loadFromStream"></a>bool <u>loadFromStream</u>(InputStream <i>stream</i>);
+</big></dt>
+<dd>Load the font from a custom <i>stream</i>.
+<br><br>
+The supported font formats are: TrueType, Type 1, CFF, OpenType, SFNT, X11 PCF, Windows FNT, BDF, PFR and Type 42. Warning: SFML cannot preload all the font data in this function, so the contents of <i>stream</i> have to remain valid as long as the font is used.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>InputStream <i>stream</i></td>
+<td>Source <i>stream</i> to read from</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading succeeded, <b>false</b> if it failed.<br><br>
+
+</dd>
+<dt><big><a name="Font.getGlyph"></a>const Glyph <u>getGlyph</u>(dchar <i>codePoint</i>, uint <i>characterSize</i>, bool <i>bold</i>);
+</big></dt>
+<dd>Retrieve a glyph of the font.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>dchar <i>codePoint</i></td>
+<td>Unicode code point of the character ot get</td></tr>
+<tr><td>uint <i>characterSize</i></td>
+<td>Reference character size</td></tr>
+<tr><td>bols</td>
+<td>Retrieve the <i>bold</i> version or the regular one?</td></tr>
+</table><br>
+<b>Returns:</b><br>
+The glyph corresponding to <i>codePoint</i> and <i>characterSize</i><br><br>
+
+</dd>
+<dt><big><a name="Font.getKerning"></a>const int <u>getKerning</u>(dchar <i>first</i>, dchar <i>second</i>, uint <i>characterSize</i>);
+</big></dt>
+<dd>Get the kerning offset of two glyphs.
+<br><br>
+The kerning is an extra offset (negative) to apply between two glyphs when rendering them, to make the pair look more "natural". For example, the pair "AV" have a special kerning to make them closer than other characters. Most of the glyphs pairs have a kerning offset of zero, though.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>dchar <i>first</i></td>
+<td>Unicode code point of the <i>first</i> character</td></tr>
+<tr><td>dchar <i>second</i></td>
+<td>Unicode code point of the <i>second</i> character</td></tr>
+<tr><td>uint <i>characterSize</i></td>
+<td>Reference character size</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Kerning value for <i>first</i> and <i>second</i>, in pixels<br><br>
+
+</dd>
+<dt><big><a name="Font.getLineSpacing"></a>const int <u>getLineSpacing</u>(uint <i>characterSize</i>);
+</big></dt>
+<dd>Get the line spacing.
+<br><br>
+The spacing is the vertical offset to apply between consecutive lines of text.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>characterSize</i></td>
+<td>Reference character size</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Line spacing, in pixels<br><br>
+
+</dd>
+<dt><big><a name="Font.getTexture"></a>const const(Texture) <u>getTexture</u>(uint <i>characterSize</i>);
+</big></dt>
+<dd>Retrieve the texture containing the loaded glyphs of a certain size.
+<br><br>
+The contents of the returned texture changes as more glyphs are requested, thus it is not very relevant. It is mainly used internally by Text.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>characterSize</i></td>
+<td>Reference character size</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Texture containing the glyphs of the requested size<br><br>
+
+</dd>
+<dt><big><a name="Font.dup"></a>const @property Font <u>dup</u>();
+</big></dt>
+<dd>Performs a deep copy on the font.
+<br><br>
+<b>Returns:</b><br>
+The duplicated font.<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

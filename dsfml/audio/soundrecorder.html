@@ -1,0 +1,224 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.audio.soundrecorder</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.audio.soundrecorder</h2>
+       <!-- Generated by Ddoc from dsfml/audio/soundrecorder.d -->
+<br><br>
+<dl><dt><big><a name="SoundRecorder"></a>abstract class <u>SoundRecorder</u>;
+</big></dt>
+<dd>Abstract base class for capturing sound data.
+<br><br>
+SoundBuffer provides a simple interface to access the audio recording capabilities of the computer (the microphone).
+<br><br>
+
+ As an abstract base class, it only cares about capturing sound samples, the task of making something useful with them is left to the derived class. Note that SFML provides a built-in specialization for saving the captured data to a sound buffer (see SoundBufferRecorder).
+<br><br>
+
+ A derived class has only one virtual function to override:
+<br><br>
+
+ onProcessSamples provides the new chunks of audio samples while the capture happens
+<br><br>
+
+ Moreover, two additionnal virtual functions can be overriden as well if necessary:
+<br><br>
+
+ onStart is called before the capture happens, to perform custom initializations
+ onStop is called after the capture ends, to perform custom cleanup
+<br><br>
+
+ The audio capture feature may not be supported or activated on every platform, thus it is recommended to check its availability with the isAvailable() function. If it returns <b>false</b>, then any attempt to use an audio recorder will fail.
+<br><br>
+
+ It is important to note that the audio capture happens in a separate thread, so that it doesn't block the rest of the program. In particular, the onProcessSamples and onStop virtual functions (but not onStart) will be called from this separate thread. It is important to keep this in mind, because you may have to take care of synchronization issues if you share data between threads.
+
+<br><br>
+<b>See Also:</b><br>
+<br><br>
+<b>http:</b><br>
+//www.sfml-dev.org/documentation/2.0/classsf_1_1SoundRecorder.php#details
+<br><br>
+<b>Authors:</b><br>
+Laurent Gomila, Jeremy DeHaan<br><br>
+
+<dl><dt><big><a name="SoundRecorder.start"></a>void <u>start</u>(uint <i>theSampleRate</i> = 44100);
+</big></dt>
+<dd>Start the capture.
+ The sampleRate parameter defines the number of audio samples captured per second. The higher, the better the quality (for example, 44100 samples/sec is CD quality). This function uses its own thread so that it doesn't block the rest of the program while the capture runs. Please note that only one capture can happen at the same time.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>sampleRate</td>
+<td>Desired capture rate, in number of samples per second</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="SoundRecorder.stop"></a>void <u>stop</u>();
+</big></dt>
+<dd>Stop the capture.<br><br>
+
+</dd>
+<dt><big><a name="SoundRecorder.sampleRate"></a>@property uint <u>sampleRate</u>();
+</big></dt>
+<dd>Get the sample rate in samples per second.
+<br><br>
+The sample rate defines the number of audio samples captured per second. The higher, the better the quality (for example, 44100 samples/sec is CD quality).<br><br>
+
+</dd>
+<dt><big><a name="SoundRecorder.isAvailable"></a>static bool <u>isAvailable</u>();
+</big></dt>
+<dd>Check if the system supports audio capture.
+<br><br>
+This function should always be called before using the audio capture features. If it returns <b>false</b>, then any attempt to use SoundRecorder or one of its derived classes will fail.
+
+<br><br>
+<b>Returns:</b><br>
+True if audio capture is supported, <b>false</b> otherwise<br><br>
+
+</dd>
+<dt><big><a name="SoundRecorder.onStart"></a>protected bool <u>onStart</u>();
+</big></dt>
+<dd>Start capturing audio data.
+<br><br>
+This virtual function may be overriden by a derived class if something has to be done every time a new capture starts. If not, this function can be ignored; the default implementation does nothing.
+
+<br><br>
+<b>Returns:</b><br>
+True to the start the capture, or <b>false</b> to abort it.<br><br>
+
+</dd>
+<dt><big><a name="SoundRecorder.onProcessSamples"></a>protected abstract bool <u>onProcessSamples</u>(const(short)[] <i>samples</i>);
+</big></dt>
+<dd>Process a new chunk of recorded <i>samples</i>.
+<br><br>
+This virtual function is called every time a new chunk of recorded data is available. The derived class can then do whatever it wants with it (storing it, playing it, sending it over the network, etc.).
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>const(short)[] <i>samples</i></td>
+<td>Array of the new chunk of recorded <i>samples</i></td></tr>
+</table><br>
+<b>Returns:</b><br>
+True to continue the capture, or <b>false</b> to stop it<br><br>
+
+</dd>
+<dt><big><a name="SoundRecorder.onStop"></a>protected void <u>onStop</u>();
+</big></dt>
+<dd>Stop capturing audio data.
+<br><br>
+This virtual function may be overriden by a derived class if something has to be done every time the capture ends. If not, this function can be ignored; the default implementation does nothing.<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

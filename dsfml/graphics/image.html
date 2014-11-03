@@ -1,0 +1,341 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.graphics.image</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.graphics.image</h2>
+       <!-- Generated by Ddoc from dsfml/graphics/image.d -->
+<br><br>
+<dl><dt><big><a name="Image"></a>class <u>Image</u>;
+</big></dt>
+<dd>Class for loading, manipulating and saving images.
+<br><br>
+<u>Image</u> is an abstraction to manipulate images as bidimensional arrays of pixels.
+<br><br>
+
+ The class provides functions to load, read, write and save pixels, as well as many other useful functions.
+<br><br>
+
+ <u>Image</u> can handle a unique internal representation of pixels, which is RGBA 32 bits. This means that a pixel must be composed of 8 bits red, green, blue and alpha channels – just like a Color. All the functions that return an array of pixels follow this rule, and all parameters that you pass to <u>Image</u> functions (such as loadFromPixels) must use this representation as well.
+<br><br>
+
+ A <u>Image</u> can be copied, but it is a heavy resource and if possible you should always use [const] references to pass or return them to avoid useless copies.
+
+<br><br>
+<b>Authors:</b><br>
+Laurent Gomila, Jeremy DeHaan
+<br><br>
+<b>See Also:</b><br>
+<br><br>
+<b>http:</b><br>
+//www.sfml-dev.org/documentation/2.0/classsf_1_1Image.php#details<br><br>
+
+<dl><dt><big><a name="Image.create"></a>bool <u>create</u>(uint <i>width</i>, uint <i>height</i>, Color <i>color</i>);
+</big></dt>
+<dd>Create the image and fill it with a unique <i>color</i>.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>width</i></td>
+<td>Width of the image</td></tr>
+<tr><td>uint <i>height</i></td>
+<td>Height of the image</td></tr>
+<tr><td>Color <i>color</i></td>
+<td>Fill <i>color</i></td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading succeeded, <b>false</b> if it failed<br><br>
+
+</dd>
+<dt><big><a name="Image.create"></a>bool <u>create</u>(uint <i>width</i>, uint <i>height</i>, ref const ubyte[] <i>pixels</i>);
+</big></dt>
+<dd>Create the image from an array of <i>pixels</i>.
+<br><br>
+The pixel array is assumed to contain 32-bits RGBA <i>pixels</i>, and have the given <i>width</i> and <i>height</i>. If not, this is an undefined behaviour. If <i>pixels</i> is <b>null</b>, an empty image is created.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>width</i></td>
+<td>Width of the image</td></tr>
+<tr><td>uint <i>height</i></td>
+<td>Height of the image</td></tr>
+<tr><td>ubyte[] <i>pixels</i></td>
+<td>Array of <i>pixels</i> to copy to the image</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading succeeded, <b>false</b> if it failed<br><br>
+
+</dd>
+<dt><big><a name="Image.loadFromFile"></a>bool <u>loadFromFile</u>(string <i>fileName</i>);
+</big></dt>
+<dd>Load the image from a file on disk.
+<br><br>
+The supported image formats are bmp, png, tga, jpg, gif, psd, hdr and pic. Some format options are not supported, like progressive jpeg. If this function fails, the image is left unchanged.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>filename</td>
+<td>Path of the image file to load</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading succeeded, <b>false</b> if it failed<br><br>
+
+</dd>
+<dt><big><a name="Image.loadFromMemory"></a>bool <u>loadFromMemory</u>(const(void)[] <i>data</i>);
+</big></dt>
+<dd>Load the image from a file in memory.
+<br><br>
+The supported image formats are bmp, png, tga, jpg, gif, psd, hdr and pic. Some format options are not supported, like progressive jpeg. If this function fails, the image is left unchanged.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>const(void)[] <i>data</i></td>
+<td>Data file in memory to load</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading succeeded, <b>false</b> if it failed<br><br>
+
+</dd>
+<dt><big><a name="Image.loadFromStream"></a>bool <u>loadFromStream</u>(InputStream <i>stream</i>);
+</big></dt>
+<dd>Load the image from a custom <i>stream</i>.
+<br><br>
+The supported image formats are bmp, png, tga, jpg, gif, psd, hdr and pic. Some format options are not supported, like progressive jpeg. If this function fails, the image is left unchanged.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>InputStream <i>stream</i></td>
+<td>Source <i>stream</i> to read from</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading succeeded, <b>false</b> if it failed<br><br>
+
+</dd>
+<dt><big><a name="Image.getPixel"></a>Color <u>getPixel</u>(uint <i>x</i>, uint <i>y</i>);
+</big></dt>
+<dd>Get the color of a pixel
+<br><br>
+This function doesn't check the validity of the pixel coordinates; using out-of-range values will result in an undefined behaviour.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>x</i></td>
+<td>X coordinate of the pixel to get</td></tr>
+<tr><td>uint <i>y</i></td>
+<td>Y coordinate of the pixel to get</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Color of the pixel at coordinates (<i>x</i>, <i>y</i>)<br><br>
+
+</dd>
+<dt><big><a name="Image.getPixelArray"></a>const(ubyte)[] <u>getPixelArray</u>();
+</big></dt>
+<dd>Get the read-only array of pixels that make up the image.
+<br><br>
+The returned value points to an array of RGBA pixels made of 8 bits integers components. The size of the array is width * height * 4 (getSize().x * getSize().y * 4). Warning: the returned pointer may become invalid if you modify the image, so you should never store it for too long.
+
+<br><br>
+<b>Returns:</b><br>
+Read-only array of pixels that make up the image.<br><br>
+
+</dd>
+<dt><big><a name="Image.getSize"></a>Vector2u <u>getSize</u>();
+</big></dt>
+<dd>Return the size (width and height) of the image.
+<br><br>
+<b>Returns:</b><br>
+Size of the image, in pixels.<br><br>
+
+</dd>
+<dt><big><a name="Image.setPixel"></a>void <u>setPixel</u>(uint <i>x</i>, uint <i>y</i>, Color <i>color</i>);
+</big></dt>
+<dd>Change the <i>color</i> of a pixel.
+<br><br>
+This function doesn't check the validity of the pixel coordinates, using out-of-range values will result in an undefined behaviour.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>x</i></td>
+<td>X coordinate of pixel to change</td></tr>
+<tr><td>uint <i>y</i></td>
+<td>Y coordinate of pixel to change</td></tr>
+<tr><td>Color <i>color</i></td>
+<td>New <i>color</i> of the pixel</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Image.copyImage"></a>void <u>copyImage</u>(ref const Image <i>source</i>, uint <i>destX</i>, uint <i>destY</i>, IntRect <i>sourceRect</i> = IntRect(0, 0, 0, 0), bool <i>applyAlpha</i> = false);
+</big></dt>
+<dd>Copy pixels from another image onto this one.
+<br><br>
+This function does a slow pixel copy and should not be used intensively. It can be used to prepare a complex static image from several others, but if you need this kind of feature in real-time you'd better use RenderTexture.
+<br><br>
+
+ If <i>sourceRect</i> is empty, the whole image is copied. If <i>applyAlpha</i> is set to <b>true</b>, the transparency of <i>source</i> pixels is applied. If it is <b>false</b>, the pixels are copied unchanged with their alpha value.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Image <i>source</i></td>
+<td>Source image to copy</td></tr>
+<tr><td>uint <i>destX</i></td>
+<td>X coordinate of the destination position</td></tr>
+<tr><td>uint <i>destY</i></td>
+<td>Y coordinate of the destination position</td></tr>
+<tr><td>IntRect <i>sourceRect</i></td>
+<td>Sub-rectangle of the <i>source</i> image to copy</td></tr>
+<tr><td>bool <i>applyAlpha</i></td>
+<td>Should the copy take the <i>source</i> transparency into account?</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Image.createMaskFromColor"></a>void <u>createMaskFromColor</u>(Color <i>maskColor</i>, ubyte <i>alpha</i> = 0);
+</big></dt>
+<dd>Create a transparency mask from a specified color-key.
+<br><br>
+This function sets the <i>alpha</i> value of every pixel matching the given color to <i>alpha</i> (0 by default) so that they become transparent.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>color</td>
+<td>Color to make transparent</td></tr>
+<tr><td>ubyte <i>alpha</i></td>
+<td>Alpha value to assign to transparent pixels</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Image.flipHorizontally"></a>void <u>flipHorizontally</u>();
+</big></dt>
+<dd>Flip the image horizontally (left &lt;-&gt; right)<br><br>
+
+</dd>
+<dt><big><a name="Image.flipVertically"></a>void <u>flipVertically</u>();
+</big></dt>
+<dd>Flip the image vertically (top &lt;-&gt; bottom)<br><br>
+
+</dd>
+<dt><big><a name="Image.saveToFile"></a>bool <u>saveToFile</u>(string <i>fileName</i>);
+</big></dt>
+<dd>Save the image to a file on disk.
+<br><br>
+The format of the image is automatically deduced from the extension. The supported image formats are bmp, png, tga and jpg. The destination file is overwritten if it already exists. This function fails if the image is empty.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>filename</td>
+<td>Path of the file to save</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if saving was successful<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

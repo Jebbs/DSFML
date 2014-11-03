@@ -1,0 +1,319 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.graphics.text</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.graphics.text</h2>
+       <!-- Generated by Ddoc from dsfml/graphics/text.d -->
+<br><br>
+<dl><dt><big><a name="Text"></a>class <u>Text</u>: dsfml.graphics.drawable.Drawable, dsfml.graphics.transformable.Transformable;
+</big></dt>
+<dd>Graphical text that can be drawn to a render target.
+<br><br>
+<u>Text</u> is a drawable class that allows to easily display some text with custom style and color on a render target.
+<br><br>
+
+ It inherits all the functions from Transformable: position, rotation, scale, origin. It also adds text-specific properties such as the font to use, the character size, the font style (bold, italic, underlined), the global color and the text to display of course. It also provides convenience functions to calculate the graphical size of the text, or to get the global position of a given character.
+<br><br>
+
+ <u>Text</u> works in combination with the Font class, which loads and provides the glyphs (visual characters) of a given font.
+<br><br>
+
+ The separation of Font and <u>Text</u> allows more flexibility and better performances: indeed a Font is a heavy resource, and any operation on it is slow (often too slow for real-time applications). On the other side, a <u>Text</u> is a lightweight object which can combine the glyphs data and metrics of a Font to display any text on a render target.
+<br><br>
+
+ It is important to note that the <u>Text</u> instance doesn't copy the font that it uses, it only keeps a reference to it. Thus, a Font must not be destructed while it is used by a <u>Text</u> (i.e. never write a function that uses a local Font instance for creating a text).
+
+<br><br>
+<b>Authors:</b><br>
+Laurent Gomila, Jeremy DeHaan
+<br><br>
+<b>See Also:</b><br>
+<br><br>
+<b>http:</b><br>
+//sfml-dev.org/documentation/2.0/classsf_1_1Text.php#details<br><br>
+
+<dl><dt><big><a name="Text.Style"></a>enum <u>Style</u>: int;
+</big></dt>
+<dd>Enumeration of the string drawing styles.<br><br>
+
+<dl><dt><big><a name="Text.Style.Regular"></a><u>Regular</u></big></dt>
+<dd><u>Regular</u> characters, no style<br><br>
+
+</dd>
+<dt><big><a name="Text.Style.Bold"></a><u>Bold</u></big></dt>
+<dd><u>Bold</u> characters<br><br>
+
+</dd>
+<dt><big><a name="Text.Style.Italic"></a><u>Italic</u></big></dt>
+<dd><u>Italic</u> characters<br><br>
+
+</dd>
+<dt><big><a name="Text.Style.Underlined"></a><u>Underlined</u></big></dt>
+<dd><u>Underlined</u> characters<br><br>
+
+</dd>
+</dl>
+</dd>
+<dt><big><a name="Text.getCharacterSize"></a>const uint <u>getCharacterSize</u>();
+</big></dt>
+<dd>Get the character size.
+<br><br>
+<b>Returns:</b><br>
+Size of the characters, in pixels.<br><br>
+
+</dd>
+<dt><big><a name="Text.getColor"></a>const Color <u>getColor</u>();
+</big></dt>
+<dd>Get the global color of the text.
+<br><br>
+<b>Returns:</b><br>
+Global color of the text.<br><br>
+
+</dd>
+<dt><big><a name="Text.getFont"></a>const const(Font) <u>getFont</u>();
+</big></dt>
+<dd>Get thet text's font.
+<br><br>
+If the text has no font attached, a NULL pointer is returned. The returned reference is const, which means that you cannot modify the font when you get it from this function.
+
+<br><br>
+<b>Returns:</b><br>
+Text's font.<br><br>
+
+</dd>
+<dt><big><a name="Text.getGlobalBounds"></a>FloatRect <u>getGlobalBounds</u>();
+</big></dt>
+<dd>Get the global bounding rectangle of the entity.
+<br><br>
+The returned rectangle is in global coordinates, which means that it takes in account the transformations (translation, rotation, scale, ...) that are applied to the entity. In other words, this function returns the bounds of the sprite in the global 2D world's coordinate system.
+
+<br><br>
+<b>Returns:</b><br>
+Global bounding rectangle of the entity.<br><br>
+
+</dd>
+<dt><big><a name="Text.getLocalBounds"></a>const FloatRect <u>getLocalBounds</u>();
+</big></dt>
+<dd>Get the local bounding rectangle of the entity.
+<br><br>
+The returned rectangle is in local coordinates, which means that it ignores the transformations (translation, rotation, scale, ...) that are applied to the entity. In other words, this function returns the bounds of the entity in the entity's coordinate system.
+
+<br><br>
+<b>Returns:</b><br>
+Local bounding rectangle of the entity.<br><br>
+
+</dd>
+<dt><big><a name="Text.getString"></a>const dstring <u>getString</u>();
+</big></dt>
+<dd>Get the text's string.
+<br><br>
+The returned string is a dstring, a unicode type.<br><br>
+
+</dd>
+<dt><big><a name="Text.getStyle"></a>const Style <u>getStyle</u>();
+</big></dt>
+<dd>Get the text's style.
+<br><br>
+<b>Returns:</b><br>
+Text's style.<br><br>
+
+</dd>
+<dt><big><a name="Text.setCharacterSize"></a>void <u>setCharacterSize</u>(uint <i>size</i>);
+</big></dt>
+<dd>Set the character <i>size</i>.
+<br><br>
+The default <i>size</i> is 30.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>size</i></td>
+<td>New character <i>size</i>, in pixels.</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Text.setColor"></a>void <u>setColor</u>(Color <i>color</i>);
+</big></dt>
+<dd>Set the global <i>color</i> of the text.
+<br><br>
+By default, the text's <i>color</i> is opaque white.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Color <i>color</i></td>
+<td>New <i>color</i> of the text.</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Text.setFont"></a>void <u>setFont</u>(const(Font) <i>font</i>);
+</big></dt>
+<dd>Set the text's <i>font</i>.
+<br><br>
+The <i>font</i> argument refers to a <i>font</i> that must exist as long as the text uses it. Indeed, the text doesn't store its own copy of the <i>font</i>, but rather keeps a pointer to the one that you passed to this function. If the <i>font</i> is destroyed and the text tries to use it, the behaviour is undefined.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>const(Font) <i>font</i></td>
+<td>New <i>font</i></td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Text.setString"></a>void <u>setString</u>(dstring <i>text</i>);
+</big></dt>
+<dd>Set the <i>text</i>'s string.
+<br><br>
+A <i>text</i>'s string is empty by default.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>dstring <i>text</i></td>
+<td>New string</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Text.setStyle"></a>void <u>setStyle</u>(Style <i>style</i>);
+</big></dt>
+<dd>Set the text's <i>style</i>.
+<br><br>
+You can pass a combination of one or more styles, for example Style.Bold | Text.Italic.<br><br>
+
+</dd>
+<dt><big><a name="Text.draw"></a>void <u>draw</u>(RenderTarget <i>renderTarget</i>, RenderStates <i>renderStates</i>);
+</big></dt>
+<dd>Draw the object to a render target.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>RenderTarget <i>renderTarget</i></td>
+<td>Render target to <u>draw</u> to</td></tr>
+<tr><td>RenderStates <i>renderStates</i></td>
+<td>Current render states</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Text.findCharacterPos"></a>Vector2f <u>findCharacterPos</u>(size_t <i>index</i>);
+</big></dt>
+<dd>Return the position of the <i>index</i>-th character.
+<br><br>
+This function computes the visual position of a character from its <i>index</i> in the string. The returned position is in global coordinates (translation, rotation, scale and origin are applied). If <i>index</i> is out of range, the position of the end of the string is returned.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>size_t <i>index</i></td>
+<td>Index of the character</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Position of the character.<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

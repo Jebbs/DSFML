@@ -1,0 +1,240 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.audio.music</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.audio.music</h2>
+       <!-- Generated by Ddoc from dsfml/audio/music.d -->
+<br><br>
+<dl><dt><big><a name="Music"></a>class <u>Music</u>: dsfml.audio.soundstream.SoundStream;
+</big></dt>
+<dd>Streamed music played from an audio file.
+<br><br>
+Musics are sounds that are streamed rather than completely loaded in memory.
+<br><br>
+
+ This is especially useful for compressed musics that usually take hundreds of MB when they are uncompressed: by streaming it instead of loading it entirely, you avoid saturating the memory and have almost no loading delay.
+<br><br>
+
+ Apart from that, a <u>Music</u> has almost the same features as the SoundBuffer / Sound pair: you can play/pause/stop it, request its parameters (channels, sample rate), change the way it is played (pitch, volume, 3D position, ...), etc.
+<br><br>
+
+ As a sound stream, a music is played in its own thread in order not to block the rest of the program. This means that you can leave the music alone after calling play(), it will manage itself very well.
+
+<br><br>
+<b>See Also:</b><br>
+<br><br>
+<b>http:</b><br>
+//sfml-dev.org/documentation/2.0/classsf_1_1Music.php#details
+<br><br>
+<b>Authors:</b><br>
+Laurent Gomila, Jeremy DeHaan<br><br>
+
+<dl><dt><big><a name="Music.openFromFile"></a>bool <u>openFromFile</u>(string <i>filename</i>);
+</big></dt>
+<dd>Open a music from an audio file.
+<br><br>
+This function doesn't start playing the music (call play() to do so).
+<br><br>
+
+ Here is a complete list of all the supported audio formats: ogg, wav, flac, aiff, au, raw, paf, svx, nist, voc, ircam, w64, mat4, mat5 pvf, htk, sds, avr, sd2, caf, wve, mpc2k, rf64.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>filename</i></td>
+<td>Path of the music file to open.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading succeeded, <b>false</b> if it failed.<br><br>
+
+</dd>
+<dt><big><a name="Music.openFromMemory"></a>bool <u>openFromMemory</u>(const(void)[] <i>data</i>);
+</big></dt>
+<dd>Open a music from an audio file in memory.
+<br><br>
+This function doesn't start playing the music (call play() to do so).
+<br><br>
+
+ Here is a complete list of all the supported audio formats: ogg, wav, flac, aiff, au, raw, paf, svx, nist, voc, ircam, w64, mat4, mat5 pvf, htk, sds, avr, sd2, caf, wve, mpc2k, rf64.
+<br><br>
+
+ Since the music is not loaded completely but rather streamed continuously, the <i>data</i> must remain available as long as the music is playing (ie. you can't deallocate it right after calling this function).
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>const(void)[] <i>data</i></td>
+<td>The array of <i>data</i></td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading succeeded, <b>false</b> if it failed.<br><br>
+
+</dd>
+<dt><big><a name="Music.openFromStream"></a>bool <u>openFromStream</u>(InputStream <i>stream</i>);
+</big></dt>
+<dd>Open a music from an audio file in memory.
+<br><br>
+This function doesn't start playing the music (call play() to do so).
+<br><br>
+
+ Here is a complete list of all the supported audio formats: ogg, wav, flac, aiff, au, raw, paf, svx, nist, voc, ircam, w64, mat4, mat5 pvf, htk, sds, avr, sd2, caf, wve, mpc2k, rf64.
+<br><br>
+
+ Since the music is not loaded completely but rather streamed continuously, the <i>stream</i> must remain available as long as the music is playing (ie. you can't deallocate it right after calling this function).
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>InputStream <i>stream</i></td>
+<td>Source <i>stream</i> to read from</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading succeeded, <b>false</b> if it failed.<br><br>
+
+</dd>
+<dt><big><a name="Music.getDuration"></a>Time <u>getDuration</u>();
+</big></dt>
+<dd>Get the total duration of the music.
+<br><br>
+<b>Returns:</b><br>
+Music duration<br><br>
+
+</dd>
+<dt><big><a name="Music.onGetData"></a>protected bool <u>onGetData</u>(ref const(short)[] <i>samples</i>);
+</big></dt>
+<dd>Request a new chunk of audio <i>samples</i> from the stream source.
+<br><br>
+This function fills the chunk from the next <i>samples</i> to read from the audio file.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>const(short)[] <i>samples</i></td>
+<td>Array of <i>samples</i> to fill</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True to continue playback, <b>false</b> to stop.<br><br>
+
+</dd>
+<dt><big><a name="Music.onSeek"></a>protected void <u>onSeek</u>(Time <i>timeOffset</i>);
+</big></dt>
+<dd>Change the current playing position in the stream source.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Time <i>timeOffset</i></td>
+<td>New playing position, from the beginning of the music
+<br><br>
+
+ Implements SoundStream.</td></tr>
+</table><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

@@ -1,0 +1,332 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.graphics.transform</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.graphics.transform</h2>
+       <!-- Generated by Ddoc from dsfml/graphics/transform.d -->
+<br><br>
+<dl><dt><big><a name="Transform"></a>struct <u>Transform</u>;
+</big></dt>
+<dd>Define a 3x3 transform matrix.
+<br><br>
+A <u>Transform</u> specifies how to translate, rotate, scale, shear, project, whatever things.
+<br><br>
+
+ In mathematical terms, it defines how to transform a coordinate system into another.
+<br><br>
+
+ For example, if you apply a rotation transform to a sprite, the result will be a rotated sprite. And anything that is transformed by this rotation transform will be rotated the same way, according to its initial position.
+<br><br>
+
+ Transforms are typically used for drawing. But they can also be used for any computation that requires to transform points between the local and global coordinate systems of an entity (like collision detection).
+
+<br><br>
+<b>Authors:</b><br>
+Laurent Gomila, Jeremy DeHaan
+<br><br>
+<b>See Also:</b><br>
+<br><br>
+<b>http:</b><br>
+//www.sfml-dev.org/documentation/2.0/classsf_1_1Transform.php#details<br><br>
+
+<dl><dt><big><a name="Transform.this"></a> this(float <i>a00</i>, float <i>a01</i>, float <i>a02</i>, float <i>a10</i>, float <i>a11</i>, float <i>a12</i>, float <i>a20</i>, float <i>a21</i>, float <i>a22</i>);
+</big></dt>
+<dd>Construct a 3x3 matrix.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>float <i>a00</i></td>
+<td>Element (0, 0) of the matrix</td></tr>
+<tr><td>float <i>a01</i></td>
+<td>Element (0, 1) of the matrix</td></tr>
+<tr><td>float <i>a02</i></td>
+<td>Element (0, 2) of the matrix</td></tr>
+<tr><td>float <i>a10</i></td>
+<td>Element (1, 0) of the matrix</td></tr>
+<tr><td>float <i>a11</i></td>
+<td>Element (1, 1) of the matrix</td></tr>
+<tr><td>float <i>a12</i></td>
+<td>Element (1, 2) of the matrix</td></tr>
+<tr><td>float <i>a20</i></td>
+<td>Element (2, 0) of the matrix</td></tr>
+<tr><td>float <i>a21</i></td>
+<td>Element (2, 1) of the matrix</td></tr>
+<tr><td>float <i>a22</i></td>
+<td>Element (2, 2) of the matrix</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Transform.getInverse"></a>const Transform <u>getInverse</u>();
+</big></dt>
+<dd>Return the inverse of the transform.
+<br><br>
+If the inverse cannot be computed, an identity transform is returned.
+
+<br><br>
+<b>Returns:</b><br>
+A new transform which is the inverse of self.<br><br>
+
+</dd>
+<dt><big><a name="Transform.getMatrix"></a>const(float)[] <u>getMatrix</u>();
+</big></dt>
+<dd>Return the transform as a 4x4 matrix.
+<br><br>
+This function returns a pointer to an array of 16 floats containing the transform elements as a 4x4 matrix, which is directly compatible with OpenGL functions.
+
+<br><br>
+<b>Returns:</b><br>
+A 4x4 matrix.<br><br>
+
+</dd>
+<dt><big><a name="Transform.combine"></a>void <u>combine</u>(Transform <i>otherTransform</i>);
+</big></dt>
+<dd>Combine the current transform with another one.
+<br><br>
+The result is a transform that is equivalent to applying this followed by transform. Mathematically, it is equivalent to a matrix multiplication.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>transform</td>
+<td>Transform to <u>combine</u> with this one.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Reference to this.<br><br>
+
+</dd>
+<dt><big><a name="Transform.transformPoint"></a>const Vector2f <u>transformPoint</u>(Vector2f <i>point</i>);
+</big></dt>
+<dd>Transform a 2D <i>point</i>.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>x</td>
+<td>X coordinate of the <i>point</i> to transform.</td></tr>
+<tr><td>y</td>
+<td>Y coordinate of the <i>point</i> to transform.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Transformed <i>point</i>.<br><br>
+
+</dd>
+<dt><big><a name="Transform.transformRect"></a>const FloatRect <u>transformRect</u>(const(FloatRect) <i>rect</i>);
+</big></dt>
+<dd>Transform a rectangle.
+<br><br>
+Since SFML doesn't provide support for oriented rectangles, the result of this function is always an axis-aligned rectangle. Which means that if the transform contains a rotation, the bounding rectangle of the transformed rectangle is returned.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>rectangle</td>
+<td>Rectangle to transform.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Transformed rectangle.<br><br>
+
+</dd>
+<dt><big><a name="Transform.translate"></a>void <u>translate</u>(float <i>x</i>, float <i>y</i>);
+</big></dt>
+<dd>Combine the current transform with a translation.
+<br><br>
+This function returns a reference to this, so that calls can be chained.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>offset</td>
+<td>Translation offset to apply.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+this<br><br>
+
+</dd>
+<dt><big><a name="Transform.rotate"></a>void <u>rotate</u>(float <i>angle</i>);
+</big></dt>
+<dd>Combine the current transform with a rotation.
+<br><br>
+This function returns a reference to this, so that calls can be chained.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>float <i>angle</i></td>
+<td>Rotation <i>angle</i>, in degrees.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+this<br><br>
+
+</dd>
+<dt><big><a name="Transform.rotate"></a>void <u>rotate</u>(float <i>angle</i>, float <i>centerX</i>, float <i>centerY</i>);
+</big></dt>
+<dd>Combine the current transform with a rotation.
+<br><br>
+The center of rotation is provided for convenience as a second argument, so that you can build rotations around arbitrary points more easily (and efficiently) than the usual translate(-center).<u>rotate</u>(<i>angle</i>).translate(center).
+<br><br>
+
+ This function returns a reference to this, so that calls can be chained.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>float <i>angle</i></td>
+<td>Rotation <i>angle</i>, in degrees.</td></tr>
+<tr><td>center</td>
+<td>Center of rotation</td></tr>
+</table><br>
+<b>Returns:</b><br>
+this<br><br>
+
+</dd>
+<dt><big><a name="Transform.scale"></a>void <u>scale</u>(float <i>scaleX</i>, float <i>scaleY</i>);
+</big></dt>
+<dd>Combine the current transform with a scaling.
+<br><br>
+This function returns a reference to this, so that calls can be chained.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>float <i>scaleX</i></td>
+<td>Scaling factor on the X-axis.</td></tr>
+<tr><td>float <i>scaleY</i></td>
+<td>Scaling factor on the Y-axis.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+this<br><br>
+
+</dd>
+<dt><big><a name="Transform.scale"></a>void <u>scale</u>(float <i>scaleX</i>, float <i>scaleY</i>, float <i>centerX</i>, float <i>centerY</i>);
+</big></dt>
+<dd>Combine the current transform with a scaling.
+<br><br>
+The center of scaling is provided for convenience as a second argument, so that you can build scaling around arbitrary points more easily (and efficiently) than the usual translate(-center).<u>scale</u>(factors).translate(center).
+<br><br>
+
+ This function returns a reference to this, so that calls can be chained.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>float <i>scaleX</i></td>
+<td>Scaling factor on the X-axis.</td></tr>
+<tr><td>float <i>scaleY</i></td>
+<td>Scaling factor on the Y-axis.</td></tr>
+<tr><td>float <i>centerX</i></td>
+<td>X coordinate of the center of scaling</td></tr>
+<tr><td>float <i>centerY</i></td>
+<td>Y coordinate of the center of scaling</td></tr>
+</table><br>
+<b>Returns:</b><br>
+this<br><br>
+
+</dd>
+<dt><big><a name="Transform.Identity"></a>static const const(Transform) <u>Identity</u>;
+</big></dt>
+<dd>Indentity transform (does nothing).<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

@@ -1,0 +1,284 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.audio.soundstream</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.audio.soundstream</h2>
+       <!-- Generated by Ddoc from dsfml/audio/soundstream.d -->
+<br><br>
+<dl><dt><big><a name="SoundStream"></a>abstract class <u>SoundStream</u>: dsfml.audio.soundsource.SoundSource;
+</big></dt>
+<dd>Abstract base class for streamed audio sources.
+<br><br>
+Unlike audio buffers (see SoundBuffer), audio streams are never completely loaded in memory.
+<br><br>
+
+ Instead, the audio data is acquired continuously while the stream is playing. This behaviour allows to play a sound with no loading delay, and keeps the memory consumption very low.
+<br><br>
+
+ Sound sources that need to be streamed are usually big files (compressed audio musics that would eat hundreds of MB in memory) or files that would take a lot of time to be received (sounds played over the network).
+<br><br>
+
+ <u>SoundStream</u> is a base class that doesn't care about the stream source, which is left to the derived class. SFML provides a built-in specialization for big files (see Music). No network stream source is provided, but you can write your own by combining this class with the network module.
+<br><br>
+
+ A derived class has to override two virtual functions:
+ 		- onGetData fills a new chunk of audio data to be played.
+ 		- onSeek changes the current playing position in the source
+<br><br>
+
+ It is important to note that each <u>SoundStream</u> is played in its own separate thread, so that the streaming loop doesn't block the rest of the program. In particular, the OnGetData and OnSeek virtual functions may sometimes be called from this separate thread. It is important to keep this in mind, because you may have to take care of synchronization issues if you share data between threads.
+
+<br><br>
+<b>See Also:</b><br>
+<br><br>
+<b>http:</b><br>
+//sfml-dev.org/documentation/2.0/classsf_1_1SoundStream.php#details
+<br><br>
+<b>Authors:</b><br>
+Laurent Gomila, Jeremy DeHaan<br><br>
+
+<dl><dt><big><a name="SoundStream.volume"></a>@property void <u>volume</u>(float <i>newVolume</i>);
+</big></dt>
+<dd>The <u>volume</u> of the sound.
+<br><br>
+The <u>volume</u> is a vlue between 0 (mute) and 100 (full <u>volume</u>). The default value for the <u>volume</u> is 100.<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.volume"></a>@property float <u>volume</u>();
+</big></dt>
+<dd>The <u>volume</u> of the sound.
+<br><br>
+The <u>volume</u> is a vlue between 0 (mute) and 100 (full <u>volume</u>). The default value for the <u>volume</u> is 100.<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.position"></a>@property void <u>position</u>(Vector3f <i>newPosition</i>);
+</big></dt>
+<dd>The 3D <u>position</u> of the sound in the audio scene.
+<br><br>
+Only sounds with one channel (mono sounds) can be spatialized. The default <u>position</u> of a sound is (0, 0, 0).<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.position"></a>@property Vector3f <u>position</u>();
+</big></dt>
+<dd>The 3D <u>position</u> of the sound in the audio scene.
+<br><br>
+Only sounds with one channel (mono sounds) can be spatialized. The default <u>position</u> of a sound is (0, 0, 0).<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.isLooping"></a>@property void <u>isLooping</u>(bool <i>loop</i>);
+</big></dt>
+<dd>Whether or not the stream should <i>loop</i> after reaching the end.
+<br><br>
+If set, the stream will restart from the beginning after reaching the end and so on, until it is stopped or looping is set to <b>false</b>.
+<br><br>
+
+ Default looping state for streams is <b>false</b>.<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.isLooping"></a>@property bool <u>isLooping</u>();
+</big></dt>
+<dd>Whether or not the stream should loop after reaching the end.
+<br><br>
+If set, the stream will restart from the beginning after reaching the end and so on, until it is stopped or looping is set to <b>false</b>.
+<br><br>
+
+ Default looping state for streams is <b>false</b>.<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.playingOffset"></a>@property void <u>playingOffset</u>(Time <i>offset</i>);
+</big></dt>
+<dd>The current playing position (from the beginning) of the stream.
+<br><br>
+The playing position can be changed when the stream is either paused or playing.<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.playingOffset"></a>@property Time <u>playingOffset</u>();
+</big></dt>
+<dd>The current playing position (from the beginning) of the stream.
+<br><br>
+The playing position can be changed when the stream is either paused or playing.<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.relativeToListener"></a>@property void <u>relativeToListener</u>(bool <i>relative</i>);
+</big></dt>
+<dd>Make the sound's position <i>relative</i> to the listener (<b>true</b>) or absolute (<b>false</b>).
+<br><br>
+Making a sound <i>relative</i> to the listener will ensure that it will always be played the same way regardless the position of the listener.  This can be useful for non-spatialized sounds, sounds that are produced by the listener, or sounds attached to it. The default value is <b>false</b> (position is absolute).<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.relativeToListener"></a>@property bool <u>relativeToListener</u>();
+</big></dt>
+<dd>Make the sound's position relative to the listener (<b>true</b>) or absolute (<b>false</b>).
+<br><br>
+Making a sound relative to the listener will ensure that it will always be played the same way regardless the position of the listener.  This can be useful for non-spatialized sounds, sounds that are produced by the listener, or sounds attached to it. The default value is <b>false</b> (position is absolute).<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.minDistance"></a>@property void <u>minDistance</u>(float <i>distance</i>);
+</big></dt>
+<dd>The minimum <i>distance</i> of the sound.
+<br><br>
+The "minimum <i>distance</i>" of a sound is the maximum <i>distance</i> at which it is heard at its maximum volume. Further than the minimum <i>distance</i>, it will start to fade out according to its attenuation factor. A value of 0 ("inside the head of the listener") is an invalid value and is forbidden. The default value of the minimum <i>distance</i> is 1.<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.minDistance"></a>@property float <u>minDistance</u>();
+</big></dt>
+<dd>The minimum distance of the sound.
+<br><br>
+The "minimum distance" of a sound is the maximum distance at which it is heard at its maximum volume. Further than the minimum distance, it will start to fade out according to its attenuation factor. A value of 0 ("inside the head of the listener") is an invalid value and is forbidden. The default value of the minimum distance is 1.<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.attenuation"></a>@property void <u>attenuation</u>(float <i>newAttenuation</i>);
+</big></dt>
+<dd>The <u>attenuation</u> factor of the sound.
+<br><br>
+The <u>attenuation</u> is a multiplicative factor which makes the sound more or less loud according to its distance from the listener. An <u>attenuation</u> of 0 will produce a non-attenuated sound, i.e. its volume will always be the same whether it is heard from near or from far.
+<br><br>
+
+ On the other hand, an <u>attenuation</u> value such as 100 will make the sound fade out very quickly as it gets further from the listener. The default value of the <u>attenuation</u> is 1.<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.attenuation"></a>@property float <u>attenuation</u>();
+</big></dt>
+<dd>The <u>attenuation</u> factor of the sound.
+<br><br>
+The <u>attenuation</u> is a multiplicative factor which makes the sound more or less loud according to its distance from the listener. An <u>attenuation</u> of 0 will produce a non-attenuated sound, i.e. its volume will always be the same whether it is heard from near or from far.
+<br><br>
+
+ On the other hand, an <u>attenuation</u> value such as 100 will make the sound fade out very quickly as it gets further from the listener. The default value of the <u>attenuation</u> is 1.<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.channelCount"></a>@property uint <u>channelCount</u>();
+</big></dt>
+<dd>The number of channels of the stream.
+<br><br>
+1 channel means mono sound, 2 means stereo, etc.
+
+<br><br>
+<b>Returns:</b><br>
+Number of channels<br><br>
+
+</dd>
+<dt><big><a name="SoundStream.sampleRate"></a>@property uint <u>sampleRate</u>();
+</big></dt>
+<dd>The stream sample rate of the stream
+<br><br>
+The sample rate is the number of audio samples played per second. The higher, the better the quality.
+
+<br><br>
+<b>Returns:</b><br>
+Sample rate, in number of samples per second.<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

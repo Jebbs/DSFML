@@ -1,0 +1,595 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.graphics.renderwindow</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.graphics.renderwindow</h2>
+       <!-- Generated by Ddoc from dsfml/graphics/renderwindow.d -->
+<br><br>
+<dl><dt><big><a name="RenderWindow"></a>class <u>RenderWindow</u>: dsfml.window.window.Window, dsfml.graphics.rendertarget.RenderTarget;
+</big></dt>
+<dd>Window that can serve as a target for 2D drawing.
+<br><br>
+<u>RenderWindow</u> is the main class of the Graphics package.
+<br><br>
+
+ It defines an OS window that can be painted using the other classes of the graphics module.
+<br><br>
+
+ <u>RenderWindow</u> is derived from Window, thus it inherits all its features: events, window management, OpenGL rendering, etc. See the documentation of Window for a more complete description of all these features, as well as code examples.
+<br><br>
+
+ On top of that, <u>RenderWindow</u> adds more features related to 2D drawing with the graphics module (see its base class RenderTarget for more details).
+<br><br>
+
+ Like Window, <u>RenderWindow</u> is still able to render direct OpenGL stuff. It is even possible to mix together OpenGL calls and regular SFML drawing commands.
+
+<br><br>
+<b>Authors:</b><br>
+Laurent Gomila, Jeremy DeHaan
+<br><br>
+<b>See Also:</b><br>
+<br><br>
+<b>http:</b><br>
+//sfml-dev.org/documentation/2.0/classsf_1_1RenderWindow.php#details<br><br>
+
+<dl><dt><big><a name="RenderWindow.position"></a>@property Vector2i <u>position</u>(Vector2i <i>newPosition</i>);
+</big></dt>
+<dd>Change the <u>position</u> of the window on screen.
+<br><br>
+This property only works for top-level windows (i.e. it will be ignored for windows created from the handle of a child window/control).<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.position"></a>@property Vector2i <u>position</u>();
+</big></dt>
+<dd>Change the <u>position</u> of the window on screen.
+<br><br>
+This property only works for top-level windows (i.e. it will be ignored for windows created from the handle of a child window/control).<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.size"></a>@property Vector2u <u>size</u>(Vector2u <i>newSize</i>);
+</big></dt>
+<dd>The <u>size</u> of the rendering region of the window.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.size"></a>@property Vector2u <u>size</u>();
+</big></dt>
+<dd>The <u>size</u> of the rendering region of the window.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.view"></a>@property const(View) <u>view</u>(const(View) <i>newView</i>);
+</big></dt>
+<dd>Change the current active <u>view</u>.
+<br><br>
+The <u>view</u> is like a 2D camera, it controls which part of the 2D scene is visible, and how it is viewed in the render-target. The new <u>view</u> will affect everything that is drawn, until another <u>view</u> is set.
+<br><br>
+
+ The render target keeps its own copy of the <u>view</u> object, so it is not necessary to keep the original one alive after calling this function. To restore the original <u>view</u> of the target, you can pass the result of getDefaultView() to this function.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.view"></a>const @property const(View) <u>view</u>();
+</big></dt>
+<dd>Change the current active <u>view</u>.
+<br><br>
+The <u>view</u> is like a 2D camera, it controls which part of the 2D scene is visible, and how it is viewed in the render-target. The new <u>view</u> will affect everything that is drawn, until another <u>view</u> is set.
+<br><br>
+
+ The render target keeps its own copy of the <u>view</u> object, so it is not necessary to keep the original one alive after calling this function. To restore the original <u>view</u> of the target, you can pass the result of getDefaultView() to this function.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.getDefaultView"></a>const View <u>getDefaultView</u>();
+</big></dt>
+<dd>Get the default view of the render target.
+<br><br>
+The default view has the initial size of the render target, and never changes after the target has been created.
+
+<br><br>
+<b>Returns:</b><br>
+The default view of the render target.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.getSettings"></a>const ContextSettings <u>getSettings</u>();
+</big></dt>
+<dd>Get the settings of the OpenGL context of the window.
+<br><br>
+Note that these settings may be different from what was passed to the constructor or the create() function, if one or more settings were not supported. In this case, SFML chose the closest match.
+
+<br><br>
+<b>Returns:</b><br>
+Structure containing the OpenGL context settings<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.getSize"></a>const Vector2u <u>getSize</u>();
+</big></dt>
+<dd>Return the size of the rendering region of the target.
+<br><br>
+<b>Returns:</b><br>
+Size in pixels<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.getSystemHandle"></a>const WindowHandle <u>getSystemHandle</u>();
+</big></dt>
+<dd>Get the OS-specific handle of the window.
+<br><br>
+The type of the returned handle is WindowHandle, which is a typedef to the handle type defined by the OS. You shouldn't need to use this function, unless you have very specific stuff to implement that SFML doesn't support, or implement a temporary workaround until a bug is fixed.
+
+<br><br>
+<b>Returns:</b><br>
+System handle of the window<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.getViewport"></a>const IntRect <u>getViewport</u>(const(View) <i>view</i>);
+</big></dt>
+<dd>Get the viewport of a <i>view</i>, applied to this render target.
+<br><br>
+The viewport is defined in the <i>view</i> as a ratio, this function simply applies this ratio to the current dimensions of the render target to calculate the pixels rectangle that the viewport actually covers in the target.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>const(View) <i>view</i></td>
+<td>The <i>view</i> for which we want to compute the viewport</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Viewport rectangle, expressed in pixels<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.setActive"></a>bool <u>setActive</u>(bool <i>active</i>);
+</big></dt>
+<dd>Get the viewport of a view, applied to this render target.
+<br><br>
+A window is <i>active</i> only on the current thread, if you want to make it <i>active</i> on another thread you have to deactivate it on the previous thread first if it was <i>active</i>. Only one window can be <i>active</i> on a thread at a time, thus the window previously <i>active</i> (if any) automatically gets deactivated.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>bool <i>active</i></td>
+<td>True to activate, <b>false</b> to deactivate</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if operation was successful, <b>false</b> otherwise<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.setFramerateLimit"></a>void <u>setFramerateLimit</u>(uint <i>limit</i>);
+</big></dt>
+<dd>Limit the framerate to a maximum fixed frequency.
+<br><br>
+If a <i>limit</i> is set, the window will use a small delay after each call to display() to ensure that the current frame lasted long enough to match the framerate <i>limit</i>.
+<br><br>
+
+ SFML will try to match the given <i>limit</i> as much as it can, but since it internally uses sf::sleep, whose precision depends on the underlying OS, the results may be a little unprecise as well (for example, you can get 65 FPS when requesting 60).
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>limit</i></td>
+<td>Framerate <i>limit</i>, in frames per seconds (use 0 to disable <i>limit</i>)</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.setIcon"></a>void <u>setIcon</u>(uint <i>width</i>, uint <i>height</i>, const(ubyte[]) <i>pixels</i>);
+</big></dt>
+<dd>Change the window's icon.
+<br><br>
+<i>pixels</i> must be an array of <i>width</i> x <i>height</i> <i>pixels</i> in 32-bits RGBA format.
+<br><br>
+
+ The OS default icon is used by default.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>width</i></td>
+<td>Icon's <i>width</i>, in <i>pixels</i></td></tr>
+<tr><td>uint <i>height</i></td>
+<td>Icon's <i>height</i>, in <i>pixels</i></td></tr>
+<tr><td>const(ubyte[]) <i>pixels</i></td>
+<td>Icon pixel array to load from</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.setJoystickThreshhold"></a>void <u>setJoystickThreshhold</u>(float <i>threshhold</i>);
+</big></dt>
+<dd>Change the joystick threshold.
+<br><br>
+The joystick threshold is the value below which no JoystickMoved event will be generated.
+<br><br>
+
+ The threshold value is 0.1 by default.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>threshold</td>
+<td>New threshold, in the range [0, 100]</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.setKeyRepeatEnabled"></a>void <u>setKeyRepeatEnabled</u>(bool <i>enabled</i>);
+</big></dt>
+<dd>Enable or disable automatic key-repeat.
+<br><br>
+If key repeat is <i>enabled</i>, you will receive repeated KeyPressed events while keeping a key pressed. If it is disabled, you will only get a single event when the key is pressed.
+<br><br>
+
+ Key repeat is <i>enabled</i> by default.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>bool <i>enabled</i></td>
+<td>True to enable, <b>false</b> to disable</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.setMouseCursorVisible"></a>void <u>setMouseCursorVisible</u>(bool <i>visible</i>);
+</big></dt>
+<dd>Show or hide the mouse cursor.
+<br><br>
+The mouse cursor is <i>visible</i> by default.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>enabled</td>
+<td>True show the mouse cursor, <b>false</b> to hide it</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.setTitle"></a>void <u>setTitle</u>(string <i>newTitle</i>);
+</big></dt>
+<dd>Change the title of the window
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>title</td>
+<td>New title</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.setTitle"></a>void <u>setTitle</u>(dstring <i>newTitle</i>);
+</big></dt>
+<dd>Change the title of the window
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>title</td>
+<td>New title</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.setVerticalSyncEnabled"></a>void <u>setVerticalSyncEnabled</u>(bool <i>enabled</i>);
+</big></dt>
+<dd>Enable or disable vertical synchronization.
+<br><br>
+Activating vertical synchronization will limit the number of frames displayed to the refresh rate of the monitor. This can avoid some visual artifacts, and limit the framerate to a good value (but not constant across different computers).
+<br><br>
+
+ Vertical synchronization is disabled by default.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>bool <i>enabled</i></td>
+<td>True to enable v-sync, <b>false</b> to deactivate it</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.setVisible"></a>void <u>setVisible</u>(bool <i>visible</i>);
+</big></dt>
+<dd>Show or hide the window.
+<br><br>
+The window is shown by default.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>bool <i>visible</i></td>
+<td>True to show the window, <b>false</b> to hide it</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.clear"></a>void <u>clear</u>(Color <i>color</i> = Color.Black);
+</big></dt>
+<dd>Clear the entire target with a single <i>color</i>.
+<br><br>
+This function is usually called once every frame, to <u>clear</u> the previous contents of the target.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Color <i>color</i></td>
+<td>Fill <i>color</i> to use to <u>clear</u> the render target</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.close"></a>void <u>close</u>();
+</big></dt>
+<dd>Close the window and destroy all the attached resources.
+<br><br>
+After calling this function, the Window instance remains valid and you can call create() to recreate the window. All other functions such as pollEvent() or display() will still work (i.e. you don't have to test isOpen() every time), and will have no effect on closed windows.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.display"></a>void <u>display</u>();
+</big></dt>
+<dd>Display on screen what has been rendered to the window so far.
+<br><br>
+This function is typically called after all OpenGL rendering has been done for the current frame, in order to show it on screen.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.draw"></a>void <u>draw</u>(Drawable <i>drawable</i>, RenderStates <i>states</i> = RenderStates.Default);
+</big></dt>
+<dd>Draw a <i>drawable</i> object to the render target.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Drawable <i>drawable</i></td>
+<td>Object to <u>draw</u></td></tr>
+<tr><td>RenderStates <i>states</i></td>
+<td>Render <i>states</i> to use for drawing</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.draw"></a>void <u>draw</u>(const(Vertex)[] <i>vertices</i>, PrimitiveType <i>type</i>, RenderStates <i>states</i> = RenderStates.Default);
+</big></dt>
+<dd>Draw primitives defined by an array of <i>vertices</i>.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>const(Vertex)[] <i>vertices</i></td>
+<td>Array of <i>vertices</i> to <u>draw</u></td></tr>
+<tr><td>PrimitiveType <i>type</i></td>
+<td>Type of primitives to <u>draw</u></td></tr>
+<tr><td>RenderStates <i>states</i></td>
+<td>Render <i>states</i> to use for drawing</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.isOpen"></a>bool <u>isOpen</u>();
+</big></dt>
+<dd>Tell whether or not the window is open.
+<br><br>
+This function returns whether or not the window exists. Note that a hidden window (setVisible(<b>false</b>)) is open (therefore this function would return <b>true</b>).
+
+<br><br>
+<b>Returns:</b><br>
+True if the window is open, <b>false</b> if it has been closed<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.mapPixelToCoords"></a>const Vector2f <u>mapPixelToCoords</u>(Vector2i <i>point</i>);
+</big></dt>
+<dd>Convert a <i>point</i> fom target coordinates to world coordinates, using the current view.
+<br><br>
+This function is an overload of the <u>mapPixelToCoords</u> function that implicitely uses the current view.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Vector2i <i>point</i></td>
+<td>Pixel to convert</td></tr>
+</table><br>
+<b>Returns:</b><br>
+The converted <i>point</i>, in "world" coordinates.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.mapPixelToCoords"></a>const Vector2f <u>mapPixelToCoords</u>(Vector2i <i>point</i>, const(View) <i>view</i>);
+</big></dt>
+<dd>Convert a <i>point</i> from target coordinates to world coordinates.
+<br><br>
+This function finds the 2D position that matches the given pixel of the render-target. In other words, it does the inverse of what the graphics card does, to find the initial position of a rendered pixel.
+<br><br>
+
+ Initially, both coordinate systems (world units and target pixels) match perfectly. But if you define a custom <i>view</i> or resize your render-target, this assertion is not <b>true</b> anymore, ie. a <i>point</i> located at (10, 50) in your render-target may map to the <i>point</i> (150, 75) in your 2D world – if the <i>view</i> is translated by (140, 25).
+<br><br>
+
+ For render-windows, this function is typically used to find which <i>point</i> (or object) is located below the mouse cursor.
+<br><br>
+
+ This version uses a custom <i>view</i> for calculations, see the other overload of the function if you want to use the current <i>view</i> of the render-target.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Vector2i <i>point</i></td>
+<td>Pixel to convert</td></tr>
+<tr><td>const(View) <i>view</i></td>
+<td>The <i>view</i> to use for converting the <i>point</i></td></tr>
+</table><br>
+<b>Returns:</b><br>
+The converted <i>point</i>, in "world" coordinates.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.mapCoordsToPixel"></a>const Vector2i <u>mapCoordsToPixel</u>(Vector2f <i>point</i>);
+</big></dt>
+<dd>Convert a <i>point</i> from target coordinates to world coordinates, using the current view.
+<br><br>
+This function is an overload of the mapPixelToCoords function that implicitely uses the current view.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Vector2f <i>point</i></td>
+<td>Point to convert
+<br><br>
+
+ The converted <i>point</i>, in "world" coordinates</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="RenderWindow.mapCoordsToPixel"></a>const Vector2i <u>mapCoordsToPixel</u>(Vector2f <i>point</i>, const(View) <i>view</i>);
+</big></dt>
+<dd>Convert a <i>point</i> from world coordinates to target coordinates.
+<br><br>
+This function finds the pixel of the render-target that matches the given 2D <i>point</i>. In other words, it goes through the same process as the graphics card, to compute the final position of a rendered <i>point</i>.
+<br><br>
+
+ Initially, both coordinate systems (world units and target pixels) match perfectly. But if you define a custom <i>view</i> or resize your render-target, this assertion is not <b>true</b> anymore, ie. a <i>point</i> located at (150, 75) in your 2D world may map to the pixel (10, 50) of your render-target – if the <i>view</i> is translated by (140, 25).
+<br><br>
+
+ This version uses a custom <i>view</i> for calculations, see the other overload of the function if you want to use the current <i>view</i> of the render-target.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Vector2f <i>point</i></td>
+<td>Point to convert</td></tr>
+<tr><td>const(View) <i>view</i></td>
+<td>The <i>view</i> to use for converting the <i>point</i></td></tr>
+</table><br>
+<b>Returns:</b><br>
+The converted <i>point</i>, in target coordinates (pixels)<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.popGLStates"></a>void <u>popGLStates</u>();
+</big></dt>
+<dd>Restore the previously saved OpenGL render states and matrices.
+<br><br>
+See the description of pushGLStates to get a detailed description of these functions.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.pushGLStates"></a>void <u>pushGLStates</u>();
+</big></dt>
+<dd>Save the current OpenGL render states and matrices.
+<br><br>
+This function can be used when you mix SFML drawing and direct OpenGL rendering. Combined with PopGLStates, it ensures that:
+ - SFML's internal states are not messed up by your OpenGL code
+ - your OpenGL states are not modified by a call to an SFML function
+<br><br>
+
+ More specifically, it must be used around the code that calls Draw functions.
+<br><br>
+
+ Note that this function is quite expensive: it saves all the possible OpenGL states and matrices, even the ones you don't care about. Therefore it should be used wisely. It is provided for convenience, but the best results will be achieved if you handle OpenGL states yourself (because you know which states have really changed, and need to be saved and restored). Take a look at the ResetGLStates function if you do so.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.resetGLStates"></a>void <u>resetGLStates</u>();
+</big></dt>
+<dd>Reset the internal OpenGL states so that the target is ready for drawing.
+<br><br>
+This function can be used when you mix SFML drawing and direct OpenGL rendering, if you choose not to use pushGLStates/popGLStates. It makes sure that all OpenGL states needed by SFML are set, so that subsequent draw() calls will work as expected.<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.pollEvent"></a>bool <u>pollEvent</u>(ref Event <i>event</i>);
+</big></dt>
+<dd>Pop the <i>event</i> on top of the <i>event</i> queue, if any, and return it.
+<br><br>
+This function is not blocking: if there's no pending <i>event</i> then it will return <b>false</b> and leave <i>event</i> unmodified. Note that more than one <i>event</i> may be present in the <i>event</i> queue, thus you should always call this function in a loop to make sure that you process every pending <i>event</i>.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Event <i>event</i></td>
+<td>Event to be returned</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if an <i>event</i> was returned, or <b>false</b> if the <i>event</i> queue was empty<br><br>
+
+</dd>
+<dt><big><a name="RenderWindow.waitEvent"></a>bool <u>waitEvent</u>(ref Event <i>event</i>);
+</big></dt>
+<dd>Wait for an <i>event</i> and return it.
+<br><br>
+This function is blocking: if there's no pending <i>event</i> then it will wait until an <i>event</i> is received. After this function returns (and no error occured), the <i>event</i> object is always valid and filled properly. This function is typically used when you have a thread that is dedicated to events handling: you want to make this thread sleep as long as no new <i>event</i> is received.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Event <i>event</i></td>
+<td>Event to be returned</td></tr>
+</table><br>
+<b>Returns:</b><br>
+False if any error occurred<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

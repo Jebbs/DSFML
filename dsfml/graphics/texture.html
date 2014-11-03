@@ -1,0 +1,435 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.graphics.texture</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.graphics.texture</h2>
+       <!-- Generated by Ddoc from dsfml/graphics/texture.d -->
+<br><br>
+<dl><dt><big><a name="Texture"></a>class <u>Texture</u>;
+</big></dt>
+<dd>Image living on the graphics card that can be used for drawing.
+<br><br>
+<u>Texture</u> stores pixels that can be drawn, with a sprite for example.
+<br><br>
+
+ A texture lives in the graphics card memory, therefore it is very fast to draw a texture to a render target, or copy a render target to a texture (the graphics card can access both directly).
+<br><br>
+
+ Being stored in the graphics card memory has some drawbacks. A texture cannot be manipulated as freely as a Image, you need to prepare the pixels first and then upload them to the texture in a single operation (see <u>Texture</u>::update).
+<br><br>
+
+ <u>Texture</u> makes it easy to convert from/to Image, but keep in mind that these calls require transfers between the graphics card and the central memory, therefore they are slow operations.
+<br><br>
+
+ A texture can be loaded from an image, but also directly from a file/memory/stream. The necessary shortcuts are defined so that you don't need an image first for the most common cases. However, if you want to perform some modifications on the pixels before creating the final texture, you can load your file to a Image, do whatever you need with the pixels, and then call <u>Texture</u>::loadFromImage.
+<br><br>
+
+ Since they live in the graphics card memory, the pixels of a texture cannot be accessed without a slow copy first. And they cannot be accessed individually. Therefore, if you need to read the texture's pixels (like for pixel-perfect collisions), it is recommended to store the collision information separately, for example in an array of booleans.
+<br><br>
+
+ Like Image, <u>Texture</u> can handle a unique internal representation of pixels, which is RGBA 32 bits. This means that a pixel must be composed of 8 bits red, green, blue and alpha channels – just like a Color.
+
+<br><br>
+<b>Authors:</b><br>
+Laurent Gomila, Jeremy DeHaan
+<br><br>
+<b>See Also:</b><br>
+<br><br>
+<b>http:</b><br>
+//www.sfml-dev.org/documentation/2.0/classsf_1_1Texture.php#details<br><br>
+
+<dl><dt><big><a name="Texture.loadFromFile"></a>bool <u>loadFromFile</u>(string <i>filename</i>, IntRect <i>area</i> = IntRect());
+</big></dt>
+<dd>Load the texture from a file on disk.
+<br><br>
+The <i>area</i> argument can be used to load only a sub-rectangle of the whole image. If you want the entire image then leave the default value (which is an empty IntRect). If the <i>area</i> rectangle crosses the bounds of the image, it is adjusted to fit the image size.
+<br><br>
+
+ The maximum size for a texture depends on the graphics driver and can be retrieved with the getMaximumSize function.
+<br><br>
+
+ If this function fails, the texture is left unchanged.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>filename</i></td>
+<td>Path of the image file to load</td></tr>
+<tr><td>IntRect <i>area</i></td>
+<td>Area of the image to load</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading was successful, <b>false</b> otherwise.<br><br>
+
+</dd>
+<dt><big><a name="Texture.loadFromMemory"></a>bool <u>loadFromMemory</u>(const(void)* <i>data</i>, size_t <i>sizeInBytes</i>, IntRect <i>area</i> = IntRect());
+</big></dt>
+<dd>Load the texture from a file in memory.
+<br><br>
+The <i>area</i> argument can be used to load only a sub-rectangle of the whole image. If you want the entire image then leave the default value (which is an empty IntRect). If the <i>area</i> rectangle crosses the bounds of the image, it is adjusted to fit the image size.
+<br><br>
+
+ The maximum size for a texture depends on the graphics driver and can be retrieved with the getMaximumSize function.
+<br><br>
+
+ If this function fails, the texture is left unchanged.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>const(void)* <i>data</i></td>
+<td>Image in memory</td></tr>
+<tr><td>size</td>
+<td>Size of the <i>data</i> to load, in bytes.</td></tr>
+<tr><td>IntRect <i>area</i></td>
+<td>Area of the image to load</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading was successful, <b>false</b> otherwise.<br><br>
+
+</dd>
+<dt><big><a name="Texture.loadFromStream"></a>bool <u>loadFromStream</u>(InputStream <i>stream</i>, IntRect <i>area</i> = IntRect());
+</big></dt>
+<dd>Load the texture from a custom <i>stream</i>.
+<br><br>
+The <i>area</i> argument can be used to load only a sub-rectangle of the whole image. If you want the entire image then leave the default value (which is an empty IntRect). If the <i>area</i> rectangle crosses the bounds of the image, it is adjusted to fit the image size.
+<br><br>
+
+ The maximum size for a texture depends on the graphics driver and can be retrieved with the getMaximumSize function.
+<br><br>
+
+ If this function fails, the texture is left unchanged.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>InputStream <i>stream</i></td>
+<td>Source <i>stream</i> to read from</td></tr>
+<tr><td>IntRect <i>area</i></td>
+<td>Area of the image to load</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading was successful, <b>false</b> otherwise.<br><br>
+
+</dd>
+<dt><big><a name="Texture.loadFromImage"></a>bool <u>loadFromImage</u>(Image <i>image</i>, IntRect <i>area</i> = IntRect());
+</big></dt>
+<dd>Load the texture from an <i>image</i>.
+<br><br>
+The <i>area</i> argument can be used to load only a sub-rectangle of the whole <i>image</i>. If you want the entire <i>image</i> then leave the default value (which is an empty IntRect). If the <i>area</i> rectangle crosses the bounds of the <i>image</i>, it is adjusted to fit the <i>image</i> size.
+<br><br>
+
+ The maximum size for a texture depends on the graphics driver and can be retrieved with the getMaximumSize function.
+<br><br>
+
+ If this function fails, the texture is left unchanged.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Image <i>image</i></td>
+<td>Image to load into the texture</td></tr>
+<tr><td>IntRect <i>area</i></td>
+<td>Area of the <i>image</i> to load</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if loading was successful, <b>false</b> otherwise.<br><br>
+
+</dd>
+<dt><big><a name="Texture.getSize"></a>const Vector2u <u>getSize</u>();
+</big></dt>
+<dd>Return the size of the texture.
+<br><br>
+<b>Returns:</b><br>
+Size in pixels.<br><br>
+
+</dd>
+<dt><big><a name="Texture.setSmooth"></a>void <u>setSmooth</u>(bool <i>smooth</i>);
+</big></dt>
+<dd>Enable or disable the <i>smooth</i> filter.
+<br><br>
+When the filter is activated, the texture appears smoother so that pixels are less noticeable. However if you want the texture to look exactly the same as its source file, you should leave it disabled. The <i>smooth</i> filter is disabled by default.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>bool <i>smooth</i></td>
+<td>True to enable smoothing, <b>false</b> to disable it.</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Texture.setRepeated"></a>void <u>setRepeated</u>(bool <i>repeated</i>);
+</big></dt>
+<dd>Enable or disable repeating.
+<br><br>
+Repeating is involved when using texture coordinates outside the texture rectangle [0, 0, width, height]. In this case, if repeat mode is enabled, the whole texture will be <i>repeated</i> as many times as needed to reach the coordinate (for example, if the X texture coordinate is 3 * width, the texture will be <i>repeated</i> 3 times).
+<br><br>
+
+ If repeat mode is disabled, the "extra space" will instead be filled with border pixels. Warning: on very old graphics cards, white pixels may appear when the texture is <i>repeated</i>. With such cards, repeat mode can be used reliably only if the texture has power-of-two dimensions (such as 256x128). Repeating is disabled by default.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>bool <i>repeated</i></td>
+<td>True to repeat the texture, <b>false</b> to disable repeating</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Texture.bind"></a>static void <u>bind</u>(Texture <i>texture</i>);
+</big></dt>
+<dd>Bind a <i>texture</i> for rendering.
+<br><br>
+This function is not part of the graphics API, it mustn't be used when drawing SFML entities. It must be used only if you mix Texture with OpenGL code.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Texture <i>texture</i></td>
+<td>The <i>texture</i> to <u>bind</u>. Can be <b>null</b> to use no <i>texture</i>.</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Texture.create"></a>bool <u>create</u>(uint <i>height</i>, uint <i>width</i>);
+</big></dt>
+<dd>Create the texture.
+<br><br>
+If this function fails, the texture is left unchanged.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>width</i></td>
+<td>Width of the texture</td></tr>
+<tr><td>uint <i>height</i></td>
+<td>Height of the texture</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if creation was successful, <b>false</b> otherwise.<br><br>
+
+</dd>
+<dt><big><a name="Texture.copyToImage"></a>Image <u>copyToImage</u>();
+</big></dt>
+<dd>Copy the texture pixels to an image.
+<br><br>
+This function performs a slow operation that downloads the texture's pixels from the graphics card and copies them to a new image, potentially applying transformations to pixels if necessary (texture may be padded or flipped).
+
+<br><br>
+<b>Returns:</b><br>
+Image containing the texture's pixels.<br><br>
+
+</dd>
+<dt><big><a name="Texture.dup"></a>const @property Texture <u>dup</u>();
+</big></dt>
+<dd>Creates a new texture from the same data (this means copying the entire set of pixels).
+<br><br>
+<b>Returns:</b><br>
+New texture data.<br><br>
+
+</dd>
+<dt><big><a name="Texture.isRepeated"></a>const bool <u>isRepeated</u>();
+</big></dt>
+<dd>Tell whether the texture is repeated or not.
+<br><br>
+<b>Returns:</b><br>
+True if repeat mode is enabled, <b>false</b> if it is disabled.<br><br>
+
+</dd>
+<dt><big><a name="Texture.isSmooth"></a>const bool <u>isSmooth</u>();
+</big></dt>
+<dd>Tell whether the smooth filter is enabled or not.
+<br><br>
+<b>Returns:</b><br>
+True if something is enabled, <b>false</b> if it is disabled.<br><br>
+
+</dd>
+<dt><big><a name="Texture.updateFromImage"></a>void <u>updateFromImage</u>(Image <i>image</i>, uint <i>x</i>, uint <i>y</i>);
+</big></dt>
+<dd>Update the texture from an <i>image</i>.
+<br><br>
+Although the source <i>image</i> can be smaller than the texture, this function is usually used for updating the whole texture. The other overload, which has (<i>x</i>, <i>y</i>) additional arguments, is more convenient for updating a sub-area of the texture.
+<br><br>
+
+ No additional check is performed on the size of the <i>image</i>, passing an <i>image</i> bigger than the texture will lead to an undefined behaviour.
+<br><br>
+
+ This function does nothing if the texture was not previously created.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Image <i>image</i></td>
+<td>Image to copy to the texture.</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Texture.updateFromPixels"></a>void <u>updateFromPixels</u>(const(ubyte)[] <i>pixels</i>, uint <i>width</i>, uint <i>height</i>, uint <i>x</i>, uint <i>y</i>);
+</big></dt>
+<dd>Update part of the texture from an array of <i>pixels</i>.
+<br><br>
+The size of the pixel array must match the <i>width</i> and <i>height</i> arguments, and it must contain 32-bits RGBA <i>pixels</i>.
+<br><br>
+
+ No additional check is performed on the size of the pixel array or the bounds of the area to update, passing invalid arguments will lead to an undefined behaviour.
+<br><br>
+
+ This function does nothing if <i>pixels</i> is <b>null</b> or if the texture was not previously created.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>const(ubyte)[] <i>pixels</i></td>
+<td>Array of <i>pixels</i> to copy to the texture.</td></tr>
+<tr><td>uint <i>width</i></td>
+<td>Width of the pixel region contained in <i>pixels</i></td></tr>
+<tr><td>uint <i>height</i></td>
+<td>Height of the pixel region contained in <i>pixels</i></td></tr>
+<tr><td>uint <i>x</i></td>
+<td>X offset in the texture where to copy the source <i>pixels</i></td></tr>
+<tr><td>uint <i>y</i></td>
+<td>Y offset in the texture where to copy the source <i>pixels</i></td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Texture.updateFromWindow"></a>void <u>updateFromWindow</u>(Window <i>window</i>, uint <i>x</i>, uint <i>y</i>);
+</big></dt>
+<dd>Update a part of the texture from the contents of a <i>window</i>.
+<br><br>
+No additional check is performed on the size of the <i>window</i>, passing an invalid combination of <i>window</i> size and offset will lead to an undefined behaviour.
+<br><br>
+
+ This function does nothing if either the texture or the <i>window</i> was not previously created.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Window <i>window</i></td>
+<td>Window to copy to the texture</td></tr>
+<tr><td>uint <i>x</i></td>
+<td>X offset in the texture where to copy the source <i>window</i></td></tr>
+<tr><td>uint <i>y</i></td>
+<td>Y offset in the texture where to copy the source <i>window</i></td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Texture.updateFromWindow"></a>void <u>updateFromWindow</u>(RenderWindow <i>window</i>, uint <i>x</i>, uint <i>y</i>);
+</big></dt>
+<dd>Update a part of the texture from the contents of a <i>window</i>.
+<br><br>
+No additional check is performed on the size of the <i>window</i>, passing an invalid combination of <i>window</i> size and offset will lead to an undefined behaviour.
+<br><br>
+
+ This function does nothing if either the texture or the <i>window</i> was not previously created.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>RenderWindow <i>window</i></td>
+<td>Window to copy to the texture</td></tr>
+<tr><td>uint <i>x</i></td>
+<td>X offset in the texture where to copy the source <i>window</i></td></tr>
+<tr><td>uint <i>y</i></td>
+<td>Y offset in the texture where to copy the source <i>window</i></td></tr>
+</table><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

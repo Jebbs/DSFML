@@ -1,0 +1,52 @@
+/********
+Some shitty css work for the DSFML website
+Author: Jeremy DeHaan
+*****/
+
+html {
+    overflow-y: scroll;
+}
+
+dt {
+    	background-color: rgb(211,211,211);
+	}
+div.nav {
+	border-left: 5px; 
+    margin-top: 50px; 
+    padding-right : 5px; 
+    float: left; 
+    width: 170;
+	}
+	dl.nav {
+        list-style-type: none;
+		//margin-left: -20;
+			}
+	dt.nav {
+            font-size: small;
+           }
+
+	dd.nav {
+			margin-left: 30; 
+            padding: 3;
+            font-size: small;
+			}
+	b {
+    font-weight: bold;
+	}
+
+	ul.hnav {
+    	list-style-type: none; 
+        margin: 0; 
+        padding: 0; 
+        overflow: hidden;
+	}
+	li.hnav {
+        float: left;
+        margin: 10;
+		}
+	a.hnav { 
+        display: block; 
+        
+        //background-color: #dddddd; 
+        //text-align: center;
+		}

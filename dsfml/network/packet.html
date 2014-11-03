@@ -1,0 +1,385 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.network.packet</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.network.packet</h2>
+       <!-- Generated by Ddoc from dsfml/network/packet.d -->
+A module contianing the Packet class.<br><br>
+
+<dl><dt><big><a name="Packet"></a>class <u>Packet</u>;
+</big></dt>
+<dd>Utility class to build blocks of data to transfer over the network.
+<br><br>
+Packets provide a safe and easy way to serialize data, in order to send it over the network using sockets (sf::TcpSocket, sf::UdpSocket).<br><br>
+
+<dl><dt><big><a name="Packet.this"></a> this();
+</big></dt>
+<dd>Default constructor<br><br>
+
+</dd>
+<dt><big><a name="Packet.getData"></a>const const(void)[] <u>getData</u>();
+</big></dt>
+<dd>Get a slice of the data contained in the packet.
+<br><br>
+<b>Returns:</b><br>
+Slice containing the data.<br><br>
+
+</dd>
+<dt><big><a name="Packet.append"></a>void <u>append</u>(const(void)[] <i>data</i>);
+</big></dt>
+<dd>Append <i>data</i> to the end of the packet.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>const(void)[] <i>data</i></td>
+<td>Pointer to the sequence of bytes to <u>append</u>.</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Packet.canRead"></a>const bool <u>canRead</u>();
+</big></dt>
+<dd>Test the validity of a packet, for reading
+<br><br>
+This function allows to test the packet, to check if
+a reading operation was successful.
+<br><br>
+
+A packet will be in an invalid state if it has no more
+data to read.
+
+<br><br>
+<b>Returns:</b><br>
+True if last data extraction from packet was successful.<br><br>
+
+</dd>
+<dt><big><a name="Packet.clear"></a>void <u>clear</u>();
+</big></dt>
+<dd>Clear the packet.
+<br><br>
+After calling Clear, the packet is empty.<br><br>
+
+</dd>
+<dt><big><a name="Packet.endOfPacket"></a>const bool <u>endOfPacket</u>();
+</big></dt>
+<dd>Tell if the reading position has reached the end of the packet.
+<br><br>
+This function is useful to know if there is some data left to be read, without actually reading it.
+
+<br><br>
+<b>Returns:</b><br>
+True if all data was read, <b>false</b> otherwise.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readBool"></a>bool <u>readBool</u>();
+</big></dt>
+<dd>Reads a bool from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readByte"></a>byte <u>readByte</u>();
+</big></dt>
+<dd>Reads a byte from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readUbyte"></a>ubyte <u>readUbyte</u>();
+</big></dt>
+<dd>Reads a ubyte from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readShort"></a>short <u>readShort</u>();
+</big></dt>
+<dd>Reads a short from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readUshort"></a>ushort <u>readUshort</u>();
+</big></dt>
+<dd>Reads a ushort from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readInt"></a>int <u>readInt</u>();
+</big></dt>
+<dd>Reads a int from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readUint"></a>uint <u>readUint</u>();
+</big></dt>
+<dd>Reads a uint from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readFloat"></a>float <u>readFloat</u>();
+</big></dt>
+<dd>Reads a float from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readDouble"></a>double <u>readDouble</u>();
+</big></dt>
+<dd>Reads a double from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readString"></a>string <u>readString</u>();
+</big></dt>
+<dd>Reads a string from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readWstring"></a>wstring <u>readWstring</u>();
+</big></dt>
+<dd>Reads a wstring from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.readDstring"></a>dstring <u>readDstring</u>();
+</big></dt>
+<dd>Reads a dstring from the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeBool"></a>void <u>writeBool</u>(bool <i>value</i>);
+</big></dt>
+<dd>Write a bool the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeByte"></a>void <u>writeByte</u>(byte <i>value</i>);
+</big></dt>
+<dd>Write a byte the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeUbyte"></a>void <u>writeUbyte</u>(ubyte <i>value</i>);
+</big></dt>
+<dd>Write a ubyte the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeShort"></a>void <u>writeShort</u>(short <i>value</i>);
+</big></dt>
+<dd>Write a short the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeUshort"></a>void <u>writeUshort</u>(ushort <i>value</i>);
+</big></dt>
+<dd>Write a ushort the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeInt"></a>void <u>writeInt</u>(int <i>value</i>);
+</big></dt>
+<dd>Write a int the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeUint"></a>void <u>writeUint</u>(uint <i>value</i>);
+</big></dt>
+<dd>Write a uint the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeFloat"></a>void <u>writeFloat</u>(float <i>value</i>);
+</big></dt>
+<dd>Write a float the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeDouble"></a>void <u>writeDouble</u>(double <i>value</i>);
+</big></dt>
+<dd>Write a double the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeString"></a>void <u>writeString</u>(string <i>value</i>);
+</big></dt>
+<dd>Write a string the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeWstring"></a>void <u>writeWstring</u>(wstring <i>value</i>);
+</big></dt>
+<dd>Write a wstring the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.writeDstring"></a>void <u>writeDstring</u>(dstring <i>value</i>);
+</big></dt>
+<dd>Write a dstring the the end of the packet.<br><br>
+
+</dd>
+<dt><big><a name="Packet.onSend"></a>const(void)[] <u>onSend</u>();
+</big></dt>
+<dd>Called before the packet is sent over the network.
+<br><br>
+This function can be defined by derived classes to transform the data before it is sent; this can be used for compression, encryption, etc.
+The function must return an array of the modified data, as well as the number of bytes pointed. The default implementation provides the packet's data without transforming it.
+
+<br><br>
+<b>Returns:</b><br>
+Array of bytes to send<br><br>
+
+</dd>
+<dt><big><a name="Packet.onRecieve"></a>void <u>onRecieve</u>(const(void)[] <i>data</i>);
+</big></dt>
+<dd>Called after the packet is received over the network.
+<br><br>
+This function can be defined by derived classes to transform the <i>data</i> after it is received; this can be used for uncompression, decryption, etc.
+The function receives an array of the received <i>data</i>, and must fill the packet with the transformed bytes. The default implementation fills the packet directly without transforming the <i>data</i>.
+
+<br><br>
+<b>Params:</b><br>
+<table></table><br>
+
+</dd>
+</dl>
+</dd>
+<dt><big><a name="sfPacket_create"></a>package sfPacket* <u>sfPacket_create</u>();
+</big></dt>
+<dd>Create a new packet<br><br>
+
+</dd>
+<dt><big><a name="sfPacket_copy"></a>package sfPacket* <u>sfPacket_copy</u>(const sfPacket* <i>packet</i>);
+</big></dt>
+<dd>Create a new <i>packet</i> by copying an existing one<br><br>
+
+</dd>
+<dt><big><a name="sfPacket_destroy"></a>package void <u>sfPacket_destroy</u>(sfPacket* <i>packet</i>);
+</big></dt>
+<dd>Destroy a <i>packet</i><br><br>
+
+</dd>
+<dt><big><a name="sfPacket_append"></a>package void <u>sfPacket_append</u>(sfPacket* <i>packet</i>, const void* <i>data</i>, size_t <i>sizeInBytes</i>);
+</big></dt>
+<dd>Append <i>data</i> to the end of a <i>packet</i><br><br>
+
+</dd>
+<dt><big><a name="sfPacket_clear"></a>package void <u>sfPacket_clear</u>(sfPacket* <i>packet</i>);
+</big></dt>
+<dd>Clear a <i>packet</i><br><br>
+
+</dd>
+<dt><big><a name="sfPacket_getData"></a>package const(void)* <u>sfPacket_getData</u>(const sfPacket* <i>packet</i>);
+</big></dt>
+<dd>Get a pointer to the data contained in a <i>packet</i><br><br>
+
+</dd>
+<dt><big><a name="sfPacket_getDataSize"></a>package size_t <u>sfPacket_getDataSize</u>(const sfPacket* <i>packet</i>);
+</big></dt>
+<dd>Get the size of the data contained in a <i>packet</i><br><br>
+
+</dd>
+<dt><big><a name="sfPacket_endOfPacket"></a>package bool <u>sfPacket_endOfPacket</u>(const sfPacket* <i>packet</i>);
+</big></dt>
+<dd>Tell if the reading position has reached the end of a <i>packet</i><br><br>
+
+</dd>
+<dt><big><a name="sfPacket_canRead"></a>package bool <u>sfPacket_canRead</u>(const sfPacket* <i>packet</i>);
+</big></dt>
+<dd>Test the validity of a <i>packet</i>, for reading<br><br>
+
+</dd>
+<dt><big><a name="sfPacket_readBool"></a>package bool <u>sfPacket_readBool</u>(sfPacket* <i>packet</i>);
+</big></dt>
+<dd>Functions to extract data from a <i>packet</i><br><br>
+
+</dd>
+<dt><big><a name="sfPacket_writeBool"></a>package void <u>sfPacket_writeBool</u>(sfPacket* <i>packet</i>, bool);
+</big></dt>
+<dd>void     sfPacket_readString(sfPacket* <i>packet</i>, char* string);
+void     sfPacket_readWideString(sfPacket* <i>packet</i>, wchar_t* string);///Remove in lieu of readUint16 and readUint32 for W and D chars in D?
+Functions to insert data into a <i>packet</i><br><br>
+
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

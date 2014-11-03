@@ -1,0 +1,228 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.network.socketselector</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.network.socketselector</h2>
+       <!-- Generated by Ddoc from dsfml/network/socketselector.d -->
+A module contianing the SocketSelector class<br><br>
+
+<dl><dt><big><a name="SocketSelector"></a>class <u>SocketSelector</u>;
+</big></dt>
+<dd>Multiplexer that allows to read from multiple sockets.
+<br><br>
+Socket selectors provide a way to wait until some data is available on a set of sockets, instead of just one.
+<br><br>
+
+This is convenient when you have multiple sockets that may possibly receive data, but you don't know which one will be ready first.
+In particular, it avoids to use a thread for each socket; with selectors, a single thread can handle all the sockets.<br><br>
+
+<dl><dt><big><a name="SocketSelector.this"></a> this();
+</big></dt>
+<dd>Default constructor<br><br>
+
+</dd>
+<dt><big><a name="SocketSelector.add"></a>void <u>add</u>(TcpListener <i>listener</i>);
+</big></dt>
+<dd>This function keeps a weak reference to the socket, so you have to make sure that the socket is not destroyed while it is stored in the selector. This function does nothing if the socket is not valid.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>TcpListener <i>listener</i></td>
+<td>Reference to the <i>listener</i> to <u>add</u>.</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="SocketSelector.add"></a>void <u>add</u>(TcpSocket <i>socket</i>);
+</big></dt>
+<dd>Add a new TcpSocket to the selector.
+<br><br>
+This function keeps a weak reference to the <i>socket</i>, so you have to make sure that the <i>socket</i> is not destroyed while it is stored in the selector. This function does nothing if the <i>socket</i> is not valid.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>TcpSocket <i>socket</i></td>
+<td>Reference to the <i>socket</i> to <u>add</u>,</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="SocketSelector.add"></a>void <u>add</u>(UdpSocket <i>socket</i>);
+</big></dt>
+<dd>Add a new UdpSocket to the selector. 
+<br><br>
+This function keeps a weak reference to the <i>socket</i>, so you have to make sure that the <i>socket</i> is not destroyed while it is stored in the selector. This function does nothing if the <i>socket</i> is not valid.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>UdpSocket <i>socket</i></td>
+<td>Reference to the <i>socket</i> to <u>add</u>,</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="SocketSelector.clear"></a>void <u>clear</u>();
+</big></dt>
+<dd>Remove all the sockets stored in the selector.
+<br><br>
+This function doesn't destroy any instance, it simply removes all the references that the selector has to external sockets.<br><br>
+
+</dd>
+<dt><big><a name="SocketSelector.isReady"></a>bool <u>isReady</u>(TcpListener <i>listener</i>);
+</big></dt>
+<dd>Test a socket to know if it is ready to receive data. 
+<br><br>
+This function must be used after a call to Wait, to know which sockets are ready to receive data. If a socket is ready, a call to receive will never block because we know that there is data available to read. Note that if this function returns <b>true</b> for a TcpListener, this means that it is ready to accept a new connection.<br><br>
+
+</dd>
+<dt><big><a name="SocketSelector.isReady"></a>bool <u>isReady</u>(TcpSocket <i>socket</i>);
+</big></dt>
+<dd>Test a <i>socket</i> to know if it is ready to receive data. 
+<br><br>
+This function must be used after a call to Wait, to know which sockets are ready to receive data. If a <i>socket</i> is ready, a call to receive will never block because we know that there is data available to read. Note that if this function returns <b>true</b> for a TcpListener, this means that it is ready to accept a new connection.<br><br>
+
+</dd>
+<dt><big><a name="SocketSelector.isReady"></a>bool <u>isReady</u>(UdpSocket <i>socket</i>);
+</big></dt>
+<dd>Test a <i>socket</i> to know if it is ready to receive data. 
+<br><br>
+This function must be used after a call to Wait, to know which sockets are ready to receive data. If a <i>socket</i> is ready, a call to receive will never block because we know that there is data available to read. Note that if this function returns <b>true</b> for a TcpListener, this means that it is ready to accept a new connection.<br><br>
+
+</dd>
+<dt><big><a name="SocketSelector.remove"></a>void <u>remove</u>(TcpListener <i>socket</i>);
+<br><a name="SocketSelector.remove"></a>void <u>remove</u>(TcpSocket <i>socket</i>);
+<br><a name="SocketSelector.remove"></a>void <u>remove</u>(UdpSocket <i>socket</i>);
+</big></dt>
+<dd>Remove a <i>socket</i> from the selector. 
+<br><br>
+This function doesn't destroy the <i>socket</i>, it simply removes the reference that the selector has to it.
+<br><br>
+
+Parameters
+		<i>socket</i> = Reference to the <i>socket</i> to <u>remove</u>.<br><br>
+
+</dd>
+<dt><big><a name="SocketSelector.wait"></a>bool <u>wait</u>(Time <i>timeout</i> = Time.Zero);
+</big></dt>
+<dd>Wait until one or more sockets are ready to receive.
+<br><br>
+This function returns as soon as at least one socket has some data available to be received. To know which sockets are ready, use the isReady function. If you use a <i>timeout</i> and no socket is ready before the <i>timeout</i> is over, the function returns <b>false</b>.
+<br><br>
+
+Parameters
+		<i>timeout</i> = Maximum time to <u>wait</u>, (use Time::Zero for infinity).
+
+<br><br>
+<b>Returns:</b><br>
+True if there are sockets ready, <b>false</b> otherwise.<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

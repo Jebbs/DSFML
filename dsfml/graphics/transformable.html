@@ -1,0 +1,292 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.graphics.transformable</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.graphics.transformable</h2>
+       <!-- Generated by Ddoc from dsfml/graphics/transformable.d -->
+<br><br>
+<dl><dt><big><a name="Transformable"></a>interface <u>Transformable</u>;
+</big></dt>
+<dd>Decomposed transform defined by a position, a rotation, and a scale.
+<br><br>
+This interface is provided for convenience, on top of Transform.
+
+<br><br>
+<b>Authors:</b><br>
+Laurent Gomila, Jeremy DeHaan
+<br><br>
+<b>See Also:</b><br>
+<br><br>
+<b>http:</b><br>
+//www.sfml-dev.org/documentation/2.0/classsf_1_1Transformable.php#details<br><br>
+
+<dl><dt><big><a name="Transformable.origin"></a>abstract @property Vector2f <u>origin</u>(Vector2f <i>newOrigin</i>);
+</big></dt>
+<dd>The local <u>origin</u> of the object.
+<br><br>
+The <u>origin</u> of an object defines the center point for all transformations (position, scale, ratation).
+<br><br>
+
+ The coordinates of this point must be relative to the top-left corner of the object, and ignore all transformations (position, scale, rotation). The default <u>origin</u> of a transformable object is (0, 0).<br><br>
+
+</dd>
+<dt><big><a name="Transformable.origin"></a>abstract const @property Vector2f <u>origin</u>();
+</big></dt>
+<dd>The local <u>origin</u> of the object.
+<br><br>
+The <u>origin</u> of an object defines the center point for all transformations (position, scale, ratation).
+<br><br>
+
+ The coordinates of this point must be relative to the top-left corner of the object, and ignore all transformations (position, scale, rotation). The default <u>origin</u> of a transformable object is (0, 0).<br><br>
+
+</dd>
+<dt><big><a name="Transformable.position"></a>abstract @property Vector2f <u>position</u>(Vector2f <i>newPosition</i>);
+</big></dt>
+<dd>The <u>position</u> of the object. The default is (0, 0).<br><br>
+
+</dd>
+<dt><big><a name="Transformable.position"></a>abstract const @property Vector2f <u>position</u>();
+</big></dt>
+<dd>The <u>position</u> of the object. The default is (0, 0).<br><br>
+
+</dd>
+<dt><big><a name="Transformable.rotation"></a>abstract @property float <u>rotation</u>(float <i>newRotation</i>);
+</big></dt>
+<dd>The orientation of the object, in degrees. The default is 0 degrees. <br><br>
+
+</dd>
+<dt><big><a name="Transformable.rotation"></a>abstract const @property float <u>rotation</u>();
+</big></dt>
+<dd>The orientation of the object, in degrees. The default is 0 degrees. <br><br>
+
+</dd>
+<dt><big><a name="Transformable.scale"></a>abstract @property Vector2f <u>scale</u>(Vector2f <i>newScale</i>);
+</big></dt>
+<dd>The <u>scale</u> factors of the object. The default is (1, 1).<br><br>
+
+</dd>
+<dt><big><a name="Transformable.scale"></a>abstract const @property Vector2f <u>scale</u>();
+</big></dt>
+<dd>The <u>scale</u> factors of the object. The default is (1, 1).<br><br>
+
+</dd>
+<dt><big><a name="Transformable.getTransform"></a>abstract const(Transform) <u>getTransform</u>();
+</big></dt>
+<dd>Get the inverse of the combined transform of the object.
+<br><br>
+<b>Returns:</b><br>
+Inverse of the combined transformations applied to the object.<br><br>
+
+</dd>
+<dt><big><a name="Transformable.getInverseTransform"></a>abstract const(Transform) <u>getInverseTransform</u>();
+</big></dt>
+<dd>Get the combined transform of the object.
+<br><br>
+<b>Returns:</b><br>
+Transform combining the position/rotation/scale/origin of the object.<br><br>
+
+</dd>
+</dl>
+</dd>
+<dt><big><a name="NormalTransformable"></a>template <u>NormalTransformable</u>()</big></dt>
+<dd>Decomposed transform defined by a position, a rotation, and a scale.
+<br><br>
+This template is provided for convenience, on top of Transformable (and Transform).
+<br><br>
+
+ Transform, as a low-level class, offers a great level of flexibility but it is not always convenient to manage. Indeed, one can easily combine any kind of operation, such as a translation followed by a rotation followed by a scaling, but once the result transform is built, there's no way to go backward and, let's say, change only the rotation without modifying the translation and scaling.
+<br><br>
+
+ The entire transform must be recomputed, which means that you need to retrieve the initial translation and scale factors as well, and combine them the same way you did before updating the rotation. This is a tedious operation, and it requires to store all the individual components of the final transform.
+<br><br>
+
+ That's exactly what Transformable was written for: it hides these variables and the composed transform behind an easy to use interface. You can set or get any of the individual components without worrying about the others. It also provides the composed transform (as a Transform), and keeps it up-to-date.
+
+<br><br>
+<b>Authors:</b><br>
+Laurent Gomila, Jeremy DeHaan
+<br><br>
+<b>See Also:</b><br>
+<br><br>
+<b>http:</b><br>
+//www.sfml-dev.org/documentation/2.0/classsf_1_1Transformable.php#details<br><br>
+
+<dl><dt><big><a name="origin"></a>Vector2f <u>origin</u>(Vector2f <i>newOrigin</i>);
+</big></dt>
+<dd>The local <u>origin</u> of the object.
+<br><br>
+The <u>origin</u> of an object defines the center point for all transformations (position, scale, ratation).
+<br><br>
+
+ The coordinates of this point must be relative to the top-left corner of the object, and ignore all transformations (position, scale, rotation). The default <u>origin</u> of a transformable object is (0, 0).<br><br>
+
+</dd>
+<dt><big><a name="origin"></a>const Vector2f <u>origin</u>();
+</big></dt>
+<dd>The local <u>origin</u> of the object.
+<br><br>
+The <u>origin</u> of an object defines the center point for all transformations (position, scale, ratation).
+<br><br>
+
+ The coordinates of this point must be relative to the top-left corner of the object, and ignore all transformations (position, scale, rotation). The default <u>origin</u> of a transformable object is (0, 0).<br><br>
+
+</dd>
+<dt><big><a name="position"></a>Vector2f <u>position</u>(Vector2f <i>newPosition</i>);
+</big></dt>
+<dd>The <u>position</u> of the object. The default is (0, 0).<br><br>
+
+</dd>
+<dt><big><a name="position"></a>const Vector2f <u>position</u>();
+</big></dt>
+<dd>The <u>position</u> of the object. The default is (0, 0).<br><br>
+
+</dd>
+<dt><big><a name="rotation"></a>float <u>rotation</u>(float <i>newRotation</i>);
+</big></dt>
+<dd>The orientation of the object, in degrees. The default is 0 degrees. <br><br>
+
+</dd>
+<dt><big><a name="rotation"></a>const float <u>rotation</u>();
+</big></dt>
+<dd>The orientation of the object, in degrees. The default is 0 degrees. <br><br>
+
+</dd>
+<dt><big><a name="scale"></a>Vector2f <u>scale</u>(Vector2f <i>newScale</i>);
+</big></dt>
+<dd>The <u>scale</u> factors of the object. The default is (1, 1).<br><br>
+
+</dd>
+<dt><big><a name="scale"></a>const Vector2f <u>scale</u>();
+</big></dt>
+<dd>The <u>scale</u> factors of the object. The default is (1, 1).<br><br>
+
+</dd>
+<dt><big><a name="getInverseTransform"></a>const(Transform) <u>getInverseTransform</u>();
+</big></dt>
+<dd>Get the inverse of the combined transform of the object.
+<br><br>
+<b>Returns:</b><br>
+Inverse of the combined transformations applied to the object.<br><br>
+
+</dd>
+<dt><big><a name="getTransform"></a>const(Transform) <u>getTransform</u>();
+</big></dt>
+<dd>Get the combined transform of the object.
+<br><br>
+<b>Returns:</b><br>
+Transform combining the position/rotation/scale/origin of the object.<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

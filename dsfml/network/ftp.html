@@ -1,0 +1,447 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.network.ftp</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.network.ftp</h2>
+       <!-- Generated by Ddoc from dsfml/network/ftp.d -->
+A module containing the Ftp class.<br><br>
+
+<dl><dt><big><a name="Ftp"></a>class <u>Ftp</u>;
+</big></dt>
+<dd>A FTP client.
+<br><br>
+The <u>Ftp</u> class is a very simple FTP client that allows you to communicate with a FTP server.
+<br><br>
+
+The FTP protocol allows you to manipulate a remote file system (list files, upload, download, create, remove, ...).<br><br>
+
+<dl><dt><big><a name="Ftp.TransferMode"></a>enum <u>TransferMode</u>: int;
+</big></dt>
+<dd>Enumeration of transfer modes.<br><br>
+
+<dl><dt><big><a name="Ftp.TransferMode.Binary"></a><u>Binary</u></big></dt>
+<dd><u>Binary</u> mode (file is transfered as a sequence of bytes) <br><br>
+
+</dd>
+<dt><big><a name="Ftp.TransferMode.Ascii"></a><u>Ascii</u></big></dt>
+<dd>Text mode using ASCII encoding.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.TransferMode.Ebcdic"></a><u>Ebcdic</u></big></dt>
+<dd>Text mode using EBCDIC encoding. <br><br>
+
+</dd>
+</dl>
+</dd>
+<dt><big><a name="Ftp.this"></a> this();
+</big></dt>
+<dd>Default Constructor.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.getWorkingDirectory"></a>DirectoryResponse <u>getWorkingDirectory</u>();
+</big></dt>
+<dd>Get the current working directory.
+<br><br>
+The working directory is the root path for subsequent operations involving directories and/or filenames.
+
+<br><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.getDirectoryListing"></a>ListingResponse <u>getDirectoryListing</u>(string <i>directory</i> = "");
+</big></dt>
+<dd>Get the contents of the given <i>directory</i>.
+<br><br>
+This function retrieves the sub-directories and files contained in the given <i>directory</i>. It is not recursive. The <i>directory</i> parameter is relative to the current working <i>directory</i>.
+
+<br><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.changeDirectory"></a>Response <u>changeDirectory</u>(string <i>directory</i>);
+</big></dt>
+<dd>Change the current working <i>directory</i>.
+<br><br>
+The new <i>directory</i> must be relative to the current one.
+
+<br><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.connect"></a>Response <u>connect</u>(IpAddress <i>address</i>, ushort <i>port</i> = 21, Time <i>timeout</i> = Time.Zero);
+</big></dt>
+<dd>Connect to the specified FTP server.
+<br><br>
+The <i>port</i> has a default value of 21, which is the standard <i>port</i> used by the FTP protocol. You shouldn't use a different value, unless you really know what you do.
+This function tries to <u>connect</u> to the server so it may take a while to complete, especially if the server is not reachable. To avoid blocking your application for too long, you can use a <i>timeout</i>. The default value, Time::Zero, means that the system <i>timeout</i> will be used (which is usually pretty long).
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>IpAddress <i>address</i></td>
+<td>Address of the FTP server to <u>connect</u> to.</td></tr>
+<tr><td>ushort <i>port</i></td>
+<td>Port used for the connection.</td></tr>
+<tr><td>Time <i>timeout</i></td>
+<td>Maximum time to wait.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.connect"></a>Response <u>connect</u>(string <i>address</i>, ushort <i>port</i> = 21, Time <i>timeout</i> = Time.Zero);
+</big></dt>
+<dd>Connect to the specified FTP server.
+<br><br>
+The <i>port</i> has a default value of 21, which is the standard <i>port</i> used by the FTP protocol. You shouldn't use a different value, unless you really know what you do.
+This function tries to <u>connect</u> to the server so it may take a while to complete, especially if the server is not reachable. To avoid blocking your application for too long, you can use a <i>timeout</i>. The default value, Time::Zero, means that the system <i>timeout</i> will be used (which is usually pretty long).
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>address</i></td>
+<td>Name or ddress of the FTP server to <u>connect</u> to.</td></tr>
+<tr><td>ushort <i>port</i></td>
+<td>Port used for the connection.</td></tr>
+<tr><td>Time <i>timeout</i></td>
+<td>Maximum time to wait.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.deleteDirectory"></a>Response <u>deleteDirectory</u>(string <i>name</i>);
+</big></dt>
+<dd>Remove an existing directory.
+<br><br>
+The directory to remove must be relative to the current working directory. Use this function with caution, the directory will be removed permanently!
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>name</i></td>
+<td>Name of the directory to remove.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.deleteFile"></a>Response <u>deleteFile</u>(string <i>name</i>);
+</big></dt>
+<dd>Remove an existing file.
+<br><br>
+The file <i>name</i> must be relative to the current working directory. Use this function with caution, the file will be removed permanently!
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>name</i></td>
+<td>Name of the file to remove.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.disconnect"></a>Response <u>disconnect</u>();
+</big></dt>
+<dd>Close the connection with the server.
+<br><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.download"></a>Response <u>download</u>(string <i>remoteFile</i>, string <i>localPath</i>, TransferMode <i>mode</i> = TransferMode.Binary);
+</big></dt>
+<dd>Download a file from the server.
+<br><br>
+The filename of the distant file is relative to the current working directory of the server, and the local destination path is relative to the current directory of your application.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>remoteFile</i></td>
+<td>Filename of the distant file to <u>download</u>.</td></tr>
+<tr><td>string <i>localPath</i></td>
+<td>Where to put to file on the local computer.</td></tr>
+<tr><td>TransferMode <i>mode</i></td>
+<td>Transfer <i>mode</i>.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.keepAlive"></a>Response <u>keepAlive</u>();
+</big></dt>
+<dd>Send a <b>null</b> command to keep the connection alive.
+<br><br>
+This command is useful because the server may close the connection automatically if no command is sent.
+
+<br><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.login"></a>Response <u>login</u>();
+</big></dt>
+<dd>Log in using an anonymous account.
+<br><br>
+Logging in is mandatory after connecting to the server. Users that are not logged in cannot perform any operation.
+
+<br><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.login"></a>Response <u>login</u>(string <i>name</i>, string <i>password</i>);
+</big></dt>
+<dd>Log in using a username and a <i>password</i>.
+<br><br>
+Logging in is mandatory after connecting to the server. Users that are not logged in cannot perform any operation.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>name</i></td>
+<td>User <i>name</i>.</td></tr>
+<tr><td>string <i>password</i></td>
+<td>The <i>password</i>.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.parentDirectory"></a>Response <u>parentDirectory</u>();
+</big></dt>
+<dd>Go to the parent directory of the current one. 
+<br><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.createDirectory"></a>Response <u>createDirectory</u>(string <i>name</i>);
+</big></dt>
+<dd>Create a new directory.
+<br><br>
+The new directory is created as a child of the current working directory.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>name</i></td>
+<td>Name of the directory to create.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.renameFile"></a>Response <u>renameFile</u>(string <i>file</i>, string <i>newName</i>);
+</big></dt>
+<dd>Rename an existing <i>file</i>.
+<br><br>
+The filenames must be relative to the current working directory.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>file</i></td>
+<td>File to rename.</td></tr>
+<tr><td>string <i>newName</i></td>
+<td>New name of the <i>file</i>.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.upload"></a>Response <u>upload</u>(string <i>localFile</i>, string <i>remotePath</i>, TransferMode <i>mode</i> = TransferMode.Binary);
+</big></dt>
+<dd>Upload a file to the server.
+<br><br>
+The name of the local file is relative to the current working directory of your application, and the remote path is relative to the current directory of the FTP server.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>localFile</i></td>
+<td>Path of the local file to <u>upload</u>.</td></tr>
+<tr><td>string <i>remotePath</i></td>
+<td>Where to put the file on the server.</td></tr>
+<tr><td>TransferMode <i>mode</i></td>
+<td>Transfer <i>mode</i>.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Server response to the request.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.DirectoryResponse"></a>class <u>DirectoryResponse</u>: dsfml.network.ftp.Ftp.Response;
+</big></dt>
+<dd>Specialization of FTP response returning a directory.<br><br>
+
+<dl><dt><big><a name="Ftp.DirectoryResponse.getDirectory"></a>string <u>getDirectory</u>();
+</big></dt>
+<dd>Get the directory returned in the response.
+<br><br>
+<b>Returns:</b><br>
+Directory name.<br><br>
+
+</dd>
+</dl>
+</dd>
+<dt><big><a name="Ftp.ListingResponse"></a>class <u>ListingResponse</u>: dsfml.network.ftp.Ftp.Response;
+</big></dt>
+<dd>Specialization of FTP response returning a filename lisiting. <br><br>
+
+<dl><dt><big><a name="Ftp.ListingResponse.getFilenames"></a>const(string[]) <u>getFilenames</u>();
+</big></dt>
+<dd>Return the array of directory/file names.
+<br><br>
+<b>Returns:</b><br>
+Array containing the requested listing.<br><br>
+
+</dd>
+</dl>
+</dd>
+<dt><big><a name="Ftp.Response"></a>class <u>Response</u>;
+</big></dt>
+<dd>Define a FTP response. <br><br>
+
+<dl><dt><big><a name="Ftp.Response.Status"></a>enum <u>Status</u>: int;
+</big></dt>
+<dd><u>Status</u> codes possibly returned by a FTP response.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.Response.getMessage"></a>const string <u>getMessage</u>();
+</big></dt>
+<dd>Get the full message contained in the response.
+<br><br>
+<b>Returns:</b><br>
+The response message.<br><br>
+
+</dd>
+<dt><big><a name="Ftp.Response.getStatus"></a>const Status <u>getStatus</u>();
+</big></dt>
+<dd>Get the status code of the response.
+<br><br>
+<b>Returns:</b><br>
+Status code. <br><br>
+
+</dd>
+<dt><big><a name="Ftp.Response.isOk"></a>const bool <u>isOk</u>();
+</big></dt>
+<dd>Check if the status code means a success.
+<br><br>
+This function is defined for convenience, it is equivalent to testing if the status code is &lt; 400.
+
+<br><br>
+<b>Returns:</b><br>
+True if the status is a success, <b>false</b> if it is a failure.<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

@@ -1,0 +1,342 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.network.http</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.network.http</h2>
+       <!-- Generated by Ddoc from dsfml/network/http.d -->
+A module containing the Http class.<br><br>
+
+<dl><dt><big><a name="Http"></a>class <u>Http</u>;
+</big></dt>
+<dd>A HTTP client.
+<br><br>
+<b>sf:</b><br>
+:<u>Http</u> is a very simple HTTP client that allows you to communicate with a web server.
+<br><br>
+
+You can retrieve web pages, send data to an interactive resource, download a remote file, etc.<br><br>
+
+<dl><dt><big><a name="Http.this"></a> this();
+</big></dt>
+<dd>Default constructor<br><br>
+
+</dd>
+<dt><big><a name="Http.this"></a> this(string <i>host</i>, ushort <i>port</i> = 0);
+</big></dt>
+<dd>Construct the HTTP client with the target <i>host</i>.
+<br><br>
+This is equivalent to calling setHost(<i>host</i>, <i>port</i>). The <i>port</i> has a default value of 0, which means that the HTTP client will use the right <i>port</i> according to the protocol used (80 for HTTP, 443 for HTTPS). You should leave it like this unless you really need a <i>port</i> other than the standard one, or use an unknown protocol.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>host</i></td>
+<td>Web server to connect to.</td></tr>
+<tr><td>ushort <i>port</i></td>
+<td>Port to use for connection. </td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Http.setHost"></a>void <u>setHost</u>(string <i>host</i>, ushort <i>port</i> = 0);
+</big></dt>
+<dd>Set the target <i>host</i>.
+<br><br>
+This function just stores the <i>host</i> address and <i>port</i>, it doesn't actually connect to it until you send a request. The <i>port</i> has a default value of 0, which means that the HTTP client will use the right <i>port</i> according to the protocol used (80 for HTTP, 443 for HTTPS). You should leave it like this unless you really need a <i>port</i> other than the standard one, or use an unknown protocol.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>host</i></td>
+<td>Web server to connect to.</td></tr>
+<tr><td>ushort <i>port</i></td>
+<td>Port to use for connection. </td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Http.sendRequest"></a>Response <u>sendRequest</u>(Request <i>request</i>, Time <i>timeout</i> = Time.Zero);
+</big></dt>
+<dd>Send a HTTP <i>request</i> and return the server's response.
+<br><br>
+You must have a valid host before sending a <i>request</i> (see setHost). Any missing mandatory header field in the <i>request</i> will be added with an appropriate value. Warning: this function waits for the server's response and may not return instantly; use a thread if you don't want to block your application, or use a <i>timeout</i> to limit the time to wait. A value of Time::Zero means that the client will use the system defaut <i>timeout</i> (which is usually pretty long).
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>Request <i>request</i></td>
+<td>Request to send.</td></tr>
+<tr><td>Time <i>timeout</i></td>
+<td>Maximum time to wait.</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Http.Request"></a>class <u>Request</u>;
+</big></dt>
+<dd>Define a HTTP request. <br><br>
+
+<dl><dt><big><a name="Http.Request.Method"></a>enum <u>Method</u>: int;
+</big></dt>
+<dd>Enumerate the available HTTP methods for a request. <br><br>
+
+<dl><dt><big><a name="Http.Request.Method.Get"></a><u>Get</u></big></dt>
+<dd>Request in get mode, standard method to retrieve a page. <br><br>
+
+</dd>
+<dt><big><a name="Http.Request.Method.Post"></a><u>Post</u></big></dt>
+<dd>Request in post mode, usually to send data to a page.<br><br>
+
+</dd>
+<dt><big><a name="Http.Request.Method.Head"></a><u>Head</u></big></dt>
+<dd>Request a page's header only. <br><br>
+
+</dd>
+</dl>
+</dd>
+<dt><big><a name="Http.Request.this"></a> this(string <i>uri</i> = "/", Method <i>method</i> = Method.Get, string <i>requestBody</i> = "");
+</big></dt>
+<dd>This constructor creates a GET request, with the root URI ("/") and an empty body.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>uri</i></td>
+<td>Target URI.</td></tr>
+<tr><td>Method <i>method</i></td>
+<td>Method to use for the request.</td></tr>
+<tr><td>body</td>
+<td>Content of the request's body.</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Http.Request.setBody"></a>void <u>setBody</u>(string <i>requestBody</i>);
+</big></dt>
+<dd>Set the body of the request.
+<br><br>
+The body of a request is optional and only makes sense for POST requests. It is ignored for all other methods. The body is empty by default.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>body</td>
+<td>Content of the body.</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Http.Request.setField"></a>void <u>setField</u>(string <i>feild</i>, string <i>value</i>);
+</big></dt>
+<dd>Set the <i>value</i> of a field.
+<br><br>
+The field is created if it doesn't exist. The name of the field is case insensitive. By default, a request doesn't contain any field (but the mandatory fields are added later by the HTTP client when sending the request).
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>field</td>
+<td>Name of the field to set.</td></tr>
+<tr><td>string <i>value</i></td>
+<td>Value of the field.</td></tr>
+</table><br>
+
+</dd>
+<dt><big><a name="Http.Request.setHttpVersion"></a>void <u>setHttpVersion</u>(uint <i>major</i>, uint <i>minor</i>);
+</big></dt>
+<dd>Set the HTTP version for the request.
+<br><br>
+The HTTP version is 1.0 by default.
+<br><br>
+
+Parameters
+		<i>major</i> = Major HTTP version number.
+		<i>minor</i> = Minor HTTP version number.<br><br>
+
+</dd>
+<dt><big><a name="Http.Request.setMethod"></a>void <u>setMethod</u>(Method <i>method</i>);
+</big></dt>
+<dd>Set the request <i>method</i>.
+<br><br>
+See the Method enumeration for a complete list of all the availale methods. The <i>method</i> is Http::Request::Get by default.
+<br><br>
+
+Params
+		<i>method</i> = Method to use for the request.<br><br>
+
+</dd>
+<dt><big><a name="Http.Request.setUri"></a>void <u>setUri</u>(string <i>uri</i>);
+</big></dt>
+<dd>Set the requested URI.
+<br><br>
+The URI is the resource (usually a web page or a file) that you want to get or post. The URI is "/" (the root page) by default.
+<br><br>
+
+Params
+		<i>uri</i> = URI to request, relative to the host.<br><br>
+
+</dd>
+</dl>
+</dd>
+<dt><big><a name="Http.Response"></a>class <u>Response</u>;
+</big></dt>
+<dd>Define a HTTP response.<br><br>
+
+<dl><dt><big><a name="Http.Response.Status"></a>enum <u>Status</u>: int;
+</big></dt>
+<dd>Enumerate all the valid status codes for a response.<br><br>
+
+</dd>
+<dt><big><a name="Http.Response.getBody"></a>string <u>getBody</u>();
+</big></dt>
+<dd>Get the body of the response.
+<br><br>
+<b>Returns:</b><br>
+The response body.<br><br>
+
+</dd>
+<dt><big><a name="Http.Response.getField"></a>string <u>getField</u>(string <i>field</i>);
+</big></dt>
+<dd>Get the value of a <i>field</i>.
+<br><br>
+If the <i>field</i> <i>field</i> is not found in the response header, the empty string is returned. This function uses case-insensitive comparisons.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>string <i>field</i></td>
+<td>Name of the <i>field</i> to get.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Value of the <i>field</i>, or empty string if not found.<br><br>
+
+</dd>
+<dt><big><a name="Http.Response.getMajorHttpVersion"></a>uint <u>getMajorHttpVersion</u>();
+</big></dt>
+<dd>Get the major HTTP version number of the response.
+<br><br>
+<b>Returns:</b><br>
+Major HTTP version number.<br><br>
+
+</dd>
+<dt><big><a name="Http.Response.getMinorHttpVersion"></a>uint <u>getMinorHttpVersion</u>();
+</big></dt>
+<dd>Get the minor HTTP version number of the response. 
+<br><br>
+<b>Returns:</b><br>
+Minor HTTP version number.<br><br>
+
+</dd>
+<dt><big><a name="Http.Response.getStatus"></a>Status <u>getStatus</u>();
+</big></dt>
+<dd>Get the response status code.
+<br><br>
+The status code should be the first thing to be checked after receiving a response, it defines whether it is a success, a failure or anything else (see the Status enumeration).
+
+<br><br>
+<b>Returns:</b><br>
+Status code of the response.<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

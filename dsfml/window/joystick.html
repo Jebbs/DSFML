@@ -1,0 +1,274 @@
+<html>
+	<head>
+       <META http-equiv="content-type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/dsfml.css">
+       <title>dsfml.window.joystick</title>
+       </head><body>
+	<div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+          <h1 id="project_title">DSFML</h1>
+
+		<ul class="hnav">
+  			<li class="hnav"><a class="hnav" href="../../index.html">Home</a></li>
+            <li class="hnav"><a class="hnav" href="../../getstarted.html">Getting Started</a></li>
+  			<li class="hnav"><a class="hnav" href="../../doc.html">Documentation</a></li>
+  			<li class="hnav"><a class="hnav" href="../../downloads.html">Downloads</a></li>
+            <li class="hnav"><a class="hnav" href="../../contact.html">Contact</a></li>
+		</ul>
+        </header>
+    </div>
+
+	
+	<div id="main_content_wrap" class="outer">
+
+<div class="nav">
+	 <ul>
+		<dl class="nav">
+		<dt class="nav"><li>System</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/clock.html">Clock</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/err.html">Err</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/inputstream.html">InputStream</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/lock.html">Lock</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/mutex.html">Mutex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/system/sleep.html">Sleep</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/string.html">String</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/thread.html">Thread</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/time.html">Time</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector2.html">Vector2</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/system/vector3.html">Vector3</a></li></dd>
+        <dt class="nav"><li>Window</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/context.html">Context</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/contextsettings.html">ContextSettings</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/event.html">Event</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/joystick.html">Joystick</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/keyboard.html">Keyboard</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/window/mouse.html">Mouse</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/videomode.html">VideoMode</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/window.html">Window</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/window/windowhandle.html">WindowHandle</a></li></dd>
+		<dt class="nav"><li>Graphics</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/blendmode.html">BlendMode</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/circleshape.html">CircleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/color.html">Color</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/convexshape.html">ConvexShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/drawable.html">Drawable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/font.html">Font</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/glyph.html">Glyph</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/image.html">Image</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/primitivetype.html">PrimitiveType</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rect.html">Rect</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rectangleshape.html">RectangleShape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderstates.html">RenderStates</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertarget.html">RenderTarget</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/rendertexture.html">RenderTexture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/renderwindow.html">RenderWindow</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shader.html">Shader</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/shape.html">Shape</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/sprite.html">Sprite</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/text.html">Text</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/texture.html">Texture</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transform.html">Transform</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/transformable.html">Transformable</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertex.html">Vertex</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/vertexarray.html">VertexArray</a></li></dd>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/graphics/view.html">View</a></li></dd>
+		<dt class="nav"><li>Audio</li></dt>
+			<dd class="nav"><li><a class="hnav" href="../../dsfml/audio/listener.html">Listener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/music.html">Music</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/sound.html">Sound</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbuffer.html">SoundBuffer</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundrecorder.html">SoundRecorder</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundsource.html">SounSource</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/audio/soundstream.html">SoundStream</a></li></dd>
+        <dt class="nav"><li>Network</li></dt>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ftp.html">Ftp</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/http.html">Http</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/ipaddress.html">IpAddress</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/packet.html">Packet</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socket.html">Socket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/socketselector.html">SocketSelector</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcplistener.html">TcpListener</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/tcpsocket.html">TcpSocket</a></li></dd>
+            <dd class="nav"><li><a class="hnav" href="../../dsfml/network/udpsocket.html">UdpSocket</a></li></dd>
+		</dl>
+</ul>
+	</div>
+
+      <section  style="min-height: 1700px;" id="main_content" class="inner">
+
+       <h2>dsfml.window.joystick</h2>
+       <!-- Generated by Ddoc from dsfml/window/joystick.d -->
+A module containing the Joystick class.<br><br>
+
+<dl><dt><big><a name="Joystick"></a>abstract class <u>Joystick</u>;
+</big></dt>
+<dd>Give access to the real-time state of the joysticks.
+<br><br>
+<u>Joystick</u> provides an interface to the state of the joysticks.
+<br><br>
+
+It only contains static functions, so it's not meant to be instanciated. Instead, each joystick is identified
+by an index that is passed to the functions of this class.
+<br><br>
+
+This class allows users to query the state of joysticks at any time and directly, without having to deal with
+a window and its events. Compared to the JoystickMoved, JoystickButtonPressed and JoystickButtonReleased events,
+<u>Joystick</u> can retrieve the state of axes and buttons of joysticks at any time (you don't need to store and update
+a boolean on your side in order to know if a button is pressed or released), and you always get the real state of
+joysticks, even if they are moved, pressed or released when your window is out of focus and no event is triggered.<br><br>
+
+<dl><dt><big><a name="Joystick.JoystickCount"></a><u>JoystickCount</u></big></dt>
+<dd>Maximum number of supported joysticks.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.JoystickButtonCount"></a><u>JoystickButtonCount</u></big></dt>
+<dd>Maximum number of supported buttons.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.JoystickAxisCount"></a><u>JoystickAxisCount</u></big></dt>
+<dd>Maximum number of supported axes.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.Axis"></a>enum <u>Axis</u>: int;
+</big></dt>
+<dd>Axes supported by SFML joysticks.<br><br>
+
+<dl><dt><big><a name="Joystick.Axis.X"></a><u>X</u></big></dt>
+<dd>The <u>X</u> axis.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.Axis.Y"></a><u>Y</u></big></dt>
+<dd>The <u>Y</u> axis.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.Axis.Z"></a><u>Z</u></big></dt>
+<dd>The <u>Z</u> axis.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.Axis.R"></a><u>R</u></big></dt>
+<dd>The <u>R</u> axis.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.Axis.U"></a><u>U</u></big></dt>
+<dd>The <u>U</u> axis.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.Axis.V"></a><u>V</u></big></dt>
+<dd>The <u>V</u> axis.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.Axis.PovX"></a><u>PovX</u></big></dt>
+<dd>The X axis of the point-of-view hat.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.Axis.PovY"></a><u>PovY</u></big></dt>
+<dd>The Y axis of the point-of-view hat.<br><br>
+
+</dd>
+</dl>
+</dd>
+<dt><big><a name="Joystick.getButtonCount"></a>static uint <u>getButtonCount</u>(uint <i>joystick</i>);
+</big></dt>
+<dd>Return the number of buttons supported by a <i>joystick</i>.
+<br><br>
+If the <i>joystick</i> is not connected, this function returns 0.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>joystick</i></td>
+<td>Index of the <i>joystick</i>.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Number of buttons supported by the <i>joystick</i>.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.getAxisPosition"></a>static float <u>getAxisPosition</u>(uint <i>joystick</i>, Axis <i>axis</i>);
+</big></dt>
+<dd>Get the current position of a <i>joystick</i> <i>axis</i>.
+<br><br>
+If the <i>joystick</i> is not connected, this function returns 0.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>joystick</i></td>
+<td>Index of the <i>joystick</i>.</td></tr>
+<tr><td>Axis <i>axis</i></td>
+<td>Axis to check.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+Current position of the <i>axis</i>, in range [-100 .. 100].<br><br>
+
+</dd>
+<dt><big><a name="Joystick.hasAxis"></a>static bool <u>hasAxis</u>(uint <i>joystick</i>, Axis <i>axis</i>);
+</big></dt>
+<dd>Check if a <i>joystick</i> supports a given <i>axis</i>.
+<br><br>
+If the <i>joystick</i> is not connected, this function returns <b>false</b>.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>joystick</i></td>
+<td>Index of the <i>joystick</i>.</td></tr>
+<tr><td>Axis <i>axis</i></td>
+<td>Axis to check.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if the <i>joystick</i> supports the <i>axis</i>, <b>false</b> otherwise.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.isButtonPressed"></a>static bool <u>isButtonPressed</u>(uint <i>joystick</i>, uint <i>button</i>);
+</big></dt>
+<dd>Check if a <i>joystick</i> <i>button</i> is pressed.
+<br><br>
+If the <i>joystick</i> is not connected, this function returns <b>false</b>.
+
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>joystick</i></td>
+<td>Index of the <i>joystick</i>.</td></tr>
+<tr><td>uint <i>button</i></td>
+<td>Button to check.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if the <i>button</i> is pressed, <b>false</b> otherwise.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.isConnected"></a>static bool <u>isConnected</u>(uint <i>joystick</i>);
+</big></dt>
+<dd>Check if a <i>joystick</i> is connected.
+<br><br>
+<b>Params:</b><br>
+<table><tr><td>uint <i>joystick</i></td>
+<td>Index of the <i>joystick</i>.</td></tr>
+</table><br>
+<b>Returns:</b><br>
+True if the <i>joystick</i> is connected, <b>false</b> otherwise.<br><br>
+
+</dd>
+<dt><big><a name="Joystick.update"></a>static void <u>update</u>();
+</big></dt>
+<dd>Update the states of all joysticks.
+<br><br>
+This function is used internally by SFML, so you normally don't have to call it explicitely.
+However, you may need to call it if you have no window yet (or no window at all): in this case the joysticks states are not updated automatically.<br><br>
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+	
+	</section>
+    </div>
+<!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+       </body>
+</html>

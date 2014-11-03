@@ -232,9 +232,10 @@ hr {
 }
 
 table {
-  border: 1px solid #373737;
+  //border: 1px solid #373737;
   margin-bottom: 20px;
   text-align: left;
+
  }
 
 th {
@@ -246,7 +247,9 @@ th {
 
 td {
   padding: 10px;
-  border: 1px solid #373737;
+    width: 100px;
+    white-space: nowrap;
+  //border: 1px solid #373737;
  }
 
 form {
@@ -264,9 +267,11 @@ Full-Width Styles
 
 .inner {
   position: relative;
-  max-width: 640px;
+  max-width: 750px;
   padding: 20px 10px;
-  margin: 0 auto;
+  margin: auto;
+
+  //overflow: auto;
 }
 
 #forkme_banner {
