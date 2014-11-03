@@ -41,7 +41,7 @@ div.nav {
 	}
 	li.hnav {
         float: left;
-        margin: 10;
+        padding: 10;
 		}
 	a.hnav { 
         display: block; 
