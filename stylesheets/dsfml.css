@@ -15,7 +15,7 @@ div.nav {
     margin-top: 50px; 
     padding-right : 5px; 
     float: left; 
-    width: 170;
+    width: 170px;
 	}
 	dl.nav {
         list-style-type: none;
@@ -25,8 +25,8 @@ div.nav {
            }
 
 	dd.nav {
-			margin-left: 30; 
-            padding: 3;
+			margin-left: 30px; 
+            padding: 3px;
             font-size: small;
 			}
 	b {
@@ -40,8 +40,9 @@ div.nav {
         overflow: hidden;
 	}
 	li.hnav {
-        float: left;padding: 10;
+        float: left;
+        margin: 10px;
 		}
 	a.hnav { 
-        display: block;padding-right: 10;
+        display: block; 
 		}
