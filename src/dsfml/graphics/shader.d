@@ -266,7 +266,6 @@ class Shader
 		return (sfPtr == null)?false:true;
 	}
 
-<<<<<<< HEAD
 	/**
 	 * Change a float parameter of the shader.
 	 * 
@@ -274,58 +273,14 @@ class Shader
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a float (float GLSL type).
 	 * 		x		= Value to assign
 	 */
-=======
-	void opIndexAssign(float x, string name)
+	 void setParameter(string name, float x)
 	{
+		import dsfml.system.string;
 		sfShader_setFloatParameter(sfPtr, toStringz(name), x);
 	}
 
-	void opIndexAssign(float[] val, string name)
-	{
-		if(val.length == 1)
-			sfShader_setFloatParameter(sfPtr, toStringz(key), val[0]);
-		else if(val.length == 2)
-			sfShader_setFloat2Parameter(sfPtr, toStringz(key), val[0], val[1]);
-		else if(val.length == 3)
-			sfShader_setFloat3Parameter(sfPtr, toStringz(key), val[0], val[1], val[2]);
-		else if(val.length >= 4)
-			sfShader_setFloat4Parameter(sfPtr, toStringz(key), val[0], val[1], val[2], val[3]);
-	}
-
-	void opIndexAssign(Vector2f vector, string name)
-	{
-		sfShader_setFloat2Parameter(sfPtr, toStringz(name), vector.x, vector.y);
-	}
-
-	void opIndexAssign(Vector3f vector, string name)
-	{
-		sfShader_setFloat3Parameter(sfPtr, toStringz(name), vector.x, vector.y, vector.z);
-	}
-	
-	void opIndexAssign(Color color, string name)
-	{
-		sfShader_setColorParameter(sfPtr, toStringz(name), color.r, color.g, color.b, color.a);
-	}
-	
-	void opIndexAssign(Transform transform, string name)
-	{
-		sfShader_setTransformParameter(sfPtr, toStringz(name), transform.m_matrix.ptr);
-	}
-	
-	void opIndexAssign(Texture texture, string name)
-	{
-		import std.conv;
-		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
-		err.write(text(sfErrGraphics_getOutput()));
-	}
-	
-	void opIndexAssign(CurrentTextureType, string name)
-	{
-		sfShader_setCurrentTextureParameter(sfPtr, toStringz(name));
-	}
-	
->>>>>>> pr/109
-	void setParameter(string name, float x)
+	///ditto
+	void opIndexAssign(float x, string name)
 	{
 		import dsfml.system.string;
 		sfShader_setFloatParameter(sfPtr, toStringz(name), x);
@@ -377,6 +332,29 @@ class Shader
 	}
 
 	/**
+	 * Change variable length vector parameter of the shader. The length of the set of floats must be between 1 and 4.
+	 * 
+	 * Params:
+	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 4x1 vector (vec4 GLSL type).
+	 * 		val 	= The set of floats to assign.
+	 */
+	void opIndexAssign(float[] val, string name)
+	{
+		//asserts to make sure that val is of proper lengths at both compile and run time
+		static assert((val.length >0) && (val.length <= 4);
+		assert((val.length >0) && (val.length <= 4);
+
+		if(val.length == 1)
+			sfShader_setFloatParameter(sfPtr, toStringz(key), val[0]);
+		else if(val.length == 2)
+			sfShader_setFloat2Parameter(sfPtr, toStringz(key), val[0], val[1]);
+		else if(val.length == 3)
+			sfShader_setFloat3Parameter(sfPtr, toStringz(key), val[0], val[1], val[2]);
+		else if(val.length >= 4)
+			sfShader_setFloat4Parameter(sfPtr, toStringz(key), val[0], val[1], val[2], val[3]);
+	}
+
+	/**
 	 * Change a 2-components vector parameter of the shader.
 	 * 
 	 * Params:
@@ -389,6 +367,12 @@ class Shader
 		sfShader_setFloat2Parameter(sfPtr, toStringz(name), vector.x, vector.y);
 	}
 
+	///ditto
+	void opIndexAssign(Vector2f vector, string name)
+	{
+		sfShader_setFloat2Parameter(sfPtr, toStringz(name), vector.x, vector.y);
+	}
+
 	/**
 	 * Change a 3-components vector parameter of the shader.
 	 * 
@@ -397,6 +381,12 @@ class Shader
 	 * 		vector	= Vector to assign
 	 */
 	void setParameter(string name, Vector3f vector)
+	{
+		import dsfml.system.string;
+		sfShader_setFloat3Parameter(sfPtr, toStringz(name), vector.x, vector.y, vector.z);
+	}
+	///ditto
+	void opIndexAssign(Vector3f vector, string name)
 	{
 		import dsfml.system.string;
 		sfShader_setFloat3Parameter(sfPtr, toStringz(name), vector.x, vector.y, vector.z);
@@ -416,6 +406,12 @@ class Shader
 		import dsfml.system.string;
 		sfShader_setColorParameter(sfPtr, toStringz(name), color.r, color.g, color.b, color.a);
 	}
+	///ditto
+	void opIndexAssign(Color color, string name)
+	{
+		import dsfml.system.string;
+		sfShader_setColorParameter(sfPtr, toStringz(name), color.r, color.g, color.b, color.a);
+	}
 
 	/**
 	 * Change a matrix parameter of the shader.
@@ -425,6 +421,12 @@ class Shader
 	 * 		transform	= Transform to assign
 	 */
 	void setParameter(string name, Transform transform)
+	{
+		import dsfml.system.string;
+		sfShader_setTransformParameter(sfPtr, toStringz(name), transform.m_matrix.ptr);
+	}
+	///ditto
+	void opIndexAssign(Transform transform, string name)
 	{
 		import dsfml.system.string;
 		sfShader_setTransformParameter(sfPtr, toStringz(name), transform.m_matrix.ptr);
@@ -447,6 +449,14 @@ class Shader
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
 		err.write(toString(sfErr_getOutput()));
 	}
+	///ditto
+	void opIndexAssign(Texture texture, string name)
+	{
+		import std.conv;
+		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
+		err.write(text(sfErrGraphics_getOutput()));
+	}
+
 
 	/**
 	 * Change a texture parameter of the shader.
@@ -457,6 +467,20 @@ class Shader
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2D texture (sampler2D GLSL type).
 	 */
 	void setParameter(string name, CurrentTextureType)
+	{
+		import dsfml.system.string;
+		sfShader_setCurrentTextureParameter(sfPtr, toStringz(name));
+	}
+
+	/**
+	 * Change a texture parameter of the shader.
+	 * 
+	 * This overload maps a shader texture variable to the texture of the object being drawn, which cannot be known in advance. The value given must be Shader.CurrentTexture.
+	 * 
+	 * Params:
+	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2D texture (sampler2D GLSL type).
+	 */
+	void opIndexAssign(CurrentTextureType, string name)
 	{
 		import dsfml.system.string;
 		sfShader_setCurrentTextureParameter(sfPtr, toStringz(name));
