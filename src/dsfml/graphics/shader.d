@@ -341,8 +341,8 @@ class Shader
 	void opIndexAssign(float[] val, string name)
 	{
 		//asserts to make sure that val is of proper lengths at both compile and run time
-		static assert((val.length >0) && (val.length <= 4);
-		assert((val.length >0) && (val.length <= 4);
+		static assert((val.length >0) && (val.length <= 4));
+		assert((val.length >0) && (val.length <= 4));
 
 		if(val.length == 1)
 			sfShader_setFloatParameter(sfPtr, toStringz(key), val[0]);
