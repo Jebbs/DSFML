@@ -370,6 +370,7 @@ class Shader
 	///ditto
 	void opIndexAssign(Vector2f vector, string name)
 	{
+		import dsfml.system.string;
 		sfShader_setFloat2Parameter(sfPtr, toStringz(name), vector.x, vector.y);
 	}
 
@@ -452,9 +453,9 @@ class Shader
 	///ditto
 	void opIndexAssign(Texture texture, string name)
 	{
-		import std.conv;
+		import dsfml.system.string;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
-		err.write(text(sfErrGraphics_getOutput()));
+		err.write(toString(sfErr_getOutput()));
 	}
 
 
