@@ -345,13 +345,13 @@ class Shader
 		assert((val.length >0) && (val.length <= 4));
 
 		if(val.length == 1)
-			sfShader_setFloatParameter(sfPtr, toStringz(key), val[0]);
+			sfShader_setFloatParameter(sfPtr, toStringz(name), val[0]);
 		else if(val.length == 2)
-			sfShader_setFloat2Parameter(sfPtr, toStringz(key), val[0], val[1]);
+			sfShader_setFloat2Parameter(sfPtr, toStringz(name), val[0], val[1]);
 		else if(val.length == 3)
-			sfShader_setFloat3Parameter(sfPtr, toStringz(key), val[0], val[1], val[2]);
+			sfShader_setFloat3Parameter(sfPtr, toStringz(name), val[0], val[1], val[2]);
 		else if(val.length >= 4)
-			sfShader_setFloat4Parameter(sfPtr, toStringz(key), val[0], val[1], val[2], val[3]);
+			sfShader_setFloat4Parameter(sfPtr, toStringz(name), val[0], val[1], val[2], val[3]);
 	}
 
 	/**
