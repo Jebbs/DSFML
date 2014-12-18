@@ -70,6 +70,15 @@ class SoundRecorder
 		sfPtr = sfSoundRecorder_create(callBacks);
 
 		err.write(toString(sfErr_getOutput()));
+		
+		//Fix for some strange bug that I can't seem to track down.
+		//This bug causes the array in SoundBufferRecorder to segfault if 
+		//its length reaches 1024, but creating an array of this size before capturing happens
+		//seems to fix it. This fix should allow other implementations to not segfault as well.
+		//I will look into the cause when I have more time, but this at least renders it usable.
+		short[] temp;
+		temp.length = 1024;
+		temp.length =0;
 	}
 
 	~this()
@@ -89,7 +98,7 @@ class SoundRecorder
    	void start(uint theSampleRate = 44100)
 	{
 		import dsfml.system.string;
-		sfSoundRecorder_start(sfPtr, sampleRate);
+		sfSoundRecorder_start(sfPtr, theSampleRate);
 
 		err.write(toString(sfErr_getOutput()));
 	}
@@ -167,15 +176,15 @@ class SoundRecorder
 
 private:
 
-private extern(C++) interface sfmlSoundRecorderCallBacks
+extern(C++) interface sfmlSoundRecorderCallBacks
 {
-public:
+
 	bool onStart();
 	bool onProcessSamples(const(short)* samples, size_t sampleCount);
 	void onStop();
 }
 
-private class SoundRecorderCallBacks: sfmlSoundRecorderCallBacks
+class SoundRecorderCallBacks: sfmlSoundRecorderCallBacks
 {
 	import std.stdio;
 
@@ -205,7 +214,7 @@ private extern(C):
 
 struct sfSoundRecorder;
 
-sfSoundRecorder* sfSoundRecorder_create(SoundRecorderCallBacks newCallBacks);
+sfSoundRecorder* sfSoundRecorder_create(sfmlSoundRecorderCallBacks newCallBacks);
 
 void sfSoundRecorder_destroy(sfSoundRecorder* soundRecorder);
 
