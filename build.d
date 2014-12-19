@@ -228,11 +228,11 @@ void initialize()
 {
 
 	currentDirectory = getcwd;
-	impDirectory = currentDirectory~"/src";
-	libDirectory = currentDirectory~"/lib/";
-	interfaceDirectory = currentDirectory~"/import/";
-	docDirectory = currentDirectory~"/doc/";
-	unittestDirectory = currentDirectory~"/unittest/";
+	impDirectory = `"`~currentDirectory~"/src"~`"`;
+	libDirectory = `"`~currentDirectory~"/lib/"~`"`;
+	interfaceDirectory = `"`~currentDirectory~"/import/"~`"`;
+	docDirectory = `"`~currentDirectory~"/doc/"~`"`;
+	unittestDirectory = `"`~currentDirectory~"/unittest/"~`"`;
 
 
 	if(isWindows)
