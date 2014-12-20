@@ -112,7 +112,7 @@ struct SoundFile
 		string temp = toString(sfErr_getOutput());
 		if(temp.length > 0)
 		{
-		    err.write();
+		    err.write(temp);
 		}
 	}
 
