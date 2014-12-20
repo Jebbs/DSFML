@@ -202,7 +202,7 @@ class SoundBuffer
 	bool loadFromStream(InputStream stream)
 	{
 
-		sfPtr = sfSoundBuffer_createFromStream(stream);
+		sfPtr = sfSoundBuffer_createFromStream(new SoundBufferStream(stream));
 		
 		if(sfPtr)
 		{
@@ -306,6 +306,48 @@ unittest
 }
 
 
+private extern(C++) interface sfmlInputStream
+{
+	long read(void* data, long size);
+		
+	long seek(long position);
+		
+	long tell();
+		
+	long getSize();
+}
+
+
+private class SoundBufferStream:sfmlInputStream
+{
+	private InputStream myStream;
+
+	this(InputStream stream)
+	{
+		myStream = stream;
+	}
+
+	extern(C++)long read(void* data, long size)
+	{
+		return myStream.read(data[0..cast(size_t)size]);
+	}
+
+	extern(C++)long seek(long position)
+	{
+		return myStream.seek(position);
+	}
+	
+	extern(C++)long tell()
+	{
+		return myStream.tell();
+	}
+	
+	extern(C++)long getSize()
+	{
+		return myStream.getSize();
+	}
+}
+
 package struct sfSoundBuffer;
 
 private extern(C):
@@ -316,7 +358,7 @@ sfSoundBuffer* sfSoundBuffer_createFromFile(const char* filename);
 
 sfSoundBuffer* sfSoundBuffer_createFromMemory(const void* data, size_t sizeInBytes);
 
-sfSoundBuffer* sfSoundBuffer_createFromStream(InputStream stream);
+sfSoundBuffer* sfSoundBuffer_createFromStream(sfmlInputStream stream);
 
 sfSoundBuffer* sfSoundBuffer_createFromSamples(const short* samples, size_t sampleCount, uint channelCount, uint sampleRate);
 
