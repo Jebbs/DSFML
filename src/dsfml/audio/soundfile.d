@@ -99,7 +99,21 @@ struct SoundFile
 	{
 		import dsfml.system.string;
 		sfSoundFile_seek(m_soundFile, timeOffset);
-		err.write(toString(sfErr_getOutput()));
+		
+		//Temporary fix for a bug where attempting to write to err
+		//throws an exception in a thread created in C++. This causes
+		//the program to explode. Hooray.
+		
+		//This fix will skip the call to err.write if there was no error
+		//to report. If there is an error, well, the program will still explode,
+		//but the user should see the error prior to the call that will make the 
+		//program explode.
+		
+		string temp = toString(sfErr_getOutput());
+		if(temp.length > 0)
+		{
+		    err.write(temp);
+		}
 	}
 
 	long getSampleCount()
