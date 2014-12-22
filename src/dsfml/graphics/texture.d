@@ -275,7 +275,7 @@ class Texture
 	 * 
 	 * Returns: True if creation was successful, false otherwise.
 	 */
-	bool create(uint height, uint width)
+	bool create(uint width, uint height)
 	{
 		import dsfml.system.string;
 		//if the Texture already exists, destroy it first
