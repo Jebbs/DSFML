@@ -93,6 +93,17 @@ interface Transformable
 	 */
 	const(Transform) getInverseTransform();
 	
+	
+	/**
+	 *Move the object by a given offset.
+	 *
+	 *This function adds to the current position of the object, unlike the position property which overwrites it.
+	 *
+	 * Params:
+	 * 		offset	= The offset.
+	 */
+	void move(Vector2f offset);
+	
 }
 
 /++
@@ -245,5 +256,18 @@ mixin template NormalTransformable()
 		
 		
 		return m_transform;
+	}
+	
+	/**
+	 *Move the object by a given offset.
+	 *
+	 *This function adds to the current position of the object, unlike the position property which overwrites it.
+	 *
+	 * Params:
+	 * 		offset	= The offset.
+	 */
+	void move(Vector2f offset)
+	{
+	    position = position + offset;
 	}
 }
