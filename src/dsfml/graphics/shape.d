@@ -85,7 +85,7 @@ class Shape : Drawable, Transformable
 		IntRect m_textureRect; /// Rectangle defining the area of the source texture to display
 		Color m_fillColor; /// Fill color
 		Color m_outlineColor; /// Outline color
-		float m_outlineThickness; /// Thickness of the shape's outline
+		float m_outlineThickness = 0; /// Thickness of the shape's outline
 		VertexArray m_vertices; /// Vertex array containing the fill geometry
 		VertexArray m_outlineVertices; /// Vertex array containing the outline geometry
 		FloatRect m_insideBounds; /// Bounding rectangle of the inside (fill)
