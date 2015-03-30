@@ -78,7 +78,7 @@ interface RenderTarget
 	 * 
 	 * Returns: The default view of the render target.
 	 */
-	View getDefaultView() const; // note: if refactored, change documentation of view property above
+	const(View) getDefaultView() const; // note: if refactored, change documentation of view property above
 
 	/**
 	 * Return the size of the rendering region of the target.

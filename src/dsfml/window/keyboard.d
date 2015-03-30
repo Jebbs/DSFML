@@ -305,7 +305,7 @@ unittest
 			keys[14] =	"O";
 			keys[15] =	"P";
 			keys[16] =	"Q";
-			keys[16] =	"R";
+			keys[17] =	"R";
 			keys[18] =	"S";
 			keys[19] =	"T";
 			keys[20] =	"U";
@@ -398,7 +398,14 @@ unittest
 			{
 				if(Keyboard.isKeyPressed(cast(Keyboard.Key)i))
 				{
-					writeln("Key "~ keys[i] ~ " was pressed.");
+					if(i in keys)
+					{
+						writeln("Key "~ keys[i] ~ " was pressed.");
+					}
+					else
+					{
+						writeln(i);
+					}
 					if(i == 36)
 					{
 						running = false;

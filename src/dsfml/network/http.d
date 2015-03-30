@@ -305,7 +305,7 @@ unittest
 		http.setHost("http://www.sfml-dev.org");
 		
 		// Prepare a request to get the 'features.php' page
-		auto request = new Http.Request("resources.php");
+		auto request = new Http.Request("learn.php");
 
 		// Send the request
 		auto response = http.sendRequest(request);
@@ -315,11 +315,11 @@ unittest
 
 		if (status == Http.Response.Status.Ok)
 		{
-			writeln(response.getBody());
+			writeln("Found the site!");
 		}
 		else
 		{
-			writeln("Error ", status);
+			writeln("Error: ", status);
 		}   
 		writeln();
 	}

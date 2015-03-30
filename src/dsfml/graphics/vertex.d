@@ -83,7 +83,7 @@ struct Vertex
 
 unittest
 {
-	version(DSFML_Unittest_Graphics)
+	version(DSFML_Unittest_Graphicss)
 	{
 		//not really needed, but implemented for code coverage later.
 		import std.stdio;

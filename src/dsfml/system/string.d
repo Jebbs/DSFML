@@ -30,7 +30,8 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 
 /**
  *A module containing functions for interacting with strings going to and from 
- *a C/C++ library. This module has no dependencies.
+ *a C/C++ library as well as converting between D's string types. This module has no dependencies
+ *except for std.utf.
  */
 module dsfml.system.string;
 
@@ -60,6 +61,14 @@ const(T)* toStringz(T)(in immutable(T)[] str) nothrow
 	//a means to store the copy after returning the address
 	static T[] copy;
 
+	//if str is just ""
+	if(str.length == 0)
+	{
+		copy = new T[1];
+		copy[0] = 0;
+		return copy.ptr;
+	}
+
 	//Already zero terminated
 	if(str[$-1] == 0)
 	{
@@ -77,13 +86,42 @@ const(T)* toStringz(T)(in immutable(T)[] str) nothrow
 	}
 }
 
+///Returns the same string in a different utf encoding
+///
+///Params:
+///		str = The string to convert.
+///
+///Returns: the C style string pointer.
+immutable(U)[] stringConvert(T, U)(in immutable(T)[] str) pure
+if ((is(T == dchar)||is(T == wchar)||is(T == char)) &&	
+	(is(U == dchar)||is(U == wchar)||is(U == char)))
+{
+	import std.utf;
+
+	static if(is(U == char))
+	{
+		return toUTF8(str);
+	}
+
+	else static if(is(U == wchar))
+	{
+		return toUTF16(str);
+	}
+	else
+	{
+		return toUTF32(str);
+	}
+
+}
+
+
 ///Get the length of a C style string
 ///
 ///Params:
 ///		str = The C style string.
 ///
 ///Returns: The C string's length.
-size_t strlen(T)(in const(T)* str) pure nothrow
+private size_t strlen(T)(in const(T)* str) pure nothrow
 if (is(T == dchar)||is(T == wchar)||is(T == char))
 {
 	size_t n = 0;

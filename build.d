@@ -241,7 +241,7 @@ void initialize()
 		prefix = "";
 		extension = ".lib";
 		
-		unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" dsfml-graphics-2.lib dsfml-window-2.lib dsfml-audio-2.lib dsfml-network-2.lib dsfml-system-2.lib dsfml-graphics.lib dsfml-window.lib dsfml-audio.lib dsfml-network.lib dsfml-system.lib ";
+		unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" dsfml-graphics.lib dsfml-window.lib dsfml-audio.lib dsfml-network.lib dsfml-system.lib dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib dsfmlc-network.lib dsfmlc-system.lib ";
 
 		if(!force64Build)
 		{
@@ -257,14 +257,14 @@ void initialize()
 		writeln("Building for Linux");
 		prefix = "lib";
 		extension = ".a";
-		unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" -L-ldsfml-graphics-2 -L-ldsfml-window-2 -L-ldsfml-audio-2 -L-ldsfml-network-2 -L-ldsfml-system-2 -L-ldsfml-graphics -L-ldsfml-window -L-ldsfml-audio -L-ldsfml-network -L-ldsfml-system -L-L"~libDirectory;
+		unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" -L-ldsfml-graphics -L-ldsfml-window -L-ldsfml-audio -L-ldsfml-network -L-ldsfml-system -L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-audio -L-ldsfmlc-network -L-ldsfmlc-system -L-L"~libDirectory;
 	}
 	else
 	{
 		writeln("Building for OSX");
 		prefix = "lib";
 		extension = ".a";
-		unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" -ldsfml-graphics-2 -ldsfml-window-2 -ldsfml-audio-2 -ldsfml-network-2 -ldsfml-system-2 -ldsfml-graphics -ldsfml-window -ldsfml-audio -ldsfml-network -ldsfml-system -L-L"~libDirectory;
+		unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" -ldsfml-graphics -ldsfml-window -ldsfml-audio -ldsfml-network -ldsfml-system -ldsfmlc-graphics -ldsfmlc-window -ldsfmlc-audio -ldsfmlc-network -ldsfmlc-system -L-L"~libDirectory;
 	}
 
 	libCompilerSwitches = "-lib -O -release -inline -I"~impDirectory;
@@ -301,7 +301,7 @@ bool buildLibs()
 			fileList~= name ~ " ";
 		}
 
-		string buildCommand = "dmd "~ fileList ~ libCompilerSwitches ~ " -of"~libDirectory~prefix~"dsfml-"~theModule~"-2"~extension;
+		string buildCommand = "dmd "~ fileList ~ libCompilerSwitches ~ " -of"~libDirectory~prefix~"dsfml-"~theModule~extension;
 		
 		writeln("Building " ~ theModule~ " module.");
 		
@@ -418,7 +418,7 @@ void showHelp()
 	writeln("-unittest  : Build static libs and unittests");
 	writeln("-all       : Build everything");
 	writeln("-unittest:sharedDir  : Build static libs and unittests, sharedDir is the location of DSFML-C shared libraries");
-	writeln("-all:sharedDir       : Build everything, sharedDir is the location of DSFML-C shared libraries");
+	writeln("-all:sharedDir       : Build everything, sharedDir is the location of DSFMLC shared libraries");
 	writeln();
 	writeln("Modifier switches:");
 	writeln("-m32        : force a 32 bit build");

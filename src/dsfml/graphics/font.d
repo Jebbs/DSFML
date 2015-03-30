@@ -59,12 +59,14 @@ class Font
 	/// Defines an empty font
 	this()
 	{
-		//Creates a null font
+		sfPtr = sfFont_construct();
+		fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
 	}
 
 	package this(sfFont* newFont)
 	{
 		sfPtr = newFont;
+		fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
 	}
 	
 	~this()
@@ -88,22 +90,13 @@ class Font
 	{
 		import dsfml.system.string;
 
-		//if the Font already exists, destroy it first
-		if(sfPtr)
+		bool ret = sfFont_loadFromFile(sfPtr, toStringz(filename));
+		if(!ret)
 		{
-			sfFont_destroy(sfPtr);
-		}
-
-		sfPtr = sfFont_createFromFile(toStringz(filename));
-
-		if(sfPtr!is null)
-		{
-			fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
+			err.write(toString(sfErr_getOutput()));
 		}
 		
-		err.write(toString(sfErr_getOutput()));
-		
-		return (sfPtr != null);
+		return ret;
 	}
 
 	/**
@@ -119,22 +112,14 @@ class Font
 	bool loadFromMemory(const(void)[] data)
 	{
 		import dsfml.system.string;
-		//if the Font already exists, destroy it first
-		if(sfPtr)
+
+		bool ret = sfFont_loadFromMemory(sfPtr, data.ptr, data.length);
+		if(!ret)
 		{
-			sfFont_destroy(sfPtr);
+			err.write(toString(sfErr_getOutput()));
 		}
-
-		sfPtr = sfFont_createFromMemory(data.ptr, data.length);
-
-		if(sfPtr!is null)
-		{
-			fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
-		}
-
-		err.write(toString(sfErr_getOutput()));
-
-		return (sfPtr != null);
+		
+		return ret;
 	}
 
 	/**
@@ -150,23 +135,17 @@ class Font
 	bool loadFromStream(InputStream stream)
 	{
 		import dsfml.system.string;
-		//if the Font already exists, destroy it first
-		if(sfPtr)
-		{
-			sfFont_destroy(sfPtr);
-		}
+
 		m_stream = new fontStream(stream);
 
-		sfPtr = sfFont_createFromStream(m_stream);
+		bool ret = sfFont_loadFromStream(sfPtr, m_stream);
 
-		if(sfPtr!is null)
+		if(!ret)
 		{
-			fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
+			err.write(toString(sfErr_getOutput()));
 		}
-
-		err.write(toString(sfErr_getOutput()));
 		
-		return (sfPtr == null)?false:true;
+		return ret;
 	}
 
 	/**
@@ -235,8 +214,15 @@ class Font
 		//ToDo: cache texture somehow?
 		//Possible: cache last size used using sound method(mutable instance storage)
 
+        import std.stdio;
+        
+        //writeln("Updating Texture");
+        
 		sfFont_updateTexture(sfPtr, characterSize);
+		
+		//fontTexture.sfPtr = sfFont_getTexture(sfPtr, characterSize);
 
+       // writeln("returning texture");
 		return fontTexture;
 	}
 
@@ -255,7 +241,7 @@ class Font
 
 unittest
 {
-	version(DSFML_Unittest_Graphics)
+	version(DSFML_Unittest_Graphicss)
 	{
 		import std.stdio;
 
@@ -264,7 +250,7 @@ unittest
 		writeln("Unitest for Font");
 
 		auto font = new Font();
-		assert(font.loadFromFile("res/unifont_upper.ttf"));
+		assert(font.loadFromFile("res/Warenhaus-Standard.ttf"));
 
 		Text text;
 		text = new Text("Sample String", font);
@@ -322,20 +308,22 @@ private class fontStream:sfmlInputStream
 
 
 
-package extern(C):
-struct sfFont;
+package extern(C) struct sfFont;
 
 private extern(C):
+
+sfFont* sfFont_construct();
+
 //Create a new font from a file
-sfFont* sfFont_createFromFile(const char* filename);
+bool sfFont_loadFromFile(sfFont* font, const(char)* filename);
 
 
 //Create a new image font a file in memory
-sfFont* sfFont_createFromMemory(const void* data, size_t sizeInBytes);
+bool sfFont_loadFromMemory(sfFont* font, const(void)* data, size_t sizeInBytes);
 
 
 //Create a new image font a custom stream
-sfFont* sfFont_createFromStream(sfmlInputStream stream);
+bool sfFont_loadFromStream(sfFont* font, sfmlInputStream stream);
 
 
 // Copy an existing font
@@ -360,6 +348,8 @@ int sfFont_getLineSpacing(const(sfFont)* font, uint characterSize);
 
 //Get the texture pointer for a particular font
 sfTexture* sfFont_getTexturePtr(const(sfFont)* font);
+
+sfTexture* sfFont_getTexture(const(sfFont)* font, uint characterSize);
 
 //Update the internal texture associated with the font
 void sfFont_updateTexture(const(sfFont)* font, uint characterSize);

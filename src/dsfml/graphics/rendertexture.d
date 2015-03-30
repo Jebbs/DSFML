@@ -68,9 +68,14 @@ class RenderTexture : RenderTarget
 {
 	package sfRenderTexture* sfPtr;
 	private Texture m_texture;
+	private View m_currentView, m_defaultView;
 
 	this()
 	{
+		sfPtr = sfRenderTexture_construct();
+		m_texture = new Texture(sfRenderTexture_getTexture(sfPtr));
+		m_currentView = new View();
+		m_defaultView = new View();
 	}
 
 	~this()
@@ -92,31 +97,20 @@ class RenderTexture : RenderTarget
 	 * 		height		= Height of the render-texture
 	 * 		depthBuffer	= Do you want this render-texture to have a depth buffer?
 	 * 
-	 * Returns: True if creation was successful
 	 */
-	bool create(uint width, uint height, bool depthBuffer = false)
+	void create(uint width, uint height, bool depthBuffer = false)
 	{
 		import dsfml.system.string;
 
-		//if the RenderTexture already exists, destroy it first
-		if(sfPtr != null)
-		{
-			sfRenderTexture_destroy(sfPtr);
-		}
-
-		sfPtr = sfRenderTexture_create(width, height, depthBuffer);
+		sfRenderTexture_create(sfPtr, width, height, depthBuffer);
 		err.write(toString(sfErr_getOutput()));
 
-		if(sfPtr != null)
-		{
-			m_texture = new Texture(sfRenderTexture_getTexture(sfPtr));
-			return true;
-		}
-		else
-		{
-			m_texture = new Texture();
-			return false;
-		}
+		//get view
+		m_currentView = new View(sfRenderTexture_getView(sfPtr));
+
+		//get default view
+		m_defaultView = new View(sfRenderTexture_getDefaultView(sfPtr));
+
 	}
 	
 	/**
@@ -147,12 +141,12 @@ class RenderTexture : RenderTarget
 		override const(View) view(const(View) newView)
 		{
 			sfRenderTexture_setView(sfPtr, newView.sfPtr);
-			return newView;
+			m_currentView = new View(sfRenderTexture_getView(sfPtr));
+			return m_currentView;
 		}
 		override const(View) view() const
 		{
-			//try to fix. Maybe cache?
-			return new View( sfRenderTexture_getView(sfPtr));
+			return m_currentView;
 		}
 	}
 
@@ -163,9 +157,9 @@ class RenderTexture : RenderTarget
 	 * 
 	 * Returns: The default view of the render target.
 	 */
-	View getDefaultView() const // note: if refactored, change documentation of view property above
+	const(View) getDefaultView() const // note: if refactored, change documentation of view property above
 	{
-		return new View(sfRenderTexture_getDefaultView(sfPtr));
+		return m_defaultView;
 	}
 
 	/**
@@ -426,7 +420,7 @@ unittest
 
 		auto renderTexture = new RenderTexture();
 
-		assert(renderTexture.create(100,100));
+		renderTexture.create(100,100);
 
 		Sprite testSprite = new Sprite();//doesn't need a texture for this unit test
 
@@ -438,6 +432,9 @@ unittest
 		//prepare the RenderTexture for usage after drawing
 		renderTexture.display();
 
+		//grab that texture for usage
+		auto texture = renderTexture.getTexture();
+
 		writeln();
 
 	}
@@ -448,7 +445,10 @@ package extern(C) struct sfRenderTexture;
 private extern(C):
 
 //Construct a new render texture
-sfRenderTexture* sfRenderTexture_create(uint width, uint height, bool depthBuffer);
+sfRenderTexture* sfRenderTexture_construct();
+
+//Construct a new render texture
+void sfRenderTexture_create(sfRenderTexture* renderTexture, uint width, uint height, bool depthBuffer);
 
 //Destroy an existing render texture
 void sfRenderTexture_destroy(sfRenderTexture* renderTexture);

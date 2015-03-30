@@ -67,7 +67,7 @@ class SoundRecorder
 	{
 		import dsfml.system.string;
 		callBacks = new SoundRecorderCallBacks(this);
-		sfPtr = sfSoundRecorder_create(callBacks);
+		sfPtr = sfSoundRecorder_construct(callBacks);
 
 		err.write(toString(sfErr_getOutput()));
 		
@@ -214,7 +214,7 @@ private extern(C):
 
 struct sfSoundRecorder;
 
-sfSoundRecorder* sfSoundRecorder_create(sfmlSoundRecorderCallBacks newCallBacks);
+sfSoundRecorder* sfSoundRecorder_construct(sfmlSoundRecorderCallBacks newCallBacks);
 
 void sfSoundRecorder_destroy(sfSoundRecorder* soundRecorder);
 

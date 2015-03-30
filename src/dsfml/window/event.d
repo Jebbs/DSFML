@@ -232,12 +232,14 @@ unittest
 	version(DSFML_Unittest_Window)
 	{
 		import std.stdio;
-		//import dsfml.graphics.all; Cannot use graphics.all due to a never ending import cycle with window module. Be on the look out for this!
+
 		import dsfml.graphics.font;
 		import dsfml.graphics.text;
 		import dsfml.graphics.renderwindow;
 		import dsfml.window;
 		import std.conv;
+
+		writeln("Unit tests for events.");
 
 		string[int] keys;
 		//in its own scope for code folding
@@ -349,7 +351,7 @@ unittest
 
 		auto font = new Font();
 
-		assert(font.loadFromFile("Cyberbit.ttf"));//will fix when unittest building get's added to build script(fix as in not use Cyberbit)
+		assert(font.loadFromFile("res/Warenhaus-Standard.ttf"));
 
 		auto text1 = new Text("Unit test for events.",font);
 		auto text2 = new Text("Note: This unit test does require user input.",font);
@@ -408,7 +410,7 @@ unittest
 				//mouse events: these could be improved, but I will write some just to have them present
 				if(event.type == Event.EventType.MouseButtonPressed)
 				{
-					mouseEventText.setString( "Mouse Event: Button Pressed");
+					mouseEventText.setString("Mouse Event: Button Pressed");
 				}
 				if(event.type == Event.EventType.MouseButtonReleased)
 				{

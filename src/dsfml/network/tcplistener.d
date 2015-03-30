@@ -101,7 +101,7 @@ class TcpListener:Socket
 	{
 		import dsfml.system.string;
 
-		Status toReturn = sfTcpListener_accept(sfPtr, &socket.sfPtr); 
+		Status toReturn = sfTcpListener_accept(sfPtr, socket.sfPtr); 
 		err.write(toString(sfErr_getOutput()));
 		return toReturn; 
 	}
@@ -196,6 +196,6 @@ Socket.Status sfTcpListener_listen(sfTcpListener* listener, ushort port);
 
 
 //Accept a new connection
-Socket.Status sfTcpListener_accept(sfTcpListener* listener, sfTcpSocket** connected);
+Socket.Status sfTcpListener_accept(sfTcpListener* listener, sfTcpSocket* connected);
 
 const(char)* sfErr_getOutput();

@@ -48,9 +48,10 @@ import dsfml.system.vector2;
  + Authors: Laurent Gomila, Jeremy DeHaan
  + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1View.php#details
  +/
+
 class View
 {
-	sfView* sfPtr;
+	package sfView* sfPtr;
 	
 	this()
 	{
@@ -66,7 +67,7 @@ class View
 	
 	package this(sfView* sfview)
 	{
-		sfPtr = sfview;
+		sfPtr = sfView_copy(sfview);
 	}
 
 	~this()
@@ -199,7 +200,7 @@ class View
 
 unittest
 {
-	version(DSFML_Unittest_Graphics)
+	version(DSFML_Unittest_Graphicss)
 	{
 		import std.stdio;
 
@@ -215,7 +216,7 @@ unittest
 
 		auto renderTexture = new RenderTexture();
 		
-		assert(renderTexture.create(1000,1000));
+		renderTexture.create(1000,1000);
 
 		renderTexture.clear();
 

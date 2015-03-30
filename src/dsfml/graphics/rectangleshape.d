@@ -105,7 +105,7 @@ class RectangleShape:Shape
 
 unittest
 {
-	version(DSFML_Unittest_Graphics)
+	version(DSFML_Unittest_Graphicss)
 	{
 		import std.stdio;
 		import dsfml.graphics;

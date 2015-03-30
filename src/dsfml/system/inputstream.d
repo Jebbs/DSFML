@@ -181,11 +181,11 @@ unittest
 		writeln();
 		writeln("Using a basic file stream to load a texture that exists.");
 		auto successStream = new FileStream();
-		successStream.open("Crono.png");//using a png of Crono for now. Will replace with something that won't get me in trouble
-		if(streamTexture.loadFromStream(successStream))
-		{
-			writeln("Texture loaded!");
-		}
+		successStream.open("res/TestImage.png");//using a png of Crono for now. Will replace with something that won't get me in trouble
+		assert(streamTexture.loadFromStream(successStream));
+		
+		writeln("Texture loaded!");
+		
 
 		writeln();
 

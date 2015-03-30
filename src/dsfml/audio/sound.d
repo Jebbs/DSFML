@@ -62,7 +62,7 @@ class Sound : SoundSource
 
 	this()
 	{
-		sfPtr = sfSound_create();
+		sfPtr = sfSound_construct();
 	}
 
 	this(const(SoundBuffer) buffer)
@@ -310,7 +310,7 @@ unittest
 
 		auto soundbuffer = new SoundBuffer();
 	
-		if(!soundbuffer.loadFromFile("res/cave1.ogg"))
+		if(!soundbuffer.loadFromFile("res/TestSound.ogg"))
 		{
 			//error
 			return;
@@ -346,7 +346,7 @@ private extern(C):
 
 struct sfSound;
 
-sfSound* sfSound_create();
+sfSound* sfSound_construct();
 
 sfSound* sfSound_copy(const sfSound* sound);
 

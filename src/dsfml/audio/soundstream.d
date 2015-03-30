@@ -73,11 +73,8 @@ class SoundStream:SoundSource
 
 	protected this()
 	{
-		//create a blank pointer in case functions might be called before it is initialized (eg, stop() in Music's openFromFile)
-		sfPtr = sfSoundStream_create(0, 0, null);
-
-		callBacks = new SoundStreamCallBacks(this);
-
+	    callBacks = new SoundStreamCallBacks(this);
+		sfPtr = sfSoundStream_construct(callBacks);
 	}
 
 	~this()
@@ -91,10 +88,7 @@ class SoundStream:SoundSource
 	{
 		import dsfml.system.string;
 
-		//destroy the blank pointer so we can create the real instance
-		sfSoundStream_destroy(sfPtr);
-
-		sfPtr = sfSoundStream_create(channelCount, sampleRate, callBacks);
+		sfSoundStream_initialize(sfPtr, channelCount, sampleRate);
 
 		err.write(toString(sfErr_getOutput()));
 	}
@@ -367,9 +361,11 @@ private extern(C):
 struct sfSoundStream;
 
 
-sfSoundStream* sfSoundStream_create( uint channelCount, uint sampleRate, sfmlSoundStreamCallBacks callBacks);
+sfSoundStream* sfSoundStream_construct(sfmlSoundStreamCallBacks callBacks);
 
 void sfSoundStream_destroy(sfSoundStream* soundStream);
+
+void sfSoundStream_initialize(sfSoundStream* soundStream, uint channelCount, uint sampleRate);
 
 void sfSoundStream_play(sfSoundStream* soundStream);
 

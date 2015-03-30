@@ -48,7 +48,7 @@ public
 
 static this()
 {
-	sfErr_redirect();
+	//sfErr_redirect();
 }
 
 private extern(C) void sfErr_redirect();

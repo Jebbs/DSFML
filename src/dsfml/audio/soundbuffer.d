@@ -70,7 +70,7 @@ class SoundBuffer
 	this()
 	{
 		import dsfml.system.string;
-		sfPtr = sfSoundBuffer_create();
+		sfPtr = sfSoundBuffer_construct();
 		err.write(toString(sfErr_getOutput()));
 	}
 
@@ -149,15 +149,13 @@ class SoundBuffer
 	 */
 	bool loadFromFile(string filename)
 	{
-		sfPtr = sfSoundBuffer_createFromFile(toStringz(filename));
-		
-		if(sfPtr)
+    	import dsfml.system.string;
+		if(sfSoundBuffer_loadFromFile(sfPtr, toStringz(filename)))
 		{
-			return true;
+		    return true;
 		}
 		else
 		{
-			import dsfml.system.string;
 			err.write(toString(sfErr_getOutput()));
 			return false;
 		}
@@ -175,15 +173,13 @@ class SoundBuffer
 	 */
 	bool loadFromMemory(const(void)[] data)
 	{
-		sfPtr = sfSoundBuffer_createFromMemory(data.ptr, data.length);
-		
-		if(sfPtr)
+		if(sfSoundBuffer_loadFromMemory(sfPtr, data.ptr, data.length))
 		{
-			return true;
+		    return true;
 		}
 		else
 		{
-			import dsfml.system.string;
+		    import dsfml.system.string;
 			err.write(toString(sfErr_getOutput()));
 			return false;
 		}
@@ -200,11 +196,8 @@ class SoundBuffer
 	 * Returns: True if loading succeeded, false if it failed
 	 */
 	bool loadFromStream(InputStream stream)
-	{
-
-		sfPtr = sfSoundBuffer_createFromStream(new SoundBufferStream(stream));
-		
-		if(sfPtr)
+	{	
+		if(sfSoundBuffer_loadFromStream(sfPtr, new SoundBufferStream(stream)))
 		{
 			return true;
 		}
@@ -230,10 +223,7 @@ class SoundBuffer
 	 */
 	bool loadFromSamples(const(short[]) samples, uint channelCount, uint sampleRate)
 	{
-
-		sfPtr = sfSoundBuffer_createFromSamples(samples.ptr, samples.length, channelCount, sampleRate);
-
-		if(sfPtr)
+		if(sfSoundBuffer_loadFromSamples(sfPtr, samples.ptr, samples.length, channelCount, sampleRate))
 		{
 			return true;
 		}
@@ -258,9 +248,7 @@ class SoundBuffer
 	bool saveToFile(string filename)
 	{
 		import dsfml.system.string;
-		sfSoundBuffer_saveToFile(sfPtr, toStringz(filename));
-		
-		if(sfPtr)
+		if(sfSoundBuffer_saveToFile(sfPtr, toStringz(filename)))
 		{
 			return true;
 		}
@@ -285,7 +273,7 @@ unittest
 
 		auto soundbuffer = new SoundBuffer();
 
-		if(!soundbuffer.loadFromFile("res/cave1.ogg"))
+		if(!soundbuffer.loadFromFile("res/TestSound.ogg"))
 		{
 			//error
 			return;
@@ -352,15 +340,15 @@ package struct sfSoundBuffer;
 
 private extern(C):
 
-sfSoundBuffer* sfSoundBuffer_create();
+sfSoundBuffer* sfSoundBuffer_construct();
 
-sfSoundBuffer* sfSoundBuffer_createFromFile(const char* filename);
+bool sfSoundBuffer_loadFromFile(sfSoundBuffer* soundBuffer, const char* filename);
 
-sfSoundBuffer* sfSoundBuffer_createFromMemory(const void* data, size_t sizeInBytes);
+bool sfSoundBuffer_loadFromMemory(sfSoundBuffer* soundBuffer, const void* data, size_t sizeInBytes);
 
-sfSoundBuffer* sfSoundBuffer_createFromStream(sfmlInputStream stream);
+bool sfSoundBuffer_loadFromStream(sfSoundBuffer* soundBuffer, sfmlInputStream stream);
 
-sfSoundBuffer* sfSoundBuffer_createFromSamples(const short* samples, size_t sampleCount, uint channelCount, uint sampleRate);
+bool sfSoundBuffer_loadFromSamples(sfSoundBuffer* soundBuffer, const short* samples, size_t sampleCount, uint channelCount, uint sampleRate);
 
 sfSoundBuffer* sfSoundBuffer_copy(const sfSoundBuffer* soundBuffer);
 

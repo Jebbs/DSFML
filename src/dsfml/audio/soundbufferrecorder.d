@@ -134,41 +134,53 @@ unittest
 		
 		writeln("Unit test for SoundBufferRecorder.");
 		
+		assert(SoundRecorder.isAvailable());
+
+
 		auto recorder = new SoundBufferRecorder();
 		
-		assert(SoundRecorder.isAvailable());
 		
-		
-		writeln("Press Enter to start recording.");
-		while(!Keyboard.isKeyPressed(Keyboard.Key.Return))
+		auto clock = new Clock();
+
+		writeln("Recording for 5 seconds in...");
+		writeln("3");
+		clock.restart();
+
+		while(clock.getElapsedTime().asSeconds() <1)
 		{
-			//wait for the user to press enter
-			if(Keyboard.isKeyPressed(Keyboard.Key.Return))
-			{
-				
-				recorder.start();
-			}
+			//wait for a second
 		}
-		//make sure the next one diesn't trigger immediately
-		if(Keyboard.isKeyPressed(Keyboard.Key.Return))
+		writeln("2");
+		
+		clock.restart();
+
+		while(clock.getElapsedTime().asSeconds() <1)
 		{
-			//wait until they release the key
-			while(Keyboard.isKeyPressed(Keyboard.Key.Return))
-			{
-				//writeln(true);
-			}
+			//wait for a second
 		}
-		
-		
-		writeln("Press Enter to stop recording.");
-		
-		while(!Keyboard.isKeyPressed(Keyboard.Key.Return))
+		writeln("1");
+
+		clock.restart();
+
+		while(clock.getElapsedTime().asSeconds() <1)
 		{
-			if(Keyboard.isKeyPressed(Keyboard.Key.Return))
-			{
-				recorder.stop();
-			}
+			//wait for a second
 		}
+		writeln("Recording!");	
+
+		recorder.start();	
+		clock.restart();
+
+		while(clock.getElapsedTime().asSeconds() <5)
+		{
+			//wait for a second
+		}
+		
+		writeln("Done!");
+		
+		
+		recorder.stop();
+		
 
 
 
@@ -178,7 +190,7 @@ unittest
 		
 		auto recorderSound = new Sound(buffer);
 		
-		auto clock = new Clock();
+		clock.restart();
 		
 		recorderSound.play();
 		while(clock.getElapsedTime() < recorderDuration)

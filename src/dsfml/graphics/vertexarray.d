@@ -191,7 +191,7 @@ class VertexArray : Drawable
 
 unittest
 {
-	version(DSFML_Unittest_Graphics)
+	version(DSFML_Unittest_Graphicss)
 	{
 		import std.stdio;
 		import dsfml.graphics.texture;
@@ -202,7 +202,7 @@ unittest
 
 		auto texture = new Texture();
 
-		assert(texture.loadFromFile("res/star.png"));
+		assert(texture.loadFromFile("res/TestImage.png"));
 
 
 
@@ -222,7 +222,7 @@ unittest
 
 		auto renderTexture = new RenderTexture();
 		
-		assert(renderTexture.create(100,100));
+		renderTexture.create(100,100);
 
 		renderTexture.clear();
 

@@ -179,7 +179,7 @@ class TcpSocket:Socket
 	///Returns: Status code.
 	Status send(Packet packet)
 	{
-
+		import std.stdio;
 		//temporary packet to be removed on function exit
 		scope Packet temp = new Packet();
 
@@ -195,22 +195,19 @@ class TcpSocket:Socket
 	///
 	///Params:
     ///		data = Array to fill with the received bytes.
-    ///		maxSize = Maximum number of bytes that can be received.
+    ///		sizeReceived = This variable is filled with the actual number of bytes received.
     ///
     ///Returns: Status code.
-	Status receive(out void[] data, size_t maxSize)
+	Status receive(void[] data , ref size_t sizeReceived)
 	{
-		void* dataPtr;
-		size_t sizeReceived;
-		
-		Status status = sfTcpSocket_receive(sfPtr, dataPtr, maxSize, &sizeReceived);
-		//TODO: catch when maxSize is < than Size received?
-		data = dataPtr[0..sizeReceived];
 
-		import std.stdio;
+		Status status;
 
-		//writeln(sizeReceived);
-		
+
+		void* temp = sfTcpSocket_receive(sfPtr, data.length, &sizeReceived, &status);
+
+		data[0..sizeReceived] = temp[0..sizeReceived].dup;
+
 		return status;
 	}
 
@@ -272,15 +269,24 @@ unittest
 		//accepts a new connection and binds it to the socket in the parameter
 		listener.accept(serverSocket);
 		
+		string temp = "I'm sending you stuff!";
+
 		//Let's greet the server!
-		sendPacket.writeString("Hello, I'm a client!");
-		clientSocket.send(sendPacket);
+		//sendPacket.writeString("Hello, I'm a client!");
+		//clientSocket.send(sendPacket);
+
+		writeln(clientSocket.send(temp));
 		
 		//And get the data on the server side
-		serverSocket.receive(receivePacket);
+		//serverSocket.receive(receivePacket);
+
+		char[1024] temp2;// = new char[1024];
+		size_t received;
+
+		writeln(serverSocket.receive(temp2, received));
 		
 		//What did we get from the client?
-		writeln("Gotten from client: " ,receivePacket.readString());
+		writeln("Gotten from client: ", cast(string)temp2[0..received]);
 		
 		//clear the packets to send/get new information
 		sendPacket.clear();
@@ -346,7 +352,7 @@ Socket.Status sfTcpSocket_send(sfTcpSocket* socket, const void* data, size_t siz
 
 
 //Receive raw data from the remote peer of a TCP socket
-Socket.Status sfTcpSocket_receive(sfTcpSocket* socket, void* data, size_t maxSize, size_t* sizeReceived);
+void* sfTcpSocket_receive(sfTcpSocket* socket, size_t maxSize, size_t* sizeReceived, Socket.Status* status);
 
 
 //Send a formatted packet of data to the remote peer of a TCP socket
