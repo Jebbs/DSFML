@@ -10,8 +10,8 @@ before_install:
   - sudo apt-get install -y libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew1.5-dev libjpeg8-dev libsndfile1-dev libopenal-dev dmd-bin
   #Build and install DSFML-C
   - cd $HOME
-  - git clone https://github.com/Jebbs/DSFML-C.git
-  - cd DSFML-C
+  - git clone https://github.com/Jebbs/DSFMLC.git
+  - cd DSFMLC
   - cmake .
   - make
   - sudo make install
