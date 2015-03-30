@@ -4,7 +4,7 @@ d: dmd-2.066.1
 
 install:
   #Install everything we need to build
-  - sudo apt-get install -y libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew1.5-dev libjpeg8-dev libsndfile1-dev libopenal-dev dmd-bin
+  - sudo apt-get install -y libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew1.5-dev libjpeg8-dev libsndfile1-dev libopenal-dev
   #Build and install DSFML-C
   - cd $HOME
   - git clone https://github.com/Jebbs/DSFMLC.git
