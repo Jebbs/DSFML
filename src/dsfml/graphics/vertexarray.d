@@ -61,7 +61,7 @@ class VertexArray : Drawable
 	 * 
 	 * The default primitive type is Points.
 	 */
-	PrimitiveType primativeType;
+	PrimitiveType primitiveType;
 	private Vertex[] Vertices;
 
 	this(PrimitiveType type, uint vertexCount)
