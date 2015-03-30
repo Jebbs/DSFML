@@ -66,13 +66,13 @@ class VertexArray : Drawable
 
 	this(PrimitiveType type, uint vertexCount)
 	{
-		primativeType = type;
+		primitiveType = type;
 		Vertices = new Vertex[vertexCount];
 	}
 	
 	private this(PrimitiveType type, Vertex[] vertices)
 	{
-		primativeType = type;
+		primitiveType = type;
 		Vertices = vertices;
 	}
 	
@@ -166,7 +166,7 @@ class VertexArray : Drawable
 	{
 		if(Vertices.length != 0)
 		{
-			renderTarget.draw(Vertices, primativeType,renderStates);
+			renderTarget.draw(Vertices, primitiveType,renderStates);
 		}
 	}
 
