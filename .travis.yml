@@ -1,6 +1,8 @@
 language: d
 
-d: dmd-2.066.1
+d: 
+  - dmd-2.066.1
+  - gdc-4.8.2
 
 install:
   #Install everything we need to build
@@ -14,6 +16,8 @@ install:
   - sudo make install
   - cd $TRAVIS_BUILD_DIR
 
-script: rdmd build.d -unittest
+script: 
+  - ${DC} build.d
+  - ./build -unittest
 
 
