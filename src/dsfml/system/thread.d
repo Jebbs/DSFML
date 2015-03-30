@@ -92,7 +92,7 @@ class Thread
 	{
 		static void XInitThreads()
 		{
-
+            linux_XInitThreads();
 		}
 	}
 
