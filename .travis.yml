@@ -17,7 +17,7 @@ install:
   - cd $TRAVIS_BUILD_DIR
 
 script: 
-  - ${DC} build.d
+  - ${DMD} build.d
   - ./build -unittest
 
 
