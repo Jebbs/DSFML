@@ -251,6 +251,11 @@ void initialize()
 	docDirectory = `"`~currentDirectory~"/doc/"~`"`;
 	unittestDirectory = `"`~currentDirectory~"/unittest/"~`"`;
 
+	if(!exists(currentDirectory~"/lib/"))
+	{
+		mkdir(currentDirectory~"/lib/");
+	}
+
 	if(isDMD)
 	{
 		initializeDMD();
