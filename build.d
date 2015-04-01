@@ -318,6 +318,8 @@ void initializeDMD()
 		unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" -L-ldsfml-graphics -L-ldsfml-window -L-ldsfml-audio -L-ldsfml-network -L-ldsfml-system -L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-audio -L-ldsfmlc-network -L-ldsfmlc-system -L-L"~libDirectory;
 	}
 
+	unittestCompilerSwitches ="-version=DSFML_Unittest_System -version=DSFML_Unittest_Window -version=DSFML_Unittest_Graphics -version=DSFML_Unittest_Audio -version=DSFML_Unittest_Network "~unittestCompilerSwitches;
+
 
 	libCompilerSwitches = "-lib -O -release -inline -I"~impDirectory;
 	docCompilerSwitches = "-D -Dd"~docDirectory~" -c -o- -op";
@@ -327,7 +329,7 @@ void initializeGDC()
 {
 	prefix = "lib";
 	extension = ".a";
-	unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" -L-ldsfml-graphics -L-ldsfml-window -L-ldsfml-audio -L-ldsfml-network -L-ldsfml-system -L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-audio -L-ldsfmlc-network -L-ldsfmlc-system -L-L"~libDirectory;
+	unittestCompilerSwitches = "-fversion=DSFML_Unittest_System -fversion=DSFML_Unittest_Window -fversion=DSFML_Unittest_Graphics -fversion=DSFML_Unittest_Audio -fversion=DSFML_Unittest_Network -funittest -I"~impDirectory~" -ldsfml-graphics -ldsfml-window -ldsfml-audio -ldsfml-network -ldsfml-system -ldsfmlc-graphics -ldsfmlc-window -ldsfmlc-audio -ldsfmlc-network -ldsfmlc-system -L"~libDirectory;
 
 	libCompilerSwitches = "-c -O3 -frelease -I"~impDirectory;
 	docCompilerSwitches = "-D -Dd"~docDirectory~" -c -o- -op";
@@ -394,6 +396,9 @@ bool buildUnittests()
 {
 	writeln("Building unit tests!");
 	string filelist = "";
+
+
+
 	foreach(theModule;modules)
 	{
 		foreach (string name; dirEntries("src/dsfml/"~theModule, SpanMode.depth))
@@ -402,8 +407,25 @@ bool buildUnittests()
 		}
 	}
 
+	if(isGDC)
+	{
+		std.file.write("main.d", "void main(){}");
+		filelist = "main.d "~filelist;
+	}
+
 	//TODO: Fix this for gdc
-	string buildCommand = "dmd "~filelist ~"-version=DSFML_Unittest_System -version=DSFML_Unittest_Window -version=DSFML_Unittest_Graphics -version=DSFML_Unittest_Audio -version=DSFML_Unittest_Network "~ unittestCompilerSwitches~" -of"~unittestDirectory~"unittest";
+	string buildCommand = compiler~filelist ~ unittestCompilerSwitches;
+
+	if(isDMD)
+	{
+		buildCommand~=" -of"~unittestDirectory~"unittest";
+	}
+	else if(isGDC)
+	{
+		buildCommand~=" -o"~unittestDirectory~"unittest";
+
+		
+	}
 
 	if(isWindows)
 	{
@@ -413,7 +435,15 @@ bool buildUnittests()
 	{
 		if(unittestLibraryLocation != "")
 		{
-			buildCommand~=" -L-L"~unittestLibraryLocation;
+			if(isDMD)
+			{
+				buildCommand~=" -L-L"~unittestLibraryLocation;
+			}
+			else if(isGDC)
+			{
+				buildCommand~=" -L"~unittestLibraryLocation;
+			}
+
 		}
 	}
 
@@ -443,7 +473,7 @@ void buildDoc()
 	}
 
 	//TODO: Fix this for GDC
-	string buildCommand = "dmd "~filelist ~ docCompilerSwitches;
+	string buildCommand = compiler~filelist ~ docCompilerSwitches;
 
 	auto status = executeShell(buildCommand);
 
@@ -471,7 +501,7 @@ void buildInterfaceFiles()
 	}
 
 	//TODO: Fix this for GDC
-	string buildCommand = "dmd "~filelist ~ interfaceCompilerSwitches;
+	string buildCommand = compiler~filelist ~ interfaceCompilerSwitches;
 
 	auto status = executeShell(buildCommand);
 
