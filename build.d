@@ -139,6 +139,30 @@ void parseSwitches(string[] switches)
 				force64Build = true;
 				break;
 			}
+			case "-dmd":
+			{
+				isDMD = true;
+				isGDC = false;
+				isLDC = false;
+				compiler = "dmd ";
+				break;
+			}
+			case "-gdc":
+			{
+				isDMD = false;
+				isGDC = true;
+				isLDC = false;
+				compiler = "gdc ";
+				break;
+			}
+			case "-ldc":
+			{
+				isDMD = false;
+				isGDC = false;
+				isLDC = true;
+				compiler = "ldc2 ";
+				break;
+			}
 			case "-unittest":
 			{
 				buildingUnittests = true;
@@ -189,7 +213,15 @@ void parseSwitches(string[] switches)
 				}
 			}
 		}
-	}	
+	}
+
+
+	//make sure the default happens if not building anything else
+	if(!buildingLibs || !buildingDoc || !buildingInterfaceFiles || !buildingUnittests || !buildingAll)
+	{
+		buildingLibs = true;
+	}
+
 }
 
 //checks for any inconsistencies with the passed switchs. Returns true if everything is ok and false if an error was found.
@@ -289,7 +321,7 @@ void initializeDMD()
 {
 	if(isWindows)
 	{
-		writeln("Building for Windows");
+		writeln("Building for Windows with dmd");
 		prefix = "";
 		extension = ".lib";
 		unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" dsfml-graphics.lib dsfml-window.lib dsfml-audio.lib dsfml-network.lib dsfml-system.lib dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib dsfmlc-network.lib dsfmlc-system.lib ";
@@ -305,14 +337,14 @@ void initializeDMD()
 	}
 	else if(isLinux)
 	{
-		writeln("Building for Linux");
+		writeln("Building for Linux with dmd");
 		prefix = "lib";
 		extension = ".a";
 		unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" -L-ldsfml-graphics -L-ldsfml-window -L-ldsfml-audio -L-ldsfml-network -L-ldsfml-system -L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-audio -L-ldsfmlc-network -L-ldsfmlc-system -L-L"~libDirectory;
 	}
 	else
 	{
-		writeln("Building for OSX");
+		writeln("Building for OSX with dmd");
 		prefix = "lib";
 		extension = ".a";
 		unittestCompilerSwitches = "-main -unittest -cov -I"~impDirectory~" -L-ldsfml-graphics -L-ldsfml-window -L-ldsfml-audio -L-ldsfml-network -L-ldsfml-system -L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-audio -L-ldsfmlc-network -L-ldsfmlc-system -L-L"~libDirectory;
@@ -327,6 +359,18 @@ void initializeDMD()
 }
 void initializeGDC()
 {
+	if(isWindows)
+	{
+		writeln("Building for Windows with gdc");
+	}
+	else if(isLinux)
+	{
+		writeln("Building for Linux with gdc");
+	}
+	else
+	{
+		writeln("Building for OSX with gdc");
+	}
 	prefix = "lib";
 	extension = ".a";
 	unittestCompilerSwitches = "-fversion=DSFML_Unittest_System -fversion=DSFML_Unittest_Window -fversion=DSFML_Unittest_Graphics -fversion=DSFML_Unittest_Audio -fversion=DSFML_Unittest_Network -funittest -I"~impDirectory~" -ldsfml-graphics -ldsfml-window -ldsfml-audio -ldsfml-network -ldsfml-system -ldsfmlc-graphics -ldsfmlc-window -ldsfmlc-audio -ldsfmlc-network -ldsfmlc-system -L"~libDirectory;
@@ -341,7 +385,7 @@ void initializeLDC()
 	//The stuff for windows probbly needs to be fixed
 	if(isWindows)
 	{
-		writeln("Building for Windows");
+		writeln("Building for Windows with ldc");
 		
 		
 
@@ -367,14 +411,14 @@ void initializeLDC()
 	}
 	else if(isLinux)
 	{
-		writeln("Building for Linux");
+		writeln("Building for Linux with ldc");
 		prefix = "lib";
 		extension = ".a";
 		unittestCompilerSwitches = "-main -singleobj -unittest -I="~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
 	}
 	else
 	{
-		writeln("Building for OSX");
+		writeln("Building for OSX with ldc");
 		prefix = "lib";
 		extension = ".a";
 		unittestCompilerSwitches = "-main -unittest -I="~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
@@ -628,16 +672,18 @@ void showHelp()
 	writeln("-import    : Build interface files for importing");
 	writeln("-unittest  : Build static libs and unittests");
 	writeln("-all       : Build everything");
-	writeln("-unittest:sharedDir  : Build static libs and unittests, sharedDir is the location of DSFML-C shared libraries");
+	writeln("-unittest:sharedDir  : Build static libs and unittests, sharedDir is the location of DSFMLC shared libraries");
 	writeln("-all:sharedDir       : Build everything, sharedDir is the location of DSFMLC shared libraries");
 	writeln();
 	writeln("Modifier switches:");
 	writeln("-m32        : force a 32 bit build");
 	writeln("-m64        : force a 64 bit build");
+	writeln("-dmd        : force using dmd as the compiler");
+	writeln("-gdc        : force using gdc as the compiler");
+	writeln("-ldc        : force using ldc as the compiler");
 
 	writeln();
-	writeln("Default (no switches passed) will be to build static libraries only");
-
+	writeln("Default (no switches passed) will be to build static libraries only with the compiler that built this script.");
 }
 
 int main(string[] args)
