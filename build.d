@@ -332,8 +332,8 @@ void initializeGDC()
 	unittestCompilerSwitches = "-fversion=DSFML_Unittest_System -fversion=DSFML_Unittest_Window -fversion=DSFML_Unittest_Graphics -fversion=DSFML_Unittest_Audio -fversion=DSFML_Unittest_Network -funittest -I"~impDirectory~" -ldsfml-graphics -ldsfml-window -ldsfml-audio -ldsfml-network -ldsfml-system -ldsfmlc-graphics -ldsfmlc-window -ldsfmlc-audio -ldsfmlc-network -ldsfmlc-system -L"~libDirectory;
 
 	libCompilerSwitches = "-c -O3 -frelease -I"~impDirectory;
-	docCompilerSwitches = "-D -Dd"~docDirectory~" -c -o- -op";
-	interfaceCompilerSwitches = "-H -Hd"~interfaceDirectory~" -c -o- -op";
+	docCompilerSwitches = " -fdoc -c";
+	interfaceCompilerSwitches = " -fintfc -c";
 
 }
 void initializeLDC()
@@ -350,7 +350,7 @@ void initializeLDC()
 			prefix = "lib";
 			extension = ".a";
 
-			unittestCompilerSwitches = "-main -unittest -I"~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
+			unittestCompilerSwitches = "-main -unittest -I="~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
 
 			unittestCompilerSwitches~="-L=-L"~libDirectory;
 		}
@@ -359,7 +359,7 @@ void initializeLDC()
 			prefix = "";
 			extension = ".lib";
 
-			unittestCompilerSwitches = "-main -unittest -I"~impDirectory~" dsfml-graphics.lib dsfml-window.lib dsfml-audio.lib dsfml-network.lib dsfml-system.lib dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib dsfmlc-network.lib dsfmlc-system.lib ";
+			unittestCompilerSwitches = "-main -unittest -I="~impDirectory~" dsfml-graphics.lib dsfml-window.lib dsfml-audio.lib dsfml-network.lib dsfml-system.lib dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib dsfmlc-network.lib dsfmlc-system.lib ";
 
 			unittestCompilerSwitches~="-L=/LIBPATH:"~libDirectory;
 
@@ -370,22 +370,22 @@ void initializeLDC()
 		writeln("Building for Linux");
 		prefix = "lib";
 		extension = ".a";
-		unittestCompilerSwitches = "-main -singleobj -unittest -I"~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
+		unittestCompilerSwitches = "-main -singleobj -unittest -I="~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
 	}
 	else
 	{
 		writeln("Building for OSX");
 		prefix = "lib";
 		extension = ".a";
-		unittestCompilerSwitches = "-main -unittest -I"~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
+		unittestCompilerSwitches = "-main -unittest -I="~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
 	}
 
 	unittestCompilerSwitches ="-d-version=DSFML_Unittest_System -d-version=DSFML_Unittest_Window -d-version=DSFML_Unittest_Graphics -d-version=DSFML_Unittest_Audio -d-version=DSFML_Unittest_Network "~unittestCompilerSwitches;
 
 
-	libCompilerSwitches = `-lib -O3 -release -enable-inlining -I`~impDirectory;
-	docCompilerSwitches = "-D -Dd"~docDirectory~" -c -o- -op";
-	interfaceCompilerSwitches = "-H -Hd"~interfaceDirectory~" -c -o- -op";
+	libCompilerSwitches = `-lib -O3 -release -enable-inlining -I=`~impDirectory;
+	docCompilerSwitches = "-D -Dd="~docDirectory~" -c -o- -op";
+	interfaceCompilerSwitches = "-H -Hd="~interfaceDirectory~" -c -o- -op";
 }
 
 //build the static libraries. Returns true on successful build, false on unsuccessful build
@@ -525,11 +525,11 @@ void buildDoc()
 	{
 		foreach (string name; dirEntries("dsfml/"~theModule, SpanMode.depth))
 		{
+			writeln(name);
 			filelist~= name ~ " ";
 		}
 	}
 
-	//TODO: Fix this for GDC
 	string buildCommand = compiler~filelist ~ docCompilerSwitches;
 
 	auto status = executeShell(buildCommand);
@@ -538,6 +538,30 @@ void buildDoc()
 		{
 			writeln(status.output);
 		}
+
+	chdir("..");
+}
+void buildDocGDC()
+{
+	writeln("Building documentation!");
+
+	chdir("src");
+
+	foreach(theModule;modules)
+	{
+		foreach (string name; dirEntries("dsfml/"~theModule, SpanMode.depth))
+		{
+
+			string buildCommand = compiler~ name ~ docCompilerSwitches ~ " -fdoc-dir="~docDirectory~"dsfml/"~theModule;
+
+			auto status = executeShell(buildCommand);
+
+			if(status.status !=0)
+			{
+				writeln(status.output);
+			}
+		}
+	}
 
 	chdir("..");
 }
@@ -566,6 +590,31 @@ void buildInterfaceFiles()
 		{
 			writeln(status.output);
 		}
+
+	chdir("..");
+}
+void buildInterfaceFilesGDC()
+{
+	writeln("Building interface files!");
+
+	chdir("src");
+
+	foreach(theModule;modules)
+	{
+		foreach (string name; dirEntries("dsfml/"~theModule, SpanMode.depth))
+		{
+
+			string buildCommand = compiler~ name ~ interfaceCompilerSwitches ~ " -fintfc-dir="~interfaceDirectory~"dsfml/"~theModule;
+
+			auto status = executeShell(buildCommand);
+
+			if(status.status !=0)
+			{
+				writeln(status.output);
+			}
+
+		}
+	}	
 
 	chdir("..");
 }
@@ -636,11 +685,25 @@ int main(string[] args)
 	}
 	if(buildingDoc)
 	{
-		buildDoc();
+		if(isGDC)
+		{
+			buildDocGDC();
+		}
+		else
+		{
+			buildDoc();
+		}
 	}
 	if(buildingInterfaceFiles)
 	{
-		buildInterfaceFiles();
+		if(isGDC)
+		{
+			buildInterfaceFilesGDC();
+		}
+		else
+		{
+			buildInterfaceFiles();
+		}
 	}
 	if(buildingAll)
 	{
