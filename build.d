@@ -338,7 +338,54 @@ void initializeGDC()
 }
 void initializeLDC()
 {
+	//The stuff for windows probbly needs to be fixed
+	if(isWindows)
+	{
+		writeln("Building for Windows");
+		
+		
 
+		if(!force64Build)
+		{
+			prefix = "lib";
+			extension = ".a";
+
+			unittestCompilerSwitches = "-main -unittest -I"~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
+
+			unittestCompilerSwitches~="-L=-L"~libDirectory;
+		}
+		else
+		{
+			prefix = "";
+			extension = ".lib";
+
+			unittestCompilerSwitches = "-main -unittest -I"~impDirectory~" dsfml-graphics.lib dsfml-window.lib dsfml-audio.lib dsfml-network.lib dsfml-system.lib dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib dsfmlc-network.lib dsfmlc-system.lib ";
+
+			unittestCompilerSwitches~="-L=/LIBPATH:"~libDirectory;
+
+		}
+	}
+	else if(isLinux)
+	{
+		writeln("Building for Linux");
+		prefix = "lib";
+		extension = ".a";
+		unittestCompilerSwitches = "-main -singleobj -unittest -I"~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
+	}
+	else
+	{
+		writeln("Building for OSX");
+		prefix = "lib";
+		extension = ".a";
+		unittestCompilerSwitches = "-main -unittest -I"~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
+	}
+
+	unittestCompilerSwitches ="-d-version=DSFML_Unittest_System -d-version=DSFML_Unittest_Window -d-version=DSFML_Unittest_Graphics -d-version=DSFML_Unittest_Audio -d-version=DSFML_Unittest_Network "~unittestCompilerSwitches;
+
+
+	libCompilerSwitches = `-lib -O3 -release -enable-inlining -I`~impDirectory;
+	docCompilerSwitches = "-D -Dd"~docDirectory~" -c -o- -op";
+	interfaceCompilerSwitches = "-H -Hd"~interfaceDirectory~" -c -o- -op";
 }
 
 //build the static libraries. Returns true on successful build, false on unsuccessful build
@@ -368,7 +415,7 @@ bool buildLibs()
 		}
 		else
 		{
-			//TODO: LDC stuff
+			buildCommand ~= " -of="~libDirectory~prefix~"dsfml-"~theModule~extension;
 		}
 		
 		writeln("Building " ~ theModule~ " module.");
@@ -385,6 +432,10 @@ bool buildLibs()
 		if(exists("lib/dsfml-"~theModule~".o"))
 		{
 			remove("lib/dsfml-"~theModule~".o");
+		}
+		if(exists("lib/libdsfml-"~theModule~".o"))
+		{
+			remove("lib/libdsfml-"~theModule~".o");
 		}
 		
 	}
@@ -422,9 +473,11 @@ bool buildUnittests()
 	}
 	else if(isGDC)
 	{
-		buildCommand~=" -o"~unittestDirectory~"unittest";
-
-		
+		buildCommand~=" -o"~unittestDirectory~"unittest";	
+	}
+	else
+	{
+		buildCommand~=" -of="~unittestDirectory~"unittest";
 	}
 
 	if(isWindows)
@@ -442,6 +495,10 @@ bool buildUnittests()
 			else if(isGDC)
 			{
 				buildCommand~=" -L"~unittestLibraryLocation;
+			}
+			else
+			{
+				buildCommand~=" -L=-L"~unittestLibraryLocation;
 			}
 
 		}
