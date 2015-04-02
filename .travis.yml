@@ -3,7 +3,7 @@ language: d
 d: 
   - dmd-2.066.1
   - gdc-4.8.2
-  - lcd-0.15.1
+  - lcd-0.15.0
 
 install:
   #Install everything we need to build
