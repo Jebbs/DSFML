@@ -198,11 +198,11 @@ class TcpSocket:Socket
     ///		sizeReceived = This variable is filled with the actual number of bytes received.
     ///
     ///Returns: Status code.
-	Status receive(void[] data , ref size_t sizeReceived)
+	Status receive(void[] data , out size_t sizeReceived)
 	{
+		//This is terrible and will be fixed in 2.2
 
 		Status status;
-
 
 		void* temp = sfTcpSocket_receive(sfPtr, data.length, &sizeReceived, &status);
 
@@ -275,15 +275,15 @@ unittest
 		//sendPacket.writeString("Hello, I'm a client!");
 		//clientSocket.send(sendPacket);
 
-		writeln(clientSocket.send(temp));
+		clientSocket.send(temp);
 		
 		//And get the data on the server side
 		//serverSocket.receive(receivePacket);
 
-		char[1024] temp2;// = new char[1024];
+		char[1024] temp2;
 		size_t received;
 
-		writeln(serverSocket.receive(temp2, received));
+		serverSocket.receive(temp2, received);
 		
 		//What did we get from the client?
 		writeln("Gotten from client: ", cast(string)temp2[0..received]);
@@ -304,6 +304,7 @@ unittest
 		writeln("Gotten from server: ", receivePacket.readString());
 		
 		clientSocket.disconnect();
+		writeln();
 	}
 }
 

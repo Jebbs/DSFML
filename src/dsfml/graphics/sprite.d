@@ -261,7 +261,7 @@ class Sprite : Drawable, Transformable
 
 unittest
 {
-	version(DSFML_Unittest_Graphicss)
+	version(DSFML_Unittest_Graphics)
 	{
 		import std.stdio;
 

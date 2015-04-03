@@ -445,7 +445,7 @@ unittest
 
 		auto ftp = new Ftp();
 
-		auto responce = ftp.connect("ftp.digitalmars.com");
+		auto responce = ftp.connect("ftp.microsoft.com");
 
 		if(responce.isOk())
 		{

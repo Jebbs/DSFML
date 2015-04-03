@@ -92,7 +92,7 @@ class ConvexShape : Shape
 
 unittest
 {
-	version(DSFML_Unittest_Graphicss)
+	version(DSFML_Unittest_Graphics)
 	{
 		import std.stdio;
 		import dsfml.graphics;
