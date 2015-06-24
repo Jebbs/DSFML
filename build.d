@@ -276,17 +276,36 @@ bool checkSwitchErrors()
 void initialize()
 {
 
-	currentDirectory = getcwd;
-	impDirectory = `"`~currentDirectory~"/src"~`"`;
-	libDirectory = `"`~currentDirectory~"/lib/"~`"`;
-	interfaceDirectory = `"`~currentDirectory~"/import/"~`"`;
-	docDirectory = `"`~currentDirectory~"/doc/"~`"`;
-	unittestDirectory = `"`~currentDirectory~"/unittest/"~`"`;
-
-	if(!exists(currentDirectory~"/lib/"))
+	if(isWindows)
 	{
-		mkdir(currentDirectory~"/lib/");
+		currentDirectory = getcwd;
+		impDirectory = currentDirectory~"\\src";
+		libDirectory = currentDirectory~"\\lib\\";
+		interfaceDirectory = currentDirectory~"\\import\\";
+		docDirectory = currentDirectory~"\\doc\\";
+		unittestDirectory = currentDirectory~"\\unittest\\";
+
+		if(!exists(currentDirectory~"\\lib\\"))
+		{
+			mkdir(currentDirectory~"\\lib\\");
+		}
 	}
+	else
+	{
+		currentDirectory = getcwd;
+		impDirectory = `"`~currentDirectory~"/src"~`"`;
+		libDirectory = `"`~currentDirectory~"/lib/"~`"`;
+		interfaceDirectory = `"`~currentDirectory~"/import/"~`"`;
+		docDirectory = `"`~currentDirectory~"/doc/"~`"`;
+		unittestDirectory = `"`~currentDirectory~"/unittest/"~`"`;
+
+		if(!exists(currentDirectory~"/lib/"))
+		{
+			mkdir(currentDirectory~"/lib/");
+		}
+	}
+
+	
 
 	if(isDMD)
 	{
@@ -451,6 +470,7 @@ bool buildLibs()
 		{
 			//build the static libs directly
 			buildCommand ~= " -of"~libDirectory~prefix~"dsfml-"~theModule~extension;
+			writeln(buildCommand);
 		}
 		else if(isGDC)
 		{
@@ -528,13 +548,25 @@ bool buildUnittests()
 	{
 		buildCommand~=".exe" ;
 	}
-	else
+	
+	//set up unit test library location
 	{
+		writeln(unittestLibraryLocation);
+
 		if(unittestLibraryLocation != "")
 		{
 			if(isDMD)
 			{
-				buildCommand~=" -L-L"~unittestLibraryLocation;
+				if(isWindows)
+				{
+					//on windows it is only useful for linking
+					buildCommand~=" -L+"~unittestLibraryLocation;
+					writeln(unittestLibraryLocation);
+				}
+				else
+				{
+					buildCommand~=" -L-L"~unittestLibraryLocation;
+				}
 			}
 			else if(isGDC)
 			{
@@ -547,6 +579,8 @@ bool buildUnittests()
 
 		}
 	}
+
+	writeln(buildCommand);
 
 	auto status = executeShell(buildCommand);
 
@@ -684,6 +718,11 @@ void showHelp()
 
 	writeln();
 	writeln("Default (no switches passed) will be to build static libraries only with the compiler that built this script.");
+}
+
+string quoteString(string s)
+{
+	return `"`~s~`"`;
 }
 
 int main(string[] args)
