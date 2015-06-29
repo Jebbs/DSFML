@@ -512,8 +512,6 @@ bool buildUnittests()
 	writeln("Building unit tests!");
 	string filelist = "";
 
-
-
 	foreach(theModule;modules)
 	{
 		foreach (string name; dirEntries("src/dsfml/"~theModule, SpanMode.depth))
@@ -551,7 +549,6 @@ bool buildUnittests()
 	
 	//set up unit test library location
 	{
-		writeln(unittestLibraryLocation);
 
 		if(unittestLibraryLocation != "")
 		{
@@ -561,7 +558,6 @@ bool buildUnittests()
 				{
 					//on windows it is only useful for linking
 					buildCommand~=" -L+"~unittestLibraryLocation;
-					writeln(unittestLibraryLocation);
 				}
 				else
 				{
@@ -579,8 +575,6 @@ bool buildUnittests()
 
 		}
 	}
-
-	writeln(buildCommand);
 
 	auto status = executeShell(buildCommand);
 
@@ -727,8 +721,6 @@ string quoteString(string s)
 
 int main(string[] args)
 {
-
-
 	parseSwitches(args[1..$]);
 
 	if(!checkSwitchErrors())
@@ -803,8 +795,6 @@ int main(string[] args)
 			return -1;
 		}
 	}
-
-
 
 	writeln("Done!");
 	return 0;
