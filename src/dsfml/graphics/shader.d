@@ -443,14 +443,14 @@ class Shader
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2D texture (sampler2D GLSL type).
 	 * 		texture	= Texture to assign
 	 */
-	void setParameter(string name, Texture texture)
+	void setParameter(string name, const(Texture) texture)
 	{
 		import dsfml.system.string;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
 		err.write(toString(sfErr_getOutput()));
 	}
 	///ditto
-	void opIndexAssign(Texture texture, string name)
+	void opIndexAssign(const(Texture) texture, string name)
 	{
 		import dsfml.system.string;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
