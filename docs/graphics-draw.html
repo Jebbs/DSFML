@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Drawing 2d Stuff</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="drawing-2d-stuff">Drawing 2D stuff</h1>
+<h2 id="introduction">Introduction</h2>
+<p>As you learnt in the previous tutorials, the window module of DSFML provides an easy way to open an OpenGL window and handle its events, but it doesn't help when it comes to drawing something. The only option which is left to you is to use the powerful-yet-complex-and-low-level OpenGL API.</p>
+<p>Fortunately, DSFML provides a graphics module which will help you draw 2D entities in a simpler way than with OpenGL.</p>
+<h2 id="the-drawing-window">The Drawing Window</h2>
+<p>To draw the entities provided by the graphics module, you must use a specialized window class: <a href="http://dsfml.com/dsfml/graphics/renderwindow.html">RenderWindow</a>. This class derives from <a href="http://dsfml.com/dsfml/window/window.html">Window</a>, and inherits all its functions. Everything that you've learnt about <a href="http://dsfml.com/dsfml/window/window.html">Window</a> (creation, event handling, controlling the framerate, mixing with OpenGL, etc.) is applicable to <a href="http://dsfml.com/dsfml/graphics/renderwindow.html">RenderWindow</a>.</p>
+<p>On top of that, <a href="http://dsfml.com/dsfml/graphics/renderwindow.html">RenderWindow</a> adds high-level functions to help you draw things easily. In this tutorial we'll focus on two of these functions: <code>clear()</code> and <code>draw()</code>. They are as simple as their name: <code>clear()</code> clears the whole window with the chosen color, and <code>draw()</code> draws whatever object you give to it.</p>
+<p>Here is what a typical main loop looks like with a render window:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">import</span> dsfml.graphics;
+
+<span class="dt">void</span> main()
+{
+    <span class="co">// create the window</span>
+    <span class="kw">auto</span> window = <span class="kw">new</span> RenderWindow(VideoMode(<span class="dv">800</span>, <span class="dv">600</span>), <span class="st">&quot;My window&quot;</span>);
+
+    <span class="co">// run the program as long as the window is open</span>
+    <span class="kw">while</span> (window.isOpen())
+    {
+        <span class="co">// check all the window&#39;s events that were triggered since the last iteration of the loop</span>
+        Event event;
+        <span class="kw">while</span> (window.pollEvent(event))
+        {
+            <span class="co">// &quot;close requested&quot; event: we close the window</span>
+            <span class="kw">if</span> (event.type == Event.EventType.Closed)
+                window.close();
+        }
+
+        <span class="co">// clear the window with black color</span>
+        window.clear(Color.Black);
+
+        <span class="co">// draw everything here...</span>
+        <span class="co">// window.draw(...);</span>
+
+        <span class="co">// end the current frame</span>
+        window.display();
+    }
+}</code></pre></div>
+<p>Calling <code>clear()</code> before drawing anything is mandatory, otherwise you may keep undefined pixels from previous frames. The only exception is when you cover the entire window with what you draw, so that no pixel is left undrawn; in this case you can avoid calling <code>clear()</code> (although it won't make a big difference on performance).</p>
+<p>Calling <code>display()</code> is also mandatory, it takes what was drawn since the last call to <code>display()</code> and displays it on the window. Indeed, things are not drawn directly to the window, but to a hidden buffer. This buffer is then copied to the window when you call <code>display()</code> -- this is called double-buffering.</p>
+<blockquote>
+<p>This <code>clear()</code>/<code>draw()</code>/<code>display()</code> cycle is the only good way to draw things. Don't try other strategies, such as keeping pixels from the previous frame, &quot;erasing&quot; pixels, or drawing once and calling <code>display()</code> multiple times. You'll get strange results due to double-buffering. Modern graphics chipsets and APIs are really made for repeated <code>clear()</code>/<code>draw()</code>/<code>display()</code> cycles where everything is completely refreshed at each iteration of the main loop. Don't be scared to draw 1000 sprites 60 times per second, you're far below the millions of triangles that your computer can handle.</p>
+</blockquote>
+<h2 id="what-can-i-draw-now">What can I draw now?</h2>
+<p>Now that you have a main loop which is ready to draw, let's see what, and how, you can actually draw there.</p>
+<p>DSFML provides four kinds of drawable entities: three of them are ready to be used (sprites, texts and shapes), the last one is the building block that will help you to create your own drawable entities (vertex arrays).</p>
+<p>Although they share some common properties, these entities have their own specificities and deserve their own tutorials:</p>
+<ul>
+<li><a href="https://github.com/luke5542/DSFML-Tutorials/blob/master/sprites.md">Sprite tutorial</a></li>
+<li><a href="https://github.com/luke5542/DSFML-Tutorials/blob/master/text.md">Text tutorial</a></li>
+<li><a href="https://github.com/luke5542/DSFML-Tutorials/blob/master/shapes.md">Shape tutorial</a></li>
+<li><a href="https://github.com/luke5542/DSFML-Tutorials/blob/master/vertex-arrays.md">Vertex array tutorial</a></li>
+</ul>
+<h2 id="off-screen-drawing">Off-screen drawing</h2>
+<p>DSFML also provides a way to draw to a texture instead of directly to a window. To do so, use a <a href="http://dsfml.com/dsfml/graphics/rendertexture.html">RenderTexture</a> instead of a <a href="http://dsfml.com/dsfml/graphics/renderwindow.html">RenderWindow</a>. It has the same functions for drawing, inherited from their common base <a href="http://dsfml.com/dsfml/graphics/rendertarget.html">RenderTarget</a>.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// create a 500x500 render-texture</span>
+RenderTexture renderTexture = <span class="kw">new</span> RenderTexture();
+<span class="kw">if</span> (!renderTexture.create(<span class="dv">500</span>, <span class="dv">500</span>))
+{
+    <span class="co">// error...</span>
+}
+
+<span class="co">// drawing uses the same functions</span>
+renderTexture.clear();
+renderTexture.draw(sprite); <span class="co">// or any other drawable</span>
+renderTexture.display();
+
+<span class="co">// get the target texture (where the stuff has been drawn)</span>
+Texture texture = renderTexture.getTexture();
+
+<span class="co">// draw it to the window</span>
+Sprite sprite = <span class="kw">new</span> Sprite(texture);
+window.draw(sprite);</code></pre></div>
+<p>The <code>getTexture()</code> function returns a read-only texture, which means that you can only use it, not modify it. If you need to modify it before using it, you can copy it to your own <a href="http://dsfml.com/dsfml/graphics/texture.html">Texture</a> instance.</p>
+<p><a href="http://dsfml.com/dsfml/graphics/rendertexture.html">RenderTexture</a> also has the same functions as <a href="http://dsfml.com/dsfml/graphics/renderwindow.html">RenderWindow</a> for handling views and OpenGL (corresponding tutorials to be done later). If you use OpenGL to draw to the render-texture, you can have a depth buffer by using the third optional argument of the create function.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">renderTexture.create(<span class="dv">500</span>, <span class="dv">500</span>, <span class="kw">true</span>); <span class="co">// enable depth buffer</span></code></pre></div>
+<h2 id="drawing-from-threads">Drawing from Threads</h2>
+<p><strong>TO BE DONE LATER</strong></p>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

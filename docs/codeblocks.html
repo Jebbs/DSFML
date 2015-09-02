@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Codeblocks</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href="../doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href="../downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<h1 id="codeblocks-windows">Code::Blocks (Windows)</h1>
+<p>This assumes that you have already either <a href="https://github.com/Jebbs/DSFML/wiki/Building-The-Library-And-Your-First-DSFML-Program">built DSFML-C</a> from source, or <a href="https://github.com/Jebbs/DSFML/wiki/Getting-Started-in-Windows">downloaded</a> the pre-built libraries for your system. It's also assumed that you have read and built the DSFML library files as described <a href="https://github.com/Jebbs/DSFML/wiki/Building-Your-First-DSFML-Program%28Windows%29">here</a>.</p>
+<p>As a result of the above process, you should have the following ready to integrate with Code::Blocks: * DSFML-C library files (named something like dsfml-graphics.lib) * DSFML library files (named something like dsfml-graphics-2.lib) * DSFML-C binary files (note, you'll also need the dependency .dll's that can be found in the download) * DSFML D source</p>
+<p>To get D working with Code::Blocks, you can follow their guide <a href="http://wiki.codeblocks.org/index.php?title=Installing_a_supported_compiler#Digital_Mars_D_Compiler_for_Windows">here</a>.</p>
+<h1 id="dependency-setup">Dependency Setup</h1>
+<p>If you have Code::Blocks setup correctly, you should be able to easily create a new D project from the <code>File -&gt; New -&gt; Project</code> window.</p>
+<p>After the project has been created, right click the project name and select <code>Build Options</code>. Under the <code>Linker Settings</code> tab, click <code>Add</code> at the bottom to add in the DSFML-C and DSFML library files from where you have them located on disk.</p>
+<p>Next, under the <code>Search Directories</code> tab, select the <code>Compiler</code> tab and add the directory of your DSFML source directory. Under the <code>Linker</code> tab, add the directories of your: * DSFML-C binary files, * DSFML-C library files, * and your DSFML binary files.</p>
+<h1 id="now-for-some-code">Now for some code</h1>
+<p>In the main D file of your project, place the following code:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">module</span> main;
+
+<span class="kw">import</span> dsfml.graphics;
+
+<span class="dt">void</span> main(<span class="dt">string</span>[] args)
+{
+    <span class="kw">auto</span> window = <span class="kw">new</span> RenderWindow(VideoMode(<span class="dv">800</span>,<span class="dv">600</span>),<span class="st">&quot;Hello DSFML!&quot;</span>);
+
+    <span class="kw">auto</span> head = <span class="kw">new</span> CircleShape(<span class="dv">100</span>);
+    head.fillColor = Color.Green;
+    head.position = Vector2f(<span class="dv">300</span>,<span class="dv">100</span>);
+
+    <span class="kw">auto</span> leftEye = <span class="kw">new</span> CircleShape(<span class="dv">10</span>);
+    leftEye.fillColor = Color.Blue;
+    leftEye.position = Vector2f(<span class="dv">350</span>,<span class="dv">150</span>);
+
+    <span class="kw">auto</span> rightEye = <span class="kw">new</span> CircleShape(<span class="dv">10</span>);
+    rightEye.fillColor = Color.Blue;
+    rightEye.position = Vector2f(<span class="dv">430</span>,<span class="dv">150</span>);
+
+    <span class="kw">auto</span> smile = <span class="kw">new</span> CircleShape(<span class="dv">30</span>);
+    smile.fillColor = Color.Red;
+    smile.position = Vector2f(<span class="dv">368</span>,<span class="dv">200</span>);
+
+    <span class="kw">auto</span> smileCover = <span class="kw">new</span> RectangleShape(Vector2f(<span class="dv">60</span>,<span class="dv">30</span>));
+    smileCover.fillColor = Color.Green;
+    smileCover.position = Vector2f(<span class="dv">368</span>,<span class="dv">200</span>);
+
+    <span class="kw">while</span> (window.isOpen())
+    {
+        Event event;
+
+        <span class="kw">while</span>(window.pollEvent(event))
+        {
+            <span class="kw">if</span>(event.type == event.EventType.Closed)
+            {
+                window.close();
+            }
+        }
+
+        window.clear();
+
+        window.draw(head);
+        window.draw(leftEye);
+        window.draw(rightEye);
+        window.draw(smile);
+        window.draw(smileCover);
+
+        window.display();
+    }
+}</code></pre></div>
+<p>Now just build and run the project and you should be done!</p>
+<div class="figure">
+<img src="https://camo.githubusercontent.com/c72a4470bb37fbb39c770aaefec8f964953d1f24/687474703a2f2f692e696d6775722e636f6d2f686274314942482e706e67" title="A Running DSFML Program!" alt="A Running DSFML Program!" />
+<p class="caption">A Running DSFML Program!</p>
+</div>
+ </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+</body>
+</html>

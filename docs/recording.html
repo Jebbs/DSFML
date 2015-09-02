@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+
+  <title>Recording Audio</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="recording-audio">Recording audio</h1>
+<h2 id="recording-to-a-sound-buffer">Recording to a sound buffer</h2>
+<p>The most common use for captured audio data is for it to be saved to a sound buffer (<a href="http://dsfml.com/dsfml/audio/soundbuffer.html">SoundBuffer</a>) so that it can either be played or saved to a file.</p>
+<p>This can be achieved with the very simple interface of the <a href="http://dsfml.com/dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a> class:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// first check if an input audio device is available on the system</span>
+<span class="kw">if</span> (!SoundBufferRecorder.isAvailable())
+{
+    <span class="co">// error: audio capture is not available on this system</span>
+    ...
+}
+
+<span class="co">// create the recorder</span>
+<span class="kw">auto</span> recorder = <span class="kw">new</span> SoundBufferRecorder();
+
+<span class="co">// start the capture</span>
+recorder.start();
+
+<span class="co">// wait...</span>
+
+<span class="co">// stop the capture</span>
+recorder.stop();
+
+<span class="co">// retrieve the buffer that contains the captured audio data</span>
+<span class="kw">const</span>(SoundBuffer) buffer = recorder.getBuffer();</code></pre></div>
+<p>The <code>SoundRecorder.isAvailable()</code> static method checks if audio recording is supported by the system. It if returns false, you won't be able to use the <a href="http://dsfml.com/dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a> class at all.</p>
+<p>The start and stop functions are self-explanatory. The capture runs in its own thread, which means that you can do whatever you want between start and stop. After the end of the capture, the recorded audio data is available in a sound buffer that you can get with the <code>getBuffer()</code> method.</p>
+<p>With the recorded data, you can then:</p>
+<ul>
+<li><p>Save it to a file</p>
+<pre><code>buffer.saveToFile(&quot;my_record.ogg&quot;);</code></pre></li>
+<li><p>Play it directly</p>
+<pre><code>Sound sound = new Sound(buffer);
+sound.play();</code></pre></li>
+<li><p>Access the raw audio data and analyze it, transform it, etc.</p>
+<pre><code>const(short[]) samples = buffer.getSamples();
+doSomething(samples);</code></pre></li>
+</ul>
+<blockquote>
+<p>If you want to use the captured audio data after the recorder is destroyed or restarted, don't forget to make a copy of the buffer.</p>
+</blockquote>
+<h2 id="custom-recording">Custom recording</h2>
+<p>If storing the captured data in a sound buffer is not what you want, you can write your own recorder. Doing so will allow you to process the audio data while it is captured, (almost) directly from the recording device. This way you can, for example, stream the captured audio over the network, perform real-time analysis on it, etc.</p>
+<p>To write your own recorder, you must inherit from the <a href="http://dsfml.com/dsfml/audio/soundrecorder.html">SoundRecorder</a> abstract base class. In fact, <a href="http://dsfml.com/dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a> is just a built-in specialization of this class.</p>
+<p>You only have a single virtual function to override in your derived class: <code>onProcessSamples()</code>. It is called every time a new chunk of audio samples is captured, so this is where you implement your specific stuff.</p>
+<p>Audio samples are provided to the <code>onProcessSamples()</code> function every 100 ms. This is currently hard-coded into DSFML and you can't change that (unless you modify DSFML itself). This may change in the future.</p>
+<p>There are also two additional virtual functions that you can optionally override: <code>onStart()</code> and <code>onStop()</code>. They are called when the capture starts/stops respectively. They are useful for initialization/cleanup tasks.</p>
+<p>Here is the skeleton of a complete derived class:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">class</span> MyRecorder : SoundRecorder
+{
+    <span class="kw">override</span> <span class="dt">bool</span> onStart() <span class="co">// optional</span>
+    {
+        <span class="co">// initialize whatever has to be done before the capture starts</span>
+        ...
+
+        <span class="co">// return true to start the capture, or false to cancel it</span>
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+    <span class="kw">override</span> <span class="dt">bool</span> onProcessSamples(<span class="kw">const</span>(<span class="dt">short</span>)[] samples)
+    {
+        <span class="co">// do something useful with the new chunk of samples</span>
+        ...
+
+        <span class="co">// return true to continue the capture, or false to stop it</span>
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+    <span class="kw">override</span> <span class="dt">void</span> onStop() <span class="co">// optional</span>
+    {
+        <span class="co">// clean up whatever has to be done after the capture is finished</span>
+        ...
+    }
+}</code></pre></div>
+<p>The <code>isAvailable()</code>/<code>start()</code>/<code>stop()</code> functions are defined in the <a href="http://dsfml.com/dsfml/audio/soundrecorder.html">SoundRecorder</a> base, and thus inherited in every derived classes. This means that you can use any recorder class exactly the same way as the <a href="http://dsfml.com/dsfml/audio/soundbufferrecorder.html">SoundBufferRecorder</a> class above.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">if</span> (!MyRecorder.isAvailable())
+{
+    <span class="co">// error...</span>
+}
+
+MyRecorder recorder;
+recorder.start();
+...
+recorder.stop();</code></pre></div>
+<h2 id="threading-issues">Threading issues</h2>
+<p>Since recording is done in a separate thread, it is important to know what exactly happens, and where.</p>
+<p><code>onStart()</code> will be called directly by the start function, so it is executed in the same thread that called it. However, <code>onProcessSample()</code> and <code>onStop()</code> will always be called from the internal recording thread that DSFML creates.</p>
+<p>If your recorder uses data that may be accessed concurrently in both the caller thread and in the recording thread, you have to protect it (with a mutex for example) in order to avoid concurrent access, which may cause undefined behavior -- corrupt data being recorded, crashes, etc.</p>
+<p>If you're not familiar enough with threading, I suggest taking a look at <a href="http://ddili.org/ders/d.en/concurrency.html">this</a> and <a href="http://ddili.org/ders/d.en/concurrency_shared.html">this</a> tutorial on threading in D.</p>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

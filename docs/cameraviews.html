@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Controlling the 2D camera with Views</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="controlling-the-2d-camera-with-views">Controlling the 2D Camera with Views</h1>
+<h2 id="what-is-a-view">What is a View?</h2>
+<p>In games, it is not uncommon to have levels which are much bigger than the window itself. You only see is a small part of them. This is typically the case in RPGs, platform games, and many other genres. What developers might tend to forget is that they define entities in a 2D world, not directly in the window. The window is just a view, it shows a specific area of the whole world. It is perfectly fine to draw several views of the same world in parallel, or draw the world to a texture rather than to a window. The world itself remains unchanged, what changes is just the way it is seen.</p>
+<p>Since what is seen in the window is just a small part of the entire 2D world, you need a way to specify which part of the world is shown in the window. Additionally, you may also want to define where/how this area will be shown within the window. These are the two main features of DSFML views.</p>
+<p>To summarize, views are what you need if you want to scroll, rotate or zoom your world. They are also the key to creating split screens and mini-maps.</p>
+<h2 id="defining-what-the-view-views">Defining What the View Views</h2>
+<p>The class which encapsulates views in DSFML is <a href="http://dsfml.com/dsfml/graphics/view.html">View</a>. It can be constructed directly with a definition of the area to view:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// create a view with the rectangular area of the 2D world to show</span>
+View view1 = <span class="kw">new</span> View(FloatRect(<span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">200</span>));
+
+<span class="co">// create a view with its center and size</span>
+View view2 = <span class="kw">new</span> View(Vector2f(<span class="dv">350</span>, <span class="dv">300</span>), Vector2f(<span class="dv">300</span>, <span class="dv">200</span>));</code></pre></div>
+<p>These two definitions are equivalent: Both views will show the same area of the 2D world, a 300x200 rectangle centered on the point (350, 300).</p>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.3/images/graphics-view-initial.png" title="A View" alt="A View" />
+<p class="caption">A View</p>
+</div>
+<p>If you don't want to define the view upon construction or want to modify it later, you can use the equivalent setters:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">View view1 = <span class="kw">new</span> View();
+view1.reset(FloatRect(<span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">200</span>));
+
+View view2 = <span class="kw">new</span> View();
+view2.center = Vector2f(<span class="dv">350</span>, <span class="dv">300</span>);
+view2.size = Vector2f(<span class="dv">200</span>, <span class="dv">200</span>);</code></pre></div>
+<p>Once your view is defined, you can transform it to make it show a translated/rotated/scaled version of your 2D world.</p>
+<h3 id="moving-scrolling-the-view">Moving (Scrolling) the View</h3>
+<p>Unlike drawable entities, such as sprites or shapes whose positions are defined by their top-left corner (and can be changed to any other point), views are always manipulated by their center -- this is simply more convenient. That's why the property to change the position of a view is named center, and not position.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// move the view at point (200, 200)</span>
+view.center = Vector2f(<span class="dv">200</span>, <span class="dv">200</span>);
+
+<span class="co">// move the view by an offset of (100, 100) (so its final position is (300, 300))</span>
+view.move(Vector2f(<span class="dv">100</span>, <span class="dv">100</span>));</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.3/images/graphics-view-translated.png" title="A Translated View" alt="A Translated View" />
+<p class="caption">A Translated View</p>
+</div>
+<h3 id="rotating-the-view">Rotating the View</h3>
+<p>To rotate a view, use the <code>rotation</code> property.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// rotate the view at 20 degrees</span>
+view.rotation = <span class="dv">20</span>;
+
+<span class="co">// rotate the view by 5 degrees relatively to its current orientation (so its final orientation is 25 degrees)</span>
+view.rotation = view.rotation + <span class="dv">5</span>;</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.3/images/graphics-view-rotated.png" title="A Rotated View" alt="A Rotated View" />
+<p class="caption">A Rotated View</p>
+</div>
+<h3 id="zooming-scaling-the-view">Zooming (Scaling) the View</h3>
+<p>Zooming in (or out) a view is done through to resizing it, so the function to use is setSize.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// resize the view to show a 1200x800 area (we see a bigger area, so this is a zoom out)</span>
+view.size = Vector2f(<span class="dv">1200</span>, <span class="dv">800</span>);
+
+<span class="co">// zoom the view relatively to its current size (apply a factor 0.5, so its final size is 600x400)</span>
+view.zoom(<span class="fl">0.5f</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.3/images/graphics-view-scaled.png" title="A Scaled View" alt="A Scaled View" />
+<p class="caption">A Scaled View</p>
+</div>
+<h2 id="defining-how-the-view-is-viewed">Defining How the View is Viewed</h2>
+<p>Now that you've defined which part of the 2D world is seen in the window, let's define where it is shown. By default, the viewed contents occupy the full window. If the view has the same size as the window, everything is rendered 1:1. If the view is smaller or larger than the window, everything is scaled to fit in the window.</p>
+<p>This default behavior is suitable for most situations, but it might need to be changed sometimes. For example, to split the screen in a multiplayer game, you may want to use two views which each only occupy half of the window. You can also implement a minimap by drawing your entire world to a view which is rendered in a small area in a corner of the window. The area in which the contents of the view is shown is called the viewport.</p>
+<p>To set the viewport of a view, you can use the <code>viewport</code> property.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// define a centered viewport, with half the size of the window</span>
+view.viewport = FloatRect(<span class="fl">0.25f</span>, <span class="fl">0.25</span>, <span class="fl">0.5f</span>, <span class="fl">0.5f</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.3/images/graphics-view-viewport.png" title="A Viewport" alt="A Viewport" />
+<p class="caption">A Viewport</p>
+</div>
+<p>You might have noticed something very important: The viewport is not defined in pixels, but instead as a ratio of the window size. This is more convenient: it allows you to not have to track resize events in order to update the size of the viewport every time the size of the window changes. It is also more intuitive: you would probably define your viewport as a fraction of the entire window area anyway, not as a fixed-size rectangle.</p>
+<p>Using a viewport, it is straightforward to split the screen for multiplayer games:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// player 1 (left side of the screen)</span>
+player1View.viewport = FloatRect(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.5f</span>, <span class="dv">1</span>);
+
+<span class="co">// player 2 (right side of the screen)</span>
+player2View.viewport = FloatRect(<span class="fl">0.5f</span>, <span class="dv">0</span>, <span class="fl">0.5f</span>, <span class="dv">1</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.3/images/graphics-view-split-screen.png" title="A Split Screen" alt="A Split Screen" />
+<p class="caption">A Split Screen</p>
+</div>
+<p>... or a mini-map:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// the game view (full window)</span>
+gameView.viewport = FloatRect(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>);
+
+<span class="co">// mini-map (upper-right corner)</span>
+minimapView.viewport = FloatRect(<span class="fl">0.75f</span>, <span class="dv">0</span>, <span class="fl">0.25f</span>, <span class="fl">0.25f</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.3/images/graphics-view-minimap.png" title="A Minimap" alt="A Minimap" />
+<p class="caption">A Minimap</p>
+</div>
+<h2 id="using-a-view">Using a View</h2>
+<p>To draw something using a view, you must draw it after setting the <code>view</code> property of the target to which you are drawing (<a href="http://dsfml.com/dsfml/graphics/renderwindow.html">RenderWindow</a> or <a href="http://dsfml.com/dsfml/graphics/rendertexture.html">RenderTexture</a>).</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// let&#39;s define a view</span>
+View view = <span class="kw">new</span> View(FloatRect(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1000</span>, <span class="dv">600</span>));
+
+<span class="co">// activate it</span>
+window.view = view;
+
+<span class="co">// draw something to that view</span>
+window.draw(some_sprite);
+
+<span class="co">// want to do visibility checks? retrieve the view</span>
+View currentView = window.view;
+...</code></pre></div>
+<p>The view remains active until you set another one. This means that there is always a view which defines what appears in the target, and where it is drawn. If you don't explicitly set any view, the render-target uses its own default view, which matches its size 1:1. You can get the default view of a render-target with the <code>getDefaultView()</code> method. This can be useful if you want to define your own view based on it, or restore it to draw fixed entities (like a GUI) on top of your scene.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// create a view half the size of the default view</span>
+View view = window.getDefaultView().<span class="dt">dup</span>;
+view.zoom(<span class="fl">0.5f</span>);
+window.view = view;
+
+<span class="co">// restore the default view</span>
+window.view = window.getDefaultView();</code></pre></div>
+<blockquote>
+<p>When you use the <code>view</code> property, the render-target makes a copy of the view, and doesn't store a pointer to the one that is passed. This means that whenever you update your view, you need to set <code>view</code> again to apply the modifications. Don't be afraid to copy views or create them on the fly, they aren't expensive objects (they just hold a few floats).</p>
+</blockquote>
+<h2 id="showing-more-when-the-window-is-resized">Showing More When the Window is Resized</h2>
+<p>Since the default view never changes after the window is created, the viewed contents are always the same. So when the window is resized, everything is squeezed/stretched to the new size.</p>
+<p>If, instead of this default behavior, you'd like to show more/less stuff depending on the new size of the window, all you have to do is update the size of the view with the size of the window.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// the event loop</span>
+Event event;
+<span class="kw">while</span> (window.pollEvent(event))
+{
+    ...
+
+    <span class="co">// catch the resize events</span>
+    <span class="kw">if</span> (event.type == Event.EventType.Resized)
+    {
+        <span class="co">// update the view to the new size of the window</span>
+        FloatRect visibleArea = FloatRect(<span class="dv">0</span>, <span class="dv">0</span>, event.size.width, event.size.height);
+        window.view = <span class="kw">new</span> View(visibleArea);
+    }
+}</code></pre></div>
+<h2 id="coordinates-conversions">Coordinates conversions</h2>
+<p>When you use a custom view, or when you resize the window without using the code above, pixels displayed on the target no longer match units in the 2D world. For example, clicking on pixel (10, 50) may hit the point (26.5, -84) of your world. You end up having to use a conversion function to map your pixel coordinates to world coordinates: <code>mapPixelToCoords()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// get the current mouse position in the window</span>
+Vector2i pixelPos = Mouse.getPosition(window);
+
+<span class="co">// convert it to world coordinates</span>
+Vector2f worldPos = window.mapPixelToCoords(pixelPos);</code></pre></div>
+<p>By default, <code>mapPixelToCoords()</code> uses the current view. If you want to convert the coordinates using view which is not the active one, you can pass it as an additional argument to the function.</p>
+<p>The opposite, converting world coordinates to pixel coordinates, is also possible with the <code>mapCoordsToPixel()</code> function.</p>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

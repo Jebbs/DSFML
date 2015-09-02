@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+
+  <title>Playing Sounds and Music</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="playing-sounds-and-music">Playing sounds and music</h1>
+<h2 id="sound-or-music">Sound or music?</h2>
+<p>DSFML provides two classes for playing audio: <a href="http://dsfml.com/dsfml/audio/sound.html">Sound</a> and <a href="http://dsfml.com/dsfml/audio/music.html">Music</a>. They both provide more or less the same features, the main difference is how they work.</p>
+<p><a href="http://dsfml.com/dsfml/audio/sound.html">Sound</a> is a lightweight object that plays loaded audio data from a <a href="http://dsfml.com/dsfml/audio/soundbuffer.html">SoundBuffer</a>. It should be used for small sounds that can fit in memory and should suffer no lag when they are played. Examples are gun shots, foot steps, etc.</p>
+<p><a href="http://dsfml.com/dsfml/audio/music.html">Music</a> doesn't load all the audio data into memory, instead it streams it on the fly from the source file. It is typically used to play compressed music that lasts several minutes, and would otherwise take many seconds to load and eat hundreds of MB in memory.</p>
+<h2 id="loading-and-playing-a-sound">Loading and playing a sound</h2>
+<p>As mentioned above, the sound data is not stored directly in <a href="http://dsfml.com/dsfml/audio/sound.html">Sound</a> but in a separate class named <a href="http://dsfml.com/dsfml/audio/soundbuffer.html">SoundBuffer</a>. This class encapsulates the audio data, which is basically an array of 16-bit signed integers (called &quot;audio samples&quot;). A sample is the amplitude of the sound signal at a given point in time, and an array of samples therefore represents a full sound.</p>
+<blockquote>
+<p>In fact, the <a href="http://dsfml.com/dsfml/audio/sound.html">Sound</a>/<a href="http://dsfml.com/dsfml/audio/soundbuffer.html">SoundBuffer</a> classes work the same way as <a href="http://dsfml.com/dsfml/graphics/sprite.d">Sprite</a>/<a href="http://dsfml.com/dsfml/graphics/texture.d">Texture</a> from the graphics module. So if you understand how sprites and textures work together, you can apply the same concept to sounds and sound buffers.</p>
+</blockquote>
+<p>You can load a sound buffer from a file on disk with its <code>loadFromFile()</code> method:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">import</span> dsfml.audio;
+
+<span class="dt">int</span> main()
+{
+    SoundBuffer buffer = <span class="kw">new</span> SoundBuffer();
+    <span class="kw">if</span> (!buffer.loadFromFile(<span class="st">&quot;sound.wav&quot;</span>))
+        <span class="kw">return</span> -<span class="dv">1</span>;
+
+    ...
+
+    <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre></div>
+<p>As with everything else, you can also load an audio file from memory (<code>loadFromMemory()</code>) or from a custom input stream (<code>loadFromStream()</code>).</p>
+<p>DSFML supports the audio file formats WAV, OGG/Vorbis and FLAC. Due to licensing issues MP3 is not supported.</p>
+<p>You can also load a sound buffer directly from an array of samples, in the case they originate from another source:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="dt">short</span>[] samples = ...;
+buffer.loadFromSamples(samples, <span class="dv">2</span>, <span class="dv">44100</span>);</code></pre></div>
+<p>Since <code>loadFromSamples()</code> loads a raw array of samples rather than an audio file, it requires additional arguments in order to have a complete description of the sound. The first one is the number of channels; 1 channel defines a mono sound, 2 channels define a stereo sound, etc. The second additional attribute is the sample rate; it defines how many samples must be played per second in order to reconstruct the original sound.</p>
+<p>Now that the audio data is loaded, we can play it with a <a href="http://dsfml.com/dsfml/audio/sound.html">Sound</a> instance.</p>
+<pre class="s"><code>SoundBuffer buffer = new SoundBuffer();
+// load something into the sound buffer...
+
+Sound sound = new Sound();
+sound.setBuffer(buffer);
+sound.play();</code></pre>
+<p>The cool thing is that you can assign the same sound buffer to multiple sounds if you want. You can even play them together without any issues.</p>
+<blockquote>
+<p>Sounds (and music) are played in a separate thread. This means that you are free to do whatever you want after calling <code>play()</code> (except destroying the sound or its data, of course), the sound will continue to play until it's finished or explicitly stopped.</p>
+</blockquote>
+<h2 id="playing-music">Playing music</h2>
+<p>Unlike <a href="http://dsfml.com/dsfml/audio/sound.html">Sound</a>, <a href="http://dsfml.com/dsfml/audio/music.html">Music</a> doesn't pre-load the audio data, instead it streams the data directly from the source. The initialization of music is thus more direct:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Music music = <span class="kw">new</span> Music();
+<span class="kw">if</span> (!music.openFromFile(<span class="st">&quot;music.ogg&quot;</span>))
+    <span class="kw">return</span> -<span class="dv">1</span>; <span class="co">// error</span>
+music.play();</code></pre></div>
+<p>It is important to note that, unlike all other DSFML resources, the loading function is named <code>openFromFile()</code> instead of <code>loadFromFile()</code>. This is because the music is not really loaded, this function merely opens it. The data is only loaded later, when the music is played. It also helps to keep in mind that the audio file has to remain available as long as it is played. The other loading functions of <a href="http://dsfml.com/dsfml/audio/music.html">Music</a> follow the same convention: <code>openFromMemory()</code>, <code>openFromStream()</code>.</p>
+<h2 id="whats-next">What's next?</h2>
+<p>Now that you are able to load and play a sound or music, let's see what you can do with it.</p>
+<p>To control playback, the following functions are available:</p>
+<ul>
+<li>play starts or resumes playback</li>
+<li>pause pauses playback</li>
+<li>stop stops playback and rewind</li>
+<li><code>setPlayingOffset()</code> changes the current playing position</li>
+</ul>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// start playback</span>
+sound.play();
+
+<span class="co">// advance to 2 seconds</span>
+sound.playingOffset = seconds(<span class="dv">2</span>);
+
+<span class="co">// pause playback</span>
+sound.pause();
+
+<span class="co">// resume playback</span>
+sound.play();
+
+<span class="co">// stop playback and rewind</span>
+sound.stop();</code></pre></div>
+<p>The <code>getStatus()</code> function returns the current status of a sound or music, you can use it to know whether it is stopped, playing or paused.</p>
+<p>Sound and music playback is also controlled by a few attributes which can be changed at any moment.</p>
+<p>The <code>pitch</code> property is a factor that changes the perceived frequency of the sound: greater than 1 plays the sound at a higher pitch, less than 1 plays the sound at a lower pitch, and 1 leaves it unchanged. Changing the pitch has a side effect: it impacts the playing speed.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">sound.pitch = <span class="fl">1.2</span>;</code></pre></div>
+<p>The <code>volume</code> property is... the volume. The value ranges from 0 (mute) to 100 (full volume). The default value is 100, which means that you can't make a sound louder than its initial volume.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">sound.volume = <span class="dv">50</span>;</code></pre></div>
+<p>The <code>isLooping</code> property controls whether the sound/music automatically loops or not. If it loops, it will restart playing from the beginning when it's finished, again and again until you explicitly call stop. If not set to loop, it will stop automatically when it's finished.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">sound.isLooping = <span class="kw">true</span>;</code></pre></div>
+<p>More attributes are available, but they are related to spatialization and are explained in the corresponding tutorial.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<h3 id="destroyed-sound-buffer">Destroyed sound buffer</h3>
+<p>The most common mistake is to let a sound buffer go out of scope (and therefore be destroyed) while a sound still uses it.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Sound loadSound(<span class="dt">string</span> filename)
+{
+    SoundBuffer buffer = <span class="kw">new</span> SoundBuffer(); <span class="co">// this buffer is local to the function, it will be destroyed...</span>
+    buffer.loadFromFile(filename);
+    <span class="kw">return</span> Sound(buffer);
+} <span class="co">// ... here</span>
+
+Sound sound = loadSound(<span class="st">&quot;s.wav&quot;</span>);
+sound.play(); <span class="co">// ERROR: the sound&#39;s buffer no longer exists, the behavior is undefined</span></code></pre></div>
+<p>Remember that a sound only keeps a pointer to the sound buffer that you give to it, it doesn't contain its own copy. You have to correctly manage the lifetime of your sound buffers so that they remain alive as long as they are used by sounds.</p>
+<h3 id="too-many-sounds">Too many sounds</h3>
+<p>Another source of error is when you try to create a huge number of sounds. DSFML internally has a limit; it can vary depending on the OS, but you should never exceed 256. This limit is the number of <a href="http://dsfml.com/dsfml/audio/sound.html">Sound</a> and <a href="http://dsfml.com/dsfml/audio/music.html">Music</a> instances that can exist simultaneously. A good way to stay below the limit is to destroy (or recycle) unused sounds when they are no longer needed. This only applies if you have to manage a really large amount of sounds and music, of course.</p>
+<h3 id="destroying-the-music-source-while-it-plays">Destroying the music source while it plays</h3>
+<p>Remember that a music needs its source as long as it is played. A music file on your disk probably won't be deleted or moved while your application plays it, however things get more complicated when you play a music from a file in memory, or from a custom input stream.</p>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

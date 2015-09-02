@@ -1,0 +1,514 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Designing your own entities with vertex arrays</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="designing-your-own-entities-with-vertex-arrays">Designing your own entities with vertex arrays</h1>
+<h2 id="introduction">Introduction</h2>
+<p>DSFML provides simple classes for the most common 2D entities. And while more complex entities can easily be created from these building blocks, it is not always the most efficient solution. For example, you'll quickly reach your graphics card's limits if you draw many individual sprites. The reason is that the performances directly depend on the number of calls to the draw function. Indeed, each call involves setting a set of OpenGL states, resetting matrices, changing textures, etc. And all this stuff only to draw two triangles (a sprite). This is really not what your graphics card expects: today's GPUs are designed to process large batches of triangles, typically several thousands or millions.</p>
+<p>To fill this gap, DSFML provides a lower-level mechanism to draw things: vertex arrays. In fact, vertex arrays are used internally by all other DSFML classes. They allow a more flexible definition of 2D entities, containing as many triangles as you need. They even allow drawing points or lines.</p>
+<h2 id="what-is-a-vertex-and-why-are-they-always-in-arrays">What is a Vertex, and Why are They Always in Arrays?</h2>
+<p>A vertex is the smallest graphical entity that you can manipulate. In short, it is a graphical point: it contains of course a 2D position (x, y), but also a color, and a pair of texture coordinates. We'll see later the role of these attributes.</p>
+<p>Vertices alone don't do much. They are always grouped in primitives: either points (1 vertex), lines (2 vertices), triangles (3 vertices) or quads (4 vertices). Then, you put one or more primitives together to create the final geometry of the entity.</p>
+<p>Now you understand why we always talk about vertex arrays, and not vertices alone.</p>
+<h2 id="a-simple-vertex-array">A Simple Vertex Array</h2>
+<p>First, let's have a look at the <a href="http://dsfml.com/dsfml/graphics/vertex.d">Vertex</a> class. It's a simple container which contains three public members, and no function except constructors. These constructors allow to create vertices with only the attributes that you need -- you don't always need to color or texture your entity.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// create a new vertex</span>
+<span class="kw">auto</span> vertex = Vertex();
+
+<span class="co">// set its position</span>
+vertex.position = Vector2f(<span class="dv">10</span>, <span class="dv">50</span>);
+
+<span class="co">// set its color</span>
+vertex.color = Color.Red;
+
+<span class="co">// set its texture coordinates</span>
+vertex.texCoords = Vector2f(<span class="dv">100</span>, <span class="dv">100</span>);</code></pre></div>
+<p>... or, using the correct constructor:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">auto</span> vertex = Vertex(Vector2f(<span class="dv">10</span>, <span class="dv">50</span>), Color.Red, Vector2f(<span class="dv">100</span>, <span class="dv">100</span>));</code></pre></div>
+<p>Now, let's define a primitive. Remember, a primitive is made of several vertices, therefore we need a vertex array. DSFML provides a simple wrapper for this: <a href="http://dsfml.com/dsfml/graphics/vertexarray.html">VertexArray</a>. It provides the semantics of an array (with a few differences where methods are used instead), and it also stores the primitive type directly.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// create an array of 3 vertices that define a triangle primitive</span>
+<span class="kw">auto</span> triangle = VertexArray(PrimitiveType.Triangles, <span class="dv">3</span>);
+
+<span class="co">// define the position of the triangle&#39;s points</span>
+triangle[<span class="dv">0</span>].position = Vector2f(<span class="dv">10</span>, <span class="dv">10</span>);
+triangle[<span class="dv">1</span>].position = Vector2f(<span class="dv">100</span>, <span class="dv">10</span>);
+triangle[<span class="dv">2</span>].position = Vector2f(<span class="dv">100</span>, <span class="dv">100</span>);
+
+<span class="co">// define the color of the triangle&#39;s points</span>
+triangle[<span class="dv">0</span>].color = Color.Red;
+triangle[<span class="dv">1</span>].color = Color.Blue;
+triangle[<span class="dv">2</span>].color = Color.Green;
+
+<span class="co">// no texture coordinates here, we&#39;ll see that later</span></code></pre></div>
+<p>Your triangle is ready, you can now draw it. Drawing a vertex array is similar to drawing other DSFML entities, with the draw function:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">window.draw(triangle);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-vertex-array-triangle.png" title="A Triangle Made With Vertices" alt="A Triangle Made With Vertices" />
+<p class="caption">A Triangle Made With Vertices</p>
+</div>
+<p>You can see that the vertices' color is interpolated to fill the primitive; this is a nice way to create gradients.</p>
+<p>Note that you don't have to use the <a href="http://dsfml.com/dsfml/graphics/vertexarray.html">VertexArray</a> class. It's just defined for convenience, it's nothing more than a <code>Vertex[]</code> with a <a href="http://dsfml.com/dsfml/graphics/primitivetype.html">PrimitiveType</a>. If you need more flexibility, or a static array, you can use your own storage. You must then use the overload of the draw function which takes a pointer to the vertices, the vertex count and the primitive type.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Vertex[] vertices;
+vertices ~= Vertex(...);
+...
+
+window.draw(vertices, PrimitiveType.Triangles);
+
+Vertex vertices[<span class="dv">2</span>] =
+[
+    Vertex(...),
+    Vertex(...)
+];
+
+window.draw(vertices, PrimitiveType.Lines);</code></pre></div>
+<h2 id="primitive-types">Primitive types</h2>
+<p>Let's stop for a while, and see which primitives you can create with vertices. As explained above, you can define the most basic 2D primitives: point, line, triangle and quad (actually, this one exists for convenience, internally the graphics card breaks it into two triangles). There are also &quot;chained&quot; variants of these primitive types, that allow to share vertices between two adjacent primitives -- which is really useful because primitives are often connected.</p>
+<p>Let's have a look at the full list:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Primitive Type</th>
+<th align="left">Description</th>
+<th align="left">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Points</td>
+<td align="left">A set of unconnected points. These points have no thickness: they will always take one pixel, regardless of the current transform and view.</td>
+<td align="left"><img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-vertex-array-points.png" alt="The Points primitive type" /></td>
+</tr>
+<tr class="even">
+<td align="left">Lines</td>
+<td align="left">A set of unconnected lines. These lines have no thickness: they will always be one pixel wide, regardless of the current transform and view.</td>
+<td align="left"><img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-vertex-array-lines.png" alt="The Lines primitive type" /></td>
+</tr>
+<tr class="odd">
+<td align="left">LinesStrip</td>
+<td align="left">A set of connected lines. The end vertex of one line is used as the start vertex of the next one.</td>
+<td align="left"><img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-vertex-array-lines-strip.png" alt="The LinesStrip primitive type" /></td>
+</tr>
+<tr class="even">
+<td align="left">Triangles</td>
+<td align="left">A set of unconnected triangles.</td>
+<td align="left"><img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-vertex-array-triangles.png" alt="The Triangles primitive type" /></td>
+</tr>
+<tr class="odd">
+<td align="left">TrianglesStrip</td>
+<td align="left">A set of connected triangles. Each triangle shares its two last vertices with the next one.</td>
+<td align="left"><img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-vertex-array-triangles-strip.png" alt="The TrianglesStrip primitive type" /></td>
+</tr>
+<tr class="even">
+<td align="left">TrianglesFan</td>
+<td align="left">A set of triangles connected to a central point. The first vertex is the center, then each new vertex defines a new triangle, using the center and the next vertex.</td>
+<td align="left"><img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-vertex-array-triangles-fan.png" alt="The TrianglesFan primitive type" /></td>
+</tr>
+<tr class="odd">
+<td align="left">Quads</td>
+<td align="left">A set of unconnected quads. The 4 points of each quad must be defined either in clockwise or counterclockwise order.</td>
+<td align="left"><img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-vertex-array-quads.png" alt="The Quads primitive type" /></td>
+</tr>
+</tbody>
+</table>
+<h2 id="texturing">Texturing</h2>
+<p>Like other DSFML entities, vertex arrays can be textured. To do so, you'll need to play with the <code>texCoords</code> attribute of the vertices. This attribute defines which pixel of the texture is mapped to the vertex.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// create a quad</span>
+<span class="kw">auto</span> quad = VertexArray(Quads, <span class="dv">4</span>);
+
+<span class="co">// define it as a rectangle, located at (10, 10) and with size 100x100</span>
+quad[<span class="dv">0</span>].position = Vector2f(<span class="dv">10</span>, <span class="dv">10</span>);
+quad[<span class="dv">1</span>].position = Vector2f(<span class="dv">110</span>, <span class="dv">10</span>);
+quad[<span class="dv">2</span>].position = Vector2f(<span class="dv">110</span>, <span class="dv">110</span>);
+quad[<span class="dv">3</span>].position = Vector2f(<span class="dv">10</span>, <span class="dv">110</span>);
+
+<span class="co">// define its texture area to be a 25x50 rectangle starting at (0, 0)</span>
+quad[<span class="dv">0</span>].texCoords = Vector2f(<span class="dv">0</span>, <span class="dv">0</span>);
+quad[<span class="dv">1</span>].texCoords = Vector2f(<span class="dv">25</span>, <span class="dv">0</span>);
+quad[<span class="dv">2</span>].texCoords = Vector2f(<span class="dv">25</span>, <span class="dv">50</span>);
+quad[<span class="dv">3</span>].texCoords = Vector2f(<span class="dv">0</span>, <span class="dv">50</span>);</code></pre></div>
+<blockquote>
+<p>Texture coordinates are defined in pixels (just like the <code>textureRect</code> of sprites and shapes). They are not normalized (between 0 and 1), as people who are used to OpenGL programming would expect.</p>
+</blockquote>
+<p>Vertex arrays are low-level entities, they only deal with geometry and do not store additional attributes like a texture. To draw a vertex array with a texture, you must pass it directly to the draw function using a <a href="http://dsfml.com/dsfml/graphics/renderstates.html">RenderStates</a> instance:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">auto</span> vertices = VertexArray();
+<span class="kw">auto</span> texture = Texture();
+
+...
+
+<span class="kw">auto</span> states = RenderStates(texture);
+
+window.draw(vertices, states);</code></pre></div>
+<h2 id="transforming-a-vertex-array">Transforming a Vertex Array</h2>
+<p>Transforming is similar to texturing. The transform is not stored in the vertex array, you must pass it to the draw function, again using <a href="http://dsfml.com/dsfml/graphics/renderstates.html">RenderStates</a>:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">auto</span> vertices = VertexArray();
+<span class="kw">auto</span> transform = Transform();
+
+...
+
+<span class="kw">auto</span> states = RenderStates(texture);
+
+window.draw(vertices, states);</code></pre></div>
+<p>To know more about transformations and the <a href="http://dsfml.com/dsfml/graphics/transform.d">Transform</a> class, you can read the <a href="https://github.com/luke5542/DSFML-Tutorials/blob/master/transforms.md">Transforming Entities</a> tutorial.</p>
+<h2 id="creating-a-dsfml-like-entity">Creating a DSFML-like Entity</h2>
+<p>Now that you know how to define your own textured/colored/transformed entity, wouldn't it be nice to wrap it in a DSFML-style class? Fortunately, DSFML makes this easy for you, with the <a href="http://dsfml.com/dsfml/graphics/drawable.html">Drawable</a> and <a href="http://dsfml.com/dsfml/graphics/transformable.html">Transformable</a> base interfaces. These two interfaces are the base of the built-in DSFML entities -- <a href="http://dsfml.com/dsfml/graphics/sprite.hmtl">Sprite</a>, <a href="http://dsfml.com/dsfml/graphics/text.html">Text</a> and <a href="http://dsfml.com/dsfml/graphics/shape.html">Shape</a>.</p>
+<p><a href="http://dsfml.com/dsfml/graphics/drawable.html">Drawable</a> only declares one virtual function; no member nor concrete function. Inheriting from <a href="http://dsfml.com/dsfml/graphics/drawable.html">Drawable</a> allows to draw instances of your class the same way as DSFML classes:</p>
+<pre><code>class MyEntity : Drawable
+{
+    override void draw(RenderTarget&amp; target, RenderStates states)
+    {
+        ...
+    }
+}
+
+MyEntity entity = ...;
+window.draw(entity); // internally calls entity.draw</code></pre>
+<p>Note that doing this is not mandatory, you could just have a similar draw function in your class, and call it with <code>entity.draw(window)</code>. But the other way, by implementing <a href="http://dsfml.com/dsfml/graphics/drawable.html">Drawable</a>, is nicer and more consistent. And in case you need to store an array of drawable objects, you can do it without extra work since all drawable objects (DSFML's and yours) use the same known interface.</p>
+<p>The other interface, <a href="http://dsfml.com/dsfml/graphics/transformable.html">Transformable</a>, shouldn't be implemented directly; that functionality is encapsulated for you with the <code>NormalTransformable</code> mixin. Including this mixin automatically adds to your class the same transformation functions and properties as other DSFML classes (position, rotation, scale, ...). You can learn more about this class in the <a href="https://github.com/luke5542/DSFML-Tutorials/blob/master/transforms.md">Transforming Entities</a> tutorial.</p>
+<p>So, using these two interfaces and a vertex array (in this example we'll also add a texture), here is what a typical DSFML-like graphical class would look like:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">class</span> MyEntity : Drawable, Transformable
+{
+
+    <span class="co">// add functions to play with the entity&#39;s geometry / colors / texturing...</span>
+
+    <span class="kw">override</span> <span class="dt">void</span> draw(RenderTarget target, RenderStates states)
+    {
+        <span class="co">// apply the entity&#39;s transform -- combine it with the one that was passed by the caller</span>
+        states.transform *= getTransform(); <span class="co">// getTransform() is defined by Transformable</span>
+
+        <span class="co">// apply the texture</span>
+        states.texture = m_texture;
+
+        <span class="co">// you may also override states.shader or states.blendMode if you want</span>
+
+        <span class="co">// draw the vertex array</span>
+        target.draw(m_vertices, states);
+    }
+
+    <span class="kw">private</span> 
+    {
+        VertexArray m_vertices;
+        Texture m_texture;
+    }
+}</code></pre></div>
+<p>You can then play with this class as if it was a built-in SFML class:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">auto</span> entity = MyEntity();
+
+<span class="co">// you can transform it</span>
+entity.position = Vector2f(<span class="dv">10</span>, <span class="dv">50</span>);
+entity.rotation = Vector2f(<span class="dv">45</span>);
+
+<span class="co">// you can draw it</span>
+window.draw(entity);</code></pre></div>
+<h2 id="example-tile-map">Example: Tile Map</h2>
+<p>With what we've seen above, let's create a class that encapsulates a tile map. The whole map will be contained in a single vertex array, therefore it will be super fast to draw. Note that we can apply this strategy only if the whole tile set can fit into a single texture. Otherwise, we would have to use at least one vertex array per texture.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">class</span> TileMap : Drawable, Transformable
+{
+    <span class="kw">private</span>
+    {
+        VertexArray m_vertices;
+        Texture m_tileset;
+    }
+
+    <span class="kw">this</span>()
+    {
+        m_tileSet = Texture();
+    }
+
+    <span class="dt">bool</span> load(<span class="kw">const</span>(<span class="dt">string</span>) tileset, Vector2u tileSize, <span class="kw">const</span>(<span class="dt">int</span>[]) tiles, <span class="dt">uint</span> width, <span class="dt">uint</span> height)
+    {
+        <span class="co">// load the tileset texture</span>
+        <span class="kw">if</span> (!m_tileset.loadFromFile(tileset))
+            <span class="kw">return</span> <span class="kw">false</span>;
+
+        <span class="co">// resize the vertex array to fit the level size</span>
+        m_vertices = <span class="kw">new</span> VertexArray(PrimitiveType.Quads, width * height * <span class="dv">4</span>);
+
+        <span class="co">// populate the vertex array, with one quad per tile</span>
+        <span class="kw">for</span> (<span class="dt">uint</span> i = <span class="dv">0</span>; i &lt; width; ++i)
+            <span class="kw">for</span> (<span class="dt">uint</span> j = <span class="dv">0</span>; j &lt; height; ++j)
+            {
+                <span class="co">// get the current tile number</span>
+                <span class="dt">int</span> tileNumber = tiles[i + j * width];
+
+                <span class="co">// find its position in the tileset texture</span>
+                <span class="dt">int</span> tu = tileNumber % (m_tileset.size.x / tileSize.x);
+                <span class="dt">int</span> tv = tileNumber / (m_tileset.size.x / tileSize.x);
+
+                <span class="co">// get a pointer to the current tile&#39;s quad</span>
+                <span class="dt">uint</span> quad = (i + j * width) * <span class="dv">4</span>;
+
+                <span class="co">// define its 4 corners</span>
+                m_vertices[quad + <span class="dv">0</span>].position = Vector2f(i * tileSize.x, j * tileSize.y);
+                m_vertices[quad + <span class="dv">1</span>].position = Vector2f((i + <span class="dv">1</span>) * tileSize.x, j * tileSize.y);
+                m_vertices[quad + <span class="dv">2</span>].position = Vector2f((i + <span class="dv">1</span>) * tileSize.x, (j + <span class="dv">1</span>) * tileSize.y);
+                m_vertices[quad + <span class="dv">3</span>].position = Vector2f(i * tileSize.x, (j + <span class="dv">1</span>) * tileSize.y);
+
+                <span class="co">// define its 4 texture coordinates</span>
+                m_vertices[quad + <span class="dv">0</span>].texCoords = Vector2f(tu * tileSize.x, tv * tileSize.y);
+                m_vertices[quad + <span class="dv">1</span>].texCoords = Vector2f((tu + <span class="dv">1</span>) * tileSize.x, tv * tileSize.y);
+                m_vertices[quad + <span class="dv">2</span>].texCoords = Vector2f((tu + <span class="dv">1</span>) * tileSize.x, (tv + <span class="dv">1</span>) * tileSize.y);
+                m_vertices[quad + <span class="dv">3</span>].texCoords = Vector2f(tu * tileSize.x, (tv + <span class="dv">1</span>) * tileSize.y);
+            }
+
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+    <span class="kw">override</span> <span class="dt">void</span> draw(RenderTarget target, RenderStates states = RenderStates.Default)
+    {
+        <span class="co">// apply the transform</span>
+        states.transform *= getTransform();
+
+        <span class="co">// apply the tileset texture</span>
+        states.texture = m_tileset;
+
+        <span class="co">// draw the vertex array</span>
+        target.draw(m_vertices, states);
+    }
+
+}</code></pre></div>
+<p>And now, the application that uses it:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="dt">void</span> main()
+{
+    <span class="co">// create the window</span>
+    RenderWindow window = RenderWindow(VideoMode(<span class="dv">512</span>, <span class="dv">256</span>), <span class="st">&quot;Tilemap&quot;</span>);
+
+    <span class="co">// define the level with an array of tile indices</span>
+    <span class="kw">const</span>(<span class="dt">int</span>) level[] =
+    [
+        <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>,
+        <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,
+        <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>,
+        <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,
+        <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>,
+        <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>,
+        <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>,
+        <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>,
+    ];
+
+    <span class="co">// create the tilemap from the level definition</span>
+    TileMap map = TileMap();
+    <span class="kw">if</span> (!map.load(<span class="st">&quot;tileset.png&quot;</span>, Vector2u(<span class="dv">32</span>, <span class="dv">32</span>), level, <span class="dv">16</span>, <span class="dv">8</span>))
+        exit(-<span class="dv">1</span>);
+
+    <span class="co">// run the main loop</span>
+    <span class="kw">while</span> (window.isOpen())
+    {
+        <span class="co">// handle events</span>
+        Event event;
+        <span class="kw">while</span> (window.pollEvent(event))
+        {
+            <span class="kw">if</span>(event.type == Event.EventType.Closed)
+                window.close();
+        }
+
+        <span class="co">// draw the map</span>
+        window.clear();
+        window.draw(map);
+        window.display();
+    }
+}</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-vertex-array-tilemap.png" title="The Tilemap Example" alt="The Tilemap Example" />
+<p class="caption">The Tilemap Example</p>
+</div>
+<h2 id="example-particle-system">Example: Particle System</h2>
+<p>This second example implements another common entity: the particle system. This one is a very simple one, with no texture and as few parameters as possible. It demonstrates the use of the <code>Points</code> primitive type with a dynamic vertex array which changes every frame.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">class</span> ParticleSystem : Drawable, Transformable
+{
+
+    <span class="kw">private</span>
+    {
+        Particle[] m_particles;
+        VertexArray m_vertices;
+        Time m_lifetime;
+        Vector2f m_emitter;
+    }
+
+
+    <span class="kw">this</span>(unsigned <span class="dt">int</span> count)
+    {
+        m_particles = <span class="kw">new</span> Particle[count];
+        m_vertices(PrimitiveType.Points, count);
+        m_lifetime(seconds(<span class="dv">3</span>));
+        m_emitter = Vector2f(<span class="dv">0</span>, <span class="dv">0</span>);
+    }
+
+    <span class="dt">void</span> setEmitter(Vector2f position)
+    {
+        m_emitter = position;
+    }
+
+    <span class="dt">void</span> update(Time elapsed)
+    {
+        <span class="kw">for</span> (<span class="dt">uint</span> i = <span class="dv">0</span>; i &lt; m_particles.size(); ++i)
+        {
+            <span class="co">// update the particle lifetime</span>
+            Particle p = m_particles[i];
+            p.lifetime -= elapsed;
+
+            <span class="co">// if the particle is dead, respawn it</span>
+            <span class="kw">if</span> (p.lifetime &lt;= Time.Zero)
+                resetParticle(i);
+
+            <span class="co">// update the position of the corresponding vertex</span>
+            m_vertices[i].position += p.velocity * elapsed.asSeconds();
+
+            <span class="co">// update the alpha (transparency) of the particle according to its lifetime</span>
+            <span class="dt">float</span> ratio = p.lifetime.asSeconds() / m_lifetime.asSeconds();
+            m_vertices[i].color.a = to!<span class="dt">ubyte</span>(ratio * <span class="dv">255</span>);
+        }
+    }
+
+    <span class="kw">override</span> <span class="dt">void</span> draw(RenderTarget target, RenderStates states)
+    {
+        <span class="co">// apply the transform</span>
+        states.transform *= getTransform();
+
+        <span class="co">// our particles don&#39;t use a texture</span>
+        states.texture = <span class="kw">null</span>;
+
+        <span class="co">// draw the vertex array</span>
+        target.draw(m_vertices, states);
+    }
+
+    <span class="dt">void</span> resetParticle(<span class="dt">int</span> index)
+    {
+        <span class="co">// give a random velocity and lifetime to the particle</span>
+        <span class="dt">float</span> angle = (uniform!(<span class="dt">uint</span>)() % <span class="dv">360</span>) * <span class="fl">3.14f</span> / <span class="fl">180.f</span>;
+        <span class="dt">float</span> speed = (uniform!(<span class="dt">uint</span>)() % <span class="dv">50</span>) + <span class="fl">50.f</span>;
+        m_particles[index].velocity = Vector2f(cos(angle) * speed, sin(angle) * speed);
+        m_particles[index].lifetime = milliseconds((uniform!(<span class="dt">uint</span>)() % <span class="dv">2000</span>) + <span class="dv">1000</span>);
+
+        <span class="co">// reset the position of the corresponding vertex</span>
+        m_vertices[index].position = m_emitter;
+    }
+}
+
+
+<span class="kw">struct</span> Particle
+{
+    Vector2f velocity;
+    Time lifetime;
+}</code></pre></div>
+<p>And the little demo that uses it:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="dt">void</span> main()
+{
+    <span class="co">// create the window</span>
+    <span class="kw">auto</span> window = RenderWindow(VideoMode(<span class="dv">512</span>, <span class="dv">256</span>), <span class="st">&quot;Particles&quot;</span>);
+
+    <span class="co">// create the particle system</span>
+    <span class="kw">auto</span> particles = ParticleSystem(<span class="dv">1000</span>);
+
+    <span class="co">// create a clock to track the elapsed time</span>
+    Clock clock = <span class="kw">new</span> Clock();
+
+    <span class="co">// run the main loop</span>
+    <span class="kw">while</span> (window.isOpen())
+    {
+        <span class="co">// handle events</span>
+        Event event;
+        <span class="kw">while</span> (window.pollEvent(event))
+        {
+            <span class="kw">if</span>(event.type == Event.EventType.Closed)
+                window.close();
+        }
+
+        <span class="co">// make the particle system emitter follow the mouse</span>
+        Vector2i mouse = Mouse.getPosition(window);
+        particles.setEmitter(window.mapPixelToCoords(mouse));
+
+        <span class="co">// update it</span>
+        Time elapsed = clock.restart();
+        particles.update(elapsed);
+
+        <span class="co">// draw it</span>
+        window.clear();
+        window.draw(particles);
+        window.display();
+    }
+
+}</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-vertex-array-particles.png" title="The Particles Example" alt="The Particles Example" />
+<p class="caption">The Particles Example</p>
+</div>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Using and Extending Packets</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="using-and-extending-packets">Using and extending packets</h1>
+<h2 id="problems-that-need-to-be-solved">Problems that need to be solved</h2>
+<p>Exchanging data on a network is more tricky than it seems. The reason is that different machines, with different operating systems and processors, can be involved. Several problems arise if you want to exchange data reliably between these different machines.</p>
+<p>The first problem is the endianness. The endianness is the order in which a particular processor interprets the bytes of primitive types that occupy more than a single byte (integers and floating point numbers). There are two main families: &quot;big endian&quot; processors, which store the most significant byte first, and &quot;little endian&quot; processors, which store the least significant byte first. There are other, more exotic byte orders, but you'll probably never have to deal with them. The problem is obvious: If you send a variable between two computers whose endianness doesn't match, they won't see the same value. For example, the 16-bit integer &quot;42&quot; in big endian notation is 00000000 00101010, but if you send this to a little endian machine, it will be interpreted as &quot;10752&quot;.</p>
+<p>The second problem is specific to how the TCP protocol works. Because it doesn't preserve message boundaries, and can split or combine chunks of data, receivers must properly reconstruct incoming messages before interpreting them. Otherwise bad things might happen, like reading incomplete variables, or ignoring useful bytes.</p>
+<p>You may of course face other problems with network programming, but these are the lowest-level ones, that almost everybody will have to solve. This is the reason why DSFML provides some simple tools to avoid them.</p>
+<h2 id="packets">Packets</h2>
+<p>These two main problems are solved by using a specific class to pack your data: <a href="http://dsfml.com/dsfml/network/packet.html">Packet</a>. As a bonus, it provides a much nicer interface than plain old byte arrays.</p>
+<p>Reading to and writing from a packet utilizes methods with the following pattern: <code>readType()</code> where Type is any primitive type (i.e. to read a bool you would use <code>readBool()</code>, an unsigned short would be read with <code>readUshort()</code>, etc). See the documentation for more information.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// on sending side</span>
+<span class="dt">short</span> x = <span class="dv">10</span>;
+<span class="dt">string</span> s = <span class="st">&quot;hello&quot;</span>;
+<span class="dt">double</span> d = <span class="fl">0.6</span>;
+
+Packet packet = <span class="kw">new</span> Packet();
+packet.writeShort(x);
+packet.writeString(s);
+packet.writeDouble(d);
+
+<span class="co">// on receiving side</span>
+<span class="dt">short</span> x;
+<span class="dt">string</span> s;
+<span class="dt">double</span> d;
+
+x = packet.readShort();
+s = packet.readString();
+d = packet.readDouble();</code></pre></div>
+<blockquote>
+<p>The interface described above is likely to change in future versions of the library, so be careful when upgrading.</p>
+</blockquote>
+<p>Unlike writing, reading from a packet can fail if you try to extract more bytes than the packet contains. If a reading operation fails, the packet error flag is set. To check whether or not the last read operation succeeded, use the method <code>canRead()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">x = packet.readByte();
+<span class="kw">if</span> (packet.canRead())
+{
+    <span class="co">// ok</span>
+}
+<span class="kw">else</span>
+{
+    <span class="co">// error, failed to read &#39;x&#39; from the packet</span>
+}</code></pre></div>
+<p>Sending and receiving packets is as easy as sending/receiving an array of bytes: sockets have an overload of send and receive that directly accept a <a href="http://dsfml.com/dsfml/network/packet.html">Packet</a>.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// with a TCP socket</span>
+tcpSocket.send(packet);
+tcpSocket.receive(packet);
+
+<span class="co">// with a UDP socket</span>
+udpSocket.send(packet, recipientAddress, recipientPort);
+udpSocket.receive(packet, senderAddress, senderPort);</code></pre></div>
+<p>Packets solve the &quot;message boundaries&quot; problem, which means that when you send a packet on a TCP socket, you receive the exact same packet on the other end, it cannot contain less bytes, or bytes from the next packet that you send. However, it has a slight drawback: To preserve message boundaries, <a href="http://dsfml.com/dsfml/network/packet.html">Packet</a> has to send some extra bytes along with your data, which implies that you can only receive them with a <a href="http://dsfml.com/dsfml/network/packet.html">Packet</a> if you want them to be properly decoded. Simply put, you can't send an DSFML packet to a non-DSFML packet recipient, it has to use an DSFML packet for receiving too. Note that this applies to TCP only, UDP is fine since the protocol itself preserves message boundaries.</p>
+<h2 id="extending-packets-to-handle-user-types">Extending packets to handle user types</h2>
+<p>Packets have overloads of their operators for all the primitive types and the most common standard types, but what about your own classes? Two methods have been supplied to support the insertion and removal of non-primitive data: <code>const(void)[] getData()</code> for reading and <code>void append(const(void)[] data)</code> for writing.</p>
+<h2 id="custom-packets">Custom packets</h2>
+<p>Packets provide nice features on top of your raw data, but what if you want to add your own features such as automatically compressing or encrypting the data? This can easily be done by deriving from <a href="http://dsfml.com/dsfml/network/packet.html">Packet</a> and overriding the following functions:</p>
+<ul>
+<li><code>onSend()</code>: called before the data is sent by the socket</li>
+<li><code>onReceive()</code>: called after the data has been received by the socket</li>
+</ul>
+<p>These functions provide direct access to the data, so that you can transform them according to your needs.</p>
+<p>Here is a mock-up of a packet that performs automatic compression/decompression:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">class</span> ZipPacket : Packet
+{
+    <span class="kw">override</span> <span class="kw">const</span>(<span class="dt">void</span>)[] onSend()
+    {
+        <span class="kw">const</span>(<span class="dt">void</span>)[] srcData = getData();
+        <span class="kw">return</span> compressTheData(srcData); <span class="co">// this is a fake function, of course :)</span>
+    }
+    <span class="kw">override</span> <span class="dt">void</span> onReceive(<span class="kw">const</span>(<span class="dt">void</span>)[] data)
+    {
+        <span class="kw">const</span>(<span class="dt">void</span>)[] dstData = uncompressTheData(data, size, &amp;dstSize); <span class="co">// this is a fake function, of course :)</span>
+        append(dstData);
+    }
+}</code></pre></div>
+<p>Such a packet class can be used exactly like <a href="http://dsfml.com/dsfml/network/packet.html">Packet</a>. All your method overrides and overloads will apply to them as well.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ZipPacket packet = <span class="kw">new</span> ZipPacket();
+packet.writeByte(x);
+socket.send(packet);</code></pre></div>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

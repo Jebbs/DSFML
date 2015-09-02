@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Handling Time</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="handling-time">Handling Time</h1>
+<h2 id="time-in-dsfml">Time in DSFML</h2>
+<p>Just like the SFML implementation of time, DSFML doesn't impose a specific unit or type for time values, like always being a float for seconds or long for milliseconds and leaving it up to the programmer to convert as needed. It instead provides a struct, <a href="http://dsfml.com/dsfml/system/time.html">Time</a>, that wraps this functionality.</p>
+<p>The <a href="http://dsfml.com/dsfml/system/time.html">Time</a> struct contains a relative time value or time span. It's exclusively a value used to represent a certain amount of time, as opposed to a full-on date-time class.</p>
+<h2 id="converting-time">Converting Time</h2>
+<p>A <a href="http://dsfml.com/dsfml/system/time.html">Time</a> object can be created from any of the source units: seconds, milliseconds, or microseconds. There is a (non-member) function to turn each of them into a <a href="http://dsfml.com/dsfml/system/time.html">Time</a>:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Time t1 = microseconds(<span class="dv">42000000</span>);
+<span class="kw">auto</span> t2 = milliseconds(<span class="dv">42000</span>);
+<span class="kw">auto</span> t3 = seconds(<span class="dv">42</span>);</code></pre></div>
+<p>Note how all three of these times are equal.</p>
+<p>Similarly, a <a href="http://dsfml.com/dsfml/system/time.html">Time</a> object can be converted back to either seconds, milliseconds, or microseconds:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Time  time = ...;
+
+<span class="dt">long</span>  usec = time.asMicroseconds();
+<span class="dt">int</span>   msec = time.asMilliseconds();
+<span class="dt">float</span> sec  = time.asSeconds();</code></pre></div>
+<h2 id="playing-with-time-values">Playing With Time Values</h2>
+<p><a href="http://dsfml.com/dsfml/system/time.html">Time</a> is just an amount of time, so it supports arithmetic operations such as addition, subtraction, comparison, etc. Times can also be negative.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Time t1 = seconds(<span class="dv">42</span>);
+<span class="kw">auto</span> t2 = t1 * <span class="dv">2</span>;
+<span class="kw">auto</span> t3 = t1 + t2;
+<span class="kw">auto</span> t4 = -t3;
+
+<span class="dt">bool</span> b1 = (t1 == t2);
+<span class="dt">bool</span> b2 = (t3 &gt; t4);</code></pre></div>
+<h2 id="measuring-time">Measuring Time</h2>
+<p>Now that we've seen how to manipulate time values with DSFML, let's see how to do something that almost every program needs: measuring the time elapsed.</p>
+<p>DSFML, like SFML, has a very simple class for measuring time: <a href="http://dsfml.com/dsfml/system/clock.html">Clock</a>. It only has two methods: <code>getElapsedTime()</code>, to retrieve the time elapsed since the clock started, and <code>restart()</code>, to restart the clock.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Clock clock = <span class="kw">new</span> Clock(); <span class="co">// starts the clock</span>
+...
+Time elapsed1 = clock.getElapsedTime();
+writeln(elapsed1.asSeconds());
+clock.restart();
+...
+Time elapsed2 = clock.getElapsedTime();
+writeln(elapsed2.asSeconds());</code></pre></div>
+<p>Note that <code>restart()</code> also returns the elapsed time, so that you can avoid the slight gap that would exist if you had to call <code>getElapsedTime()</code> explicitly before <code>restart()</code>.</p>
+<p>Here is an example that uses the time elapsed at each iteration of the game loop to update the game logic:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Clock clock = <span class="kw">new</span> Clock();
+<span class="kw">while</span> (window.isOpen())
+{
+    Time elapsed = clock.restart();
+    updateGame(elapsed);
+    ...
+}</code></pre></div>
+
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

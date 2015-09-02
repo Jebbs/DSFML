@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Text and Font</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="text-and-fonts">Text and Fonts</h1>
+<h2 id="loading-a-font">Loading a Font</h2>
+<p>Before drawing text, you need a character font -- like in any other program that prints text. Fonts are encapsulated in the <a href="http://dsfml.com/dsfml/graphics/font.html">Font</a> class, which provides three main features: loading a font, getting glyphs (i.e. visual characters) from it, and reading its attributes. In a regular program, you'll only deal with the first feature, loading the font. So let's focus on this first.</p>
+<p>The most common way of loading a font is from a file on disk, which is done with the <code>loadFromFile()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Font font = <span class="kw">new</span> Font();
+<span class="kw">if</span> (!font.loadFromFile(<span class="st">&quot;arial.ttf&quot;</span>))
+{
+    <span class="co">// error...</span>
+}</code></pre></div>
+<p>Note that DSFML won't load your system fonts automatically, i.e. <code>font.loadFromFile(&quot;Courier New&quot;)</code> won't work. First because DSFML requires file names, not font names, and secondly because DSFML doesn't have a magic access to your system's font folder. So, if you want to load a font, you need to have the font file with your application, like other resources (images, sounds, ...).</p>
+<blockquote>
+<p>The <code>loadFromFile()</code> function sometimes fails with no obvious reason. First, check the error message printed by DSFML in the standard output (check the console). If the message is &quot;unable to open file&quot;, make sure that the working directory (which is the directory any file path will be interpreted relatively to) is what you think it is: when you run the application from the explorer, the working directory is the executable folder, but when you launch your program from your IDE (Visual Studio, Code::Blocks, ...) the working directory is sometimes set to the project directory instead. This can generally be changed easily in the project settings.</p>
+</blockquote>
+<p>You can also load a font file from memory (<code>loadFromMemory()</code>), or from a custom input stream (<code>loadFromStream()</code>).</p>
+<p>DSFML supports the most common font formats. The full list is available in the API documentation.</p>
+<p>That's all. Once your font is loaded, you can start drawing text.</p>
+<h2 id="drawing-text">Drawing Text</h2>
+<p>To draw text, you need to use the Text class. It's very simple to use:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Text text = <span class="kw">new</span> Text();
+
+<span class="co">// select the font</span>
+text.setFont(font); <span class="co">// font is a Font</span>
+
+<span class="co">// set the string to display</span>
+text.setString(<span class="st">&quot;Hello world&quot;</span>);
+
+<span class="co">// set the character size</span>
+text.setCharacterSize(<span class="dv">24</span>); <span class="co">// in pixels, not points!</span>
+
+<span class="co">// set the color</span>
+text.setColor(Color.Red);
+
+<span class="co">// set the text style</span>
+text.setStyle(Text.Bold | Text.Underlined);
+
+...
+
+<span class="co">// inside the main loop, between window.clear() and window.display()</span>
+window.draw(text);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-text-draw.png" title="Drawing Text" alt="Drawing Text" />
+<p class="caption">Drawing Text</p>
+</div>
+<p>Texts can also be transformed: they have a position, an orientation and a scale. The functions involved are the same as for the <a href="http://dsfml.com/dsfml/graphics/sprite.html">Sprite</a> class and other DSFML entities, and are explained in the <a href="https://github.com/luke5542/DSFML-Tutorials/blob/master/transforms.md">Transforming Entities</a> tutorial.</p>
+<h2 id="making-your-own-text-class">Making your own text class</h2>
+<p>If Text is too limited, or if you want to do something else with pre-rendered glyphs, <a href="http://dsfml.com/dsfml/graphics/font.html">Font</a> provides everything that you need.</p>
+<p>First, you can retrieve the texture which contains all the pre-rendered glyphs of a certain size:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">const</span>(Texture) texture = font.getTexture(characterSize);</code></pre></div>
+<p>Note that glyphs are added to the texture when they are requested. There are so many characters (remember, more than 100000) that they can't all be generated when you load the font. Instead, they are rendered on the fly when you call the <code>getGlyph()</code> function (see below).</p>
+<p>To make something useful of the glyph texture, you must then get the texture coordinates of glyphs that are contained in it:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Glyph glyph = font.getGlyph(character, characterSize, bold);</code></pre></div>
+<p><code>character</code> is the <code>dchar</code> (UTF-32 code) of the glyph that you want to get. You must also specify the character size, and whether you want the bold or the regular version of the glyph.</p>
+<p>The Glyph structure contains three members:</p>
+<ul>
+<li><code>textureRect</code> is the texture coordinates of the glyph within the texture</li>
+<li><code>bounds</code> is the bounding rectangle of the glyph, which helps to position it relatively to the base line of the text</li>
+<li><code>advance</code> is the horizontal offset to apply to get the start position of the next glyph in the text</li>
+</ul>
+<p>Finally, you can get some other metrics of the font, such as the line height or the kerning (always for a certain character size):</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="dt">int</span> lineHeight = font.getLineHeight(characterSize);
+
+<span class="dt">int</span> kerning = font.getKerning(character1, character2, characterSize);</code></pre></div>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

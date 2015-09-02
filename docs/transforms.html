@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Position, rotation, scale: transforming entities.</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="position-rotation-scale-transforming-entities">Position, rotation, scale: transforming entities</h1>
+<h2 id="transforming-sfml-entities">Transforming SFML entities</h2>
+<p>All SFML classes (sprites, text, shapes) use the same interface for transformations: <a href="http://dsfml.com/dsfml/graphics/transformable.html">Transformable</a>. This base class defines a simple API to position, rotate, and scale your entities. It doesn't provide maximum flexibility, but it rather defines an interface which is easy to understand and to use, and which covers 99% of use cases -- for the other 1%, see the last chapters.</p>
+<p><a href="http://dsfml.com/dsfml/graphics/transformable.html">Transformable</a> defines four properties: position, rotation, scale and origin; they are standard D <code>@property</code> fields. These transformation components are all independent from each other: if you want to change the orientation of the entity, you just have to set its rotation property, you don't have to care about the current position and scale.</p>
+<h2 id="position">Position</h2>
+<p>The position is the... position of the entity in the 2D world. I don't think it deserves more explanations :)</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// &#39;entity&#39; can be a Sprite, a Text, a Shape or any other transformable class</span>
+
+<span class="co">// set the absolute position of the entity</span>
+entity.position = Vector2f(<span class="dv">10</span>, <span class="dv">50</span>);
+
+<span class="co">// move the entity relatively to its current position</span>
+<span class="co">// This may change later...</span>
+entity.position = entity.position + Vector2f(<span class="dv">5</span>, <span class="dv">5</span>);
+
+<span class="co">// retrieve the absolute position of the entity</span>
+Vector2f position = entity.position; <span class="co">// = (15, 55)</span></code></pre></div>
+<div class="figure">
+<img src="http://sfml-dev.org/tutorials/2.1/images/graphics-transform-position.png" title="A Translated Entity" alt="A Translated Entity" />
+<p class="caption">A Translated Entity</p>
+</div>
+<p>By default, entities are positioned relatively to their top-left corner; we'll see later how to change that with the 'origin' property.</p>
+<h2 id="rotation">Rotation</h2>
+<p>The rotation is the orientation of the entity in the 2D world. It is defined in degrees, in clockwise order (because the Y axis is pointing down in DSFML).</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// &#39;entity&#39; can be a Sprite, a Text, a Shape or any other transformable class</span>
+
+<span class="co">// set the absolute rotation of the entity</span>
+entity.rotation = <span class="dv">45</span>;
+
+<span class="co">// rotate the entity relatively to its current orientation</span>
+<span class="co">// This may change later...</span>
+entity.rotation = entity.rotation + <span class="dv">10</span>;
+
+<span class="co">// retrieve the absolute rotation of the entity</span>
+<span class="dt">float</span> rotation = entity.rotation(); <span class="co">// = 55</span></code></pre></div>
+<div class="figure">
+<img src="http://sfml-dev.org/tutorials/2.1/images/graphics-transform-rotation.png" title="A Rotated Entity" alt="A Rotated Entity" />
+<p class="caption">A Rotated Entity</p>
+</div>
+<p>Note that DSFML always returns an angle in range [0, 360] when you call <code>rotation</code>.</p>
+<p>Like for the position, the rotation is done around the top-left corner by default, but this can be changed with the origin.</p>
+<h2 id="scale">Scale</h2>
+<p>The scale factor allows to resize the entity. The default scale is 1, less than 1 makes the entity smaller, more than 1 makes it bigger. Negative scales are also allowed, so that you can mirror the entity.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// &#39;entity&#39; can be a Sprite, a Text, a Shape or any other transformable class</span>
+
+<span class="co">// set the absolute scale of the entity</span>
+entity.scale = Vector2f(<span class="fl">4.0f</span>, <span class="fl">1.6f</span>);
+
+<span class="co">// scale the entity relatively to its current scale</span>
+<span class="co">// This may change later...</span>
+entity.scale = entity.scale + Vector2f(<span class="fl">0.5f</span>, <span class="fl">0.5f</span>);
+
+<span class="co">// retrieve the absolute scale of the entity</span>
+Vector2f scale = entity.scale; <span class="co">// = (2, 0.8)</span></code></pre></div>
+<div class="figure">
+<img src="http://sfml-dev.org/tutorials/2.1/images/graphics-transform-scale.png" title="A Scaled Entity" alt="A Scaled Entity" />
+<p class="caption">A Scaled Entity</p>
+</div>
+<h2 id="origin">Origin</h2>
+<p>The origin is the center point of the three other transformations. The position is the position of the origin, the rotation is made around the origin, and the scale is applied around the origin too. By default it is the top-left corner of the entity (point (0, 0)), but you can change it so that it is its center, or another corner for example.</p>
+<p>To keep things simple, there's only one origin for the three transformation components. Which means that you can't, for example, position an entity relatively to its top-left corner while rotating it around its center. If you need to do such things, have a look at the next chapters.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// &#39;entity&#39; can be a Sprite, a Text, a Shape or any other transformable class</span>
+
+<span class="co">// set the origin of the entity</span>
+entity.origin = Vector2f(<span class="dv">10</span>, <span class="dv">20</span>);
+
+<span class="co">// retrieve the origin of the entity</span>
+Vector2f origin = entity.origin; <span class="co">// = (10, 20)</span></code></pre></div>
+<p>Note that changing the origin also changes the visual position of the entity, although its position property is still the same. If you don't understand why, read this tutorial one more time!</p>
+<h2 id="transforming-your-own-classes">Transforming your own classes</h2>
+<p><a href="http://dsfml.com/dsfml/graphics/transformable.html">Transformable</a> is not only made for DSFML classes, it can also be a base (or member) of you own classes. On thing to mention, first, that's specific to DSFML: all of the built-in transformable types (i.e. Sprite, Text, etc) use a <code>NormalTransformable</code> mixin that provides a standard implementation for classes that wish to implement the <code>Transformable</code> interface. If you wish to maintain identical functionality in your own DSFML classes, you should do the same:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">class</span> MyGraphicalEntity : Transformable
+{
+    <span class="kw">mixin</span> NormalTransformable;
+    <span class="co">// ...</span>
+}
+
+<span class="kw">auto</span> entity = <span class="kw">new</span> MyGraphicalEntity(...);
+entity.position = Vector2f(<span class="dv">10</span>, <span class="dv">30</span>);
+entity.rotation = <span class="dv">110</span>;
+entity.scale = Vector2f(<span class="fl">0.5f</span>, <span class="fl">0.2f</span>);</code></pre></div>
+<p>To make use of the final transform of the entity (most likely to draw it), call the <code>getTransform()</code> function. This function returns a <a href="http://dsfml.com/dsfml/graphics/transform.html">Transform</a>; see below for more explanations about it, and how to use it to transform a DSFML entity.</p>
+<h2 id="custom-transforms">Custom transforms</h2>
+<p>The <a href="http://dsfml.com/dsfml/graphics/transformable.html">Transformable</a> interface is easy to use, but it is also limited. Some users need more power, they need to specify a final transformation as a custom combination of individual transformations. For this kind of users, a lower-level class is available: <a href="http://dsfml.com/dsfml/graphics/transform.html">Transform</a>. It is nothing more than a 3x3 matrix, so it can represent any transformation in the 2D space.</p>
+<p>There are many ways to construct a <a href="http://dsfml.com/dsfml/graphics/transform.html">Transform</a>:</p>
+<ul>
+<li>by using the predefined functions for the most common transformations (translation, rotation, scale)</li>
+<li>by combining two transforms</li>
+<li>by specifying its 9 elements directly</li>
+</ul>
+<p>Here are a few examples:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// the identity transform (does nothing)</span>
+<span class="kw">auto</span> t1 = Transform.Identity;
+
+<span class="co">// a rotation transform</span>
+Transform t2;
+t2.rotate(<span class="dv">45</span>);
+
+<span class="co">// a custom matrix</span>
+<span class="kw">auto</span> t3 = Transform(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">20</span>,
+                    <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">50</span>,
+                    <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>);
+
+<span class="co">// a combined transform</span>
+<span class="kw">auto</span> t4 = t1 * t2 * t3;</code></pre></div>
+<p>You can of course apply several predefined transformations to the same transform, they will all be combined sequentially:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Transform t;
+t.translate(<span class="dv">10</span>, <span class="dv">100</span>);
+t.rotate(<span class="dv">90</span>);
+t.translate(-<span class="dv">10</span>, <span class="dv">50</span>);
+t.scale(<span class="fl">0.5f</span>, <span class="fl">0.75f</span>);</code></pre></div>
+<p>Back to the point: how can a custom transform be applied to a graphical entity? It's easy: pass it to the draw function.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">window.draw(entity, transform);</code></pre></div>
+<p>... which is in fact a shortcut for:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">RenderStates states;
+states.transform = transform;
+window.draw(entity, states);</code></pre></div>
+<p>If your entity is a <a href="http://dsfml.com/dsfml/graphics/transformable.html">Transformable</a> (sprite, text, shape), with its own internal transform, then both are combined to produce the final transform.</p>
+<h2 id="bounding-boxes">Bounding boxes</h2>
+<p>After transforming entities and drawing them, maybe you'd like to do some calculations with them, like checking collisions.</p>
+<p>DSFML entities can give you their bounding box. The bounding box is the minimal rectangle that contains the entity, with sides aligned on the X and Y axes.</p>
+<div class="figure">
+<img src="http://sfml-dev.org/tutorials/2.1/images/graphics-transform-bounds.png" title="Bounding Box of Entities" alt="Bounding Box of Entities" />
+<p class="caption">Bounding Box of Entities</p>
+</div>
+<p>The bounding box is very useful to implement collision detection: it is very fast to check against a point or another axis-aligned rectangle, and it is close enough to the real entity to provide a good approximation.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// get the bounding box of the entity</span>
+FloatRect boundingBox = entity.getGlobalBounds();
+
+<span class="co">// check collision with a point</span>
+Vector2f point = ...;
+<span class="kw">if</span> (boundingBox.contains(point))
+{
+    <span class="co">// collision!</span>
+}
+
+<span class="co">// check collision with another box (like the bounding box of another entity)</span>
+FloatRect otherBox = ...;
+<span class="kw">if</span> (boundingBox.intersects(otherBox))
+{
+    <span class="co">// collision!</span>
+}</code></pre></div>
+<p>The function is named <code>getGlobalBounds()</code> because it returns the bounding box of the entity in the global coordinates system, ie. with all its transformations (position, rotation, scale) applied.</p>
+<p>There's another function that returns the bounding box of the entity in its local coordinates system (without transformations applied): <code>getLocalBounds()</code>. This function can be used to get the initial size of an entity, for example, or to perform more specific calculations.</p>
+<h2 id="object-hierarchies-scene-graph">Object hierarchies (scene graph)</h2>
+<p>With the custom transforms seen previously, it's now easy to implement a hierarchy of objects, where children are transformed relatively to their parent. All you have to do is to pass the combined transform from parent to children when you draw them, until you reach the final drawable entities (sprites, texts, shapes, vertex arrays or your own drawables).</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// the abstract base class</span>
+<span class="kw">class</span> Node
+{
+
+    <span class="co">// ... functions to transform the node</span>
+
+    <span class="co">// ... functions to manage the node&#39;s children</span>
+
+    <span class="dt">void</span> draw(RenderTarget target, Transform parentTransform)
+    {
+        <span class="co">// combine the parent transform with the node&#39;s one</span>
+        Transform combinedTransform = parentTransform * m_transform;
+
+        <span class="co">// let the node draw itself</span>
+        onDraw(target, combinedTransform)
+
+        <span class="co">// draw its children</span>
+        <span class="kw">foreach</span> (child; m_children)
+            child.draw(target, combinedTransform);
+    }
+
+<span class="kw">private</span>:
+
+    <span class="dt">void</span> onDraw(RenderTarget target, Transform transform);
+
+    Transform m_transform;
+    Node[] m_children;
+}
+
+<span class="co">// a simple derived class: a node that draws a sprite</span>
+<span class="kw">class</span> SpriteNode : Node
+{
+
+    <span class="co">// .. functions to define the sprite</span>
+
+<span class="kw">private</span>:
+
+    <span class="dt">void</span> onDraw(RenderTarget target, Transform transform)
+    {
+        target.draw(m_sprite, transform);
+    }
+
+    Sprite m_sprite;
+}</code></pre></div>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>File transfers with FTP</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="file-transfers-with-ftp">File transfers with FTP</h1>
+<h2 id="ftp-for-dummies">FTP for dummies</h2>
+<p>If you know what FTP is, and just want to know how to use the FTP class that DSFML provides, you can skip this section.</p>
+<p>FTP (<em>File Transfer Protocol</em>) is a simple protocol that allows manipulation of files and directories on a remote server. The protocol consists of commands such as &quot;create directory&quot;, &quot;delete file&quot;, &quot;download file&quot;, etc. You can't send FTP commands to any remote computer, it needs to have an FTP server running which can understand and execute the commands that clients send.</p>
+<p>So what can you do with FTP, and how can it be helpful to your program? Basically, with FTP you can access existing remote file systems, or even create your own. This can be useful if you want your network game to download resources (maps, images, ...) from a server, or your program to update itself automatically when it's connected to the internet.</p>
+<p>If you want to know more about the FTP protocol, the Wikipedia article provides more detailed information than this short introduction.</p>
+<h2 id="the-ftp-client-class">The FTP client class</h2>
+<p>The class provided by DSFML is <a href="http://dsfml.com/dsfml/network/ftp.html">Ftp</a> (surprising, isn't it?). It's a client, which means that it can connect to an FTP server, send commands to it and upload or download files.</p>
+<p>Every function of the <a href="http://dsfml.com/dsfml/network/ftp.html">Ftp</a> class wraps an FTP command, and returns a standard FTP response. An FTP response contains a status code (similar to HTTP status codes but not identical), and a message that informs the user of what happened. FTP reponses are encapsulated in the <a href="http://dsfml.com/dsfml/network/ftp.html">Ftp.Response</a> class.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">import</span> dsfml.network;
+
+Ftp ftp = <span class="kw">new</span> Ftp();
+...
+Ftp.Response response = ftp.login(); <span class="co">// just an example, could be any function</span>
+
+writeln(<span class="st">&quot;Response status: &quot;</span>, response.getStatus());
+writeln(<span class="st">&quot;Response message: &quot;</span>, response.getMessage());</code></pre></div>
+<p>The status code can be used to check whether the command was successful or failed: Codes lower than 400 represent success, all others represent errors. You can use the <code>isOk()</code> function as a shortcut to test a status code for success.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Ftp.Response response = ftp.login();
+<span class="kw">if</span> (response.isOk())
+{
+    <span class="co">// success!</span>
+}
+<span class="kw">else</span>
+{
+    <span class="co">// error...</span>
+}</code></pre></div>
+<p>If you don't care about the details of the response, you can check for success with even less code:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">if</span> (ftp.login().isOk())
+{
+    <span class="co">// success!</span>
+}
+<span class="kw">else</span>
+{
+    <span class="co">// error...</span>
+}</code></pre></div>
+<p>For readability, these checks won't be performed in the following examples in this tutorial. Don't forget to perform them in your code!</p>
+<p>Now that you understand how the class works, let's have a look at what it can do.</p>
+<h2 id="connecting-to-the-ftp-server">Connecting to the FTP server</h2>
+<p>The first thing to do is connect to an FTP server.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Ftp ftp = <span class="kw">new</span> Ftp();
+ftp.connect(<span class="st">&quot;ftp.myserver.org&quot;</span>);</code></pre></div>
+<p>The server address can be any valid [IpAddress(http://dsfml.com/dsfml/network/ipaddress.html): A URL, an IP address, a network name, ...</p>
+<p>The standard port for FTP is 21. If, for some reason, your server uses a different port, you can specify it as an additional argument:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Ftp ftp = <span class="kw">new</span> Ftp();
+ftp.connect(<span class="st">&quot;ftp.myserver.org&quot;</span>, <span class="dv">45000</span>);</code></pre></div>
+<p>You can also pass a third parameter, which is a time out value. This prevents you from having to wait forever (or at least a very long time) if the server doesn't respond.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Ftp ftp = <span class="kw">new</span> Ftp();
+ftp.connect(<span class="st">&quot;ftp.myserver.org&quot;</span>, <span class="dv">21</span>, seconds(<span class="dv">5</span>));</code></pre></div>
+<p>Once you're connected to the server, the next step is to authenticate yourself:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// authenticate with name and password</span>
+ftp.login(<span class="st">&quot;username&quot;</span>, <span class="st">&quot;password&quot;</span>);
+
+<span class="co">// or login anonymously, if the server allows it</span>
+ftp.login();</code></pre></div>
+<h2 id="ftp-commands">FTP commands</h2>
+<p>Here is a short description of all the commands available in the <a href="http://dsfml.com/dsfml/network/ftp.html">Ftp</a> class. Remember one thing: all these commands are performed relative to the current working directory, exactly as if you were executing file or directory commands in a console on your operating system.</p>
+<p>Getting the current working directory:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Ftp.DirectoryResponse response = ftp.getWorkingDirectory();
+<span class="kw">if</span> (response.isOk())
+    writeln(<span class="st">&quot;Current directory: &quot;</span>, response.getDirectory());</code></pre></div>
+<p><a href="http://dsfml.com/dsfml/network/ftp.html">Ftp.DirectoryResponse</a> is a specialized [Ftp.Response(http://dsfml.com/dsfml/network/ftp.html) that also contains the requested directory.</p>
+<p>Getting the list of directories and files contained in the current directory:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Ftp.ListingResponse response = ftp.getDirectoryListing();
+<span class="kw">if</span> (response.isOk())
+{
+    <span class="kw">const</span>(<span class="dt">string</span>) listing = response.getFilenames();
+    <span class="kw">for</span> (file : listing)
+        writeln(<span class="st">&quot;- &quot;</span>, file);
+}
+
+<span class="co">// you can also get the listing of a sub-directory of the current directory:</span>
+response = ftp.getDirectoryListing(<span class="st">&quot;subfolder&quot;</span>);</code></pre></div>
+<p><a href="http://dsfml.com/dsfml/network/ftp.html">Ftp.ListingResponse</a> is a specialized <a href="http://dsfml.com/dsfml/network/ftp.html">Ftp.Response</a> that also contains the requested directory/file names.</p>
+<p>Changing the current directory:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ftp.changeDirectory(<span class="st">&quot;path/to/new_directory&quot;</span>); <span class="co">// the given path is relative to the current directory</span></code></pre></div>
+<p>Going to the parent directory of the current one:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ftp.parentDirectory();</code></pre></div>
+<p>Creating a new directory (as a child of the current one):</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ftp.createDirectory(<span class="st">&quot;name_of_new_directory&quot;</span>);</code></pre></div>
+<p>Deleting an existing directory:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ftp.deleteDirectory(<span class="st">&quot;name_of_directory_to_delete&quot;</span>);</code></pre></div>
+<p>Renaming an existing file:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ftp.renameFile(<span class="st">&quot;old_name.txt&quot;</span>, <span class="st">&quot;new_name.txt&quot;</span>);</code></pre></div>
+<p>Deleting an existing file:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ftp.deleteFile(<span class="st">&quot;file_name.txt&quot;</span>);</code></pre></div>
+<p>Downloading (receiving from the server) a file:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ftp.download(<span class="st">&quot;remote_file_name.txt&quot;</span>, <span class="st">&quot;local/destination/path&quot;</span>, Ftp.TransferMode.Ascii);</code></pre></div>
+<p>The last argument is the transfer mode. It can be either Ascii (for text files), Ebcdic (for text files using the EBCDIC character set) or Binary (for non-text files). The Ascii and Ebcdic modes can transform the file (line endings, encoding) during the transfer to match the client environment. The Binary mode is a direct byte-for-byte transfer.</p>
+<p>Uploading (sending to the server) a file:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ftp.upload(<span class="st">&quot;local_file_name.pdf&quot;</span>, <span class="st">&quot;remote/destination/path&quot;</span>, Ftp.TransferMode.Binary);</code></pre></div>
+<p>FTP servers usually close connections that are inactive for a while. If you want to avoid being disconnected, you can send a no-op command periodically:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ftp.keepAlive();</code></pre></div>
+<h2 id="disconnecting-from-the-ftp-server">Disconnecting from the FTP server</h2>
+<p>You can close the connection with the server at any moment with the disconnect function.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ftp.disconnect();</code></pre></div>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

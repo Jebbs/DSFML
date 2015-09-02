@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Shapes</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="shapes">Shapes</h1>
+<h2 id="introduction">Introduction</h2>
+<p>DSFML provides a set of classes that represent simple shape entities. Each type of shape is a separate class, but they all derive from the same base class so that they provide the same subset of common features. Each class then adds its own specificities: a radius property for the circle class, a size for the rectangle class, points for the polygon class, etc.</p>
+<h2 id="common-shape-properties">Common Shape Properties</h2>
+<h2 id="transformation-position-rotation-scale">Transformation (Position, Rotation, Scale)</h2>
+<p>These properties are common to all the DSFML graphical classes, so they are explained in a separate tutorial: <a href="https://github.com/luke5542/DSFML-Tutorials/blob/master/transforms.md">Transforming Entities</a>.</p>
+<h3 id="color">Color</h3>
+<p>One of the most basic property of a shape is its color, that you can change with the <code>setFillColor()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">auto</span> shape = <span class="kw">new</span> CircleShape(<span class="dv">50</span>);
+
+<span class="co">// set the shape color to green</span>
+shape.fillColor = Color(<span class="dv">100</span>, <span class="dv">250</span>, <span class="dv">50</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-shape-color.png" title="A Colored Shape" alt="A Colored Shape" />
+<p class="caption">A Colored Shape</p>
+</div>
+<h3 id="outline">Outline</h3>
+<p>Shapes can have an outline. You can set the thickness and color of the outline with the <code>outlineThickness</code> and <code>outlineColor</code> properties.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">auto</span> shape = <span class="kw">new</span> CircleShape(<span class="dv">50</span>);
+shape.fillColor = Color(<span class="dv">100</span>, <span class="dv">250</span>, <span class="dv">50</span>);
+
+<span class="co">// set a 10-pixel wide orange outline</span>
+shape.outlineThickness = <span class="dv">10</span>;
+shape.outlineColor = Color(<span class="dv">250</span>, <span class="dv">150</span>, <span class="dv">100</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-shape-color.png" title="An Outlined Shape" alt="An Outlined Shape" />
+<p class="caption">An Outlined Shape</p>
+</div>
+<p>By default, the outline expands outside the shape (if you have a circle with a radius of 10 and an outline thickness of 5, the total radius of the circle will be 15). You can make it expand towards the center of the shape instead, by giving a negative thickness.</p>
+<p>To disable the outline, set its thickness to 0. If you want the outline only, you can set the fill color to <code>Color.Transparent</code>.</p>
+<h3 id="texture">Texture</h3>
+<p>Shapes can also be textured, like sprites. To specify which part of the texture must be mapped to the shape, you must specify the texture rectangle with the <code>textureRect</code> property. It takes the texture rectangle to map to the bounding rectangle of the shape. This method doesn't offer maximum flexibility, but it is much easier to use than individually setting the texture coordinates of each point of the shape.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">CircleShape shape = <span class="kw">new</span> CircleShape(<span class="dv">50</span>);
+
+<span class="co">// map a 100x100 textured rectangle to the shape</span>
+shape.setTexture(texture); <span class="co">// texture is a Texture</span>
+shape.textureRect = IntRect(<span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">100</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-shape-texture.png" title="A Textured Shape" alt="A Textured Shape" />
+<p class="caption">A Textured Shape</p>
+</div>
+<p>Note that the outline is not textured. In case the shape has a fill color, the texture is modulated (multiplied) with it. To disable texturing, call <code>setTexture(null)</code>.</p>
+<h2 id="drawing-a-shape">Drawing a shape</h2>
+<p>Drawing a shape is as simple as drawing any other DSFML entity:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">window.draw(shape);</code></pre></div>
+<h2 id="built-in-shape-types">Built-in shape types</h2>
+<h3 id="rectangles">Rectangles</h3>
+<p>To draw rectangles, you must use the <a href="http://dsfml.com/dsfml/graphics/rectangleshape.d">RectangleShape</a> class. It has only one attribute: the size of the rectangle.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// define a 120x50 rectangle</span>
+RectangleShape rectangle = <span class="kw">new</span> RectangleShape(<span class="kw">new</span> Vector2f(<span class="dv">120</span>, <span class="dv">50</span>));
+
+<span class="co">// change the size to 100x100</span>
+rectangle.size = Vector2f(<span class="dv">100</span>, <span class="dv">100</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-shape-rectangle.png" title="A Rectangle Shape" alt="A Rectangle Shape" />
+<p class="caption">A Rectangle Shape</p>
+</div>
+<h3 id="circles">Circles</h3>
+<p>Circles are represented by the <a href="http://dsfml.com/dsfml/graphics/circleshape.html">CircleShape</a> class. It has two attributes: the radius and the number of sides. The number of sides is an optional attribute, it allows you to adjust the &quot;quality&quot; of the circle: circles have to be simulated by polygons with many sides (the graphics card is unable to draw a perfect circle directly), and this attribute defines how many sides your circle will have. If you draw small circles, you'll probably need only a few sides. If you draw big circles, or zoom on regular circles, you'll most likely need more sides.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// define a circle with radius = 200</span>
+CircleShape circle = <span class="kw">new</span> CircleShape(<span class="dv">200</span>);
+
+<span class="co">// change the radius to 40</span>
+circle.radius = <span class="dv">40</span>;
+
+<span class="co">// change the number of sides (points) to 100</span>
+circle.pointCount = <span class="dv">100</span>;</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-shape-circle.png" title="A Circle Shape" alt="A Circle Shape" />
+<p class="caption">A Circle Shape</p>
+</div>
+<h3 id="regular-polygons">Regular polygons</h3>
+<p>There's no dedicated class for regular polygons, in fact you can get a regular polygon of any number of sides with the <a href="http://dsfml.com/dsfml/graphics/circleshape.html">CircleShape</a> class: indeed, since circles are simulated by polygons with many sides, you just have to play with the number of sides to get the desired polygons. A <a href="http://dsfml.com/dsfml/graphics/circleshape.html">CircleShape</a> with 3 points is a triangle, with 4 points it's a square, etc.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// define a triangle</span>
+CircleShape triangle = <span class="kw">new</span> CircleShape(<span class="dv">80</span>, <span class="dv">3</span>);
+
+<span class="co">// define a square</span>
+CircleShape square = <span class="kw">new</span> CircleShape(<span class="dv">80</span>, <span class="dv">4</span>);
+
+<span class="co">// define an octagon</span>
+CircleShape octagon = <span class="kw">new</span> CircleShape(<span class="dv">80</span>, <span class="dv">8</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-shape-regular.png" title="Regular Polygons" alt="Regular Polygons" />
+<p class="caption">Regular Polygons</p>
+</div>
+<h3 id="convex-shapes">Convex shapes</h3>
+<p>The <a href="http://dsfml.com/dsfml/graphics/convexshape.html">ConvexShape</a> class is the ultimate shape class: it allows you to define any shape, as long as it stays convex. Indeed, DSFML is unable to draw concave shapes; if you need to draw a concave shape, you'll have to split it into multiple convex polygons (if possible).</p>
+<p>To define a convex shape, you must first set the total number of points, and then define these points.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// create an empty shape</span>
+ConvexShape convex = <span class="kw">new</span> ConvexShape();
+
+<span class="co">// resize it to 5 points</span>
+convex.pointCount = <span class="dv">5</span>;
+
+<span class="co">// define the points</span>
+convex.setPoint(<span class="dv">0</span>, <span class="kw">new</span> Vector2f(<span class="dv">0</span>, <span class="dv">0</span>));
+convex.setPoint(<span class="dv">1</span>, <span class="kw">new</span> Vector2f(<span class="dv">150</span>, <span class="dv">10</span>));
+convex.setPoint(<span class="dv">2</span>, <span class="kw">new</span> Vector2f(<span class="dv">120</span>, <span class="dv">90</span>));
+convex.setPoint(<span class="dv">3</span>, <span class="kw">new</span> Vector2f(<span class="dv">30</span>, <span class="dv">100</span>));
+convex.setPoint(<span class="dv">4</span>, <span class="kw">new</span> Vector2f(<span class="dv">0</span>, <span class="dv">50</span>));</code></pre></div>
+<blockquote>
+<p>It is very important to define the points of a convex shape either in clockwise or counter-clockwise order. If you define them in a random order, the result will be undefined.</p>
+</blockquote>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-shape-convex.png" title="A Convex Shape" alt="A Convex Shape" />
+<p class="caption">A Convex Shape</p>
+</div>
+<p>Officially, <a href="http://dsfml.com/dsfml/graphics/convexshape.html">ConvexShape</a> can only create convex shapes. But in fact, its requirements are a little more relaxed. In fact, the only technical constraint that your shape must follow, is that if you draw a line from its center of gravity to any of its point, you mustn't cross an edge. With this relaxed definition, you can for example draw stars.</p>
+<h3 id="lines">Lines</h3>
+<p>There's no shape class for lines. The reason is simple: if your line has a thickness, it is a rectangle; if it doesn't, it can be drawn with a line primitive.</p>
+<p>Line with thickness:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">RectangleShape line = <span class="kw">new</span> RectangleShape(Vector2f(<span class="dv">150</span>, <span class="dv">5</span>));
+line.rotate(<span class="dv">45</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-shape-line-rectangle.png" title="A Line Shape Drawn as a Rectangle" alt="A Line Shape Drawn as a Rectangle" />
+<p class="caption">A Line Shape Drawn as a Rectangle</p>
+</div>
+<p>Line without thickness:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Vertex[<span class="dv">2</span>] line =
+[
+    Vertex(Vector2f(<span class="dv">10</span>, <span class="dv">10</span>)),
+    Vertex(Vector2f(<span class="dv">150</span>, <span class="dv">150</span>))
+];
+
+window.draw(line, <span class="dv">2</span>, PrimitiveType.Lines);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-shape-line-primitive.png" title="A Line Shape Drawn as a Primitive" alt="A Line Shape Drawn as a Primitive" />
+<p class="caption">A Line Shape Drawn as a Primitive</p>
+</div>
+<p>To learn more about vertices and primitives, you can read the <a href="https://github.com/luke5542/DSFML-Tutorials/blob/master/vertex-arrays.md">Vertex Arrays</a> tutorial.</p>
+<h2 id="custom-shape-types">Custom shape types</h2>
+<p>You can extend the set of shape classes with your own shape types. To do so, you must derive from <a href="http://dsfml.com/dsfml/graphics/shape.html">Shape</a> and override two functions:</p>
+<ul>
+<li><code>getPointCount()</code>: return the number of points of the shape</li>
+<li><code>getPoint()</code>: return a point of the shape</li>
+</ul>
+<p>You must also call the <code>update()</code> protected function whenever the points of your shape change, so that the base class knows about it and can update its internal state.</p>
+<p>Here is a complete example of a custom shape class: EllipseShape.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">class</span> EllipseShape : Shape
+{
+
+    <span class="kw">private</span> {
+        Vector2f m_radius;
+    }
+
+    <span class="kw">public</span> :
+
+        <span class="kw">this</span>(Vector2f radius = Vector2f(<span class="dv">0</span>, <span class="dv">0</span>)) {
+            m_radius = radius;
+            update();
+        }
+
+        @property
+        {
+            Vector2f radius(Vector2f newRadius)
+            {
+                m_radius = newRadius;
+                update();
+                <span class="kw">return</span> newRadius;
+            }
+
+            Vector2f radius()
+            {
+                <span class="kw">return</span> m_radius;
+            }
+        }
+
+        <span class="kw">override</span> <span class="dt">uint</span> getPointCount()
+        {
+            <span class="kw">return</span> <span class="dv">30</span>; <span class="co">// fixed, but could be an attribute of the class if needed</span>
+        }
+
+        <span class="kw">override</span> Vector2f getPoint(<span class="dt">uint</span> index) <span class="kw">const</span>
+        {
+
+            <span class="dt">float</span> angle = index * <span class="dv">2</span> * PI / getPointCount() - PI / <span class="dv">2</span>;
+            <span class="dt">float</span> x = cos(angle) * m_radius.x;
+            <span class="dt">float</span> y = sin(angle) * m_radius.y;
+
+            <span class="kw">return</span> Vector2f(m_radius.x + x, m_radius.y + y);
+        }
+
+}</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-shape-ellipse.png" title="An Ellipse Shape" alt="An Ellipse Shape" />
+<p class="caption">An Ellipse Shape</p>
+</div>
+<h2 id="antialiased-shapes">Antialiased Shapes</h2>
+<p>There's no option to antialias a single shape. If you want to get antialiased shapes (ie. shapes with smooth edges), you must enable antialiasing globally when you create the window, with the corresponding attribute of the <a href="http://dsfml.com/dsfml/window/contextsettings.html">ContextSettings</a> structure.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">ContextSettings settings = <span class="kw">new</span> ContextSettings();
+settings.antialiasingLevel = <span class="dv">8</span>;
+
+RenderWindow window(VideoMode(<span class="dv">800</span>, <span class="dv">600</span>), <span class="st">&quot;SFML shapes&quot;</span>, Style.Default, settings);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-shape-antialiasing.png" title="Aliased vs Antialiased Shape" alt="Aliased vs Antialiased Shape" />
+<p class="caption">Aliased vs Antialiased Shape</p>
+</div>
+<p>Remember that antialiasing depends on the graphics card: it may either not support it, or have it forced to off in the driver settings.</p>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

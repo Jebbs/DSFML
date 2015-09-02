@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Keyboard, Mouse, and Joysticks</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="keyboard-mouse-and-joystick">Keyboard, Mouse, and Joystick</h1>
+<h2 id="introduction">Introduction</h2>
+<p>This tutorial explains how to access global inputs: keyboard, mouse and joysticks. This must not be confused with events: real-time inputs allow you to query the global state of keyboard, mouse and joysticks at any time (<em>&quot;is this button currently pressed?&quot;</em>, <em>&quot;where is the mouse?&quot;</em>) while events notify you when something happens (<em>&quot;this button was pressed&quot;</em>, <em>&quot;the mouse has moved&quot;</em>).</p>
+<h2 id="keyboard">Keyboard</h2>
+<p>The class that gives access to the keyboard state is <a href="http://dsfml.com/dsfml/window/keyboard.html">Keyboard</a>. It contains only one function, <code>isKeyPressed()</code>, which checks the current state of a key (pressed or released). It is a static function, so you don't need to instantiate <a href="http://dsfml.com/dsfml/window/keyboard.html">Keyboard</a> to use it.</p>
+<p>This function directly reads the keyboard state, ignoring the focus state of your window. This means that <code>isKeyPressed()</code> may return true even if your window is inactive.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">if</span> (Keyboard.isKeyPressed(Keyboard.Key.Left))
+{
+    <span class="co">// left key is pressed: move our character</span>
+    character.move(<span class="dv">1</span>, <span class="dv">0</span>);
+}</code></pre></div>
+<p>Key codes are defined in the <code>Keyboard.Key</code> enum.</p>
+<blockquote>
+<p>Some key codes may be missing, or interpreted incorrectly depending on your OS and keyboard layout. This is something that will be improved in a future version of DSFML.</p>
+</blockquote>
+<h2 id="mouse">Mouse</h2>
+<p>The class that gives access to the mouse state is <a href="http://dsfml.com/dsfml/window/mouse.html">Mouse</a>. Like its friend <a href="http://dsfml.com/dsfml/window/keyboard.html">Keyboard</a>, <a href="http://dsfml.com/dsfml/window/mouse.html">Mouse</a> contains only static functions and is not meant to be instantiated (DSFML only handles a single mouse for the time being).</p>
+<p>You can check if buttons are pressed:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">if</span> (Mouse.isButtonPressed(Mouse.Button.Left))
+{
+    <span class="co">// left mouse button is pressed: shoot</span>
+    gun.fire();
+}</code></pre></div>
+<p>Mouse button codes are defined in the <code>Mouse.Button</code> enum. DSFML supports up to 5 buttons: left, right, middle (wheel), plus two extra buttons whatever they are.</p>
+<p>You can also get and set the current position of the mouse, either relatively to the desktop or to a window:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// get the global mouse position (relatively to the desktop)</span>
+Vector2i globalPosition = Mouse.getPosition();
+
+<span class="co">// get the local mouse position (relatively to a window)</span>
+Vector2i localPosition = Mouse.getPosition(window); <span class="co">// window is a Window</span>
+
+<span class="co">// set the mouse position globally (relatively to the desktop)</span>
+Mouse.setPosition(Vector2i(<span class="dv">10</span>, <span class="dv">50</span>));
+
+<span class="co">// set the mouse position localy (relatively to a window)</span>
+Mouse.setPosition(Vector2i(<span class="dv">10</span>, <span class="dv">50</span>), window); <span class="co">// window is a Window</span></code></pre></div>
+<p>There's no function for reading the current state of the mouse wheel. Indeed, the wheel can only be moved relatively, and has no absolute state. By looking at a key you can tell whether it's pressed or released; by looking at the mouse cursor you can tell where it is located on the screen; but by looking at the mouse wheel you can't tell which &quot;tick&quot; it is on. You can only be notified when it moves (<code>MouseWheelMoved</code> event).</p>
+<h2 id="joystick">Joystick</h2>
+<p>The class that gives access to the joysticks state is <a href="http://dsfml.com/dsfml/window/joystick.html">Joystick</a>. Like the other classes of this tutorial, it contains static functions only.</p>
+<p>Joysticks are identified by their index (0 to 7, since DSFML supports up to 8 joysticks). Therefore, the first argument of every function of <a href="http://dsfml.com/dsfml/window/joystick.html">Joystick</a> is the index of the joystick that you want to query.</p>
+<p>You can check whether a joystick is connected or not:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">if</span> (Joystick.isConnected(<span class="dv">0</span>))
+{
+    <span class="co">// joystick number 0 is connected</span>
+    ...
+}</code></pre></div>
+<p>You can also get the capabilities of a connected joystick:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// check how many buttons joystick number 0 has</span>
+<span class="dt">uint</span> buttonCount = Joystick.getButtonCount(<span class="dv">0</span>);
+
+<span class="co">// check if joystick number 0 has a Z axis</span>
+<span class="dt">bool</span> hasZ = Joystick.hasAxis(<span class="dv">0</span>, Joystick.Axis.Z);</code></pre></div>
+<p>Joystick axes are defined in the <code>Joystick.Axis</code> enum. Since they have no special meaning, buttons are simply numbered from 0 to 31.</p>
+<p>Finally, you can of course query the state of a joystick's axes and buttons:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// is button 1 of joystick number 0 pressed?</span>
+<span class="kw">if</span> (Joystick.isButtonPressed(<span class="dv">0</span>, <span class="dv">1</span>))
+{
+    <span class="co">// yes: shoot!</span>
+    gun.fire();
+}
+
+<span class="co">// what&#39;s the current position of the X and Y axes of joystick number 0?</span>
+<span class="dt">float</span> x = Joystick.getAxisPosition(<span class="dv">0</span>, Joystick.Axis.X);
+<span class="dt">float</span> y = Joystick.getAxisPosition(<span class="dv">0</span>, Joystick.Axis.Y);
+character.move(x, y);</code></pre></div>
+<blockquote>
+<p>Joystick states are automatically updated by the event loop. If you don't have one, or need to read a joystick state (for example, check which joysticks are connected) before starting your game loop, you'll have to call the <code>Joystick.update()</code> function to make sure that the joystick states are up to date.</p>
+</blockquote>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

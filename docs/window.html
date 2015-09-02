@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Opening and managing a DSFML window</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="opening-and-managing-a-dsfml-window">Opening and Managing a DSFML Window</h1>
+<h2 id="introduction">Introduction</h2>
+<p>This tutorial only describes how to open and manage a window. Drawing stuff is out of the scope of the dsfml-window module: it is handled by the dsfml-graphics module. However, the window management remains exactly the same so reading this tutorial is important in any case.</p>
+<h2 id="opening-a-window">Opening a Window</h2>
+<p>Windows in SFML are defined by the <a href="http://dsfml.com/dsfml/window/window.html">Window</a> class. A window can be created and opened directly upon construction:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">import</span> dsfml.window;
+
+
+<span class="dt">void</span> main()
+{
+    <span class="kw">auto</span> window = <span class="kw">new</span> Window(VideoMode(<span class="dv">800</span>, <span class="dv">600</span>), <span class="st">&quot;My Window&quot;</span>);
+
+    ...
+
+}</code></pre></div>
+<p>The first argument, the video mode, defines the size of the window (the inner size, without the titlebar and borders). Here, we create a window of 800x600 pixels. The <a href="http://dsfml.com/dsfml/window/videomode.html">VideoMode</a> class has some interesting static functions to get the desktop resolution, or the list of valid video modes for fullscreen mode. Don't hesitate to have a look at its documentation.</p>
+<p>The second argument is simply the title of the window.</p>
+<p>This constructor accepts a third optional argument: a style, which allows to choose which decorations and features you want. You can use any combination of the following styles:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Style</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Style.None</td>
+<td align="left">No decoration at all (useful for splash screens, for example); this style cannot be combined with others</td>
+</tr>
+<tr class="even">
+<td align="left">Style.Titlebar</td>
+<td align="left">The window has a titlebar</td>
+</tr>
+<tr class="odd">
+<td align="left">Style.Resize</td>
+<td align="left">The window can be resized and has a maximize button</td>
+</tr>
+<tr class="even">
+<td align="left">Style.Close</td>
+<td align="left">The window has a close button</td>
+</tr>
+<tr class="odd">
+<td align="left">Style.Fullscreen</td>
+<td align="left">The window is shown in fullscreen mode; this style cannot be combined with others, and requires a valid video mode</td>
+</tr>
+<tr class="even">
+<td align="left">Style.Default</td>
+<td align="left">The default style, which is a shortcut for <code>Titlebar OR Resize OR Close</code></td>
+</tr>
+</tbody>
+</table>
+<p>There's also a fourth optional argument, which defines OpenGL specific options explained in a later tutorial.</p>
+<h2 id="bringing-the-window-to-life">Bringing the Window to Life</h2>
+<p>If you try to execute the code above with nothing in place of the &quot;...&quot;, you will hardly see something. First, because the program ends immediately. Second, because there's no event handling -- so even if you added an endless loop to this code, you would see a dead window, unable to be moved, resized, or closed.</p>
+<p>So let's add a little something to make this program more interesting:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">import</span> dsfml.window;
+
+
+<span class="dt">void</span> main()
+{
+    <span class="kw">auto</span> window = <span class="kw">new</span> Window(VideoMode(<span class="dv">800</span>, <span class="dv">600</span>), <span class="st">&quot;My Window&quot;</span>);
+
+    <span class="co">// run the program as long as the window is open</span>
+    <span class="kw">while</span> (window.isOpen())
+    {
+        <span class="co">// check all the window&#39;s events that were triggered since the last iteration of the loop</span>
+        Event event;
+        <span class="kw">while</span>(window.pollEvent(event))
+        {
+            <span class="co">// &quot;close requested&quot; event: we close the window</span>
+            <span class="kw">if</span>(event.type == event.EventType.Closed)
+            {
+                window.close();
+            }
+        }
+    }
+}</code></pre></div>
+<p>The above code will open a window, and terminate when the user closes it. Let's see how it works in detail.</p>
+<p>First, we added a loop that ensures that the application will be refreshed/updated until the window is closed. Most (if not all) DSFML programs will have this kind of loop, sometimes called the main loop or game loop.</p>
+<p>Then, the first thing that we do inside our game loop is to check events that were triggered. Note that we use a while loop so that all the events are processed, in case there were several pending. The <code>pollEvent()</code> method returns true if an event was pending, or false if there was none.</p>
+<p>Whenever we get an event, we must check its type (window closed? key pressed? mouse moved? joystick connected? ...), and react accordingly if we are interested in it. In this case, we only care about the EventType.Closed event, which is triggered when the user wants to close the window. At this point, the window is still open and we have to close it explicitly with the close function. This allows us to do something before the window is closed, such as saving the current state of the application, or displaying a message.</p>
+<blockquote>
+<p>A mistake that people often do is to forget the event loop, because they don't care yet about handling events (they use real-time inputs instead). But without an event loop, the window won't be responsive; indeed, the event loop has two roles: in addition to provide events to the user, it gives the window a chance to process its internal events too, which is required so that it can react to move or resize user actions.</p>
+</blockquote>
+<p>After the window has been closed, the main loop exits and the program terminates.</p>
+<p>At this point, you will have probably noticed that we haven't talked about drawing something to the window yet. As stated in the introduction, this is not the job of the dsfml-window module, and you'll have to jump to the dsfml-graphics tutorials if you want to draw something such as sprites, texts or shapes.</p>
+<p>To draw stuff, you can also use OpenGL directly and totally ignore the dsfml-graphics module. <a href="http://dsfml.com/dsfml/window/window.html">Window</a> internally creates an OpenGL context and is ready to accept your OpenGL calls. You can learn more about that in the corresponding tutorial.</p>
+<p>So, don't expect to see something interesting in this window: you may see a uniform color (black or white), or the last contents of the previous application that used OpenGL, or... anything else.</p>
+<h2 id="playing-with-the-window">Playing With the Window</h2>
+<p>Of course, DSFML allows you to play a little bit with your windows. Basic window operations such as changing the size, position, title or icon are supported, but unlike dedicated GUI libraries (Qt, wxWidgets), DSFML doesn't provide advanced features. DSFML windows are only meant to provide a base for OpenGL or DSFML drawing.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// change the position of the window (relatively to the desktop)</span>
+window.position = Vector2i(<span class="dv">10</span>, <span class="dv">50</span>);
+
+<span class="co">// change the size of the window</span>
+window.size = Vector2u(<span class="dv">640</span>, <span class="dv">480</span>);
+
+<span class="co">// change the title of the window</span>
+window.setTitle(<span class="st">&quot;DSFML window&quot;</span>);
+
+<span class="co">// get the size of the window</span>
+Vector2u size = window.size;
+<span class="dt">uint</span> width = size.x;
+<span class="dt">uint</span> height = size.y;
+
+...</code></pre></div>
+<p>You can refer to the API documentation for a complete list of <a href="http://dsfml.com/dsfml/window/window.html">Window</a>'s functions.</p>
+<p>In case you really need advanced features for your window, you can create one (or even a full GUI) with another library, and embed DSFML into it. To do so, you can use the other constructor, or create function, of sf::Window which takes the OS-specific handle of an existing window. In this case, DSFML will create a drawing context inside the given window, and catch all its events, without disturbing the initial window management.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">WindowHandle handle = <span class="co">/* specific to what you&#39;re doing and the library you&#39;re using */</span>;
+Window window(handle);</code></pre></div>
+<p>If you just want an additional, very specific feature, you can also do it the other way round: create a DSFML window, and get its OS-specific handle to implement things that DSFML doesn't support.</p>
+<pre><code>auto window = Window(VideoMode(800, 600), &quot;DSFML window&quot;);
+WindowHandle handle = window.getSystemHandle();
+
+// you can now use the handle with OS specific functions</code></pre>
+<p>Integrating DSFML with other libraries requires some work and won't be described here, but you can refer to the dedicated tutorials, examples or forum posts.</p>
+<h2 id="controlling-the-framerate">Controlling the Framerate</h2>
+<p>Sometimes, when your application runs fast, you may notice visual artifacts such as tearing. The reason is that your application's refresh rate is not synchronized with the vertical frequency of the monitor, and as a result, the bottom of the previous frame is mixed with the top of the next one. The solution to this problem is to activate <em>vertical synchronization</em>. It is automatically handled by the graphics card, and can easily be switched on and off with the <code>setVerticalSyncEnabled()</code> function:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">window.setVerticalSyncEnabled(<span class="kw">true</span>); <span class="co">// call it once, after creating the window</span></code></pre></div>
+<p>After this call, your application will run at the same frequency as the monitor, so approximately 60 frames per second.</p>
+<blockquote>
+<p>Sometimes <code>setVerticalSyncEnabled()</code> will have no effect: this is most likely because vertical synchronization is forced to &quot;off&quot; in your graphics driver's settings. It should be set to &quot;controlled by application&quot; instead.</p>
+</blockquote>
+<p>In other situations, you may also want your application to run at a given framerate, instead of the monitor's frequency. This can be done by calling <code>setFramerateLimit()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">window.setFramerateLimit(<span class="dv">30</span>); <span class="co">// call it once, after creating the window</span></code></pre></div>
+<p>Unlike <code>setVerticalSyncEnabled()</code>, this feature is implemented by DSFML itself, using a combination of <a href="http://dsfml.com/dsfml/system/clock.html">Clock</a> and <a href="http://dsfml.com/dsfml/system/sleep.html">sleep</a>. An important consequence is that it is not 100% reliable, especially for high framerates: <a href="http://dsfml.com/dsfml/system/sleep.html">sleep</a>'s resolution depends on the underlying OS, and can be as high as 10 or 15 milliseconds. Don't rely on this feature to implement precise timing.</p>
+<blockquote>
+<p>Never use both <code>setVerticalSyncEnabled()</code> and <code>setFramerateLimit()</code> at the same time! They would badly mix and make things worse.</p>
+</blockquote>
+<h2 id="things-to-know-about-windows">Things to Know About Windows</h2>
+<p>Here is a brief list of what you can and cannot do with DSFML windows.</p>
+<h3 id="you-can-create-multiple-windows">You can create multiple windows</h3>
+<p>DSFML allows you to create multiple windows, and to handle them either all in the main thread, or each one in its own thread (but... see below). In this case, don't forget to have an event loop for each window.</p>
+<h3 id="multiple-monitors-are-not-correctly-supported-yet">Multiple monitors are not correctly supported yet</h3>
+<p>DSFML doesn't explicitly manage multiple monitors. As a consequence, you won't be able to choose which monitor a window appears on, and you won't be able to create more than one fullscreen window. This should be improved in a future version.</p>
+<h3 id="events-must-be-polled-in-the-windows-thread">Events must be polled in the window's thread</h3>
+<p>This is an important limitation of most OSes: the event loop (more precisely, the <code>pollEvent()</code> or <code>waitEvent()</code> method) must be called in the same thread that created the window. This means that if you want to create a dedicated thread for event handling, you'll have to make sure that the window is created in this thread too. If you really want to split things between threads, it is more convient to keep event handling in the main thread and move the rest (rendering, physics, logic, ...) to a separate thread instead. This configuration will also be compatible with the other limitation described below.</p>
+<h3 id="on-os-x-windows-and-events-must-be-managed-in-the-main-thread">On OS X, windows and events must be managed in the main thread</h3>
+<p>Yep, that's true. Mac OS X just won't agree if you try to create a window or handle events in a thread other than the main one.</p>
+<h3 id="on-windows-a-window-which-is-bigger-than-the-desktop-will-not-behave-correctly">On Windows, a window which is bigger than the desktop will not behave correctly</h3>
+<p>For some reason, Windows doesn't like windows that are bigger than the desktop. This includes windows created with <code>VideoMode.getDesktopMode()</code>: with the window decorations (borders and titlebar) added, you end up with a window which is slightly bigger than the desktop, so if you use this, make sure you also set the window decoration to <code>Style.None</code>.</p>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

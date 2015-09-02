@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Sprites and Textures</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="sprites-and-textures">Sprites and Textures</h1>
+<h2 id="vocabulary">Vocabulary</h2>
+<p>Most (if not all) of you are already familiar with these two very common objects, so let's define them very briefly.</p>
+<p>A texture is an image. But we call it &quot;texture&quot; because it has a very specific role: being mapped to a 2D entity.</p>
+<p>A <a href="http://dsfml.com/dsfml/graphics/sprite.html">Sprite</a> is nothing more than a textured rectangle.</p>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-sprites-definition.png" title="Rectangular Entity + Texture = Sprite" alt="Rectangular Entity + Texture = Sprite" />
+<p class="caption">Rectangular Entity + Texture = Sprite</p>
+</div>
+<p>Ok, that was short but if you really don't understand what sprites and textures are, then you'll find a much better description on wikipedia.</p>
+<h2 id="loading-a-texture">Loading a Texture</h2>
+<p>So, before creating any sprite, we need a valid texture. The class that encapsulates textures in DSFML is, surprisingly, Texture. Since the (only) role of a texture is to be loaded and mapped to graphical entities, almost all its functions are about loading and updating it.</p>
+<p>The most common way of loading a texture is from an image file on disk, which is done with the <code>loadFromFile()</code> method.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Texture texture = <span class="kw">new</span> Texture();
+<span class="kw">if</span> (!texture.loadFromFile(<span class="st">&quot;image.png&quot;</span>))
+{
+    <span class="co">// error...</span>
+}</code></pre></div>
+<blockquote>
+<p>The <code>loadFromFile()</code> method sometimes fails with no obvious reason. First, check the error message printed by DSFML in the standard output (check the console). If the message is &quot;unable to open file&quot;, make sure that the working directory (which is the directory any file path will be interpreted relatively to) is what you think it is: when you run the application from the explorer, the working directory is the executable folder, but when you launch your program from your IDE (Visual Studio, Code::Blocks, ...) the working directory is sometimes set to the project directory instead. This can generally be changed easily in the project settings.</p>
+</blockquote>
+<p>You can also load an image file from memory (<code>loadFromMemory()</code>), from a custom input stream (<code>loadFromStream()</code>), or from an already loaded image (<code>loadFromImage()</code>). The latter loads the texture from a <a href="http://dsfml.com/dsfml/graphics/image.html">Image</a>, which is a utility class that helps to manipulate images (modify pixels, create transparency channel, etc.). The pixels of an <a href="http://dsfml.com/dsfml/graphics/image.html">Image</a> stay in system memory, which ensures that operations on them will be as fast as possible, as opposed to the pixels of a texture which reside in video memory and are therefore slow to retrieve or update -- but very fast to draw.</p>
+<p>DSFML supports the most common file formats. The full list is available in the API documentation.</p>
+<p>All these loading functions have an optional argument, which can be used if you want to load a smaller part of the image.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// load a 32x32 rectangle that starts at (10, 10)</span>
+<span class="kw">if</span> (!texture.loadFromFile(<span class="st">&quot;image.png&quot;</span>, IntRect(<span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">32</span>, <span class="dv">32</span>)))
+{
+    <span class="co">// error...</span>
+}</code></pre></div>
+<p>The <code>IntRect</code> struct is a simple utility type that represents a rectangle, and is merely an alias for <code>Rect!(int)</code>. Its constructor takes the coordinates of the left-top corner, and the size of the rectangle.</p>
+<p>If you don't want to load a texture from an image, but rather want to update it directly from an array of pixels, you can create it empty and update it later:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// create an empty 200x200 texture</span>
+<span class="kw">if</span> (!texture.create(<span class="dv">200</span>, <span class="dv">200</span>))
+{
+    <span class="co">// error...</span>
+}</code></pre></div>
+<p>Note that the contents of the texture are undefined at this point.</p>
+<p>To update the pixels of an existing texture, you must use the update function. It has overloads for many sources:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// update a texture from an array of pixels</span>
+<span class="dt">ubyte</span>[] pixels pixels = <span class="kw">new</span> <span class="dt">ubyte</span>[width * height * <span class="dv">4</span>]; <span class="co">// * 4 because pixels have 4 components (RGBA)</span>
+...
+texture.update(pixels);
+
+<span class="co">// update a texture from a Image</span>
+Image image = <span class="kw">new</span> Image();
+...
+texture.update(image);
+
+<span class="co">// update the texture from the current contents of the window</span>
+RenderWindow window;
+...
+texture.update(window);</code></pre></div>
+<p>These examples all assume that the source has the same size as the texture. If this is not the case, i.e. if you want to update only a part of the texture, then you can specify the coordinates of the sub-rectangle that you want to update. You can refer to the documentation for more details.</p>
+<p>Additionally, a texture has two properties that change how it is rendered.</p>
+<p>The first property allows one to smooth the texture. Smoothing a texture makes its pixels less visible (but a little more blurry), which can be important if it is scaled.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">texture.setSmooth(<span class="kw">true</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-sprites-smooth.png" title="Smooth vs Not Smooth" alt="Smooth vs Not Smooth" />
+<p class="caption">Smooth vs Not Smooth</p>
+</div>
+<p>Since smoothing interpolates adjacent pixels in the texture, it can have the unwanted side effect of showing pixels outside the selected texture area. This can happen when your sprite is located at non-integer coordinates.</p>
+<p>The second property allows one to repeat a texture within a single sprite.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">texture.setRepeated(<span class="kw">true</span>);</code></pre></div>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-sprites-repeated.png" title="Repeated vs not repeated" alt="Repeated vs not repeated" />
+<p class="caption">Repeated vs not repeated</p>
+</div>
+<p>This works only if your sprite is configured to show a rectangle which is bigger than the texture. Otherwise this property has no effect.</p>
+<h2 id="ok-can-i-have-my-sprite-now">Ok, Can I Have My Sprite Now?</h2>
+<p>Yes, you can now create your sprite.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">Sprite sprite = <span class="kw">new</span> Sprite();
+sprite.setTexture(texture);
+
+<span class="co">// ... and finally draw it.</span>
+
+<span class="co">// inside the main loop, between window.clear() and window.display()</span>
+window.draw(sprite);</code></pre></div>
+<p>If you don't want your sprite to show the full texture, you can set its texture rectangle.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">sprite.setTextureRect(IntRect(<span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">32</span>, <span class="dv">32</span>));</code></pre></div>
+<p>You can also change the color of a sprite. The color that you set is modulated (multiplied) with the texture of the sprite. This can also be used to change the global transparency (alpha) of the sprite.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">sprite.setColor(Color(<span class="dv">0</span>, <span class="dv">255</span>, <span class="dv">0</span>)); <span class="co">// green</span>
+sprite.setColor(Color(<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">128</span>)); <span class="co">// half transparent</span></code></pre></div>
+<p>These sprites all use the same texture, but have a different color:</p>
+<div class="figure">
+<img src="http://www.sfml-dev.org/tutorials/2.0/images/graphics-sprites-color.png" title="Coloring Sprites" alt="Coloring Sprites" />
+<p class="caption">Coloring Sprites</p>
+</div>
+<p>Sprites can also be transformed: they have a position, an orientation and a scale.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="co">// position</span>
+sprite.position(Vector2f(<span class="dv">10</span>, <span class="dv">50</span>)); <span class="co">// absolute position</span>
+
+<span class="co">// rotation</span>
+sprite.rotation(<span class="dv">90</span>); <span class="co">// absolute angle</span>
+sprite.rotation(sprite.rotation() + <span class="dv">15</span>); <span class="co">// offset relative to the current angle</span>
+
+<span class="co">// scale</span>
+sprite.scale(Vector2f(<span class="fl">0.5f</span>, <span class="fl">2f</span>)); <span class="co">// absolute scale factor</span></code></pre></div>
+<p>By default, the origin for these three transformations is the top-left corner of the sprite. If you want to set the origin to a different point (for example the center of the sprite, or another corner), you can use the <code>setOrigin</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d">sprite.origin(Vector2f(<span class="dv">25</span>, <span class="dv">25</span>));</code></pre></div>
+<p>Since transformation functions are common to all DSFML entities, they are explained in a separate tutorial: <a href="https://github.com/luke5542/DSFML-Tutorials/blob/master/transforms.md">Transforming Entities</a>.</p>
+<h2 id="the-white-square-problem">The White Square Problem</h2>
+<p>You successfully loaded a texture, correctly defined a sprite, and... all you see on screen now is a white square. What happened?</p>
+<p>This is a common mistake. When you set the texture of a sprite, all it does internally is to keep a pointer to the texture instance. Therefore, if the texture is destroyed or moves elsewhere in memory, the sprite ends up with an invalid texture pointer.</p>
+<p>You must correctly manage the lifetime of your textures, so that they live as long as they are used by sprites.</p>
+<h2 id="the-importance-of-using-as-few-textures-as-possible">The Importance of Using as few Textures as Possible</h2>
+<p>Using as few textures as possible is a good strategy, and the reason is simple: changing the current texture is an expensive operation for the graphics card. Drawing many sprites that use the same texture will give you the best performances.</p>
+<p>Additionally, using a single texture allows you to group static geometry into a single entity (you can only use one texture per draw call), which will be much faster to draw than a set of many entities. Batching static geometry involves other classes and is therefore beyond the scope of this tutorial, for more details see the <a href="https://github.com/luke5542/DSFML-Tutorials/blob/master/vertex-arrays.md">Vertex Array Tutorial</a>.</p>
+<p>So, keep this in mind when you create your animation sheets or your tilesets: use a single texture if possible.</p>
+<h2 id="using-texture-with-opengl-code">Using Texture With OpenGL Code</h2>
+<p><strong>TO BE COMPLETED</strong></p>
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

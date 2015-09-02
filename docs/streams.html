@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Custom User Streams</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href=".//doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href=".//downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="user-data-streams">User Data Streams</h1>
+<h2 id="introduction">Introduction</h2>
+<p>DSFML has several resource classes: images, fonts, sounds, etc. In most programs, these resources will be loaded from files, with the help of their <code>loadFromFile()</code> method. In a few other situations, resources will be packed directly into the executable or in a big data file, and loaded from memory with <code>loadFromMemory()</code>. These methods cover <em>almost</em> all the possible use cases -- but they are not without their limits.</p>
+<p>Sometimes you want to load files from unusual places, such as a compressed/encrypted archive, or a remote network location, for example. For these special situations, DSFML provides a third loading method: <code>loadFromStream()</code>. This method reads data from an <a href="http://dsfml.com/dsfml/system/inputstream.html">InputStream</a> interface, which allows you to define your own implementations.</p>
+<p>In this tutorial you'll learn how to write and use your own derived input stream.</p>
+<h2 id="and-standard-streams">And Standard Streams?</h2>
+<p>Like many other languages, D already has classes for various input data streams. Unfortunately, these classes are not very user friendly, and can even become very complicated if you want to implement more than trivial stuff.</p>
+<p>More importantly, to stick to the original SFML design, DSFML provides its own stream interface, which is hopefully a lot more <em>simple and fast</em>.</p>
+<h2 id="input-stream">Input Stream</h2>
+<p>The <a href="http://dsfml.com/dsfml/system/inputstream.html">InputStream</a> interface declares four methods:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">interface</span> InputStream
+{
+    <span class="dt">long</span> read(<span class="dt">void</span>[] data);
+
+    <span class="dt">long</span> seek(<span class="dt">long</span> position);
+
+    <span class="dt">long</span> tell();
+
+    <span class="dt">long</span> getSize();
+}</code></pre></div>
+<p><code>read()</code> must extract size bytes of data from the stream, and copy them to the supplied data address; it returns the number of bytes read, or -1 on error.</p>
+<p><code>seek()</code> must change the current reading position in the stream; its position argument is the absolute byte offset to jump to (so it is relative to the beginning of the data, not to the current position); it returns the new position, or -1 on error.</p>
+<p><code>tell()</code> must return the current reading position (in bytes) in the stream, or -1 on error.</p>
+<p><code>getSize()</code> must return the total size (in bytes) of the data which is contained in the stream, or -1 on error.</p>
+<p>To create your own working stream, you must implement all of these four methods according to their requirements.</p>
+<h2 id="an-example">An Example</h2>
+<p>Below is a complete and working implementation of a custom input stream. It's not very useful: we'll write a stream that reads data from a file, <code>FileStream</code>. But it is simple enough so that you can focus on how the code works, and not get lost in implementation details.</p>
+<p>In this example we'll use D's file API, so we have a <a href="http://dlang.org/phobos/std_stdio.html#.File">File</a> member. We also add a default constructor, a destructor, and a function to open the file.</p>
+<p>An interesting note, while D has many links back to the C/C++ APIs, in this specific example when we use <a href="http://dlang.org/phobos/std_stdio.html#.File">File</a>, we are actually using an encapsulation of `FILE*`` that is automatically cleaned up for us when our m_file reference leaves scope.</p>
+<p>Here is the implementation:</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">class</span> FileStream : InputStream
+{
+    File m_file;
+
+    <span class="kw">this</span>()
+    {
+        <span class="co">// Constructor code</span>
+    }
+
+    <span class="dt">bool</span> open(<span class="dt">string</span> fileName)
+    {
+        <span class="kw">try</span>
+        {
+            m_file.open(fileName);
+        }
+        <span class="kw">catch</span>(<span class="dt">Exception</span> e)
+        {
+            writeln(e.msg);
+        }
+
+        <span class="kw">return</span> m_file.isOpen;
+    }
+
+    <span class="dt">long</span> read(<span class="dt">void</span>[] data)
+    {
+
+        <span class="kw">if</span>(m_file.isOpen)
+        {
+            <span class="kw">return</span> m_file.rawRead(data).<span class="dt">length</span>;
+        }
+        <span class="kw">else</span>
+        {
+            <span class="kw">return</span> -<span class="dv">1</span>;
+        }
+    }
+
+    <span class="dt">long</span> seek(<span class="dt">long</span> position)
+    {
+        <span class="kw">if</span>(m_file.isOpen)
+        {
+            m_file.seek(position);
+            <span class="kw">return</span> tell();
+        }
+        <span class="kw">else</span>
+        {
+            <span class="kw">return</span> -<span class="dv">1</span>;
+        }
+    }
+
+    <span class="dt">long</span> tell()
+    {
+
+        <span class="kw">if</span>(m_file.isOpen)
+        {
+            <span class="kw">return</span> m_file.tell;
+        }
+        <span class="kw">else</span>
+        {
+            <span class="kw">return</span> -<span class="dv">1</span>;
+        }
+    }
+
+    <span class="dt">long</span> getSize()
+    {
+        <span class="kw">if</span>(m_file.isOpen)
+        {
+            <span class="dt">long</span> position = m_file.tell;
+
+            m_file.seek(<span class="dv">0</span>,SEEK_END);
+
+            <span class="dt">long</span> size = tell();
+
+            seek(position);
+
+            <span class="kw">return</span> size;
+        }
+        <span class="kw">else</span>
+        {
+            <span class="kw">return</span> -<span class="dv">1</span>;
+        }
+    }
+}</code></pre></div>
+<p>Note that, as explained above, all functions return -1 on error.</p>
+<p>Don't forget to check the forum and wiki (including the standard SFML forum and wiki), chances are that another user already wrote an <a href="http://dsfml.com/dsfml/system/inputstream.html">InputStream</a> class that matches your needs. And if you write a new one and feel like it could be useful outside your project, don't hesitate to share!</p>
+<h2 id="using-your-stream">Using Your Stream</h2>
+<p>Using a custom stream class is straight-forward: instantiate it, and pass it to the <code>loadFromStream()</code> (or <code>openFromStream()</code>) method of the object that you want to load.</p>
+<div class="sourceCode"><pre class="sourceCode d"><code class="sourceCode d"><span class="kw">auto</span> stream = <span class="kw">new</span> FileStream();
+stream.open(<span class="st">&quot;image.png&quot;</span>);
+
+<span class="kw">auto</span> streamTexture = <span class="kw">new</span> Texture();
+<span class="kw">if</span>(streamTexture.loadFromStream(stream))
+{
+    writeln(<span class="st">&quot;Texture loaded!&quot;</span>);
+}</code></pre></div>
+<h2 id="common-mistakes">Common Mistakes</h2>
+<p>Some resource classes are not loaded completely after <code>loadFromStream</code> has been called. Instead, they continue to read from their data source as long as they are used. This is the case for <a href="http://dsfml.com/dsfml/audio/music.html">Music</a>, which streams audio samples as they are played, and for <a href="http://dsfml.com/dsfml/graphics/font.html">Font</a>, which loads glyphs on the fly depending on the texts content.</p>
+<p>As a consequence, the stream instance that you used to load a music or a font, as well as its data source, must remain alive as long as the resource uses it. If it is destroyed while still being used, the behavior is undefined (can be a crash, corrupt data, or nothing visible).</p>
+<p>Another common mistake is to return whatever the internal functions return directly, but sometimes it doesn't match what DSFML expects. For example, a function you use internally for <code>seek()</code> could return 0 for success instead of the position.</p>
+
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+</body>
+</html>
