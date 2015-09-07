@@ -58,8 +58,8 @@ class Thread
 	///Destructor
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
 	///Run the thread.

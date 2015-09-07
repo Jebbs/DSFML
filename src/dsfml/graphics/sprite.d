@@ -76,8 +76,8 @@ class Sprite : Drawable, Transformable
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
 	/**

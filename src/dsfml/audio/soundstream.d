@@ -68,8 +68,8 @@ class SoundStream:SoundSource
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfSoundStream_destroy(sfPtr);
 	}
 

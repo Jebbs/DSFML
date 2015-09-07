@@ -56,8 +56,8 @@ class Http
 	///Destructor
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfHttp_destroy(sfPtr);
 	}
 	
@@ -120,8 +120,8 @@ class Http
 		///Destructor
 		~this()
 		{
-			debug import std.stdio;
-			debug writeln("Destroying HTTP Request");
+			import std.stdio;
+			writeln("Destroying HTTP Request");
 			sfHttpRequest_destroy(sfPtrRequest);
 		}
 

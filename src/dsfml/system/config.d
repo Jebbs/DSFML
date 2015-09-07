@@ -35,12 +35,13 @@ enum
 
 //destructor output for mixing in.
 enum destructorOutput =`
-	version (DSFML_Quiet_Destructors)
-	{
-	}
-	else
+	version (DSFML_Noisy_Destructors)
 	{
 		import dsfml.system.err;
 		err.writeln("Destroying ", typeof(this).stringof);
+	}
+	else
+	{
+		
 	}`;
 

@@ -61,8 +61,8 @@ class UdpSocket:Socket
 	///Destructor
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfUdpSocket_destroy(sfPtr);
 	}
 

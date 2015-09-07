@@ -118,10 +118,12 @@ class Window
 	
 	~this()
 	{
-		debug import dsfml.system.config;
+		import dsfml.system.config;
+		//this takes care of not freeing a null pointer due to inheritance
+		//(RenderWindow does not create the inherited sfWindow)
 		if(m_needsToDelete)
 		{
-			debug mixin(destructorOutput);
+			mixin(destructorOutput);
 			sfWindow_destroy(sfPtr);
 		}
 	}

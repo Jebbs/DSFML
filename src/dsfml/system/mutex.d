@@ -43,6 +43,13 @@ class Mutex
 		m_mutex = new core.Mutex();
 	}
 
+	//Destructor
+	~this()
+	{
+		import dsfml.system.config;
+		mixin(destructorOutput);
+	}
+
 	///Lock the mutex
 	///
 	///If the mutex is already locked in another thread, this call will block the execution until the mutex is released.

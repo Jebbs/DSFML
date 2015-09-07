@@ -55,8 +55,8 @@ class Ftp
 	///Destructor
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfFtp_destroy(sfPtr);
 	}
 

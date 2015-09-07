@@ -72,8 +72,8 @@ class SoundRecorder
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfSoundRecorder_destroy(sfPtr);
 	}
 
