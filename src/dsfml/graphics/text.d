@@ -318,7 +318,7 @@ class Text : Drawable, Transformable
 	Vector2f findCharacterPos(size_t index)
 	{
 		// Make sure that we have a valid font
-		if(m_font !is null)
+		if(m_font is null)
 		{
 			return Vector2f(0,0);
 		}
