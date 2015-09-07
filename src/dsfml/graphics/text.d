@@ -44,6 +44,9 @@ import dsfml.graphics.primitivetype;
 
 import dsfml.system.vector2;
 
+import std.range;
+import std.utf;
+
 /++
  + Graphical text that can be drawn to a render target.
  + 
@@ -75,7 +78,7 @@ class Text : Drawable, Transformable
 
 	private
 	{
-		dstring m_string;
+		ForwardRange!dchar m_string;
 		Rebindable!(const(Font)) m_font;
 		uint m_characterSize;
 		Style m_style;
@@ -90,7 +93,7 @@ class Text : Drawable, Transformable
 
 	this()
 	{
-		m_string = "";
+		m_string = null;
 		m_characterSize = 30;
 		m_style = Style.Regular;
 		m_color = Color(255,255,255);
@@ -98,9 +101,9 @@ class Text : Drawable, Transformable
 		m_bounds = FloatRect();
 	}
 	
-	this(dstring text, const(Font) font, uint characterSize = 30)
+	this(T)(T text, const(Font) font, uint characterSize = 30) if (isForwardRange!T && is(ElementType!T : dchar))
 	{
-		m_string = text;
+		m_string = inputRangeObject(text);
 		m_characterSize = characterSize;
 		m_style = Style.Regular;
 		m_color = Color(255,255,255);
@@ -185,9 +188,9 @@ class Text : Drawable, Transformable
 	 * 
 	 * The returned string is a dstring, a unicode type.
 	 */
-	dstring getString() const
+	auto getString() const
 	{
-		return m_string;
+		return m_string.save();
 	}
 
 	/**
@@ -250,9 +253,9 @@ class Text : Drawable, Transformable
 	 * Params:
 	 * 		text	= New string
 	 */
-	void setString(dstring text)
+	void setString(T)(T text) if (isForwardRange!T && is(ElementType!(T) : dchar))
 	{
-		m_string = text;
+		m_string = inputRangeObject(text);
 		updateGeometry();
 	}
 
@@ -314,12 +317,6 @@ class Text : Drawable, Transformable
 			return Vector2f(0,0);
 		}
 		
-		// Adjust the index if it's out of range
-		if(index > m_string.length)
-		{
-			index = m_string.length;
-		}
-
 		bool bold  = (m_style & Style.Bold) != 0;
 
 		float hspace = cast(float)(m_font.getGlyph(' ', m_characterSize, bold).advance);
@@ -327,9 +324,21 @@ class Text : Drawable, Transformable
 		
 		Vector2f position;
 		dchar prevChar = 0;
-		for (size_t i = 0; i < index; ++i)
+		size_t i;
+		auto iter = m_string.save();
+
+		while (!iter.empty)
 		{
-			dchar curChar = m_string[i];
+			
+			dchar curChar;
+
+			try {
+				curChar = iter.decodeFront();
+			} catch (UTFException e) {
+				//XXX: I tried setting it to \uFFFD and continuing, but strings that end in invalid.
+				//     unicode don't seem to be safely iterable;
+				break;
+			}
 			
 			// Apply the kerning offset
 			position.x += cast(float)(m_font.getKerning(prevChar, curChar, m_characterSize));
@@ -348,6 +357,8 @@ class Text : Drawable, Transformable
 			
 			// For regular characters, add the advance offset of the glyph
 			position.x += cast(float)(m_font.getGlyph(curChar, m_characterSize, bold).advance);
+			if (i == index) break;
+			i++;			
 		}
 		
 		// Transform the position to global coordinates
@@ -370,7 +381,7 @@ private:
 			return;
 
 		// No text: nothing to draw
-		if (m_string.length == 0)
+		if (m_string.empty)
 			return;
 		// Compute values related to the text style
 		bool bold = (m_style & Style.Bold) != 0;
@@ -388,10 +399,19 @@ private:
 		// Create one quad for each character
 		float minX = m_characterSize, minY = m_characterSize, maxX = 0, maxY = 0;
 		dchar prevChar = 0;
-		for (size_t i = 0; i < m_string.length; ++i)
-		{
-			dchar curChar = m_string[i];
+		auto iter = m_string.save();
 
+		while (!iter.empty) 
+		{
+			//dchar curChar = m_string[i];
+			dchar curChar;
+			try {
+				curChar = iter.decodeFront();
+			} catch (UTFException e) {
+				//XXX: I tried setting it to \uFFFD and continuing, but strings that end in invalid.
+				//     unicode don't seem to be safely iterable;
+				break;
+			}
 			
 			// Apply the kerning offset
 			x += cast(float)(m_font.getKerning(prevChar, curChar, m_characterSize));
