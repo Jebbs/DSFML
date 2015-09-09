@@ -4,6 +4,7 @@ import std.stdio;
 import std.file;
 import std.process;
 import std.algorithm;
+import std.array;
 
 
 version(DigitalMars)
@@ -376,6 +377,7 @@ void initializeDMD()
 	docCompilerSwitches = "-D -Dd"~docDirectory~" -c -o- -op";
 	interfaceCompilerSwitches = "-H -Hd"~interfaceDirectory~" -c -o- -op";
 }
+
 void initializeGDC()
 {
 	if(isWindows)
@@ -399,6 +401,7 @@ void initializeGDC()
 	interfaceCompilerSwitches = " -fintfc -c";
 
 }
+
 void initializeLDC()
 {
 	//The stuff for windows probbly needs to be fixed
@@ -461,7 +464,11 @@ bool buildLibs()
 
 		foreach (string name; dirEntries("src/dsfml/"~theModule, SpanMode.depth))
 		{
-			fileList~= name ~ " ";
+			if(isDFile(name))
+			{
+				fileList~= name ~ " ";
+			}
+			
 		}
 
 		string buildCommand = compiler~ fileList ~ libCompilerSwitches;
@@ -470,7 +477,6 @@ bool buildLibs()
 		{
 			//build the static libs directly
 			buildCommand ~= " -of"~libDirectory~prefix~"dsfml-"~theModule~extension;
-			writeln(buildCommand);
 		}
 		else if(isGDC)
 		{
@@ -516,7 +522,11 @@ bool buildUnittests()
 	{
 		foreach (string name; dirEntries("src/dsfml/"~theModule, SpanMode.depth))
 		{
-			filelist~= name ~ " ";
+
+			if(isDFile(name))
+			{
+				filelist~= name ~ " ";
+			}
 		}
 	}
 
@@ -526,7 +536,6 @@ bool buildUnittests()
 		filelist = "main.d "~filelist;
 	}
 
-	//TODO: Fix this for gdc
 	string buildCommand = compiler~filelist ~ unittestCompilerSwitches;
 
 	if(isDMD)
@@ -597,8 +606,10 @@ void buildDoc()
 	{
 		foreach (string name; dirEntries("dsfml/"~theModule, SpanMode.depth))
 		{
-			writeln(name);
-			filelist~= name ~ " ";
+			if(isDFile(name))
+			{
+				filelist~= name ~ " ";
+			}
 		}
 	}
 
@@ -623,14 +634,16 @@ void buildDocGDC()
 	{
 		foreach (string name; dirEntries("dsfml/"~theModule, SpanMode.depth))
 		{
-
-			string buildCommand = compiler~ name ~ docCompilerSwitches ~ " -fdoc-dir="~docDirectory~"dsfml/"~theModule;
-
-			auto status = executeShell(buildCommand);
-
-			if(status.status !=0)
+			if(isDFile(name))
 			{
-				writeln(status.output);
+				string buildCommand = compiler~ name ~ docCompilerSwitches ~ " -fdoc-dir="~docDirectory~"dsfml/"~theModule;
+
+				auto status = executeShell(buildCommand);
+
+				if(status.status !=0)
+				{
+					writeln(status.output);
+				}
 			}
 		}
 	}
@@ -649,7 +662,10 @@ void buildInterfaceFiles()
 	{
 		foreach (string name; dirEntries("dsfml/"~theModule, SpanMode.depth))
 		{
-			filelist~= name ~ " ";
+			if(isDFile(name))
+			{
+				filelist~= name ~ " ";
+			}
 		}
 	}
 
@@ -665,6 +681,7 @@ void buildInterfaceFiles()
 
 	chdir("..");
 }
+
 void buildInterfaceFilesGDC()
 {
 	writeln("Building interface files!");
@@ -676,13 +693,17 @@ void buildInterfaceFilesGDC()
 		foreach (string name; dirEntries("dsfml/"~theModule, SpanMode.depth))
 		{
 
-			string buildCommand = compiler~ name ~ interfaceCompilerSwitches ~ " -fintfc-dir="~interfaceDirectory~"dsfml/"~theModule;
-
-			auto status = executeShell(buildCommand);
-
-			if(status.status !=0)
+			if(isDFile(name))
 			{
-				writeln(status.output);
+
+				string buildCommand = compiler~ name ~ interfaceCompilerSwitches ~ " -fintfc-dir="~interfaceDirectory~"dsfml/"~theModule;
+
+				auto status = executeShell(buildCommand);
+
+				if(status.status !=0)
+				{
+					writeln(status.output);
+				}
 			}
 
 		}
@@ -714,9 +735,20 @@ void showHelp()
 	writeln("Default (no switches passed) will be to build static libraries only with the compiler that built this script.");
 }
 
+//used to add quotes around full directories
+//To be used in the next update (2.3)
 string quoteString(string s)
 {
 	return `"`~s~`"`;
+}
+
+//checks if a file is a .d file.
+//osx adds those stupid .DS_Store files when I am working on things, and I hate them.
+bool isDFile(string name)
+{
+	string[] splitName = split(name, ".");
+
+	return (splitName[$-1] == "d");
 }
 
 int main(string[] args)
