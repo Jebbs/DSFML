@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,18 +15,8 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
 module dsfml.graphics.vertexarray;
 
 import dsfml.graphics.vertex;
@@ -61,25 +51,25 @@ class VertexArray : Drawable
 	 * 
 	 * The default primitive type is Points.
 	 */
-	PrimitiveType primativeType;
+	PrimitiveType primitiveType;
 	private Vertex[] Vertices;
 
 	this(PrimitiveType type, uint vertexCount)
 	{
-		primativeType = type;
+		primitiveType = type;
 		Vertices = new Vertex[vertexCount];
 	}
 	
 	private this(PrimitiveType type, Vertex[] vertices)
 	{
-		primativeType = type;
+		primitiveType = type;
 		Vertices = vertices;
 	}
 	
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
 	/**
@@ -166,7 +156,7 @@ class VertexArray : Drawable
 	{
 		if(Vertices.length != 0)
 		{
-			renderTarget.draw(Vertices, primativeType,renderStates);
+			renderTarget.draw(Vertices, primitiveType,renderStates);
 		}
 	}
 
@@ -202,7 +192,7 @@ unittest
 
 		auto texture = new Texture();
 
-		assert(texture.loadFromFile("res/star.png"));
+		assert(texture.loadFromFile("res/TestImage.png"));
 
 
 
@@ -222,7 +212,7 @@ unittest
 
 		auto renderTexture = new RenderTexture();
 		
-		assert(renderTexture.create(100,100));
+		renderTexture.create(100,100);
 
 		renderTexture.clear();
 

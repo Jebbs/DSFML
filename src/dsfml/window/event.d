@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,17 +15,6 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
 ///A module containing the Event struct and other event structs.
@@ -232,12 +221,14 @@ unittest
 	version(DSFML_Unittest_Window)
 	{
 		import std.stdio;
-		//import dsfml.graphics.all; Cannot use graphics.all due to a never ending import cycle with window module. Be on the look out for this!
+
 		import dsfml.graphics.font;
 		import dsfml.graphics.text;
 		import dsfml.graphics.renderwindow;
 		import dsfml.window;
 		import std.conv;
+
+		writeln("Unit tests for events.");
 
 		string[int] keys;
 		//in its own scope for code folding
@@ -349,7 +340,7 @@ unittest
 
 		auto font = new Font();
 
-		assert(font.loadFromFile("Cyberbit.ttf"));//will fix when unittest building get's added to build script(fix as in not use Cyberbit)
+		assert(font.loadFromFile("res/Warenhaus-Standard.ttf"));
 
 		auto text1 = new Text("Unit test for events.",font);
 		auto text2 = new Text("Note: This unit test does require user input.",font);
@@ -408,7 +399,7 @@ unittest
 				//mouse events: these could be improved, but I will write some just to have them present
 				if(event.type == Event.EventType.MouseButtonPressed)
 				{
-					mouseEventText.setString( "Mouse Event: Button Pressed");
+					mouseEventText.setString("Mouse Event: Button Pressed");
 				}
 				if(event.type == Event.EventType.MouseButtonReleased)
 				{

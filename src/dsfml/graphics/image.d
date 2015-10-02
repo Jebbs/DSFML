@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,18 +15,8 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
 module dsfml.graphics.image;
 
 import dsfml.system.vector2;
@@ -58,7 +48,7 @@ class Image
 	
 	this()
 	{
-		//Creates a null Image
+		sfPtr = sfImage_construct();
 	}
 	
 	package this(sfImage* image)
@@ -68,8 +58,8 @@ class Image
 	
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfImage_destroy(sfPtr);
 	}
 
@@ -81,18 +71,11 @@ class Image
 	 * 		height	= Height of the image
 	 * 		color	= Fill color
 	 * 
-	 * Returns: True if loading succeeded, false if it failed
 	 */
-	bool create(uint width, uint height, Color color)
+	void create(uint width, uint height, Color color)
 	{
-		//if the Image already exists, destroy it first
-		if(sfPtr)
-		{
-			sfImage_destroy(sfPtr);
-		}
 
-		sfPtr = sfImage_createFromColor(width, height,color.r, color.b, color.g, color.a);
-		return (sfPtr != null);
+		sfImage_createFromColor(sfPtr, width, height,color.r, color.b, color.g, color.a);
 	}
 	
 	/**
@@ -105,18 +88,10 @@ class Image
 	 * 		height	= Height of the image
 	 * 		pixels	= Array of pixels to copy to the image
 	 * 
-	 * Returns: True if loading succeeded, false if it failed
 	 */
-	bool create(uint width, uint height, const ref ubyte[] pixels)
+	void create(uint width, uint height, const ref ubyte[] pixels)
 	{
-		//if the Image already exists, destroy it first
-		if(sfPtr)
-		{
-			sfImage_destroy(sfPtr);
-		}
-
-		sfPtr = sfImage_createFromPixels(width, height,pixels.ptr);
-		return (sfPtr != null);
+		sfImage_createFromPixels(sfPtr, width, height,pixels.ptr);
 	}
 
 	/**
@@ -133,17 +108,14 @@ class Image
 	{
 		import dsfml.system.string;
 
-		//if the Image already exists, destroy it first
-		if(sfPtr)
+		bool ret = sfImage_loadFromFile(sfPtr, toStringz(fileName));
+
+		if(!ret)
 		{
-			sfImage_destroy(sfPtr);
+			err.write(toString(sfErr_getOutput()));
 		}
 
-		sfPtr = sfImage_createFromFile(toStringz(fileName));
-
-		err.write(toString(sfErr_getOutput()));
-
-		return (sfPtr != null);
+		return ret;
 	}
 
 	/**
@@ -159,15 +131,14 @@ class Image
 	bool loadFromMemory(const(void)[] data)
 	{
 		import dsfml.system.string;
-		//if the Image already exists, destroy it first
-		if(sfPtr)
-		{
-			sfImage_destroy(sfPtr);
-		}
 
-		sfPtr = sfImage_createFromMemory(data.ptr, data.length);
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr != null);
+		bool ret = sfImage_loadFromMemory(sfPtr, data.ptr, data.length);
+		if(!ret)
+		{
+			err.write(toString(sfErr_getOutput()));
+		}
+		
+		return ret;
 	}
 
 	/**
@@ -183,15 +154,14 @@ class Image
 	bool loadFromStream(InputStream stream)
 	{
 		import dsfml.system.string;
-		//if the Image already exists, destroy it first
-		if(sfPtr)
+
+		bool ret = sfImage_loadFromStream(sfPtr, new imageStream(stream));
+		if(!ret)
 		{
-			sfImage_destroy(sfPtr);
+			err.write(toString(sfErr_getOutput()));
 		}
 
-		sfPtr = sfImage_createFromStream(new imageStream(stream));
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr == null)?false:true;
+		return ret;
 	}
 
 	/**
@@ -326,7 +296,7 @@ class Image
 	bool saveToFile(string fileName)
 	{
 		import dsfml.system.string;
-		bool toReturn = sfImage_saveToFile(sfPtr, fileName.ptr);
+		bool toReturn = sfImage_saveToFile(sfPtr, toStringz(fileName));
 		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
@@ -342,7 +312,7 @@ unittest
 
 		auto image = new Image();
 
-		assert(image.create(100,100,Color.Blue));
+		image.create(100,100,Color.Blue);
 
 		assert(image.getPixel(0,0) == Color.Blue);
 
@@ -413,25 +383,28 @@ package extern(C) struct sfImage;
 
 private extern(C):
 
-sfImage* sfImage_create(uint width, uint height);
+//Construct a new image
+sfImage* sfImage_construct();
+
+void sfImage_create(sfImage* image, uint width, uint height);
 
 /// \brief Create an image and fill it with a unique color
-sfImage* sfImage_createFromColor(uint width, uint height, ubyte r, ubyte b, ubyte g, ubyte a);
+void sfImage_createFromColor(sfImage* image, uint width, uint height, ubyte r, ubyte b, ubyte g, ubyte a);
 
 /// \brief Create an image from an array of pixels
-sfImage* sfImage_createFromPixels(uint width, uint height, const ubyte* pixels);
+void sfImage_createFromPixels(sfImage* image, uint width, uint height, const(ubyte)* pixels);
 
 /// \brief Create an image from a file on disk
-sfImage* sfImage_createFromFile(const char* filename);
+bool sfImage_loadFromFile(sfImage* image, const(char)* filename);
 
 /// \brief Create an image from a file in memory
-sfImage* sfImage_createFromMemory(const void* data, size_t size);
+bool sfImage_loadFromMemory(sfImage* image, const(void)* data, size_t size);
 
 /// \brief Create an image from a custom stream
-sfImage* sfImage_createFromStream(sfmlInputStream stream);
+bool sfImage_loadFromStream(sfImage* image, sfmlInputStream stream);
 
 /// \brief Copy an existing image
-sfImage* sfImage_copy(const sfImage* image);
+sfImage* sfImage_copy(const(sfImage)* image);
 
 /// \brief Destroy an existing image
 void sfImage_destroy(sfImage* image);

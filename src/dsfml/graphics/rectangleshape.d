@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,17 +15,6 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
 module dsfml.graphics.rectangleshape;
@@ -52,8 +41,8 @@ class RectangleShape:Shape
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
 	/// The point count for a rectangle is always 4.

@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,17 +15,6 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
 ///A module containing the UdpSocket Class.
@@ -72,8 +61,8 @@ class UdpSocket:Socket
 	///Destructor
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfUdpSocket_destroy(sfPtr);
 	}
 
@@ -168,21 +157,24 @@ class UdpSocket:Socket
 	///Be careful to use a buffer which is large enough for the data that you intend to receive, if it is too small then an error will be returned and all the data will be lost.
 	///
 	///Params:
-    ///		data = The array to fill with the received bytes
+	///		data = The array to fill with the received bytes
+    ///		sizeReceived
     ///		address = Address of the peer that sent the data
     ///		port = Port of the peer that sent the data
     ///
 	///Returns: Status code.
-	Status receive(void[] data, out IpAddress address, out ushort port)
+	Status receive(void[] data, out size_t sizeReceived,  out IpAddress address, out ushort port)
 	{
 		import dsfml.system.string;
 		
-		size_t sizeReceived;
-		
-		Status status = sfUdpSocket_receive(sfPtr, data.ptr, data.length, &sizeReceived, address.m_address.ptr, &port);
+		Status status;
+
+		void* temp = sfUdpSocket_receive(sfPtr, data.length, &sizeReceived, address.m_address.ptr, &port, &status);
 		
 		err.write(toString(sfErr_getOutput()));
 		
+		data[0..sizeReceived] = temp[0..sizeReceived].dup;
+
 		return status;
 	}
 
@@ -238,12 +230,12 @@ unittest
 		serverSocket.bind(56002);
 
 
-		auto sendingPacket = new Packet();
+		//auto sendingPacket = new Packet();
 
-		sendingPacket.writeString("I sent you data!");
-
+		//sendingPacket.writeString("I sent you data!");
+		writeln("Sending data!");
 		//send the data to the port our server is listening to
-		clientSocket.send(sendingPacket, IpAddress.LocalHost, 56002);
+		clientSocket.send("I sent you data!", IpAddress.LocalHost, 56002);
 
 
 		IpAddress receivedFrom;
@@ -251,10 +243,16 @@ unittest
 		auto receivedPacket = new Packet();
 
 		//get the information received as well as information about the sender
-		serverSocket.receive(receivedPacket,receivedFrom, receivedPort);
+		//serverSocket.receive(receivedPacket,receivedFrom, receivedPort);
+
+		char[1024] temp2;
+		size_t received;
+
+		writeln("Receiving data!");
+		serverSocket.receive(temp2,received, receivedFrom, receivedPort);
 
 		//What did we get?!
-		writeln("The data received from ", receivedFrom.toString(), " at port ", receivedPort, " was: ", receivedPacket.readString());
+		writeln("The data received from ", receivedFrom.toString(), " at port ", receivedPort, " was: ", cast(string)temp2[0..received]);
 
 
 		writeln();
@@ -290,7 +288,7 @@ void sfUdpSocket_unbind(sfUdpSocket* socket);
 Socket.Status sfUdpSocket_send(sfUdpSocket* socket, const(void)* data, size_t size, const(char)* ipAddress, ushort port);
 
 //Receive raw data from a remote peer with a UDP socket
-Socket.Status sfUdpSocket_receive(sfUdpSocket* socket, void* data, size_t maxSize, size_t* sizeReceived, char* ipAddress, ushort* port);
+void* sfUdpSocket_receive(sfUdpSocket* socket, size_t maxSize, size_t* sizeReceived, char* ipAddress, ushort* port, Socket.Status* status);
 
 //Send a formatted packet of data to a remote peer with a UDP socket
 Socket.Status sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, const(char)* ipAddress, ushort port);

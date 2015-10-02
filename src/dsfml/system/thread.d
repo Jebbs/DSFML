@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,17 +15,6 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
 ///A module containing the DSFML Thread class
@@ -69,8 +58,8 @@ class Thread
 	///Destructor
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
 	///Run the thread.
@@ -88,6 +77,14 @@ class Thread
 		}
 	}
 
+	version(linux)
+	{
+		static void XInitThreads()
+		{
+            linux_XInitThreads();
+		}
+	}
+
 }
 
 unittest
@@ -97,6 +94,9 @@ unittest
 	version(DSFML_Unittest_System)
 	{
 		import std.stdio;
+		import dsfml.system.sleep;
+		import dsfml.system.time;
+		
 
 		void secondThreadHello()
 		{
@@ -124,21 +124,24 @@ unittest
 			writeln("Hello from the main thread!");
 		}
 
+		sleep(seconds(1));
 
+		//writeln("Letting a thread run completely before going back to the main thread.");
 
-		writeln("Letting a thread run completely before going back to the main thread.");
+		//secondThread = new Thread(&secondThreadHello);//To prevent threading errors, create a new thread before calling launch again
 
-		secondThread = new Thread(&secondThreadHello);//To prevent threading errors, create a new thread before calling launch again
+		//secondThread.launch();
 
-		secondThread.launch();
+		//secondThread.wait();
 
-		secondThread.wait();
-
-		for(int i = 0; i < 10; ++i)
-		{
-			writeln("Hello from the main thread!");
-		}
+		//for(int i = 0; i < 10; ++i)
+		//{
+		//	writeln("Hello from the main thread!");
+		//}
 	}
 
 }
+
+
+version(linux) package extern(C) void linux_XInitThreads();
 
