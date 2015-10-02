@@ -12,6 +12,26 @@
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/dsfml.css">
     <title>DSFML</title>
+    <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
   </head>
 
   <body>
@@ -116,65 +136,65 @@
 
         <h1>Documentation</h1>
             <p>Here is a short example, to show you how simple it is to use DSFML.</p>
-            <pre style='color:#000020;background:#f6f8ff;overflow:hidden;'><html><body style='color:#000020; background:#f6f8ff; '><pre>
-module example<span style='color:#406080; '>;</span>
-<span style='color:#200080; font-weight:bold; '>import</span> dsfml<span style='color:#308080; '>.</span><span style='color:#003060; '>system</span><span style='color:#406080; '>;</span>
-<span style='color:#200080; font-weight:bold; '>import</span> dsfml<span style='color:#308080; '>.</span>window<span style='color:#406080; '>;</span>
-<span style='color:#200080; font-weight:bold; '>import</span> dsfml<span style='color:#308080; '>.</span>graphics<span style='color:#406080; '>;</span>
-<span style='color:#200080; font-weight:bold; '>import</span> dsfml<span style='color:#308080; '>.</span>audio<span style='color:#406080; '>;</span>
+           
+            <pre class="sourceCode D"><code class="sourceCode d"><span class="kw">module</span> example;
+<span class="kw">import</span> dsfml.system;
+<span class="kw">import</span> dsfml.window;
+<span class="kw">import</span> dsfml.graphics;
+<span class="kw">import</span> dsfml.audio;
 
-<span style='color:#200080; font-weight:bold; '>void</span> <span style='color:#400000; '>main</span><span style='color:#308080; '>(</span><span style='color:#308080; '>)</span>
-<span style='color:#406080; '>{</span>
-    <span style='color:#595979; '>// Create the main window</span>
-    <span style='color:#200080; font-weight:bold; '>auto</span> window <span style='color:#308080; '>=</span> <span style='color:#200080; font-weight:bold; '>new</span> RenderWindow<span style='color:#308080; '>(</span>VideoMode<span style='color:#308080; '>(</span><span style='color:#008c00; '>800</span><span style='color:#308080; '>,</span> <span style='color:#008c00; '>600</span><span style='color:#308080; '>)</span><span style='color:#308080; '>,</span> <span style='color:#800000; '>"</span><span style='color:#1060b6; '>DSFML window</span><span style='color:#800000; '>"</span><span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
+<span class="dt">void</span> main()
+{
+    <span class="co">// Create the main window</span>
+    <span class="kw">auto</span> window = <span class="kw">new</span> RenderWindow(VideoMode(<span class="dv">800</span>, <span class="dv">600</span>), <span class="st">&quot;DSFML window&quot;</span>);
 
-    <span style='color:#595979; '>// Load a sprite to display</span>
-    <span style='color:#200080; font-weight:bold; '>auto</span> texture <span style='color:#308080; '>=</span> <span style='color:#200080; font-weight:bold; '>new</span> Texture<span style='color:#308080; '>(</span><span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
-    <span style='color:#200080; font-weight:bold; '>if</span><span style='color:#308080; '>(</span><span style='color:#308080; '>!</span>texture<span style='color:#308080; '>.</span>loadFromFile<span style='color:#308080; '>(</span><span style='color:#800000; '>"</span><span style='color:#1060b6; '>cute_image.jpg</span><span style='color:#800000; '>"</span><span style='color:#308080; '>)</span><span style='color:#308080; '>)</span>
-        <span style='color:#200080; font-weight:bold; '>return</span><span style='color:#406080; '>;</span>
+    <span class="co">// Load a sprite to display</span>
+    <span class="kw">auto</span> texture = <span class="kw">new</span> Texture();
+    <span class="kw">if</span>(!texture.loadFromFile(<span class="st">&quot;cute_image.jpg&quot;</span>))
+        <span class="kw">return</span>;
 
-    <span style='color:#200080; font-weight:bold; '>auto</span> sprite <span style='color:#308080; '>=</span> <span style='color:#200080; font-weight:bold; '>new</span> Sprite<span style='color:#308080; '>(</span>texture<span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
+    <span class="kw">auto</span> sprite = <span class="kw">new</span> Sprite(texture);
 
-    <span style='color:#595979; '>// Create a graphical text to display</span>
-    <span style='color:#200080; font-weight:bold; '>auto</span> font <span style='color:#308080; '>=</span> <span style='color:#200080; font-weight:bold; '>new</span> Font<span style='color:#308080; '>(</span><span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
-    <span style='color:#200080; font-weight:bold; '>if</span><span style='color:#308080; '>(</span><span style='color:#308080; '>!</span>font<span style='color:#308080; '>.</span>loadFromFile<span style='color:#308080; '>(</span><span style='color:#800000; '>"</span><span style='color:#1060b6; '>arial.ttf</span><span style='color:#800000; '>"</span><span style='color:#308080; '>)</span><span style='color:#308080; '>)</span>
-        <span style='color:#200080; font-weight:bold; '>return</span><span style='color:#406080; '>;</span>
-    <span style='color:#200080; font-weight:bold; '>auto</span> text <span style='color:#308080; '>=</span> <span style='color:#200080; font-weight:bold; '>new</span> Text<span style='color:#308080; '>(</span><span style='color:#800000; '>"</span><span style='color:#1060b6; '>Hello DSFML</span><span style='color:#800000; '>"</span><span style='color:#308080; '>,</span> font<span style='color:#308080; '>,</span> <span style='color:#008c00; '>50</span><span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
+    <span class="co">// Create a graphical text to display</span>
+    <span class="kw">auto</span> font = <span class="kw">new</span> Font();
+    <span class="kw">if</span>(!font.loadFromFile(<span class="st">&quot;arial.ttf&quot;</span>))
+        <span class="kw">return</span>;
+    <span class="kw">auto</span> text = <span class="kw">new</span> Text(<span class="st">&quot;Hello DSFML&quot;</span>, font, <span class="dv">50</span>);
 
-    <span style='color:#595979; '>// Load a music to play</span>
-    <span style='color:#200080; font-weight:bold; '>auto</span> music <span style='color:#308080; '>=</span> <span style='color:#200080; font-weight:bold; '>new</span> Music<span style='color:#308080; '>(</span><span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
-    <span style='color:#200080; font-weight:bold; '>if</span><span style='color:#308080; '>(</span><span style='color:#308080; '>!</span>music<span style='color:#308080; '>.</span>openFromFile<span style='color:#308080; '>(</span><span style='color:#800000; '>"</span><span style='color:#1060b6; '>nice_music.ogg</span><span style='color:#800000; '>"</span><span style='color:#308080; '>)</span><span style='color:#308080; '>)</span>
-        <span style='color:#200080; font-weight:bold; '>return</span><span style='color:#406080; '>;</span>
+    <span class="co">// Load a music to play</span>
+    <span class="kw">auto</span> music = <span class="kw">new</span> Music();
+    <span class="kw">if</span>(!music.openFromFile(<span class="st">&quot;nice_music.ogg&quot;</span>))
+        <span class="kw">return</span>;
 
-    <span style='color:#595979; '>// Play the music</span>
-    music<span style='color:#308080; '>.</span>play<span style='color:#308080; '>(</span><span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
+    <span class="co">// Play the music</span>
+    music.play();
 
-    <span style='color:#595979; '>// Start the game loop</span>
-    <span style='color:#200080; font-weight:bold; '>while</span><span style='color:#308080; '>(</span>window<span style='color:#308080; '>.</span>isOpen<span style='color:#308080; '>(</span><span style='color:#308080; '>)</span><span style='color:#308080; '>)</span>
-    <span style='color:#406080; '>{</span>
-        <span style='color:#595979; '>// Process events</span>
-        Event event<span style='color:#406080; '>;</span>
-        <span style='color:#200080; font-weight:bold; '>while</span><span style='color:#308080; '>(</span>window<span style='color:#308080; '>.</span>pollEvent<span style='color:#308080; '>(</span>event<span style='color:#308080; '>)</span><span style='color:#308080; '>)</span>
-        <span style='color:#406080; '>{</span>
-            <span style='color:#595979; '>// Close window</span>
-            <span style='color:#200080; font-weight:bold; '>if</span><span style='color:#308080; '>(</span>event<span style='color:#308080; '>.</span>type <span style='color:#308080; '>=</span><span style='color:#308080; '>=</span> Event<span style='color:#308080; '>.</span>EventType<span style='color:#308080; '>.</span>Closed<span style='color:#308080; '>)</span>
-                window<span style='color:#308080; '>.</span>close<span style='color:#308080; '>(</span><span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
-        <span style='color:#406080; '>}</span>
+    <span class="co">// Start the game loop</span>
+    <span class="kw">while</span>(window.isOpen())
+    {
+        <span class="co">// Process events</span>
+        Event event;
+        <span class="kw">while</span>(window.pollEvent(event))
+        {
+            <span class="co">// Close window</span>
+            <span class="kw">if</span>(event.type == Event.EventType.Closed)
+                window.close();
+        }
 
-        <span style='color:#595979; '>// Clear screen</span>
-        window<span style='color:#308080; '>.</span>clear<span style='color:#308080; '>(</span><span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
+        <span class="co">// Clear screen</span>
+        window.clear();
 
-        <span style='color:#595979; '>// Draw the sprite</span>
-        window<span style='color:#308080; '>.</span>draw<span style='color:#308080; '>(</span>sprite<span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
+        <span class="co">// Draw the sprite</span>
+        window.draw(sprite);
 
-        <span style='color:#595979; '>// Draw the string</span>
-        window<span style='color:#308080; '>.</span>draw<span style='color:#308080; '>(</span>text<span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
+        <span class="co">// Draw the string</span>
+        window.draw(text);
 
-        <span style='color:#595979; '>// Update the window</span>
-        window<span style='color:#308080; '>.</span>display<span style='color:#308080; '>(</span><span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
-    <span style='color:#406080; '>}</span>
-<span style='color:#406080; '>}</span>
-</pre>
+        <span class="co">// Update the window</span>
+        window.display();
+    }
+}</code></pre>
+
 
       </section>
     </div>

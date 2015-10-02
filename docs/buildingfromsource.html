@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Building From Source</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href="../doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href="../downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1 id="introduction">Introduction</h1>
+<p>This tutorial outlines some of the easiest/fastest ways to get the source built. This does not outline every possible way.</p>
+<p>Make sure you have:</p>
+<ul>
+<li>Your D compiler of choice</li>
+<li>A C/C++ compiler</li>
+<li>Git</li>
+<li>CMake</li>
+<li>SFML dependencies (Linux only) - pthread, opengl, xlib, xrandr, freetype, glew, jpeg, sndfile, and openal</li>
+</ul>
+<p><em>This tutorial assumes that git, cmake, and your compilers of choice are installed and you can use them from your terminal of choice</em></p>
+<p>The DSFML project actually comes in two parts. DSFMLC is a library that wraps SFML in a C calling convention, and DSFML wraps the calls to the C code in D for more idiomatic usage. In order to use DSFML you will need both.</p>
+<h1 id="building-dsfmlc">Building DSFMLC</h1>
+<p>As DSFML needs DSFMLC to work, we'll build that first. DSFMLC uses CMake in order to configure and generate make files. For a more in depth look on using CMake with DSFMLC, you can look at <a href="http://www.sfml-dev.org/tutorials/2.1/compile-with-cmake.php">SFML's CMake tutorial</a> as they are nearly identical in the way they are set up.</p>
+<p><em>Note: The following builds the 2.1 version specifically. If you want to build git HEAD, just use git clone https://github.com/Jebbs/DSFMLC.git</em></p>
+<p><strong>Windows</strong></p>
+<p>On Windows you can use either VC or MinGW as your compiler. You can also use VC to generate 64 bit libraries. DSFMLC also includes implib for easy building of libraries to be used with DMD. Also be aware that since you most likely <em>do not</em> need it when using D, DSFMLC statically links the C++ standard library into the the compiled .dll's. If you do not want this, add <code>-DSFML_USE_STATIC_STD_LIBS=FALSE</code> to your cmake command.</p>
+<p>Here are what I assume will be the three most common set ups:</p>
+<p>VC with implib(for usage with DMD):</p>
+<pre><code>git clone -b 2.1 --depth 1 https://github.com/Jebbs/DSFMLC.git
+cd DSFMLC
+cmake -G&quot;NMake Makefiles&quot; .
+nmake
+implib</code></pre>
+<p>VC 64bit</p>
+<pre><code>git clone -b 2.1 --depth 1 https://github.com/Jebbs/DSFMLC.git
+cd DSFMLC
+cmake -G&quot;NMake Makefiles&quot; .
+nmake</code></pre>
+<p>MingW 32bit with implib</p>
+<pre><code>git clone -b 2.1 --depth 1 https://github.com/Jebbs/DSFMLC.git
+cd DSFMLC
+cmake -G&quot;MinGW Makefiles&quot; .
+mingw32-make
+implib</code></pre>
+<p><strong>Linux and OS X</strong></p>
+<p>Linux and OS X are much easier since we don't really have to worry about different compilers.</p>
+<pre><code>git clone -b 2.1 --depth 1 https://github.com/Jebbs/DSFMLC.git
+cd DSFMLC
+cmake .
+make
+sudo make install</code></pre>
+<p>That is it! You now have shared libraries/dlls ready to go.</p>
+<h1 id="building-dsfml">Building DSFML</h1>
+<p>If you do not use dub, DSFML comes with a build script that makes it simple to build static libraries for dmd, gdc, and ldc. It is smart enough to run correctly based on the system and compiler you use, but in order to use it correctly, your compiler of choice needs to be on PATH.</p>
+<p>For example, if you want to build on 32 bit Linux with gdc:</p>
+<pre><code>git clone -b 2.1 --depth 1 https://github.com/Jebbs/DSFML.git
+cd DSFML
+gdc build.d -obuild
+./build</code></pre>
+<p>This will correctly build 32 bit static libraries for gdc.</p>
+<p>You can also use rdmd if you have it. For example:</p>
+<pre><code>git clone -b 2.1 --depth 1 https://github.com/Jebbs/DSFML.git
+cd DSFML
+rdmd build</code></pre>
+<p>will build static libraries for what ever system you happen to be running for use with DMD.</p>
+<p>For more information about what the script can do, pass it <code>-help</code>.</p>
+
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>

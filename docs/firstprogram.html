@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="description" content="DSFML : DSFML is a D binding of SFML " />
+
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/dsfml.css">
+  <title>Building Your First Program</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Jebbs/DSFML">View on GitHub</a>
+
+          <h1 id="project_title">DSFML</h1>
+           <ul class="hnav">
+              <li class="hnav"><a class="hnav" href="../index.html">Home</a></li>
+              <li class="hnav"><a class="hnav" href="../tutorials.html">Tutorials</a></li>
+              <li class="hnav"><a class="hnav" href="../doc.html">Documentation</a></li>
+              <li class="hnav"><a class="hnav" href="../downloads.html">Downloads</a></li>
+              <li class="hnav"><a class="hnav" href="http://en.sfml-dev.org/forums/index.php?board=13.0">Forum</a></li>
+              <li class="hnav"><a class="hnav" href="../contact.html">Contact</a></li>
+        </ul>
+
+        </header>
+    </div>
+
+<!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<h1 id="introduction">Introduction</h1>
+<p>Before we begin, make sure you have the following:</p>
+<ul>
+<li>A D compiler</li>
+<li>DSFMLC shared libraries</li>
+<li>DSFML Static libraries (If you don't use DUB)</li>
+<li>DSFML sources/import files (If you don't use DUB)</li>
+<li>DUB (If you use it)</li>
+</ul>
+<p>We'll use DMD for this tutorial, so read up on how to use your compiler of choice.</p>
+<h1 id="installing-dsfmldsfmlc">Installing DSFML/DSFMLC</h1>
+<p>There are two libraries that are needed in order to get DSFML working properly. The backend known as DSFMLC is a set of shared libraries that wraps SFML with a C ABI. DSFML itself is a D wrapper around DSFMLC, so both are necessary.</p>
+<p>The easiest way to get these is from the <a href="../downloads.html">downloads</a> page. You can put them in your preferred location such as on your system's PATH or in a personal directory.</p>
+<p>You can also <a href="buildingfromsource.html">build from source</a> if you need to.</p>
+<h1 id="used-code">Used Code</h1>
+<p>In order to test out DSFML, we're going to need some code.</p>
+<p>This is the code we'll be using for this tutorial, and we'll name it app.d:</p>
+<pre class="sourceCode d"><code class="sourceCode d"><span class="kw">module</span> main;
+
+<span class="kw">import</span> dsfml.graphics;
+
+<span class="dt">void</span> main(<span class="dt">string</span>[] args)
+{
+    <span class="kw">auto</span> window = <span class="kw">new</span> RenderWindow(VideoMode(<span class="dv">800</span>,<span class="dv">600</span>),<span class="st">&quot;Hello DSFML!&quot;</span>);
+
+    <span class="kw">auto</span> head = <span class="kw">new</span> CircleShape(<span class="dv">100</span>);
+    head.fillColor = Color.Green;
+    head.position = Vector2f(<span class="dv">300</span>,<span class="dv">100</span>);
+
+    <span class="kw">auto</span> leftEye = <span class="kw">new</span> CircleShape(<span class="dv">10</span>);
+    leftEye.fillColor = Color.Blue;
+    leftEye.position = Vector2f(<span class="dv">350</span>,<span class="dv">150</span>);
+
+    <span class="kw">auto</span> rightEye = <span class="kw">new</span> CircleShape(<span class="dv">10</span>);
+    rightEye.fillColor = Color.Blue;
+    rightEye.position = Vector2f(<span class="dv">430</span>,<span class="dv">150</span>);
+
+    <span class="kw">auto</span> smile = <span class="kw">new</span> CircleShape(<span class="dv">30</span>);
+    smile.fillColor = Color.Red;
+    smile.position = Vector2f(<span class="dv">368</span>,<span class="dv">200</span>);
+
+    <span class="kw">auto</span> smileCover = <span class="kw">new</span> RectangleShape(Vector2f(<span class="dv">60</span>,<span class="dv">30</span>));
+    smileCover.fillColor = Color.Green;
+    smileCover.position = Vector2f(<span class="dv">368</span>,<span class="dv">200</span>);
+
+    <span class="kw">while</span> (window.isOpen())
+    {
+        Event event;
+
+        <span class="kw">while</span>(window.pollEvent(event))
+        {
+            <span class="kw">if</span>(event.type == event.EventType.Closed)
+            {
+                window.close();
+            }
+        }
+
+        window.clear();
+
+        window.draw(head);
+        window.draw(leftEye);
+        window.draw(rightEye);
+        window.draw(smile);
+        window.draw(smileCover);
+
+        window.display();
+    }
+}</code></pre>
+<h1 id="compiling-a-dsfml-program-command-line">Compiling a DSFML program (Command Line)</h1>
+<p>While we don't cover IDE's here, the set up should be mostly the same. You'll need to know the path to the source/import files, the path to the DSFML static libraries, and the path to the DSFMLC shared libraries.</p>
+<p>In this section we'll refer to these as DSFML/src, DSFML/lib, and DSFMLC/lib respectively.</p>
+<p><em>On Windows</em></p>
+<p>For 32 bit:</p>
+<p><code>dmd app.d  -IDSFML\src\ -L+DSFMLC\lib\ -L+DSFML\lib\ dsfml-graphics.lib dsfml-window.lib dsfml-system.lib dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-system.lib</code></p>
+<p>For 64 bit:</p>
+<p><code>dmd app.d -m64 -IDSFML\src\ -L/LIBPATH:DSFMLC\lib\ -L/LIBPATH:DSFML\lib\ dsfml-graphics.lib dsfml-window.lib dsfml-system.lib dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-system.lib</code></p>
+<p><em>On OS X and Linux</em></p>
+<p><code>dmd app.d -IDSFML/scr -L-LDSFMLC/lib -L-LDSFML/lib -L-ldsfml-graphics -L-ldsfml-window -L-ldsfml-system -L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-system</code></p>
+<p>Just make sure that the DSFMLC shared libraries are able to be found by your application when you try to run it.</p>
+<p>(Check out the bottom of the page for the expected output)</p>
+<h1 id="compiling-a-dsfml-program-dub">Compiling a DSFML program (DUB)</h1>
+<p>Using DUB to build your simplifies a lot of things. All you need to know is location of the DSFMLC shared libraries. For this section, we'll call it DSFMLC/lib.</p>
+<p>In your generated dub.json, you'll want to add the lflags section:</p>
+<p><em>Windows</em> For 32 bit:</p>
+<pre class="sourceCode json"><code class="sourceCode json"><span class="er">&quot;lflags&quot;</span> <span class="er">:</span> [<span class="st">&quot;+DSFMLC\\lib\\&quot;</span>]<span class="er">,</span></code></pre>
+<p>For 64 bit:</p>
+<pre class="sourceCode json"><code class="sourceCode json"><span class="er">&quot;lflags&quot;</span> <span class="er">:</span> [<span class="st">&quot;/LIBPATH:DSFMLC\\lib\\&quot;</span>]<span class="er">,</span></code></pre>
+<p><em>OS X and Linux</em></p>
+<pre class="sourceCode json"><code class="sourceCode json"><span class="er">&quot;lflags&quot;</span> <span class="er">:</span> [<span class="st">&quot;-LDSFMLC/lib&quot;</span>]<span class="er">,</span></code></pre>
+<p>Next, add DSFML to the dependencies:</p>
+<pre class="sourceCode json"><code class="sourceCode json"><span class="er">&quot;dependencies&quot;:</span> 
+    {
+        <span class="dt">&quot;dsfml:graphics&quot;</span>: <span class="st">&quot;~2.1&quot;</span>
+    }</code></pre>
+<p><em>Note: Dependency packages will pull in what they need. For example, the graphics package also uses the system and windows packages.</em></p>
+<p>Just make sure that the DSFMLC shared libraries are able to be found by your application when you try to run it.</p>
+<h1 id="expected-output">Expected Output</h1>
+<p>If you have done everything correctly, you will see a weird green smiling face.</p>
+<div class="figure">
+<img src="http://i.imgur.com/hbt1IBH.png" alt="FACE!" /><p class="caption">FACE!</p>
+</div>
+<p>That should take care of the basics of setting up your DSFML project.</p>
+<p>Check out the other tutorials for how to use DSFML.</p>
+
+</section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">DSFML maintained by <a href="https://github.com/Jebbs">Jebbs</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+</body>
+</html>
