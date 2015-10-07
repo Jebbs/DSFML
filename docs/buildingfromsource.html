@@ -80,13 +80,13 @@ sudo make install</code></pre>
 <h1 id="building-dsfml">Building DSFML</h1>
 <p>If you do not use dub, DSFML comes with a build script that makes it simple to build static libraries for dmd, gdc, and ldc. It is smart enough to run correctly based on the system and compiler you use, but in order to use it correctly, your compiler of choice needs to be on PATH.</p>
 <p>For example, if you want to build on 32 bit Linux with gdc:</p>
-<pre><code>git clone -b 2.1 --depth 1 https://github.com/Jebbs/DSFML.git
+<pre><code>git clone -b v2.1.0 --depth 1 https://github.com/Jebbs/DSFML.git
 cd DSFML
 gdc build.d -obuild
 ./build</code></pre>
 <p>This will correctly build 32 bit static libraries for gdc.</p>
 <p>You can also use rdmd if you have it. For example:</p>
-<pre><code>git clone -b 2.1 --depth 1 https://github.com/Jebbs/DSFML.git
+<pre><code>git clone -b v2.1.0 --depth 1 https://github.com/Jebbs/DSFML.git
 cd DSFML
 rdmd build</code></pre>
 <p>will build static libraries for what ever system you happen to be running for use with DMD.</p>
