@@ -5,11 +5,11 @@
         "homepage": "https://github.com/Jebbs/DSFML",
         "license": "Zlib",
         "dependencies": {
-            "dsfml:audio": "~2.1",
-            "dsfml:graphics": "~2.1",
-            "dsfml:window": "~2.1",
-            "dsfml:network": "~2.1",
-            "dsfml:system": "~2.1"
+            "dsfml:audio": "~>2.1",
+            "dsfml:graphics": "~>2.1",
+            "dsfml:window": "~>2.1",
+            "dsfml:network": "~>2.1",
+            "dsfml:system": "~>2.1"
         },
         "subPackages":
         [
@@ -20,7 +20,7 @@
                         "libs": [ "dsfmlc-audio" ],
                         "dependencies": 
                         { 
-                                "dsfml:system": "~2.1" 
+                                "dsfml:system": "~>2.1" 
                         }
                 },
                 {
@@ -30,8 +30,8 @@
                         "libs": [ "dsfmlc-graphics" ],
                         "dependencies": 
                         { 
-                                "dsfml:system": "~2.1",
-                                "dsfml:window": "~2.1"
+                                "dsfml:system": "~>2.1",
+                                "dsfml:window": "~>2.1"
                         }
                 },
                 {
@@ -40,7 +40,7 @@
                         "libs": [ "dsfmlc-window" ],
                         "dependencies": 
                         { 
-                                "dsfml:system": "~2.1" 
+                                "dsfml:system": "~>2.1" 
                         }
                 },
                 {
@@ -50,7 +50,7 @@
                         "libs": [ "dsfmlc-network" ],
                         "dependencies": 
                         { 
-                                "dsfml:system": "~2.1" 
+                                "dsfml:system": "~>2.1" 
                         }
                 },
                 {
