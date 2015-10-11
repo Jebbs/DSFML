@@ -4,7 +4,7 @@ DSFML
 
 DSFML is a static binding of SFML, which let's you use SFML in your D programs. DSFML attempts to be as compatible with SFML as possible, but does so in a way that makes sense for the D language.
 
-See www.dsfml.org for more information and help0 getting started
+See www.dsfml.com for more information and help getting started
 
 
 
