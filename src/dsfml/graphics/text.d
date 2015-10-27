@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,18 +15,8 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
 module dsfml.graphics.text;
 
 import dsfml.graphics.font;
@@ -98,9 +88,12 @@ class Text : Drawable, Transformable
 		m_bounds = FloatRect();
 	}
 	
-	this(dstring text, const(Font) font, uint characterSize = 30)
+	this(T)(immutable(T)[] text, const(Font) font, uint characterSize = 30)
+		if (is(T == dchar)||is(T == wchar)||is(T == char))
 	{
-		m_string = text;
+		import dsfml.system.string;
+
+		m_string = stringConvert!(T, dchar)(text);
 		m_characterSize = characterSize;
 		m_style = Style.Regular;
 		m_color = Color(255,255,255);
@@ -112,8 +105,8 @@ class Text : Drawable, Transformable
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
 	/**
@@ -185,9 +178,11 @@ class Text : Drawable, Transformable
 	 * 
 	 * The returned string is a dstring, a unicode type.
 	 */
-	dstring getString() const
+	immutable(T)[] getString(T=char)() const
+		if (is(T == dchar)||is(T == wchar)||is(T == char))
 	{
-		return m_string;
+		import dsfml.system.string;
+		return stringConvert!(dchar, T)(m_string);
 	}
 
 	/**
@@ -250,9 +245,11 @@ class Text : Drawable, Transformable
 	 * Params:
 	 * 		text	= New string
 	 */
-	void setString(dstring text)
+	void setString(T)(immutable(T)[] text)
+		if (is(T == dchar)||is(T == wchar)||is(T == char))
 	{
-		m_string = text;
+		import dsfml.system.string;
+		m_string = stringConvert!(T,dchar)(text);
 		updateGeometry();
 	}
 
@@ -277,6 +274,8 @@ class Text : Drawable, Transformable
 	 */
 	void draw(RenderTarget renderTarget, RenderStates renderStates)
 	{
+	    import std.stdio;
+	    
 		if ((m_font !is null) && (m_characterSize>0))
 		{
 			renderStates.transform *= getTransform();
@@ -289,9 +288,19 @@ class Text : Drawable, Transformable
 				//grab the new texture
 				lastTextureUsed = m_font.getTexture(m_characterSize);
 			}
+			
+			//writeln("Update Geometry");
 			updateGeometry();
+			
+			//writeln("Setting renderstates tecture");
 			renderStates.texture =  m_font.getTexture(m_characterSize);
 			
+			if(renderStates.texture is null)
+			{
+			    //writeln("Texture don't exist!");
+			}
+			
+			//writeln("Trying to draw!");
 			renderTarget.draw(m_vertices, renderStates);
 		}
 	}
@@ -309,7 +318,7 @@ class Text : Drawable, Transformable
 	Vector2f findCharacterPos(size_t index)
 	{
 		// Make sure that we have a valid font
-		if(m_font !is null)
+		if(m_font is null)
 		{
 			return Vector2f(0,0);
 		}
@@ -491,24 +500,32 @@ unittest
 		import std.stdio;
 		import dsfml.graphics.rendertexture;
 
-		writeln("Unit test for Font");
+		writeln("Unit test for Text");
 
 		auto renderTexture = new RenderTexture();
 		
-		assert(renderTexture.create(100,100));
+		renderTexture.create(100,100);
 
 		auto font = new Font();
-		assert(font.loadFromFile("res/unifont_upper.ttf"));
+		assert(font.loadFromFile("res/Warenhaus-Standard.ttf"));
 
 		Text text;
 		text = new Text("Sample String", font);
 
+		string temp = text.getString();
+
+		writeln(temp);
 
 		renderTexture.clear();
 
 		renderTexture.draw(text);
 
 		renderTexture.display();
+
+		//grab that texture for usage
+		auto texture = renderTexture.getTexture();
+
+		texture.copyToImage().saveToFile("Text.png");
 
 		writeln();
 	}

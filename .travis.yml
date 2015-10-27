@@ -1,23 +1,25 @@
-language: cpp
-compiler:
-  - gcc
+language: d
 
-before_install:
-  #set up d-apt  repository
-  - sudo wget http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
-  - sudo apt-get update && sudo apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring && sudo apt-get update
+d: 
+  - dmd-2.067.0
+  - dmd-2.066.1
+  - gdc-4.8.2
+  - ldc-0.15.1
+
+install:
   #Install everything we need to build
-  - sudo apt-get install -y libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew1.5-dev libjpeg8-dev libsndfile1-dev libopenal-dev dmd-bin
+  - sudo apt-get install -y libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew1.5-dev libjpeg8-dev libsndfile1-dev libopenal-dev
   #Build and install DSFML-C
   - cd $HOME
-  - git clone https://github.com/Jebbs/DSFML-C.git
-  - cd DSFML-C
+  - git clone https://github.com/Jebbs/DSFMLC.git
+  - cd DSFMLC
   - cmake .
   - make
   - sudo make install
   - cd $TRAVIS_BUILD_DIR
- 
-install:
-script: rdmd build.d -unittest
+
+script: 
+  - ${DMD} build.d
+  - ./build -unittest
 
 

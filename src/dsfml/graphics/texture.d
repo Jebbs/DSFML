@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,18 +15,8 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
 module dsfml.graphics.texture;
 
 
@@ -66,7 +56,7 @@ class Texture
 
 	this()
 	{
-		//Creates a empty Texture
+		sfPtr = sfTexture_construct();
 	}
 	
 	package this(sfTexture* texturePointer)
@@ -76,8 +66,8 @@ class Texture
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfTexture_destroy( sfPtr);	
 	}
 
@@ -99,15 +89,14 @@ class Texture
 	bool loadFromFile(string filename, IntRect area = IntRect() )
 	{
 		import dsfml.system.string;
-		//if the Texture already exists, destroy it first
-		if(sfPtr)
+
+		bool ret = sfTexture_loadFromFile(sfPtr, toStringz(filename) ,area.left, area.top,area.width, area.height);
+		if(!ret)
 		{
-			sfTexture_destroy(sfPtr);
+			err.write(toString(sfErr_getOutput()));
 		}
 
-		sfPtr = sfTexture_createFromFile(toStringz(filename) ,area.left, area.top,area.width, area.height);
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr == null)?false:true;
+		return ret;
 	}
 
 	//TODO: Can this be done with a slice of bytes rather than a const(void)*?
@@ -127,18 +116,18 @@ class Texture
 	 * 
 	 * Returns: True if loading was successful, false otherwise.
 	 */
-	bool loadFromMemory(const(void)* data, size_t sizeInBytes, IntRect area = IntRect())
+	bool loadFromMemory(const(void)[] data, IntRect area = IntRect())
 	{
 		import dsfml.system.string;
-		//if the Texture already exists, destroy it first
-		if(sfPtr)
+
+
+		bool ret = sfTexture_loadFromMemory(sfPtr, data.ptr, data.length,area.left, area.top,area.width, area.height);
+		if(!ret)
 		{
-			sfTexture_destroy(sfPtr);
+			err.write(toString(sfErr_getOutput()));
 		}
 
-		sfPtr = sfTexture_createFromMemory(data,sizeInBytes,area.left, area.top,area.width, area.height);
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr == null)?false:true;
+		return ret;
 	}
 
 	/**
@@ -159,15 +148,14 @@ class Texture
 	bool loadFromStream(InputStream stream, IntRect area = IntRect())
 	{
 		import dsfml.system.string;
-		//if the Texture already exists, destroy it first
-		if(sfPtr)
+
+		bool ret = sfTexture_loadFromStream(sfPtr, new sfmlStream(stream), area.left, area.top,area.width, area.height);
+		if(!ret)
 		{
-			sfTexture_destroy(sfPtr);
+			err.write(toString(sfErr_getOutput()));
 		}
 
-		sfPtr = sfTexture_createFromStream(new sfmlStream(stream), area.left, area.top,area.width, area.height);
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr == null)?false:true;
+		return ret;
 	}
 
 	/**
@@ -188,15 +176,14 @@ class Texture
 	bool loadFromImage(Image image, IntRect area = IntRect())
 	{
 		import dsfml.system.string;
-		//if the Texture already exists, destroy it first
-		if(sfPtr)
+
+		bool ret = sfTexture_loadFromImage(sfPtr, image.sfPtr, area.left, area.top,area.width, area.height);
+		if(!ret)
 		{
-			sfTexture_destroy(sfPtr);
+			err.write(toString(sfErr_getOutput()));
 		}
 
-		sfPtr = sfTexture_createFromImage(image.sfPtr, area.left, area.top,area.width, area.height);
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr != null);
+		return ret;
 	}
 
 	/**
@@ -278,15 +265,14 @@ class Texture
 	bool create(uint width, uint height)
 	{
 		import dsfml.system.string;
-		//if the Texture already exists, destroy it first
-		if(sfPtr)
-		{
-			sfTexture_destroy(sfPtr);
-		}
 		
-		sfPtr = sfTexture_create(width, height);
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr == null)?false:true;
+		bool ret = sfTexture_create(sfPtr, width, height);
+		if(!ret)
+		{
+			err.write(toString(sfErr_getOutput()));
+		}
+
+		return ret;
 	}
 
 	/**
@@ -296,7 +282,7 @@ class Texture
 	 * 
 	 * Returns: Image containing the texture's pixels.
 	 */
-	Image copyToImage()
+	Image copyToImage() const
 	{
 		return new Image(sfTexture_copyToImage(sfPtr));
 	}
@@ -417,7 +403,7 @@ unittest
 
 		auto texture = new Texture();
 
-		assert(texture.loadFromFile("res/star.png"));
+		assert(texture.loadFromFile("res/TestImage.png"));
 
 		//do things with the texture
 
@@ -472,29 +458,33 @@ private class sfmlStream:sfmlInputStream
 package extern(C) struct sfTexture;
 
 private extern(C):
+
+//Construct a new texture
+sfTexture* sfTexture_construct();
+
 //Create a new texture
-sfTexture* sfTexture_create(uint width, uint height);
+bool sfTexture_create(sfTexture* texture, uint width, uint height);
 
 //Create a new texture from a file
-sfTexture* sfTexture_createFromFile(const char* filename, int left, int top, int width, int height);
+bool sfTexture_loadFromFile(sfTexture* texture, const(char)* filename, int left, int top, int width, int height);
 
 //Create a new texture from a file in memory
-sfTexture* sfTexture_createFromMemory(const void* data, size_t sizeInBytes, int left, int top, int width, int height);
+bool sfTexture_loadFromMemory(sfTexture* texture, const(void)* data, size_t sizeInBytes, int left, int top, int width, int height);
 
 //Create a new texture from a custom stream
-sfTexture* sfTexture_createFromStream(sfmlInputStream stream, int left, int top, int width, int height);
+bool sfTexture_loadFromStream(sfTexture* texture, sfmlInputStream stream, int left, int top, int width, int height);
 
 //Create a new texture from an image
-sfTexture* sfTexture_createFromImage(const sfImage* image, int left, int top, int width, int height);
+bool sfTexture_loadFromImage(sfTexture* texture, const(sfImage)* image, int left, int top, int width, int height);
 
 //Copy an existing texture
-sfTexture* sfTexture_copy(const sfTexture* texture);
+sfTexture* sfTexture_copy(const(sfTexture)* texture);
 
 //Destroy an existing texture
 void sfTexture_destroy(sfTexture* texture);
 
 //Return the size of the texture
-void sfTexture_getSize(const sfTexture* texture, uint* x, uint* y);
+void sfTexture_getSize(const(sfTexture)* texture, uint* x, uint* y);
 
 //Copy a texture's pixels to an image
 sfImage* sfTexture_copyToImage(const sfTexture* texture);

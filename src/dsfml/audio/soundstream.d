@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,17 +15,6 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
 module dsfml.audio.soundstream;
@@ -73,17 +62,14 @@ class SoundStream:SoundSource
 
 	protected this()
 	{
-		//create a blank pointer in case functions might be called before it is initialized (eg, stop() in Music's openFromFile)
-		sfPtr = sfSoundStream_create(0, 0, null);
-
-		callBacks = new SoundStreamCallBacks(this);
-
+	    callBacks = new SoundStreamCallBacks(this);
+		sfPtr = sfSoundStream_construct(callBacks);
 	}
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfSoundStream_destroy(sfPtr);
 	}
 
@@ -91,10 +77,7 @@ class SoundStream:SoundSource
 	{
 		import dsfml.system.string;
 
-		//destroy the blank pointer so we can create the real instance
-		sfSoundStream_destroy(sfPtr);
-
-		sfPtr = sfSoundStream_create(channelCount, sampleRate, callBacks);
+		sfSoundStream_initialize(sfPtr, channelCount, sampleRate);
 
 		err.write(toString(sfErr_getOutput()));
 	}
@@ -367,9 +350,11 @@ private extern(C):
 struct sfSoundStream;
 
 
-sfSoundStream* sfSoundStream_create( uint channelCount, uint sampleRate, sfmlSoundStreamCallBacks callBacks);
+sfSoundStream* sfSoundStream_construct(sfmlSoundStreamCallBacks callBacks);
 
 void sfSoundStream_destroy(sfSoundStream* soundStream);
+
+void sfSoundStream_initialize(sfSoundStream* soundStream, uint channelCount, uint sampleRate);
 
 void sfSoundStream_play(sfSoundStream* soundStream);
 

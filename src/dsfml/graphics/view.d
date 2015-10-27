@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,18 +15,8 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
 module dsfml.graphics.view;
 
 import dsfml.graphics.rect;
@@ -48,9 +38,10 @@ import dsfml.system.vector2;
  + Authors: Laurent Gomila, Jeremy DeHaan
  + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1View.php#details
  +/
+
 class View
 {
-	sfView* sfPtr;
+	package sfView* sfPtr;
 	
 	this()
 	{
@@ -66,13 +57,13 @@ class View
 	
 	package this(sfView* sfview)
 	{
-		sfPtr = sfview;
+		sfPtr = sfView_copy(sfview);
 	}
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfView_destroy(sfPtr);
 	}
 
@@ -215,7 +206,7 @@ unittest
 
 		auto renderTexture = new RenderTexture();
 		
-		assert(renderTexture.create(1000,1000));
+		renderTexture.create(1000,1000);
 
 		renderTexture.clear();
 

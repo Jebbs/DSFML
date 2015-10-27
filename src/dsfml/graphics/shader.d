@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,18 +15,8 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
 module dsfml.graphics.shader;
 
 import dsfml.graphics.texture;
@@ -90,8 +80,8 @@ class Shader
 	
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfShader_destroy(sfPtr);
 	}
 
@@ -109,22 +99,24 @@ class Shader
 	bool loadFromFile(string filename, Type type)
 	{
 		import dsfml.system.string;
-		//if the Shader exists, destroy it first
-		if(sfPtr)
-		{
-			sfShader_destroy(sfPtr);
-		}
+
+		bool ret;
 
 		if(type == Type.Vertex)
 		{
-			sfPtr = sfShader_createFromFile(toStringz(filename) , null);
+			ret = sfShader_loadFromFile(sfPtr, toStringz(filename) , null);
 		}
 		else
 		{
-			sfPtr = sfShader_createFromFile(null , toStringz(filename) );
+			ret = sfShader_loadFromFile(sfPtr, null , toStringz(filename) );
 		}
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr == null)?false:true;
+
+		if(!ret)
+		{
+			err.write(toString(sfErr_getOutput()));
+		}
+
+		return ret;
 	}
 
 	/**
@@ -141,15 +133,14 @@ class Shader
 	bool loadFromFile(string vertexShaderFilename, string fragmentShaderFilename)
 	{
 		import dsfml.system.string;
-		//if the Shader exists, destroy it first
-		if(sfPtr)
+
+		bool ret = sfShader_loadFromFile(sfPtr, toStringz(vertexShaderFilename) , toStringz(fragmentShaderFilename));
+		if(!ret)
 		{
-			sfShader_destroy(sfPtr);
+			err.write(toString(sfErr_getOutput()));
 		}
 
-		sfPtr = sfShader_createFromFile(toStringz(vertexShaderFilename) , toStringz(fragmentShaderFilename));
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr != null);
+		return ret;
 	}
 
 	/**
@@ -166,22 +157,22 @@ class Shader
 	bool loadFromMemory(string shader, Type type)
 	{
 		import dsfml.system.string;
-		//if the Shader exists, destroy it first
-		if(sfPtr)
-		{
-			sfShader_destroy(sfPtr);
-		}
+
+		bool ret;
 
 		if(type == Type.Vertex)
 		{
-			sfPtr = sfShader_createFromMemory(toStringz(shader) , null);
+			ret = sfShader_loadFromMemory(sfPtr, toStringz(shader) , null);
 		}
 		else
 		{
-			sfPtr = sfShader_createFromMemory(null , toStringz(shader) );
+			ret = sfShader_loadFromMemory(sfPtr, null , toStringz(shader) );
 		}
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr == null)?false:true;
+		if(!ret)
+		{
+			err.write(toString(sfErr_getOutput()));
+		}
+		return ret;
 	}
 	
 	/**
@@ -198,15 +189,14 @@ class Shader
 	bool loadFromMemory(string vertexShader, string fragmentShader)
 	{
 		import dsfml.system.string;
-		//if the Shader exists, destroy it first
-		if(sfPtr)
+
+		bool ret = sfShader_loadFromMemory(sfPtr, toStringz(vertexShader) , toStringz(fragmentShader));
+		if(!ret)
 		{
-			sfShader_destroy(sfPtr);
+			err.write(toString(sfErr_getOutput()));
 		}
 
-		sfShader_createFromMemory(toStringz(vertexShader) , toStringz(fragmentShader));
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr == null)?false:true;
+		return ret;
 	}
 	
 	/**
@@ -223,22 +213,23 @@ class Shader
 	bool loadFromStream(InputStream stream, Type type)
 	{
 		import dsfml.system.string;
-		//if the Shader exists, destroy it first
-		if(sfPtr)
-		{
-			sfShader_destroy(sfPtr);
-		}
+
+		bool ret;
 
 		if(type == Type.Vertex)
 		{
-			sfPtr = sfShader_createFromStream(&stream , null);
+			ret = sfShader_loadFromStream(sfPtr, new shaderStream(stream) , null);
 		}
 		else
 		{
-			sfPtr = sfShader_createFromStream(null , &stream );
+			ret = sfShader_loadFromStream(sfPtr, null , new shaderStream(stream));
 		}
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr == null)?false:true;
+		if(!ret)
+		{
+			err.write(toString(sfErr_getOutput()));
+		}
+
+		return ret;
 	}
 
 	/**
@@ -255,15 +246,13 @@ class Shader
 	bool loadFromStream(InputStream vertexShaderStream, InputStream fragmentShaderStream)
 	{
 		import dsfml.system.string;
-		//if the Shader exists, destroy it first
-		if(sfPtr)
-		{
-			sfShader_destroy(sfPtr);
-		}
 
-		sfPtr = sfShader_createFromStream(&vertexShaderStream, &fragmentShaderStream);
-		err.write(toString(sfErr_getOutput()));
-		return (sfPtr == null)?false:true;
+		bool ret = sfShader_loadFromStream(sfPtr, new shaderStream(vertexShaderStream), new shaderStream(fragmentShaderStream));
+		if(!ret)
+		{
+			err.write(toString(sfErr_getOutput()));
+		}
+		return ret;
 	}
 
 	/**
@@ -444,14 +433,14 @@ class Shader
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2D texture (sampler2D GLSL type).
 	 * 		texture	= Texture to assign
 	 */
-	void setParameter(string name, Texture texture)
+	void setParameter(string name, const(Texture) texture)
 	{
 		import dsfml.system.string;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
 		err.write(toString(sfErr_getOutput()));
 	}
 	///ditto
-	void opIndexAssign(Texture texture, string name)
+	void opIndexAssign(const(Texture) texture, string name)
 	{
 		import dsfml.system.string;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
@@ -521,18 +510,64 @@ unittest
 	//find some examples of interesting shaders and use them here
 }
 
+private extern(C++) interface sfmlInputStream
+{
+	long read(void* data, long size);
+	
+	long seek(long position);
+	
+	long tell();
+	
+	long getSize();
+}
+
+
+private class shaderStream:sfmlInputStream
+{
+	private InputStream myStream;
+	
+	this(InputStream stream)
+	{
+		myStream = stream;
+	}
+	
+	extern(C++)long read(void* data, long size)
+	{
+		return myStream.read(data[0..cast(size_t)size]);
+	}
+	
+	extern(C++)long seek(long position)
+	{
+		return myStream.seek(position);
+	}
+	
+	extern(C++)long tell()
+	{
+		return myStream.tell();
+	}
+	
+	extern(C++)long getSize()
+	{
+		return myStream.getSize();
+	}
+}
+
 package extern(C):
 struct sfShader;
 
 private extern(C):
+
+//Construct a new shader
+sfShader* sfShader_construct();
+
 //Load both the vertex and fragment shaders from files
-sfShader* sfShader_createFromFile(const char* vertexShaderFilename, const char* fragmentShaderFilename);
+bool sfShader_loadFromFile(sfShader* shader, const(char)* vertexShaderFilename, const char* fragmentShaderFilename);
 
 //Load both the vertex and fragment shaders from source codes in memory
-sfShader* sfShader_createFromMemory(const char* vertexShader, const char* fragmentShader);
+bool sfShader_loadFromMemory(sfShader* shader, const(char)* vertexShader, const char* fragmentShader);
 
 //Load both the vertex and fragment shaders from custom streams
-sfShader* sfShader_createFromStream(void* vertexShaderStream, void* fragmentShaderStream);
+bool sfShader_loadFromStream(sfShader* shader, sfmlInputStream vertexShaderStream, sfmlInputStream fragmentShaderStream);
 
 //Destroy an existing shader
 void sfShader_destroy(sfShader* shader);

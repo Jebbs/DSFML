@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,17 +15,6 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
 module dsfml.audio.soundbuffer;
@@ -70,14 +59,14 @@ class SoundBuffer
 	this()
 	{
 		import dsfml.system.string;
-		sfPtr = sfSoundBuffer_create();
+		sfPtr = sfSoundBuffer_construct();
 		err.write(toString(sfErr_getOutput()));
 	}
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfSoundBuffer_destroy(sfPtr);
 	}
 	
@@ -149,15 +138,13 @@ class SoundBuffer
 	 */
 	bool loadFromFile(string filename)
 	{
-		sfPtr = sfSoundBuffer_createFromFile(toStringz(filename));
-		
-		if(sfPtr)
+    	import dsfml.system.string;
+		if(sfSoundBuffer_loadFromFile(sfPtr, toStringz(filename)))
 		{
-			return true;
+		    return true;
 		}
 		else
 		{
-			import dsfml.system.string;
 			err.write(toString(sfErr_getOutput()));
 			return false;
 		}
@@ -175,15 +162,13 @@ class SoundBuffer
 	 */
 	bool loadFromMemory(const(void)[] data)
 	{
-		sfPtr = sfSoundBuffer_createFromMemory(data.ptr, data.length);
-		
-		if(sfPtr)
+		if(sfSoundBuffer_loadFromMemory(sfPtr, data.ptr, data.length))
 		{
-			return true;
+		    return true;
 		}
 		else
 		{
-			import dsfml.system.string;
+		    import dsfml.system.string;
 			err.write(toString(sfErr_getOutput()));
 			return false;
 		}
@@ -200,11 +185,8 @@ class SoundBuffer
 	 * Returns: True if loading succeeded, false if it failed
 	 */
 	bool loadFromStream(InputStream stream)
-	{
-
-		sfPtr = sfSoundBuffer_createFromStream(new SoundBufferStream(stream));
-		
-		if(sfPtr)
+	{	
+		if(sfSoundBuffer_loadFromStream(sfPtr, new SoundBufferStream(stream)))
 		{
 			return true;
 		}
@@ -230,10 +212,7 @@ class SoundBuffer
 	 */
 	bool loadFromSamples(const(short[]) samples, uint channelCount, uint sampleRate)
 	{
-
-		sfPtr = sfSoundBuffer_createFromSamples(samples.ptr, samples.length, channelCount, sampleRate);
-
-		if(sfPtr)
+		if(sfSoundBuffer_loadFromSamples(sfPtr, samples.ptr, samples.length, channelCount, sampleRate))
 		{
 			return true;
 		}
@@ -258,9 +237,7 @@ class SoundBuffer
 	bool saveToFile(string filename)
 	{
 		import dsfml.system.string;
-		sfSoundBuffer_saveToFile(sfPtr, toStringz(filename));
-		
-		if(sfPtr)
+		if(sfSoundBuffer_saveToFile(sfPtr, toStringz(filename)))
 		{
 			return true;
 		}
@@ -285,7 +262,7 @@ unittest
 
 		auto soundbuffer = new SoundBuffer();
 
-		if(!soundbuffer.loadFromFile("res/cave1.ogg"))
+		if(!soundbuffer.loadFromFile("res/TestSound.ogg"))
 		{
 			//error
 			return;
@@ -352,15 +329,15 @@ package struct sfSoundBuffer;
 
 private extern(C):
 
-sfSoundBuffer* sfSoundBuffer_create();
+sfSoundBuffer* sfSoundBuffer_construct();
 
-sfSoundBuffer* sfSoundBuffer_createFromFile(const char* filename);
+bool sfSoundBuffer_loadFromFile(sfSoundBuffer* soundBuffer, const char* filename);
 
-sfSoundBuffer* sfSoundBuffer_createFromMemory(const void* data, size_t sizeInBytes);
+bool sfSoundBuffer_loadFromMemory(sfSoundBuffer* soundBuffer, const void* data, size_t sizeInBytes);
 
-sfSoundBuffer* sfSoundBuffer_createFromStream(sfmlInputStream stream);
+bool sfSoundBuffer_loadFromStream(sfSoundBuffer* soundBuffer, sfmlInputStream stream);
 
-sfSoundBuffer* sfSoundBuffer_createFromSamples(const short* samples, size_t sampleCount, uint channelCount, uint sampleRate);
+bool sfSoundBuffer_loadFromSamples(sfSoundBuffer* soundBuffer, const short* samples, size_t sampleCount, uint channelCount, uint sampleRate);
 
 sfSoundBuffer* sfSoundBuffer_copy(const sfSoundBuffer* soundBuffer);
 

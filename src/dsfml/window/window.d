@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,18 +15,8 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
 module dsfml.window.window;
 
 import dsfml.window.event;
@@ -64,11 +54,33 @@ class Window
 
 	package sfWindow* sfPtr;
 
-	//blank constructor for RenderWindow
-	protected this()
+	private bool m_needsToDelete = true;
+
+	//Default constructor
+	this()
 	{
+		sfPtr = sfWindow_construct();
+	}
+
+	//Construct a window without calling sfWindow_construct
+	//This allows a RenderWindow to be created without creating a Window first
+	protected this(int)
+	{
+		m_needsToDelete = false;
+	}
+
+	//allows RenderWindow to delete the Window pointer when it is created
+	//so that there are not both instances.
+	protected void deleteWindowPtr()
+	{
+		sfWindow_destroy(sfPtr);
+		m_needsToDelete = false;
 	}
 	
+	//TODO: Reduce to one constructor with a template parameter for the string types. Use sfWindow_createUnicode in case it has unicode in the title.
+
+	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
+
 	///Construct a new window.
 	///
 	///This constructor creates the window with the size and pixel depth defined in mode. An optional style can be passed to customize the look and behaviour of the window (borders, title bar, resizable, closable, ...). If style contains Style::Fullscreen, then mode must be a valid video mode.
@@ -80,21 +92,13 @@ class Window
 	///  	title = Title of the window.
 	///   	style = Window style.
 	///    	settings = Additional settings for the underlying OpenGL context.
-	this(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+		if (is(T == dchar)||is(T == wchar)||is(T == char))
 	{
 		import dsfml.system.string;
-		sfPtr = sfWindow_create(mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
-	}
-	
-	//TODO: Reduce to one constructor with a template parameter for the string types. Use sfWindow_createUnicode in case it has unicode in the title.
 
-	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
-	this(VideoMode mode, dstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
-	{
-		import dsfml.system.string;
-		sfPtr = sfWindow_createUnicode(mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		this();
+		create(mode, title, style, settings);
 	}
 
 	///Construct the window from an existing control.
@@ -108,16 +112,20 @@ class Window
     ///		settings = Additional settings for the underlying OpenGL context.
 	this(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
-		import dsfml.system.string;
-		sfPtr = sfWindow_createFromHandle(handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		this();
+		create(handle, settings);
 	}
 	
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
-		sfWindow_destroy(sfPtr);
+		import dsfml.system.config;
+		//this takes care of not freeing a null pointer due to inheritance
+		//(RenderWindow does not create the inherited sfWindow)
+		if(m_needsToDelete)
+		{
+			mixin(destructorOutput);
+			sfWindow_destroy(sfPtr);
+		}
 	}
 
 	///Get's or set's the window's position.
@@ -234,7 +242,7 @@ class Window
 		visible ? sfWindow_setMouseCursorVisible(sfPtr,true): sfWindow_setMouseCursorVisible(sfPtr,false);
 	}
 
-	//TODO: Reduce to one setTitle with a template parameter for the string types. Use sfWindow_setUnicode in case it has unicode in the title.
+	//Cannot use templates here as template member functions cannot be virtual.
 
 	///Change the title of the window.
 	///
@@ -243,10 +251,21 @@ class Window
 	void setTitle(string newTitle)
 	{
 		import dsfml.system.string;
-		sfWindow_setTitle(sfPtr, toStringz(newTitle));
+		sfWindow_setUnicodeTitle(sfPtr, toStringz(stringConvert!(char, dchar)(newTitle)));
 	}
-	
-	///ditto
+	///Change the title of the window.
+	///
+	///Params:
+    ///		title = New title.
+	void setTitle(wstring newTitle)
+	{
+		import dsfml.system.string;
+		sfWindow_setUnicodeTitle(sfPtr, toStringz(stringConvert!(wchar, dchar)(newTitle)));
+	}
+	///Change the title of the window.
+	///
+	///Params:
+    ///		title = New title.
 	void setTitle(dstring newTitle)
 	{
 		import dsfml.system.string;
@@ -299,7 +318,6 @@ class Window
 		return sfWindow_getSystemHandle(sfPtr);
 	}
 
-
 	//TODO: Consider adding these methods.
 	//void onCreate
 	//void onResize
@@ -310,6 +328,54 @@ class Window
 	void close()
 	{
 		sfWindow_close(sfPtr);
+	}
+
+	//Cannot use templates here as template member functions cannot be virtual.
+
+	///Create (or recreate) the window.
+	///
+	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
+	///
+	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+	void create(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	{
+		import dsfml.system.string;
+		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(char,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(toString(sfErr_getOutput()));
+	}
+	///Create (or recreate) the window.
+	///
+	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
+	///
+	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+	void create(VideoMode mode, wstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	{
+		import dsfml.system.string;
+		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(wchar,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(toString(sfErr_getOutput()));
+	}
+	///Create (or recreate) the window.
+	///
+	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
+	///
+	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+	void create(VideoMode mode, dstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	{
+		import dsfml.system.string;
+		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(toString(sfErr_getOutput()));
+	}
+
+	///Create (or recreate) the window from an existing control.
+	///
+	///Use this function if you want to create an OpenGL rendering area into an already existing control. If the window was already created, it closes it first.
+	///
+	///The second parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+	void create(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
+	{
+		import dsfml.system.string;
+		sfWindow_createFromHandle(sfPtr, handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(toString(sfErr_getOutput()));
 	}
 
 	///Display on screen what has been rendered to the window so far.
@@ -400,6 +466,9 @@ unittest
 		import std.stdio;
 		import dsfml.graphics.image;
 
+		writeln("Unit test for Window class.");
+
+
 		//constructor
 		auto window = new Window(VideoMode(800,600),"Test Window");
 
@@ -420,7 +489,7 @@ unittest
 
 		window.setTitle("thing");//uses the first set title
 
-		window.setTitle("素晴らしい ！"d);//forces the dstring override and uses unicode
+		window.setTitle("素晴らしい ！");//forces the dstring override and uses unicode
 
 		window.setActive(true);
 
@@ -437,7 +506,7 @@ unittest
 		auto settings = window.getSettings();
 
 		auto image = new Image();
-		image.loadFromFile("Crono.png");//replace with something that won't get me in trouble
+		image.loadFromFile("res/TestImage.png");
 
 		window.setIcon(image.getSize().x,image.getSize().x,image.getPixelArray());
 
@@ -463,23 +532,18 @@ unittest
 }
 
 
-//alias std.utf.toUTFz!(const(dchar)*) toUTF32z;
+package extern(C) struct sfWindow;
 
-package extern(C)
-{
-	struct sfWindow;
-}
+private extern(C):
 
-private extern(C)
-{
 	//Construct a new window
-	sfWindow* sfWindow_create(uint width, uint height, uint bitsPerPixel, const char* title, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
+	sfWindow* sfWindow_construct();
 
 	//Construct a new window (with a UTF-32 title)
-	sfWindow* sfWindow_createUnicode(uint width, uint height, uint bitsPerPixel, const(dchar)* title, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
+	void sfWindow_createFromSettings(sfWindow* window, uint width, uint height, uint bitsPerPixel, const(dchar)* title, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
 
 	//Construct a window from an existing control
-	sfWindow* sfWindow_createFromHandle(WindowHandle handle, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
+	void sfWindow_createFromHandle(sfWindow* window, WindowHandle handle, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
 
 	// Destroy a window
 	void sfWindow_destroy(sfWindow* window);
@@ -552,6 +616,6 @@ private extern(C)
 	void sfMouse_setPosition(int x, int y, const(sfWindow)* relativeTo);
 
 	const(char)* sfErr_getOutput();
-}
+
 
 

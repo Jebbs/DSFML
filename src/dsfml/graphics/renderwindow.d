@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,18 +15,8 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
 module dsfml.graphics.renderwindow;
 
 import dsfml.graphics.color;
@@ -72,37 +62,36 @@ import dsfml.system.vector2;
 class RenderWindow : Window, RenderTarget
 {
 	package sfRenderWindow* sfPtr;
+	private View m_currentView, m_defaultView;
 
-	package this()
-	{
-	}
 
-	this(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	this()
 	{
-		import dsfml.system.string;
-		sfPtr = sfRenderWindow_create(mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		sfPtr = sfRenderWindow_construct();
+		m_currentView = new View();
+		m_defaultView = new View();
+		super(0);
 	}
 
 	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
-	this(VideoMode mode, dstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+		if (is(T == dchar)||is(T == wchar)||is(T == char))
 	{
-		import dsfml.system.string;
-		sfPtr = sfRenderWindow_createUnicode(mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+
+		this();
+		create(mode, title, style, settings);
 	}
 
 	this(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
-		import dsfml.system.string;
-		sfPtr = sfRenderWindow_createFromHandle(handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		this();
+		create(handle, settings);
 	}
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfRenderWindow_destroy(sfPtr);
 	}
 
@@ -157,11 +146,12 @@ class RenderWindow : Window, RenderTarget
 		const(View) view(const(View) newView)
 		{
 			sfRenderWindow_setView(sfPtr, newView.sfPtr);
-			return newView;
+			m_currentView = new View(sfRenderWindow_getView(sfPtr));
+			return m_currentView;
 		}
 		const(View) view() const
 		{
-			return new View(sfRenderWindow_getView(sfPtr));
+			return m_currentView;
 		}
 	}
 
@@ -172,9 +162,9 @@ class RenderWindow : Window, RenderTarget
 	 * 
 	 * Returns: The default view of the render target.
 	 */
-	View getDefaultView() const // note: if refactored, change documentation of view property above
+	const(View) getDefaultView() const // note: if refactored, change documentation of view property above
 	{
-		return new View(sfRenderWindow_getDefaultView(sfPtr));
+		return m_defaultView;
 	}
 
 	/**
@@ -330,6 +320,8 @@ class RenderWindow : Window, RenderTarget
 		visible ? sfRenderWindow_setMouseCursorVisible(sfPtr,true): sfRenderWindow_setMouseCursorVisible(sfPtr,false);
 	}
 
+	//Cannot use templates here as template member functions cannot be virtual.
+
 	/**
 	 * Change the title of the window
 	 * 
@@ -338,10 +330,20 @@ class RenderWindow : Window, RenderTarget
 	 */
 	override void setTitle(string newTitle)
 	{
-		import std.string;
-		sfRenderWindow_setTitle(sfPtr, toStringz(newTitle));
+		import dsfml.system.string;
+		sfRenderWindow_setUnicodeTitle(sfPtr, toStringz(stringConvert!(char, dchar)(newTitle)));
 	}
-	
+	/**
+	 * Change the title of the window
+	 * 
+	 * Params:
+	 * 		title	= New title
+	 */
+	override void setTitle(wstring newTitle)
+	{
+		import dsfml.system.string;
+		sfRenderWindow_setUnicodeTitle(sfPtr, toStringz(stringConvert!(wchar, dchar)(newTitle)));
+	}
 	/**
 	 * Change the title of the window
 	 * 
@@ -403,6 +405,83 @@ class RenderWindow : Window, RenderTarget
 	override void close()
 	{
 		sfRenderWindow_close(sfPtr);
+	}
+
+	//Cannot use templates here as template member functions cannot be virtual.
+
+	///Create (or recreate) the window.
+	///
+	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
+	///
+	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+	override void create(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	{
+		import dsfml.system.string;
+		
+		sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(char,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(toString(sfErr_getOutput()));
+
+		//get view
+		m_currentView = new View(sfRenderWindow_getView(sfPtr));
+
+		//get default view
+		m_defaultView = new View(sfRenderWindow_getDefaultView(sfPtr));
+
+	}
+	///Create (or recreate) the window.
+	///
+	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
+	///
+	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+	override void create(VideoMode mode, wstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	{
+		import dsfml.system.string;
+		
+		sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(wchar,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(toString(sfErr_getOutput()));
+
+		//get view
+		m_currentView = new View(sfRenderWindow_getView(sfPtr));
+
+		//get default view
+		m_defaultView = new View(sfRenderWindow_getDefaultView(sfPtr));
+
+	}
+	///Create (or recreate) the window.
+	///
+	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
+	///
+	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+	override void create(VideoMode mode, dstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	{
+		import dsfml.system.string;
+		
+		sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(toString(sfErr_getOutput()));
+
+		//get view
+		m_currentView = new View(sfRenderWindow_getView(sfPtr));
+
+		//get default view
+		m_defaultView = new View(sfRenderWindow_getDefaultView(sfPtr));
+
+	}
+
+	///Create (or recreate) the window from an existing control.
+	///
+	///Use this function if you want to create an OpenGL rendering area into an already existing control. If the window was already created, it closes it first.
+	///
+	///The second parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+	override void create(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
+	{
+		import dsfml.system.string;
+		sfRenderWindow_createFromHandle(sfPtr, handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		err.write(toString(sfErr_getOutput()));
+		//get view
+		m_currentView = new View(sfRenderWindow_getView(sfPtr));
+
+		//get default view
+		m_defaultView = new View(sfRenderWindow_getDefaultView(sfPtr));
 	}
 
 	/**
@@ -711,7 +790,7 @@ unittest
 		auto settings = window.getSettings();
 		
 		auto image = new Image();
-		image.loadFromFile("res/star.png");//replace with something that won't get me in trouble
+		image.loadFromFile("res/TestImage.png");
 		
 		window.setIcon(image.getSize().x,image.getSize().x,image.getPixelArray());
 
@@ -749,21 +828,24 @@ unittest
 	}
 }
 
-package extern(C):
-
-struct sfRenderWindow;
+package extern(C) struct sfRenderWindow;
 
 private extern(C):
 
+//Construct a new render window
+sfRenderWindow* sfRenderWindow_construct();
 
-
-sfRenderWindow* sfRenderWindow_create(uint width, uint height, uint bitsPerPixel, const char* title, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
-
-//Construct a new render window (with a UTF-32 title)
-sfRenderWindow* sfRenderWindow_createUnicode(uint width, uint height, uint bitsPerPixel, const(dchar)* title, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
+//Construct a new render window from settings
+sfRenderWindow* sfRenderWindow_constructFromSettings(uint width, uint height, uint bitsPerPixel, const(dchar)* title, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
 
 //Construct a render window from an existing control
-sfRenderWindow* sfRenderWindow_createFromHandle(WindowHandle handle, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
+sfRenderWindow* sfRenderWindow_constructFromHandle(WindowHandle handle, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
+
+//Create(or recreate) a new render window from settings
+void sfRenderWindow_createFromSettings(sfRenderWindow* renderWindow, uint width, uint height, uint bitsPerPixel, const(dchar)* title, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
+
+//Create(or recreate) a render window from an existing control
+void sfRenderWindow_createFromHandle(sfRenderWindow* renderWindow, WindowHandle handle, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
 
 //Destroy an existing render window
 void sfRenderWindow_destroy(sfRenderWindow* renderWindow);
@@ -796,7 +878,7 @@ void sfRenderWindow_getSize(const sfRenderWindow* renderWindow, uint* width, uin
 void sfRenderWindow_setSize(sfRenderWindow* renderWindow, int width, int height);
 
 //Change the title of a render window
-void sfRenderWindow_setTitle(sfRenderWindow* renderWindow, const char* title);
+void sfRenderWindow_setTitle(sfRenderWindow* renderWindow, const(char)* title);
 
 //Change the title of a render window (with a UTF-32 string)
 void sfRenderWindow_setUnicodeTitle(sfRenderWindow* renderWindow, const(dchar)* title);

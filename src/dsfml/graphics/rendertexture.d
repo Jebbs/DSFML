@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,18 +15,8 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
 module dsfml.graphics.rendertexture;
 
 import dsfml.graphics.rendertarget;
@@ -68,15 +58,20 @@ class RenderTexture : RenderTarget
 {
 	package sfRenderTexture* sfPtr;
 	private Texture m_texture;
+	private View m_currentView, m_defaultView;
 
 	this()
 	{
+		sfPtr = sfRenderTexture_construct();
+		m_texture = new Texture(sfRenderTexture_getTexture(sfPtr));
+		m_currentView = new View();
+		m_defaultView = new View();
 	}
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfRenderTexture_destroy(sfPtr);
 	}
 
@@ -92,31 +87,20 @@ class RenderTexture : RenderTarget
 	 * 		height		= Height of the render-texture
 	 * 		depthBuffer	= Do you want this render-texture to have a depth buffer?
 	 * 
-	 * Returns: True if creation was successful
 	 */
-	bool create(uint width, uint height, bool depthBuffer = false)
+	void create(uint width, uint height, bool depthBuffer = false)
 	{
 		import dsfml.system.string;
 
-		//if the RenderTexture already exists, destroy it first
-		if(sfPtr != null)
-		{
-			sfRenderTexture_destroy(sfPtr);
-		}
-
-		sfPtr = sfRenderTexture_create(width, height, depthBuffer);
+		sfRenderTexture_create(sfPtr, width, height, depthBuffer);
 		err.write(toString(sfErr_getOutput()));
 
-		if(sfPtr != null)
-		{
-			m_texture = new Texture(sfRenderTexture_getTexture(sfPtr));
-			return true;
-		}
-		else
-		{
-			m_texture = new Texture();
-			return false;
-		}
+		//get view
+		m_currentView = new View(sfRenderTexture_getView(sfPtr));
+
+		//get default view
+		m_defaultView = new View(sfRenderTexture_getDefaultView(sfPtr));
+
 	}
 	
 	/**
@@ -147,12 +131,12 @@ class RenderTexture : RenderTarget
 		override const(View) view(const(View) newView)
 		{
 			sfRenderTexture_setView(sfPtr, newView.sfPtr);
-			return newView;
+			m_currentView = new View(sfRenderTexture_getView(sfPtr));
+			return m_currentView;
 		}
 		override const(View) view() const
 		{
-			//try to fix. Maybe cache?
-			return new View( sfRenderTexture_getView(sfPtr));
+			return m_currentView;
 		}
 	}
 
@@ -163,9 +147,9 @@ class RenderTexture : RenderTarget
 	 * 
 	 * Returns: The default view of the render target.
 	 */
-	View getDefaultView() const // note: if refactored, change documentation of view property above
+	const(View) getDefaultView() const // note: if refactored, change documentation of view property above
 	{
-		return new View(sfRenderTexture_getDefaultView(sfPtr));
+		return m_defaultView;
 	}
 
 	/**
@@ -426,7 +410,7 @@ unittest
 
 		auto renderTexture = new RenderTexture();
 
-		assert(renderTexture.create(100,100));
+		renderTexture.create(100,100);
 
 		Sprite testSprite = new Sprite();//doesn't need a texture for this unit test
 
@@ -438,6 +422,9 @@ unittest
 		//prepare the RenderTexture for usage after drawing
 		renderTexture.display();
 
+		//grab that texture for usage
+		auto texture = renderTexture.getTexture();
+
 		writeln();
 
 	}
@@ -448,7 +435,10 @@ package extern(C) struct sfRenderTexture;
 private extern(C):
 
 //Construct a new render texture
-sfRenderTexture* sfRenderTexture_create(uint width, uint height, bool depthBuffer);
+sfRenderTexture* sfRenderTexture_construct();
+
+//Construct a new render texture
+void sfRenderTexture_create(sfRenderTexture* renderTexture, uint width, uint height, bool depthBuffer);
 
 //Destroy an existing render texture
 void sfRenderTexture_destroy(sfRenderTexture* renderTexture);
