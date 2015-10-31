@@ -66,10 +66,10 @@ class Clock
 	Duration restart()
 	{
 		MonoTime now = MonoTime.currTime;
-	    auto elapsed = now - m_startTime;
-	    m_startTime = now;
+		auto elapsed = now - m_startTime;
+		m_startTime = now;
 
-	    return elapsed;
+		return elapsed;
 	}
 	
 }
