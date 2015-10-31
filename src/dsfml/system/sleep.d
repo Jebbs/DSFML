@@ -20,17 +20,17 @@ If you use this software in a product, an acknowledgment in the product document
 ///A module containing the sleep function.
 module dsfml.system.sleep;
 
-import dsfml.system.time;
+import core.time;
 
 /**
  *Make the current thread sleep for a given duration.
  *
  *sleep is the best way to block a program or one of its threads, as it doesn't consume any CPU power.
  */
-void sleep(Time duration)
+void sleep(Duration duration)
 {
-	import core.thread; 
-	Thread.sleep(usecs(duration.asMicroseconds()));
+	import core.thread;
+	Thread.sleep(duration);
 }
 
 

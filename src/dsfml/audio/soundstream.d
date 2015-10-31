@@ -21,10 +21,9 @@ module dsfml.audio.soundstream;
 
 
 import core.thread;
+import core.time;
 
 import dsfml.audio.soundsource;
-
-import dsfml.system.time;
 
 import dsfml.system.vector3;
 
@@ -53,8 +52,6 @@ import dsfml.system.err;
  +/
 class SoundStream:SoundSource
 {
-
-
 
 	package sfSoundStream* sfPtr;
 
@@ -162,15 +159,15 @@ class SoundStream:SoundSource
 	*/
 	@property
 	{
-		void playingOffset(Time offset)
+		void playingOffset(Duration offset)
 		{
-			sfSoundStream_setPlayingOffset(sfPtr, offset.asMicroseconds());
+			sfSoundStream_setPlayingOffset(sfPtr, offset.total!"usecs");
 			
 		}
 		
-		Time playingOffset()
+		Duration playingOffset()
 		{
-			return microseconds(sfSoundStream_getPlayingOffset(sfPtr));
+			return usecs(sfSoundStream_getPlayingOffset(sfPtr));
 		}
 	}
 	
@@ -290,7 +287,7 @@ class SoundStream:SoundSource
 
 	abstract bool onGetData(ref const(short)[] samples);
 
-	abstract void onSeek(Time timeOffset);
+	abstract void onSeek(Duration timeOffset);
 	
 
 }
@@ -336,7 +333,7 @@ class SoundStreamCallBacks: sfmlSoundStreamCallBacks
 	
 	extern(C++) void onSeek(long time)
 	{
-		m_stream.onSeek(microseconds(time));
+		m_stream.onSeek(usecs(time));
 	}
 	
 	

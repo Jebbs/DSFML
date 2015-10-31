@@ -20,7 +20,8 @@ If you use this software in a product, an acknowledgment in the product document
 ///A module containing the Ftp class.
 module dsfml.network.ftp;
 
-import dsfml.system.time;
+import core.time;
+
 import dsfml.network.ipaddress;
 
 
@@ -103,9 +104,9 @@ class Ftp
 	///		timeout = Maximum time to wait.
 	///
 	///Returns: Server response to the request.
-	Response connect(IpAddress address, ushort port = 21, Time timeout = Time.Zero)
+	Response connect(IpAddress address, ushort port = 21, Duration timeout = Duration.zero())
 	{
-		return new Response(sfFtp_connect(sfPtr, address.m_address.ptr, port, timeout.asMicroseconds()));
+		return new Response(sfFtp_connect(sfPtr, address.m_address.ptr, port, timeout.total!"usecs"));
 	}
 
 	///Connect to the specified FTP server.
@@ -119,9 +120,9 @@ class Ftp
 	///		timeout = Maximum time to wait.
 	///
 	///Returns: Server response to the request.
-	Response connect(string address, ushort port = 21, Time timeout = Time.Zero)
+	Response connect(string address, ushort port = 21, Duration timeout = Duration.zero())
 	{
-		return new Response(sfFtp_connect(sfPtr, IpAddress(address).m_address.ptr, port, timeout.asMicroseconds()));
+		return new Response(sfFtp_connect(sfPtr, IpAddress(address).m_address.ptr, port, timeout.total!"usecs"));
 	}
 
 	///Remove an existing directory.
@@ -626,4 +627,3 @@ sfFtpResponse* sfFtp_download(sfFtp* ftp, const(char)* distantFile, const(char)*
 
 ///Upload a file to a FTP server
 sfFtpResponse* sfFtp_upload(sfFtp* ftp, const(char)* localFile, const(char)* destPath, int mode);
-

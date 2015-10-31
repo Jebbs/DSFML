@@ -20,7 +20,7 @@ If you use this software in a product, an acknowledgment in the product document
 ///A module containing the IpAddress struct.
 module dsfml.network.ipaddress;
 
-import dsfml.system.time;
+import core.time;
 
 /**
  *Encapsulate an IPv4 network address.
@@ -123,10 +123,10 @@ struct IpAddress
     ///		timeout = Maximum time to wait.
     ///
 	///Returns: Public IP address of the computer.
-	static IpAddress getPublicAddress(Time timeout = Time.Zero)
+	static IpAddress getPublicAddress(Duration timeout = Duration.zero())
 	{
 		IpAddress temp;
-		sfIpAddress_getPublicAddress(temp.m_address.ptr, timeout.asMicroseconds());
+		sfIpAddress_getPublicAddress(temp.m_address.ptr, timeout.total!"usecs");
 		return temp;
 	}
 	
@@ -191,4 +191,3 @@ void sfIpAddress_getLocalAddress(char* ipAddress);
 
 ///Get the computer's public address
 void sfIpAddress_getPublicAddress(char* ipAddress, long timeout);
-

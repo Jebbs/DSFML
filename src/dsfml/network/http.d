@@ -20,7 +20,7 @@ If you use this software in a product, an acknowledgment in the product document
 ///A module containing the Http class.
 module dsfml.network.http;
 
-import dsfml.system.time;
+import core.time;
 
 /**
  *A HTTP client.
@@ -81,9 +81,9 @@ class Http
 	///Params:
     ///		request = Request to send.
     ///		timeout = Maximum time to wait.
-	Response sendRequest(Request request, Time timeout = Time.Zero)
+	Response sendRequest(Request request, Duration timeout = Duration.zero())
 	{
-		return new Response(sfHttp_sendRequest(sfPtr,request.sfPtrRequest,timeout.asMicroseconds()));
+		return new Response(sfHttp_sendRequest(sfPtr,request.sfPtrRequest,timeout.total!"usecs"));
 	}
 	
 	///Define a HTTP request. 
@@ -390,5 +390,3 @@ void sfHttp_setHost(sfHttp* http, const(char)* host, ushort port);
 	
 ///Send a HTTP request and return the server's response.
 sfHttpResponse* sfHttp_sendRequest(sfHttp* http, const(sfHttpRequest)* request, long timeout);
-
-

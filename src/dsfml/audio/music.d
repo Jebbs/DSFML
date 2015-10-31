@@ -19,8 +19,9 @@ If you use this software in a product, an acknowledgment in the product document
 
 module dsfml.audio.music;
 
+import core.time;
+
 import dsfml.system.mutex;
-import dsfml.system.time;
 import dsfml.system.inputstream;
 
 import dsfml.audio.soundstream;
@@ -47,7 +48,7 @@ class Music : SoundStream
 	private
 	{
 		SoundFile m_file;
-		Time m_duration;
+		Duration m_duration;
 		short[] m_samples;
 		Mutex m_mutex;
 	}
@@ -149,7 +150,7 @@ class Music : SoundStream
 
 	/// Get the total duration of the music.
 	/// Returns: Music duration
-	Time getDuration()
+	Duration getDuration()
 	{
 		return m_duration;
 	}
@@ -185,13 +186,13 @@ class Music : SoundStream
 		 * 
 		 * Implements SoundStream.
 		 */
-		override void onSeek(Time timeOffset)
+		override void onSeek(Duration timeOffset)
 		{
 			import dsfml.system.lock;
 
-			Lock lock =Lock(m_mutex);
+			Lock lock = Lock(m_mutex);
 
-			m_file.seek(timeOffset.asMicroseconds());
+			m_file.seek(timeOffset.total!"usecs");
 		}
 	}
 
@@ -217,7 +218,7 @@ class Music : SoundStream
 			uint sampleRate = m_file.getSampleRate();
 
 			// Compute the music duration
-			m_duration = seconds(cast(float)(sampleCount) / sampleRate / channelCount);
+			m_duration = usecs(cast(long)(cast(float)(sampleCount) / sampleRate / channelCount * 1_000_000));
 			
 			// Resize the internal buffer so that it can contain 1 second of audio samples
 			m_samples.length = sampleRate * channelCount;
@@ -252,7 +253,7 @@ unittest
 		writeln("Playing music for 5 seconds");
 
 		music.play();
-		while(clock.getElapsedTime().asSeconds() < 5)
+		while(clock.getElapsedTime().total!"seconds" < 5)
 		{
 			//playing music in seoarate thread while main thread is stuck here
 		}
@@ -265,5 +266,3 @@ unittest
 		writeln();
 	}
 }
-
-

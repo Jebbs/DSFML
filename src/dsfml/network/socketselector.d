@@ -24,7 +24,7 @@ import dsfml.network.tcplistener;
 import dsfml.network.tcpsocket;
 import dsfml.network.udpsocket;
 
-import dsfml.system.time;
+import core.time;
 
 /**
  *Multiplexer that allows to read from multiple sockets.
@@ -151,9 +151,9 @@ class SocketSelector
     ///		timeout = Maximum time to wait, (use Time::Zero for infinity).
     ///
 	///Returns: True if there are sockets ready, false otherwise.
-	bool wait(Time timeout = Time.Zero)
+	bool wait(Duration timeout = Duration.zero())
 	{
-		return (sfSocketSelector_wait(sfPtr, timeout.asMicroseconds()));
+		return (sfSocketSelector_wait(sfPtr, timeout.total!"usecs"));
 	}
 }
 

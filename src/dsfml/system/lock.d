@@ -63,7 +63,7 @@ unittest
 		import dsfml.system.thread;
 		import dsfml.system.mutex;
 		import dsfml.system.sleep;
-		import dsfml.system.time;
+		import core.time;
 		import std.stdio;
 	
 		Mutex mutex = new Mutex();
@@ -104,5 +104,3 @@ unittest
 		writeln();
 	}
 }
-
-

@@ -30,7 +30,6 @@ public
 	import dsfml.system.mutex;
 	import dsfml.system.sleep;
 	import dsfml.system.thread;
-	import dsfml.system.time;
 	import dsfml.system.vector2;
 	import dsfml.system.vector3;
 }
