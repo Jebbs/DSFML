@@ -32,6 +32,12 @@ public import core.time;
  */
 class Clock
 {
+	import std.compiler;
+	static if(version_minor < 67)
+	{
+		alias MonoTime = TickDuration;
+	}
+	
 	package MonoTime m_startTime;
 	
 	///Default constructor.
