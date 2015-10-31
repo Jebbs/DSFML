@@ -32,12 +32,23 @@ public import core.time;
  */
 class Clock
 {
+	import std.compiler;
+	static if(version_minor < 67)
+	{
+		alias MonoTime = TickDuration;
+		alias currTime = TickDuration.currSystemTick;
+	}
+	else
+	{
+		alias currTime = MonoTime.currTime;
+	}
+	
 	package MonoTime m_startTime;
 	
 	///Default constructor.
 	this()
 	{
-		m_startTime = MonoTime.currTime;
+		m_startTime = currTime;
 	}
 	
 	///Destructor
@@ -54,7 +65,7 @@ class Clock
 	///Returns: Time elapsed .
 	Duration getElapsedTime() const
 	{
-		return MonoTime.currTime - m_startTime;
+		return cast(Duration)(currTime - m_startTime);
 	}
 	
 	///Restart the clock.  
@@ -64,11 +75,11 @@ class Clock
 	///Returns: Time elapsed.
 	Duration restart()
 	{
-		MonoTime now = MonoTime.currTime;
+		MonoTime now = currTime;
 		auto elapsed = now - m_startTime;
 		m_startTime = now;
 
-		return elapsed;
+		return cast(Duration)elapsed;
 	}
 	
 }
