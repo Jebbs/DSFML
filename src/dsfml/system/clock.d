@@ -65,7 +65,7 @@ class Clock
 	///Returns: Time elapsed .
 	Duration getElapsedTime() const
 	{
-		return currTime - m_startTime;
+		return cast(Duration)(currTime - m_startTime);
 	}
 	
 	///Restart the clock.  
@@ -79,7 +79,7 @@ class Clock
 		auto elapsed = now - m_startTime;
 		m_startTime = now;
 
-		return elapsed;
+		return cast(Duration)elapsed;
 	}
 	
 }
