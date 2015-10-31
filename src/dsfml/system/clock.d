@@ -45,7 +45,6 @@ class Clock
 	{
 		import dsfml.system.config;
 		mixin(destructorOutput);
-		//sfClock_destroy(sfPtr);
 	}
 	
 	///Get the elapsed time.
