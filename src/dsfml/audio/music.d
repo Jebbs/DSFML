@@ -218,7 +218,7 @@ class Music : SoundStream
 			uint sampleRate = m_file.getSampleRate();
 
 			// Compute the music duration
-			m_duration = usecs(cast(long)(cast(float)(sampleCount) / sampleRate / channelCount * 1_000_000));
+			m_duration = usecs(sampleCount * 1_000_000 / sampleRate / channelCount);
 			
 			// Resize the internal buffer so that it can contain 1 second of audio samples
 			m_samples.length = sampleRate * channelCount;

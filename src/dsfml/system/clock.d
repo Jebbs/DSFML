@@ -32,8 +32,7 @@ public import core.time;
  */
 class Clock
 {
-	import std.compiler;
-	static if(version_minor < 67)
+	static if(__VERSION__ < 2067L)
 	{
 		alias MonoTime = TickDuration;
 		alias currTime = TickDuration.currSystemTick;
