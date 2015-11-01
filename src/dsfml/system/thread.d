@@ -95,7 +95,7 @@ unittest
 	{
 		import std.stdio;
 		import dsfml.system.sleep;
-		import dsfml.system.time;
+		import core.time;
 		
 
 		void secondThreadHello()
@@ -144,4 +144,3 @@ unittest
 
 
 version(linux) package extern(C) void linux_XInitThreads();
-

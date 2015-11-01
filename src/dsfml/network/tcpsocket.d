@@ -20,11 +20,12 @@ If you use this software in a product, an acknowledgment in the product document
 ///A module containing the TcpSocket class.
 module dsfml.network.tcpsocket;
 
+import core.time;
+
 import dsfml.network.socket;
 import dsfml.network.ipaddress;
 import dsfml.network.packet;
 
-import dsfml.system.time;
 import dsfml.system.err;
 
 /**
@@ -120,9 +121,9 @@ class TcpSocket:Socket
     ///		timeout = Optional maximum time to wait.
     ///
     ///Returns: Status code.
-	Status connect(IpAddress host, ushort port, Time timeout = Time.Zero)
+	Status connect(IpAddress host, ushort port, Duration timeout = Duration.zero())
 	{
-		return sfTcpSocket_connect(sfPtr, host.m_address.ptr,port, timeout.asMicroseconds());
+		return sfTcpSocket_connect(sfPtr, host.m_address.ptr,port, timeout.total!"usecs");
 	}
 	
 	///Disconnect the socket from its remote peer.
@@ -353,4 +354,3 @@ Socket.Status sfTcpSocket_sendPacket(sfTcpSocket* socket, sfPacket* packet);
 Socket.Status sfTcpSocket_receivePacket(sfTcpSocket* socket, sfPacket* packet);
 
 const(char)* sfErr_getOutput();
-

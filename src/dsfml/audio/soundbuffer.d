@@ -19,11 +19,12 @@ If you use this software in a product, an acknowledgment in the product document
 
 module dsfml.audio.soundbuffer;
 
+import core.time;
+
 import dsfml.audio.soundfile;
 import dsfml.audio.sound;
 
 import dsfml.system.inputstream;
-import dsfml.system.time;
 
 import std.stdio;
 
@@ -121,9 +122,10 @@ class SoundBuffer
 	 * 
 	 * Returns: Sound duration
 	 */
-	Time getDuration() const
+	Duration getDuration() const
 	{
-		return microseconds(sfSoundBuffer_getDuration(sfPtr));
+		import core.time;
+		return usecs(sfSoundBuffer_getDuration(sfPtr));
 	}
 
 	/**
@@ -272,9 +274,9 @@ unittest
 
 		writeln("Channel Count: ", soundbuffer.getChannelCount());
 
-		writeln("Duration: ",soundbuffer.getDuration().asSeconds());
+		writeln("Duration: ", soundbuffer.getDuration().total!"seconds");
 
-		writeln("Sample Count: ",soundbuffer.getSamples().length);
+		writeln("Sample Count: ", soundbuffer.getSamples().length);
 
 		//use sound buffer here
 
@@ -356,4 +358,3 @@ uint sfSoundBuffer_getChannelCount(const sfSoundBuffer* soundBuffer);
 long sfSoundBuffer_getDuration(const sfSoundBuffer* soundBuffer);
 
 const(char)* sfErr_getOutput();
-

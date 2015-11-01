@@ -19,10 +19,11 @@ If you use this software in a product, an acknowledgment in the product document
 
 module dsfml.audio.sound;
 
+import core.time;
+
 import dsfml.audio.soundbuffer;
 import dsfml.audio.soundsource;
 
-import dsfml.system.time;
 import dsfml.system.vector3;
 
 /++
@@ -100,14 +101,14 @@ class Sound : SoundSource
 	 */
 	@property
 	{
-		void playingOffset(Time offset)
+		void playingOffset(Duration offset)
 		{
-			sfSound_setPlayingOffset(sfPtr, offset.asMicroseconds());
+			sfSound_setPlayingOffset(sfPtr, offset.total!"usecs");
 		}
 
-		Time playingOffset()
+		Duration playingOffset()
 		{
-			return microseconds(sfSound_getPlayingOffset(sfPtr));
+			return usecs(sfSound_getPlayingOffset(sfPtr));
 		}
 	}
 
@@ -290,7 +291,7 @@ unittest
 	{
 		import std.stdio;
 		import dsfml.system.clock;
-		import dsfml.system.time;
+		import core.time;
 
 
 		writeln("Unit test for Sound class");
@@ -305,7 +306,7 @@ unittest
 			return;
 		}
 
-		float duration = soundbuffer.getDuration().asSeconds();
+		float duration = soundbuffer.getDuration().total!"seconds";
 
 		auto sound = new Sound(soundbuffer);
 
@@ -316,7 +317,7 @@ unittest
 		sound.play();
 
 
-		while(clock.getElapsedTime().asSeconds()< duration)
+		while(clock.getElapsedTime().total!"seconds" < duration)
 		{
 			//wait for sound to finish
 		}
@@ -382,4 +383,3 @@ float sfSound_getMinDistance(const sfSound* sound);
 float sfSound_getAttenuation(const sfSound* sound);
 
 long sfSound_getPlayingOffset(const sfSound* sound);
-

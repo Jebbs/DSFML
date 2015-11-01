@@ -74,7 +74,7 @@ unittest
 	{
 		import dsfml.system.thread;
 		import dsfml.system.sleep;
-		import dsfml.system.time;
+		import core.time;
 		import std.stdio;
 
 		auto mutex = new Mutex();

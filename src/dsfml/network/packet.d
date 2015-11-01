@@ -332,12 +332,12 @@ unittest
 	{
 		import std.stdio;
 
-
 		import dsfml.network.socket;
 		import dsfml.network.tcpsocket;
 		import dsfml.network.tcplistener;
 		import dsfml.network.ipaddress;
-		import dsfml.system.time;
+		
+		import core.time;
 
 		
 		writeln("Unittest for Packet");
@@ -461,4 +461,3 @@ void sfPacket_writeInt32(sfPacket* packet, int);
 void sfPacket_writeUint32(sfPacket* packet, uint);
 void sfPacket_writeFloat(sfPacket* packet, float);
 void sfPacket_writeDouble(sfPacket* packet, double);
-

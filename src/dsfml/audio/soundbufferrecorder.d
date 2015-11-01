@@ -35,7 +35,7 @@ import dsfml.audio.soundbuffer;
  + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1SoundBufferRecorder.php#details
  + Authors: Laurent Gomila, Jeremy DeHaan
  +/
-class SoundBufferRecorder:SoundRecorder
+class SoundBufferRecorder : SoundRecorder
 {
 	private
 	{
@@ -114,9 +114,9 @@ unittest
 	version(DSFML_Unittest_Audio)
 	{
 		import std.stdio;
+		import core.time;
 		import dsfml.window.keyboard;
 		import dsfml.audio.sound;
-		import dsfml.system.time;
 		import dsfml.system.clock;
 		import dsfml.system.sleep;
 		
@@ -135,7 +135,7 @@ unittest
 		writeln("3");
 		clock.restart();
 
-		while(clock.getElapsedTime().asSeconds() <1)
+		while(clock.getElapsedTime().total!"seconds" <1)
 		{
 			//wait for a second
 		}
@@ -143,7 +143,7 @@ unittest
 		
 		clock.restart();
 
-		while(clock.getElapsedTime().asSeconds() <1)
+		while(clock.getElapsedTime().total!"seconds" <1)
 		{
 			//wait for a second
 		}
@@ -151,7 +151,7 @@ unittest
 
 		clock.restart();
 
-		while(clock.getElapsedTime().asSeconds() <1)
+		while(clock.getElapsedTime().total!"seconds" <1)
 		{
 			//wait for a second
 		}
@@ -160,7 +160,7 @@ unittest
 		recorder.start();	
 		clock.restart();
 
-		while(clock.getElapsedTime().asSeconds() <5)
+		while(clock.getElapsedTime().total!"seconds" <5)
 		{
 			//wait for a second
 		}
@@ -193,6 +193,3 @@ unittest
 		writeln();
 	}
 }
-
-
-
