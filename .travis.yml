@@ -1,4 +1,18 @@
 language: d
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - libfreetype6-dev
+      - libgl1-mesa-dev
+      - libglew-dev
+      - libjpeg8-dev
+      - libopenal-dev
+      - libpthread-stubs0-dev
+      - libsndfile1-dev
+      - libx11-dev
+      - libxrandr-dev
 
 d: 
   - dmd-2.069.0-rc2
@@ -8,20 +22,17 @@ d:
   - gdc-4.8.2
   - ldc-0.15.1
 
-install:
-  #Install everything we need to build
-  - sudo apt-get install -y libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew1.5-dev libjpeg8-dev libsndfile1-dev libopenal-dev
+before_install:
   #Build and install DSFML-C
-  - cd $HOME
-  - git clone https://github.com/Jebbs/DSFMLC.git
-  - cd DSFMLC
-  - cmake .
-  - make
-  - sudo make install
-  - cd $TRAVIS_BUILD_DIR
+  - pushd $(mktemp -d)
+  - git clone --depth=1 https://github.com/Jebbs/DSFML-C.git .
+  - cmake -DCMAKE_INSTALL_PREFIX:PATH=${HOME}/DSFML-C .
+  - make -j2 install
+  - export LIBRARY_PATH=${HOME}/DSFML-C/lib
+  - export LD_LIBRARY_PATH=${HOME}/DSFML-C/lib
+  - popd
 
-script: 
-  - ${DMD} build.d
-  - ./build -unittest
-
+script:
+  - rdmd build.d -unittest
+  - cd unittest && ./unittest
 
