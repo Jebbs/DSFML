@@ -142,7 +142,7 @@ class UdpSocket:Socket
 	Status send(Packet packet, IpAddress address, ushort port)
 	{
 		//temporary packet to be removed on function exit
-		scope Packet temp = new Packet();
+		scope SfPacket temp = new SfPacket();
 		
 		//getting packet's "to send" data
 		temp.append(packet.onSend());
@@ -191,10 +191,10 @@ class UdpSocket:Socket
 	Status receive(Packet packet, out IpAddress address, out ushort port)
 	{
 		//temporary packet to be removed on function exit
-		scope Packet temp = new Packet();
+		scope SfPacket temp = new SfPacket();
 
 		//get the sent data
-		Status status =  sfUdpSocket_receivePacket(sfPtr, packet.sfPtr,address.m_address.ptr,&port);
+		Status status =  sfUdpSocket_receivePacket(sfPtr, temp.sfPtr, address.m_address.ptr, &port);
 
 		//put data into the packet so that it can process it first if it wants.
 		packet.onRecieve(temp.getData());
@@ -297,6 +297,3 @@ Socket.Status sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, cons
 Socket.Status sfUdpSocket_receivePacket(sfUdpSocket* socket, sfPacket* packet, char* address, ushort* port);
 
 const(char)* sfErr_getOutput();
-
-
-

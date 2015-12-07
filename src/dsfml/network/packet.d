@@ -27,12 +27,20 @@ module dsfml.network.packet;
  */
 class Packet
 {
-	package sfPacket* sfPtr;
+	
+	private
+	{
+		ubyte[] m_data;    /// Data stored in the packet
+	    size_t m_readPos; /// Current reading position in the packet
+	    bool   m_isValid; /// Reading state of the packet
+	}
 	
 	///Default constructor
 	this()
 	{
-		sfPtr = sfPacket_create();
+		//sfPtr = sfPacket_create();
+		m_readPos = 0;
+		m_isValid = true;
 	}
 	
 	///Destructor
@@ -40,7 +48,7 @@ class Packet
 	{
 		import dsfml.system.config;
 		mixin(destructorOutput);
-		sfPacket_destroy(sfPtr);
+		//sfPacket_destroy(sfPtr);
 	}
 
 	///Get a slice of the data contained in the packet.
@@ -48,7 +56,7 @@ class Packet
 	///Returns: Slice containing the data.
 	const(void)[] getData() const
 	{
-		return sfPacket_getData(sfPtr)[0..sfPacket_getDataSize(sfPtr)];
+		return m_data;
 	}
 
 	///Append data to the end of the packet.
@@ -56,7 +64,11 @@ class Packet
     ///		data = Pointer to the sequence of bytes to append.
 	void append(const(void)[] data)
 	{
-		sfPacket_append(sfPtr, data.ptr, void.sizeof*data.length);
+		//sfPacket_append(sfPtr, data.ptr, void.sizeof*data.length);
+		if(data != null && data.length > 0)
+		{
+			m_data ~= cast(byte[])data;
+		}
 	}
 
 	
@@ -71,7 +83,7 @@ class Packet
 	///Returns: True if last data extraction from packet was successful.
 	bool canRead() const
 	{
-		return (sfPacket_canRead(sfPtr));
+		return m_isValid;
 	}
 
 	///Clear the packet.
@@ -79,7 +91,9 @@ class Packet
 	///After calling Clear, the packet is empty.
 	void clear()
 	{
-		sfPacket_clear(sfPtr);
+		m_data.length = 0;
+	    m_readPos = 0;
+	    m_isValid = true;
 	}
 
 	///Tell if the reading position has reached the end of the packet.
@@ -89,61 +103,18 @@ class Packet
 	///Returns: True if all data was read, false otherwise.
 	bool endOfPacket() const
 	{
-		return (sfPacket_endOfPacket(sfPtr));
-	}
-
-	///Reads a bool from the packet.
-	bool readBool()
-	{
-		return cast(bool)readByte();
-	}
-
-	///Reads a byte from the packet.
-	byte readByte()
-	{
-		return sfPacket_readInt8(sfPtr);
+		return m_readPos >= m_data.length;
 	}
 	
-	///Reads a ubyte from the packet.
-	ubyte readUbyte()
-	{
-		return sfPacket_readUint8(sfPtr);
-	}
 	
-	///Reads a short from the packet.
-	short readShort()
+	///Reads a primitive data type from the packet.
+	T read(T)()
 	{
-		return sfPacket_readInt16(sfPtr);
-	}
-
-	///Reads a ushort from the packet.
-	ushort readUshort()
-	{
-		return sfPacket_readUint16(sfPtr);
-	}
-
-	///Reads a int from the packet.
-	int readInt()
-	{
-		return sfPacket_readInt32(sfPtr);
-	}
-
-	///Reads a uint from the packet.
-	uint readUint()
-	{
-		return sfPacket_readUint32(sfPtr);
-	}
-	
-	///Reads a float from the packet.
-	float readFloat()
-	{
-		return sfPacket_readFloat(sfPtr);
-	}
-	
-	///Reads a double from the packet.
-	double readDouble()
-	{
-		return sfPacket_readDouble(sfPtr);
+		import std.bitmanip;
+	    T temp = std.bitmanip.read!T(m_data);
+	    m_readPos += T.sizeof;
+	    
+	    return temp;
 	}
 	
 	///Reads a string from the packet.
@@ -152,13 +123,13 @@ class Packet
 		import std.conv;
 
 		//get string length
-		uint length = readUint();
+		uint length = read!uint();
 		char[] temp = new char[](length);
 
 		//read each char of the string and put it in. 
-		for(int i = 0; i < length;++i)
+		for(int i = 0; i < length; ++i)
 		{
-			temp[i] = cast(char)readUbyte();
+			temp[i] = read!char();
 		}
 
 		return temp.to!string();
@@ -170,13 +141,13 @@ class Packet
 		import std.conv;
 
 		//get string length
-		uint length = readUint();
+		uint length = read!uint();
 		wchar[] temp = new wchar[](length);
 		
 		//read each wchar of the string and put it in. 
-		for(int i = 0; i < length;++i)
+		for(int i = 0; i < length; ++i)
 		{
-			temp[i] = cast(wchar)readUshort();
+			temp[i] = read!wchar();
 		}
 		
 		return temp.to!wstring();
@@ -188,77 +159,33 @@ class Packet
 		import std.conv;
 
 		//get string length
-		uint length = readUint();
+		uint length = read!uint();
 		dchar[] temp = new dchar[](length);
 		
 		//read each dchar of the string and put it in. 
-		for(int i = 0; i < length;++i)
+		for(int i = 0; i < length; ++i)
 		{
-			temp[i] = cast(dchar)readUint();
+			temp[i] = read!dchar();
 		}
 		
 		return temp.to!dstring();
 	}
-
-	///Write a bool the the end of the packet.
-	void writeBool(bool value)
-	{
-		writeUbyte(cast(ubyte)value);
-	}
-
-	///Write a byte the the end of the packet.
-	void writeByte(byte value)
-	{
-		sfPacket_writeInt8(sfPtr,value);
-	}
-
-	///Write a ubyte the the end of the packet.
-	void writeUbyte(ubyte value)
-	{
-		sfPacket_writeUint8(sfPtr, value);
-	}
 	
-	///Write a short the the end of the packet.
-	void writeShort(short value)
-	{
-		sfPacket_writeInt16(sfPtr, value);
-	}
 	
-	///Write a ushort the the end of the packet.
-	void writeUshort(ushort value)
+	///Writes a scalar data type to the packet.
+	void write(T)(T value)
 	{
-		sfPacket_writeUint16(sfPtr, value);
-	}
-	
-	///Write a int the the end of the packet.
-	void writeInt(int value)
-	{
-		sfPacket_writeInt32(sfPtr, value);
-	}
-	
-	///Write a uint the the end of the packet.
-	void writeUint(uint value)
-	{
-		sfPacket_writeUint32(sfPtr, value);
-	}
-	
-	///Write a float the the end of the packet.
-	void writeFloat(float value)
-	{
-		sfPacket_writeFloat(sfPtr, value);
-	}
-
-	///Write a double the the end of the packet.
-	void writeDouble(double value)
-	{
-		sfPacket_writeDouble(sfPtr, value);
+		import std.bitmanip;
+		size_t index = m_data.length;
+		m_data.reserve(value.sizeof);
+	    std.bitmanip.write!T(m_data, value, index);
 	}
 	
 	///Write a string the the end of the packet.
 	void writeString(string value)
 	{
 		//write length of string.
-		writeUint(cast(uint)value.length);
+		write(cast(uint) value.length);
 		//write append the string data
 
 		append(value);
@@ -268,11 +195,11 @@ class Packet
 	void writeWstring(wstring value)
 	{
 		//write length of string.
-		writeUint(cast(uint)value.length);
+		write(cast(uint) value.length);
 		//write append the string data
-		for(int i = 0; i<value.length;++i)
+		for(int i = 0; i < value.length; ++i)
 		{
-			writeUshort(cast(ushort)value[i]);
+			write(value[i]);
 		}
 	}
 
@@ -280,11 +207,11 @@ class Packet
 	void writeDstring(dstring value)
 	{
 		//write length of string.
-		writeUint(cast(uint)value.length);
+		write(cast(uint) value.length);
 		//write append the string data
-		for(int i = 0; i<value.length;++i)
+		for(int i = 0; i < value.length; ++i)
 		{
-			writeUint(cast(uint)value[i]);
+			write(value[i]);
 		}
 	}
 
@@ -321,8 +248,53 @@ class Packet
 
 	}
 	
+	private bool checkSize(size_t size)
+	{
+	    m_isValid = m_isValid && (m_readPos + size <= m_data.length);
+
+	    return m_isValid;
+	}
+	
 }
 
+/**
+ *Utility class used internally to interact with DSFML-C to transfer Packet's data.
+ */
+package class SfPacket
+{
+	package sfPacket* sfPtr;
+	
+	///Default constructor
+	this()
+	{
+		sfPtr = sfPacket_create();
+	}
+	
+	///Destructor
+	~this()
+	{
+		import dsfml.system.config;
+		mixin(destructorOutput);
+		sfPacket_destroy(sfPtr);
+	}
+	
+	
+	///Get a slice of the data contained in the packet.
+	///
+	///Returns: Slice containing the data.
+	const(void)[] getData() const
+	{
+		return sfPacket_getData(sfPtr)[0 .. sfPacket_getDataSize(sfPtr)];
+	}
+
+	///Append data to the end of the packet.
+	///Params:
+    ///		data = Pointer to the sequence of bytes to append.
+	void append(const(void)[] data)
+	{
+		sfPacket_append(sfPtr, data.ptr, void.sizeof * data.length);
+	}
+}
 
 
 unittest

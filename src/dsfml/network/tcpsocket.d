@@ -171,7 +171,7 @@ class TcpSocket:Socket
 	{
 		import std.stdio;
 		//temporary packet to be removed on function exit
-		scope Packet temp = new Packet();
+		scope SfPacket temp = new SfPacket();
 
 		//getting packet's "to send" data
 		temp.append(packet.onSend());
@@ -212,7 +212,7 @@ class TcpSocket:Socket
 	Status receive(Packet packet)
 	{
 		//temporary packet to be removed on function exit
-		scope Packet temp = new Packet();
+		scope SfPacket temp = new SfPacket();
 
 		//get the sent data
 		Status status = sfTcpSocket_receivePacket(sfPtr, temp.sfPtr);
