@@ -64,7 +64,7 @@ class Packet
 	{
 		if(data != null && data.length > 0)
 		{
-			m_data ~= cast(byte[])data;
+			m_data ~= cast(ubyte[])data;
 		}
 	}
 
