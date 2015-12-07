@@ -31,14 +31,13 @@ class Packet
 	private
 	{
 		ubyte[] m_data;    /// Data stored in the packet
-	    size_t m_readPos; /// Current reading position in the packet
-	    bool   m_isValid; /// Reading state of the packet
+		size_t  m_readPos; /// Current reading position in the packet
+		bool    m_isValid; /// Reading state of the packet
 	}
 	
 	///Default constructor
 	this()
 	{
-		//sfPtr = sfPacket_create();
 		m_readPos = 0;
 		m_isValid = true;
 	}
@@ -48,7 +47,6 @@ class Packet
 	{
 		import dsfml.system.config;
 		mixin(destructorOutput);
-		//sfPacket_destroy(sfPtr);
 	}
 
 	///Get a slice of the data contained in the packet.
@@ -64,7 +62,6 @@ class Packet
     ///		data = Pointer to the sequence of bytes to append.
 	void append(const(void)[] data)
 	{
-		//sfPacket_append(sfPtr, data.ptr, void.sizeof*data.length);
 		if(data != null && data.length > 0)
 		{
 			m_data ~= cast(byte[])data;
@@ -92,8 +89,8 @@ class Packet
 	void clear()
 	{
 		m_data.length = 0;
-	    m_readPos = 0;
-	    m_isValid = true;
+		m_readPos = 0;
+		m_isValid = true;
 	}
 
 	///Tell if the reading position has reached the end of the packet.
@@ -111,10 +108,10 @@ class Packet
 	T read(T)()
 	{
 		import std.bitmanip;
-	    T temp = std.bitmanip.read!T(m_data);
-	    m_readPos += T.sizeof;
-	    
-	    return temp;
+		T temp = std.bitmanip.read!T(m_data);
+		m_readPos += T.sizeof;
+	
+		return temp;
 	}
 	
 	///Reads a string from the packet.
@@ -176,9 +173,10 @@ class Packet
 	void write(T)(T value)
 	{
 		import std.bitmanip;
+		
 		size_t index = m_data.length;
 		m_data.reserve(value.sizeof);
-	    std.bitmanip.write!T(m_data, value, index);
+		std.bitmanip.write!T(m_data, value, index);
 	}
 	
 	///Write a string the the end of the packet.
@@ -186,8 +184,8 @@ class Packet
 	{
 		//write length of string.
 		write(cast(uint) value.length);
+		
 		//write append the string data
-
 		append(value);
 	}
 	
@@ -250,9 +248,9 @@ class Packet
 	
 	private bool checkSize(size_t size)
 	{
-	    m_isValid = m_isValid && (m_readPos + size <= m_data.length);
+		m_isValid = m_isValid && (m_readPos + size <= m_data.length);
 
-	    return m_isValid;
+		return m_isValid;
 	}
 	
 }
