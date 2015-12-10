@@ -71,6 +71,7 @@ class Shader
 	this()
 	{
 		//creates an empty shader
+		sfPtr=sfShader_construct();
 	}
 	
 	package this(sfShader* shader)
