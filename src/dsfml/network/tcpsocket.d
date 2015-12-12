@@ -283,7 +283,7 @@ unittest
 		receivePacket.clear();
 		
 		//Respond back to the client
-		sendPacket.writeString("Hello, I'm your server.");
+		sendPacket.write("Hello, I'm your server.");
 		
 		serverSocket.send(sendPacket);
 
@@ -291,7 +291,7 @@ unittest
 
 
 		
-		writeln("Gotten from server: ", receivePacket.readString());
+		writeln("Gotten from server: ", receivePacket.read!string());
 		
 		clientSocket.disconnect();
 		writeln();

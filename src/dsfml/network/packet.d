@@ -20,6 +20,9 @@ If you use this software in a product, an acknowledgment in the product document
 ///A module contianing the Packet class.
 module dsfml.network.packet;
 
+import std.traits;
+import std.range;
+
 /**
  *Utility class to build blocks of data to transfer over the network.
  *
@@ -299,21 +302,21 @@ unittest
 		listener.accept(serverSocket);
 		
 		//Let's greet the server!
-		sendPacket.writeString("Hello, I'm a client!");
+		sendPacket.write("Hello, I'm a client!");
 		clientSocket.send(sendPacket);
 		
 		//And get the data on the server side
 		serverSocket.receive(receivePacket);
 		
 		//What did we get from the client?
-		writeln("Gotten from client: " ,receivePacket.readString());
+		writeln("Gotten from client: ", receivePacket.read!string());
 		
 		//clear the packets to send/get new information
 		sendPacket.clear();
 		receivePacket.clear();
 		
 		//Respond back to the client
-		sendPacket.writeString("Hello, I'm your server.");
+		sendPacket.write("Hello, I'm your server.");
 		
 		serverSocket.send(sendPacket);
 
@@ -321,7 +324,7 @@ unittest
 
 
 		
-		writeln("Gotten from server: ", receivePacket.readString());
+		writeln("Gotten from server: ", receivePacket.read!string());
 		
 		clientSocket.disconnect();
 		
