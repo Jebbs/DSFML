@@ -59,7 +59,7 @@ class Packet
 
 	///Append data to the end of the packet.
 	///Params:
-    ///		data = Pointer to the sequence of bytes to append.
+	///		data = Pointer to the sequence of bytes to append.
 	void append(const(void)[] data)
 	{
 		if(data != null && data.length > 0)
@@ -104,105 +104,67 @@ class Packet
 	}
 	
 	
-	///Reads a primitive data type from the packet.
+	///Reads a primitive data type or string from the packet.
+	///
+	///Returns: The value in the packet at the current read position.
+	///Throws: A RangeError if you try to access data that doesn't exist.
 	T read(T)()
+	if(isScalarType!T)
 	{
 		import std.bitmanip;
-		T temp = std.bitmanip.read!T(m_data);
+		
+		T temp = std.bitmanip.peek!T(m_data, m_readPos);
 		m_readPos += T.sizeof;
-	
+
 		return temp;
 	}
 	
-	///Reads a string from the packet.
-	string readString()
+	///Ditto
+	T read(T)() 
+	if(isSomeString!T)
 	{
 		import std.conv;
-
-		//get string length
-		uint length = read!uint();
-		char[] temp = new char[](length);
-
-		//read each char of the string and put it in. 
-		for(int i = 0; i < length; ++i)
+		
+		//Get the element type of the string
+		static if(isNarrowString!T)
 		{
-			temp[i] = read!char();
+			alias ET = Unqual!(ElementEncodingType!T);
+		}
+		else
+		{
+			alias ET = Unqual!(ElementType!T);
 		}
 
-		return temp.to!string();
-	}
-	
-	///Reads a wstring from the packet.
-	wstring readWstring()
-	{
-		import std.conv;
-
 		//get string length
 		uint length = read!uint();
-		wchar[] temp = new wchar[](length);
-		
-		//read each wchar of the string and put it in. 
-		for(int i = 0; i < length; ++i)
-		{
-			temp[i] = read!wchar();
-		}
-		
-		return temp.to!wstring();
-	}
-
-	///Reads a dstring from the packet.
-	dstring readDstring()
-	{
-		import std.conv;
-
-		//get string length
-		uint length = read!uint();
-		dchar[] temp = new dchar[](length);
+		ET[] temp = new ET[](length);
 		
 		//read each dchar of the string and put it in. 
 		for(int i = 0; i < length; ++i)
 		{
-			temp[i] = read!dchar();
+			temp[i] = read!ET;
 		}
 		
-		return temp.to!dstring();
+		return temp.to!T();
 	}
 	
 	
-	///Writes a scalar data type to the packet.
+	///Writes a scalar data type or string to the packet.
 	void write(T)(T value)
+	if(isScalarType!T)
 	{
 		import std.bitmanip;
 		
 		size_t index = m_data.length;
 		m_data.reserve(value.sizeof);
+		m_data.length += value.sizeof;
+		
 		std.bitmanip.write!T(m_data, value, index);
 	}
 	
-	///Write a string the the end of the packet.
-	void writeString(string value)
-	{
-		//write length of string.
-		write(cast(uint) value.length);
-		
-		//write append the string data
-		append(value);
-	}
-	
-	///Write a wstring the the end of the packet.
-	void writeWstring(wstring value)
-	{
-		//write length of string.
-		write(cast(uint) value.length);
-		//write append the string data
-		for(int i = 0; i < value.length; ++i)
-		{
-			write(value[i]);
-		}
-	}
-
-	///Write a dstring the the end of the packet.
-	void writeDstring(dstring value)
+	///Ditto
+	void write(T)(T value)
+	if(isSomeString!T)
 	{
 		//write length of string.
 		write(cast(uint) value.length);
@@ -230,7 +192,7 @@ class Packet
 	///The function receives an array of the received data, and must fill the packet with the transformed bytes. The default implementation fills the packet directly without transforming the data.
 	///
 	///Params:
-    //		data = Array of the received bytes. 
+	///		data = Array of the received bytes. 
 	void onRecieve(const(void)[] data)
 	{
 		append(data);
@@ -240,7 +202,7 @@ class Packet
 	{
 		shared static this()
 		{
-    		//XInitThreads();
+			//XInitThreads();
 		}
 
 
@@ -287,7 +249,7 @@ package class SfPacket
 
 	///Append data to the end of the packet.
 	///Params:
-    ///		data = Pointer to the sequence of bytes to append.
+	///		data = Pointer to the sequence of bytes to append.
 	void append(const(void)[] data)
 	{
 		sfPacket_append(sfPtr, data.ptr, void.sizeof * data.length);
