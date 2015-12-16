@@ -71,21 +71,6 @@ class Packet
 		}
 	}
 
-	
-	///Test the validity of a packet, for reading
-	///
-	///This function allows to test the packet, to check if
-	///a reading operation was successful.
-	///
-	///A packet will be in an invalid state if it has no more
-	///data to read.
-	///
-	///Returns: True if last data extraction from packet was successful.
-	bool canRead() const
-	{
-		return m_isValid;
-	}
-
 	///Clear the packet.
 	///
 	///After calling Clear, the packet is empty.
@@ -108,22 +93,25 @@ class Packet
 	
 	
 	///Reads a primitive data type or string from the packet.
+	///The value in the packet at the current read position is set to value.
 	///
-	///Returns: The value in the packet at the current read position.
-	///Throws: A RangeError if you try to access data that doesn't exist.
-	T read(T)()
+	///Returns: True if last data extraction from packet was successful.
+	bool read(T)(out T value)
 	if(isScalarType!T)
 	{
 		import std.bitmanip;
 		
-		T temp = std.bitmanip.peek!T(m_data, m_readPos);
-		m_readPos += T.sizeof;
+		if (checkSize(T.sizeof))
+	    {
+			value = std.bitmanip.peek!T(m_data, m_readPos);
+			m_readPos += T.sizeof;
+		}
 
-		return temp;
+		return m_isValid;
 	}
 	
 	///Ditto
-	T read(T)() 
+	bool read(T)(out T value) 
 	if(isSomeString!T)
 	{
 		import std.conv;
@@ -139,16 +127,19 @@ class Packet
 		}
 
 		//get string length
-		uint length = read!uint();
+		uint length;
+		read(length);
 		ET[] temp = new ET[](length);
 		
 		//read each dchar of the string and put it in. 
-		for(int i = 0; i < length; ++i)
+		for(int i = 0; i < length && m_isValid; ++i)
 		{
-			temp[i] = read!ET;
+			read!ET(temp[i]);
 		}
 		
-		return temp.to!T();
+		value = temp.to!T();
+		
+		return m_isValid;
 	}
 	
 	
@@ -309,7 +300,9 @@ unittest
 		serverSocket.receive(receivePacket);
 		
 		//What did we get from the client?
-		writeln("Gotten from client: ", receivePacket.read!string());
+		string message;
+		receivePacket.read!string(message);
+		writeln("Gotten from client: ", message);
 		
 		//clear the packets to send/get new information
 		sendPacket.clear();
@@ -323,8 +316,8 @@ unittest
 		clientSocket.receive(receivePacket);
 
 
-		
-		writeln("Gotten from server: ", receivePacket.read!string());
+		receivePacket.read!string(message);
+		writeln("Gotten from server: ", message);
 		
 		clientSocket.disconnect();
 		

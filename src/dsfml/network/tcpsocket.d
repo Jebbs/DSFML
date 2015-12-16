@@ -290,8 +290,9 @@ unittest
 		clientSocket.receive(receivePacket);
 
 
-		
-		writeln("Gotten from server: ", receivePacket.read!string());
+		string message;
+		receivePacket.read!string(message);
+		writeln("Gotten from server: ", message);
 		
 		clientSocket.disconnect();
 		writeln();
