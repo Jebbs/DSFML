@@ -511,7 +511,7 @@ unittest
 	//find some examples of interesting shaders and use them here
 }
 
-private extern(C++) interface sfmlInputStream
+private extern(C++) interface shaderInputStream
 {
 	long read(void* data, long size);
 	
@@ -523,7 +523,7 @@ private extern(C++) interface sfmlInputStream
 }
 
 
-private class shaderStream:sfmlInputStream
+private class shaderStream:shaderInputStream
 {
 	private InputStream myStream;
 	
@@ -568,7 +568,7 @@ bool sfShader_loadFromFile(sfShader* shader, const(char)* vertexShaderFilename, 
 bool sfShader_loadFromMemory(sfShader* shader, const(char)* vertexShader, const char* fragmentShader);
 
 //Load both the vertex and fragment shaders from custom streams
-bool sfShader_loadFromStream(sfShader* shader, sfmlInputStream vertexShaderStream, sfmlInputStream fragmentShaderStream);
+bool sfShader_loadFromStream(sfShader* shader, shaderInputStream vertexShaderStream, shaderInputStream fragmentShaderStream);
 
 //Destroy an existing shader
 void sfShader_destroy(sfShader* shader);

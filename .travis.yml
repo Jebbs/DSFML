@@ -1,23 +1,55 @@
+os:
+  - linux
+  - osx
+
 language: d
 
-d: 
-  - dmd-2.069.0-rc2
-  - dmd-2.068.2
-  - dmd-2.067.1
-  - dmd-2.066.1
-  - gdc-4.8.2
-  - ldc-0.15.1
+sudo: false
 
+addons:
+  apt:
+    packages:
+      - libfreetype6-dev
+      - libgl1-mesa-dev
+      - libglew-dev
+      - libjpeg8-dev
+      - libopenal-dev
+      - libpthread-stubs0-dev
+      - libsndfile1-dev
+      - libx11-dev
+      - libxrandr-dev
+
+d: 
+ - dmd-2.069.0
+ - dmd-2.068.2
+ - dmd-2.067.1
+ - dmd-2.066.1
+ - gdc-5.2.0
+ - gdc-4.9.3
+ - gdc-4.8.2
+ - ldc-0.16.1
+ - ldc-0.16.0
+ - ldc-0.15.1
+
+#GDC is not supported on OS X :(
+matrix:
+  exclude:
+  - os: osx
+    d: gdc-5.2.0
+  - os: osx
+    d: gdc-4.9.3
+  - os: osx
+    d: gdc-4.8.2
+
+#Build and install DSFMLC
 install:
-  #Install everything we need to build
-  - sudo apt-get install -y libpthread-stubs0-dev libgl1-mesa-dev libx11-dev libxrandr-dev libfreetype6-dev libglew1.5-dev libjpeg8-dev libsndfile1-dev libopenal-dev
-  #Build and install DSFML-C
   - cd $HOME
-  - git clone https://github.com/Jebbs/DSFMLC.git
+  - git clone --depth=1 https://github.com/Jebbs/DSFMLC.git
   - cd DSFMLC
   - cmake .
-  - make
-  - sudo make install
+  - make -j2
+  - export LIBRARY_PATH=${HOME}/DSFMLC/lib
+  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/DSFMLC/lib
   - cd $TRAVIS_BUILD_DIR
 
 script: 

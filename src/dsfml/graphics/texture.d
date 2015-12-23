@@ -149,7 +149,7 @@ class Texture
 	{
 		import dsfml.system.string;
 
-		bool ret = sfTexture_loadFromStream(sfPtr, new sfmlStream(stream), area.left, area.top,area.width, area.height);
+		bool ret = sfTexture_loadFromStream(sfPtr, new textureStream(stream), area.left, area.top,area.width, area.height);
 		if(!ret)
 		{
 			err.write(toString(sfErr_getOutput()));
@@ -411,7 +411,7 @@ unittest
 	}
 }
 
-private extern(C++) interface sfmlInputStream
+private extern(C++) interface textureInputStream
 {
 	long read(void* data, long size);
 		
@@ -423,7 +423,7 @@ private extern(C++) interface sfmlInputStream
 }
 
 
-private class sfmlStream:sfmlInputStream
+private class textureStream:textureInputStream
 {
 	private InputStream myStream;
 
@@ -472,7 +472,7 @@ bool sfTexture_loadFromFile(sfTexture* texture, const(char)* filename, int left,
 bool sfTexture_loadFromMemory(sfTexture* texture, const(void)* data, size_t sizeInBytes, int left, int top, int width, int height);
 
 //Create a new texture from a custom stream
-bool sfTexture_loadFromStream(sfTexture* texture, sfmlInputStream stream, int left, int top, int width, int height);
+bool sfTexture_loadFromStream(sfTexture* texture, textureInputStream stream, int left, int top, int width, int height);
 
 //Create a new texture from an image
 bool sfTexture_loadFromImage(sfTexture* texture, const(sfImage)* image, int left, int top, int width, int height);
