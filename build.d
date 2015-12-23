@@ -94,6 +94,13 @@ else
 
 string[5] modules = ["system", "audio", "network", "window", "graphics"];
 
+//This is to circumvent a bug in GDC's current Windows 32 bit builds.
+//The aa is set up in the initialize function.
+string[][string] fileList;
+
+
+
+
 //parses and finds all given switches
 void parseSwitches(string[] switches)
 {
@@ -234,7 +241,7 @@ bool checkSwitchErrors()
 	{
 		if(buildingLibs || buildingDoc || buildingInterfaceFiles || buildingUnittests || buildingAll || hasUnrecognizedSwitch || force32Build || force64Build)
 		{
-			writeln("Using -help will ignore all other switchs.");
+			writeln("Using -help will ignore all other switches.");
 			return false;
 		}
 	}
@@ -276,6 +283,14 @@ bool checkSwitchErrors()
 //initialize all build settings
 void initialize()
 {
+
+	//Setting up our aa with our lists of files because GDC crashes when searching for them at runtime
+	fileList["system"] = ["clock.d", "config.d", "err.d", "inputstream.d", "lock.d", "mutex.d", "package.d", "sleep.d", "string.d", "thread.d", "vector2.d", "vector3.d"];
+	fileList["audio"] = ["listener.d", "music.d", "package.d", "sound.d", "soundbuffer.d", "soundbufferrecorder.d", "soundfile.d", "soundrecorder.d", "soundsource.d", "soundstream.d"];
+	fileList["network"] = ["ftp.d", "http.d", "ipaddress.d", "package.d", "packet.d", "socket.d", "socketselector.d", "tcplistener.d", "tcpsocket.d", "udpsocket.d"];
+	fileList["window"] = ["context.d", "contextsettings.d", "event.d", "joystick.d", "keyboard.d", "mouse.d", "package.d", "videomode.d", "window.d", "windowhandle.d"];
+	fileList["graphics"] = ["blendmode.d", "circleshape.d", "color.d", "convexshape.d", "drawable.d", "font.d", "glyph.d", "image.d", "package.d", "primitivetype.d", "rect.d", "rectangleshape.d", "renderstates.d", "rendertarget.d", "rendertexture.d", "renderwindow.d", "shader.d", "shape.d", "sprite.d", "text.d", "texture.d", "transform.d", "transformable.d", "vertex.d", "vertexarray.d", "view.d"];
+
 
 	if(isWindows)
 	{
@@ -446,10 +461,10 @@ void initializeLDC()
 		unittestCompilerSwitches = "-main -unittest -I="~impDirectory~" -L=-ldsfml-graphics -L=-ldsfml-window -L=-ldsfml-audio -L=-ldsfml-network -L=-ldsfml-system -L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio -L=-ldsfmlc-network -L=-ldsfmlc-system -L=-L"~libDirectory;
 	}
 
-	unittestCompilerSwitches ="-d-version=DSFML_Unittest_System -d-version=DSFML_Unittest_Window -d-version=DSFML_Unittest_Graphics -d-version=DSFML_Unittest_Audio -d-version=DSFML_Unittest_Network "~unittestCompilerSwitches;
+	unittestCompilerSwitches ="-d-version=DSFML_Unittest_System -d-version=DSFML_Unittest_Window -d-version=DSFML_Unittest_Graphics -d-version=DSFML_Unittest_Audio -d-version=DSFML_Unittest_Network -oq "~unittestCompilerSwitches;
 
 
-	libCompilerSwitches = `-lib -O3 -release -enable-inlining -I=`~impDirectory;
+	libCompilerSwitches = `-lib -O3 -release -oq -enable-inlining -I=`~impDirectory;
 	docCompilerSwitches = "-D -Dd="~docDirectory~" -c -o- -op";
 	interfaceCompilerSwitches = "-H -Hd="~interfaceDirectory~" -c -o- -op";
 }
@@ -457,21 +472,33 @@ void initializeLDC()
 //build the static libraries. Returns true on successful build, false on unsuccessful build
 bool buildLibs()
 {
+
+	//This is because there is a bug that I haven't bothered to track down yet
+	//It causes the static libs to be built twice if building unit tests.
+	//Will fix properly when I care more.
+	static bool builtOnce = false;
+
+	if(builtOnce)
+	{
+		return true;
+	}
+
+
 	writeln("Building static libraries!");
 	foreach(theModule;modules)
 	{
-		string fileList = "";
+		string files = "";
 
-		foreach (string name; dirEntries("src/dsfml/"~theModule, SpanMode.depth))
+		foreach (string name; fileList[theModule])
 		{
 			if(isDFile(name))
 			{
-				fileList~= name ~ " ";
+				files~= "src/dsfml/" ~theModule~"/"~name ~ " ";
 			}
 			
 		}
 
-		string buildCommand = compiler~ fileList ~ libCompilerSwitches;
+		string buildCommand = compiler~ files ~ libCompilerSwitches;
 
 		if(isDMD) 
 		{
@@ -509,6 +536,8 @@ bool buildLibs()
 		}
 		
 	}
+
+	builtOnce = true;
 	return true;
 }
 
@@ -516,27 +545,27 @@ bool buildLibs()
 bool buildUnittests()
 {
 	writeln("Building unit tests!");
-	string filelist = "";
+	string files = "";
 
 	foreach(theModule;modules)
 	{
-		foreach (string name; dirEntries("src/dsfml/"~theModule, SpanMode.depth))
+		foreach (string name; fileList[theModule])
 		{
-
 			if(isDFile(name))
 			{
-				filelist~= name ~ " ";
+				files~= "src/dsfml/" ~theModule~"/"~name ~ " ";
 			}
+			
 		}
 	}
 
 	if(isGDC)
 	{
 		std.file.write("main.d", "void main(){}");
-		filelist = "main.d "~filelist;
+		files = "main.d "~files;
 	}
 
-	string buildCommand = compiler~filelist ~ unittestCompilerSwitches;
+	string buildCommand = compiler~files ~ unittestCompilerSwitches;
 
 	if(isDMD)
 	{
@@ -565,8 +594,15 @@ bool buildUnittests()
 			{
 				if(isWindows)
 				{
-					//on windows it is only useful for linking
-					buildCommand~=" -L+"~unittestLibraryLocation;
+
+					if(!force64Build)
+					{
+						buildCommand~=" -L+"~unittestLibraryLocation;
+					}
+					else
+					{
+						buildCommand~=" -L/LIBPATH:"~unittestLibraryLocation;
+					}
 				}
 				else
 				{
@@ -579,11 +615,22 @@ bool buildUnittests()
 			}
 			else
 			{
-				buildCommand~=" -L=-L"~unittestLibraryLocation;
+				if(isWindows)
+				{
+					buildCommand~=" -L=/LIBPATH:"~unittestLibraryLocation;
+				}
+				else
+				{
+					buildCommand~=" -L=-L"~unittestLibraryLocation;
+				}
 			}
 
 		}
 	}
+
+
+
+	//writeln(buildCommand);
 
 	auto status = executeShell(buildCommand);
 
@@ -601,19 +648,20 @@ void buildDoc()
 
 	chdir("src");
 
-	string filelist = "";
+	string files = "";
 	foreach(theModule;modules)
 	{
-		foreach (string name; dirEntries("dsfml/"~theModule, SpanMode.depth))
+		foreach (string name; fileList[theModule])
 		{
 			if(isDFile(name))
 			{
-				filelist~= name ~ " ";
+				files~= "dsfml/" ~theModule~"/"~name ~ " ";
 			}
+			
 		}
 	}
 
-	string buildCommand = compiler~filelist ~ docCompilerSwitches;
+	string buildCommand = compiler~files ~ docCompilerSwitches;
 
 	auto status = executeShell(buildCommand);
 
@@ -632,11 +680,11 @@ void buildDocGDC()
 
 	foreach(theModule;modules)
 	{
-		foreach (string name; dirEntries("dsfml/"~theModule, SpanMode.depth))
+		foreach (string name; fileList[theModule])
 		{
 			if(isDFile(name))
 			{
-				string buildCommand = compiler~ name ~ docCompilerSwitches ~ " -fdoc-dir="~docDirectory~"dsfml/"~theModule;
+				string buildCommand = compiler~ "dsfml/" ~ theModule ~ name ~ docCompilerSwitches ~ " -fdoc-dir="~docDirectory~"dsfml/"~theModule;
 
 				auto status = executeShell(buildCommand);
 
@@ -753,6 +801,7 @@ bool isDFile(string name)
 
 int main(string[] args)
 {
+
 	parseSwitches(args[1..$]);
 
 	if(!checkSwitchErrors())

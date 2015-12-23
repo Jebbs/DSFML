@@ -254,7 +254,7 @@ unittest
 
 
 private:
-private extern(C++) interface sfmlInputStream
+private extern(C++) interface fontInputStream
 {
 	long read(void* data, long size);
 	
@@ -266,7 +266,7 @@ private extern(C++) interface sfmlInputStream
 }
 
 
-private class fontStream:sfmlInputStream
+private class fontStream:fontInputStream
 {
 	private InputStream myStream;
 	
@@ -313,7 +313,7 @@ bool sfFont_loadFromMemory(sfFont* font, const(void)* data, size_t sizeInBytes);
 
 
 //Create a new image font a custom stream
-bool sfFont_loadFromStream(sfFont* font, sfmlInputStream stream);
+bool sfFont_loadFromStream(sfFont* font, fontInputStream stream);
 
 
 // Copy an existing font

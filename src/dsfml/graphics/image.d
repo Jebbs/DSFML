@@ -336,7 +336,7 @@ unittest
 }
 
 
-private extern(C++) interface sfmlInputStream
+private extern(C++) interface imageInputStream
 {
 	long read(void* data, long size);
 	
@@ -348,7 +348,7 @@ private extern(C++) interface sfmlInputStream
 }
 
 
-private class imageStream:sfmlInputStream
+private class imageStream:imageInputStream
 {
 	private InputStream myStream;
 	
@@ -401,7 +401,7 @@ bool sfImage_loadFromFile(sfImage* image, const(char)* filename);
 bool sfImage_loadFromMemory(sfImage* image, const(void)* data, size_t size);
 
 /// \brief Create an image from a custom stream
-bool sfImage_loadFromStream(sfImage* image, sfmlInputStream stream);
+bool sfImage_loadFromStream(sfImage* image, imageInputStream stream);
 
 /// \brief Copy an existing image
 sfImage* sfImage_copy(const(sfImage)* image);

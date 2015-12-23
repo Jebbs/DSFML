@@ -126,7 +126,7 @@ struct SoundFile
 private
 {
 
-extern(C++) interface sfmlInputStream
+extern(C++) interface soundInputStream
 {
 	long read(void* data, long size);
 	
@@ -138,7 +138,7 @@ extern(C++) interface sfmlInputStream
 }
 
 
-class soundFileStream:sfmlInputStream
+class soundFileStream:soundInputStream
 {
 	private InputStream myStream;
 	
@@ -191,7 +191,7 @@ bool sfSoundFile_openReadFromFile(sfSoundFile* file, const char* filename);
 
 bool sfSoundFile_openReadFromMemory(sfSoundFile* file,const(void)* data, long sizeInBytes);
 
-bool sfSoundFile_openReadFromStream(sfSoundFile* file, sfmlInputStream stream);
+bool sfSoundFile_openReadFromStream(sfSoundFile* file, soundInputStream stream);
 
 //bool sfSoundFile_openReadFromStream(sfSoundFile* file, void* stream);
 
