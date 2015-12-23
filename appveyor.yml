@@ -51,9 +51,10 @@ environment:
   - DC: ldc
     DVersion: 0.16.1
     arch: x64
-  - DC: ldc
-    DVersion: 0.15.1
-    arch: x64
+#0.15.1 doesn't work properly on Windows due to poor x64 support.
+#  - DC: ldc
+#    DVersion: 0.15.1
+#    arch: x64
 
 
 #Set up our powershell functions
