@@ -272,9 +272,6 @@ unittest
 		//Packet to receive data
 		auto receivePacket = new Packet();
 
-		//accepts a new connection and binds it to the socket in the parameter
-		//listener.accept(serverSocket);
-
 		//Let's greet the server!
 		sendPacket.write("Hello, I'm a client!");
 		sendPacket.write(42);
@@ -327,8 +324,6 @@ unittest
 		receivePacket.read(sentBool);
 		assert(sentBool);
 		writeln("Gotten from server: ", message, ", ", sentULong, ", ", sentFloat, ", ", sentBool);
-
-		//clientSocket.disconnect();
 
 		writeln("Done!");
 		writeln();
