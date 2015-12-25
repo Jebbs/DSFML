@@ -285,16 +285,16 @@ unittest
 		int sentInt;
 		double sentDouble;
 		bool sentBool;
-		receivePacket.read!string(message);
+		assert(receivePacket.read!string(message));
 		assert(message == "Hello, I'm a client!");
 		
-		receivePacket.read(sentInt);
+		assert(receivePacket.read(sentInt));
 		assert(sentInt == 42);
 		
-		receivePacket.read(sentDouble);
+		assert(receivePacket.read(sentDouble));
 		assert(sentDouble == 3.141592);
 		
-		receivePacket.read(sentBool);
+		assert(receivePacket.read(sentBool));
 		assert(!sentBool);
 		writeln("Gotten from client: ", message, ", ", sentInt, ", ", sentDouble, ", ", sentBool);
 
@@ -312,16 +312,16 @@ unittest
 
 		ulong sentULong;
 		float sentFloat;
-		receivePacket.read!string(message);
+		assert(receivePacket.read!string(message));
 		assert(message == "Hello, I'm your server.");
 		
-		receivePacket.read(sentULong);
+		assert(receivePacket.read(sentULong));
 		assert(sentULong == 420UL);
 		
-		receivePacket.read(sentFloat);
+		assert(receivePacket.read(sentFloat));
 		assert(sentFloat == 2.7182818f);
 		
-		receivePacket.read(sentBool);
+		assert(receivePacket.read(sentBool));
 		assert(sentBool);
 		writeln("Gotten from server: ", message, ", ", sentULong, ", ", sentFloat, ", ", sentBool);
 
