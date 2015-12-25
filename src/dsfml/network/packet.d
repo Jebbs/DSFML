@@ -102,7 +102,7 @@ class Packet
 		import std.bitmanip;
 		
 		if (checkSize(T.sizeof))
-	    {
+		{
 			value = std.bitmanip.peek!T(m_data, m_readPos);
 			m_readPos += T.sizeof;
 		}
@@ -265,62 +265,71 @@ unittest
 		
 		import core.time;
 
-		
 		writeln("Unittest for Packet");
-		//socket connecting to server
-		auto clientSocket = new TcpSocket();
-		
-		//listener looking for new sockets
-		auto listener = new TcpListener();
-		listener.listen(46932);
-		
-		//get our client socket to connect to the server
-		clientSocket.connect(IpAddress.LocalHost, 46932);
-		
-		
-		
+
 		//packet to send data
 		auto sendPacket = new Packet();
-		
-		
 		//Packet to receive data
 		auto receivePacket = new Packet();
-		
-		//socket on the server side connected to the client's socket
-		auto serverSocket = new TcpSocket();
-		
+
 		//accepts a new connection and binds it to the socket in the parameter
-		listener.accept(serverSocket);
-		
+		//listener.accept(serverSocket);
+
 		//Let's greet the server!
 		sendPacket.write("Hello, I'm a client!");
-		clientSocket.send(sendPacket);
+		sendPacket.write(42);
+		sendPacket.write(cast(double) 3.141592);
+		sendPacket.write(false);
 		
-		//And get the data on the server side
-		serverSocket.receive(receivePacket);
-		
+		receivePacket.onRecieve(sendPacket.onSend());
+
 		//What did we get from the client?
 		string message;
+		int sentInt;
+		double sentDouble;
+		bool sentBool;
 		receivePacket.read!string(message);
-		writeln("Gotten from client: ", message);
+		assert(message == "Hello, I'm a client!");
 		
+		receivePacket.read(sentInt);
+		assert(sentInt == 42);
+		
+		receivePacket.read(sentDouble);
+		assert(sentDouble == 3.141592);
+		
+		receivePacket.read(sentBool);
+		assert(!sentBool);
+		writeln("Gotten from client: ", message, ", ", sentInt, ", ", sentDouble, ", ", sentBool);
+
 		//clear the packets to send/get new information
 		sendPacket.clear();
 		receivePacket.clear();
-		
+
 		//Respond back to the client
 		sendPacket.write("Hello, I'm your server.");
-		
-		serverSocket.send(sendPacket);
+		sendPacket.write(420UL);
+		sendPacket.write(cast(float) 2.7182818);
+		sendPacket.write(true);
 
-		clientSocket.receive(receivePacket);
+		receivePacket.onRecieve(sendPacket.onSend());
 
-
+		ulong sentULong;
+		float sentFloat;
 		receivePacket.read!string(message);
-		writeln("Gotten from server: ", message);
+		assert(message == "Hello, I'm your server.");
 		
-		clientSocket.disconnect();
+		receivePacket.read(sentULong);
+		assert(sentULong == 420UL);
 		
+		receivePacket.read(sentFloat);
+		assert(sentFloat == 2.7182818f);
+		
+		receivePacket.read(sentBool);
+		assert(sentBool);
+		writeln("Gotten from server: ", message, ", ", sentULong, ", ", sentFloat, ", ", sentBool);
+
+		//clientSocket.disconnect();
+
 		writeln("Done!");
 		writeln();
 	}
