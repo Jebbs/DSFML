@@ -266,6 +266,20 @@ class Ftp
 		import dsfml.system.string;
 		return new Response(sfFtp_upload(sfPtr,toStringz(localFile),toStringz(remotePath),mode));
 	}
+	
+	///Send a command to the FTP server.
+	///
+	///While the most often used commands are provided as member functions in the Ftp class, this method can be used to send any FTP command to the server. If the command requires one or more parameters, they can be specified in parameter. If the server returns information, you can extract it from the response using getMessage().
+	///
+	///Params:
+	///		command = Command to send.
+	///		parameter = Command parameter.
+	///
+	///Returns: Server response to the request.
+	Response sendCommand(string command, string parameter) {
+		import dsfml.system.string;
+		return new Response(sfFtp_sendCommand(sfPtr, toStringz(command), toStringz(parameter)));
+	}
 
 	///Specialization of FTP response returning a directory.
 	class DirectoryResponse:Response
@@ -627,3 +641,6 @@ sfFtpResponse* sfFtp_download(sfFtp* ftp, const(char)* distantFile, const(char)*
 
 ///Upload a file to a FTP server
 sfFtpResponse* sfFtp_upload(sfFtp* ftp, const(char)* localFile, const(char)* destPath, int mode);
+
+///Send a command to a FTP server
+sfFtpResponse* sfFtp_sendCommand(sfFtp* ftp, const(char)* command, const(char)* parameter);

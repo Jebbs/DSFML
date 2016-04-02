@@ -17,7 +17,7 @@ If you use this software in a product, an acknowledgment in the product document
 3. This notice may not be removed or altered from any source distribution
 */
 
-module dsfml.audio.soundfile;
+module dsfml.audio.inputsoundfile;
 
 import std.string;
 import dsfml.system.inputstream;
@@ -25,25 +25,25 @@ import dsfml.system.err;
 
 package:
 
-struct SoundFile
+struct InputSoundFile
 {
-	private sfSoundFile* m_soundFile;
+	private sfInputSoundFile* m_soundFile;
 	private soundFileStream m_stream;//keeps an instance of the C++ interface stored if used
 
 	void create()
 	{
-		m_soundFile = sfSoundFile_create();
+		m_soundFile = sfInputSoundFile_create();
 	}
 	
 	~this()
 	{
-		sfSoundFile_destroy(m_soundFile);
+		sfInputSoundFile_destroy(m_soundFile);
 	}
 
 	bool openReadFromFile(string filename)
 	{
 		import dsfml.system.string;
-		bool toReturn = sfSoundFile_openReadFromFile(m_soundFile, toStringz(filename));
+		bool toReturn = sfInputSoundFile_openFromFile(m_soundFile, toStringz(filename));
 		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
@@ -51,7 +51,7 @@ struct SoundFile
 	bool openReadFromMemory(const(void)[] data)
 	{
 		import dsfml.system.string;
-		bool toReturn = sfSoundFile_openReadFromMemory(m_soundFile, data.ptr, data.length);
+		bool toReturn = sfInputSoundFile_openFromMemory(m_soundFile, data.ptr, data.length);
 		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
@@ -60,34 +60,34 @@ struct SoundFile
 		import dsfml.system.string;
 		m_stream = new soundFileStream(stream);
 
-		bool toReturn  = sfSoundFile_openReadFromStream(m_soundFile, m_stream);
+		bool toReturn  = sfInputSoundFile_openFromStream(m_soundFile, m_stream);
 		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
-	bool openWrite(string filename,uint channelCount,uint sampleRate)
+	/*bool openWrite(string filename,uint channelCount,uint sampleRate)
 	{
 		import dsfml.system.string;
-		bool toReturn = sfSoundFile_openWrite(m_soundFile, toStringz(filename),channelCount,sampleRate);
+		bool toReturn = sfInputSoundFile_openForWriting(m_soundFile, toStringz(filename),channelCount,sampleRate);
 		err.write(toString(sfErr_getOutput()));
 		return toReturn;
-	}
+	}*/
 
 	long read(ref short[] data)
 	{
-		return sfSoundFile_read(m_soundFile,data.ptr, data.length);
+		return sfInputSoundFile_read(m_soundFile,data.ptr, data.length);
 
 	}
 
-	void write(const(short)[] data)
+	/*void write(const(short)[] data)
 	{
-		sfSoundFile_write(m_soundFile, data.ptr, data.length);
-	}
+		sfInputSoundFile_write(m_soundFile, data.ptr, data.length);
+	}*/
 
 	void seek(long timeOffset)
 	{
 		import dsfml.system.string;
-		sfSoundFile_seek(m_soundFile, timeOffset);
+		sfInputSoundFile_seek(m_soundFile, timeOffset);
 		
 		//Temporary fix for a bug where attempting to write to err
 		//throws an exception in a thread created in C++. This causes
@@ -107,15 +107,15 @@ struct SoundFile
 
 	long getSampleCount()
 	{
-		return sfSoundFile_getSampleCount(m_soundFile);
+		return sfInputSoundFile_getSampleCount(m_soundFile);
 	}
 	uint getSampleRate()
 	{
-		return sfSoundFile_getSampleRate(m_soundFile);
+		return sfInputSoundFile_getSampleRate(m_soundFile);
 	}
 	uint getChannelCount()
 	{
-		return sfSoundFile_getChannelCount(m_soundFile);
+		return sfInputSoundFile_getChannelCount(m_soundFile);
 	}
 
 
@@ -175,32 +175,32 @@ extern(C) const(char)* sfErr_getOutput();
 extern(C)
 {
 
-struct sfSoundFile;
+struct sfInputSoundFile;
 
-sfSoundFile* sfSoundFile_create();
+sfInputSoundFile* sfInputSoundFile_create();
 
-void sfSoundFile_destroy(sfSoundFile* file);
+void sfInputSoundFile_destroy(sfInputSoundFile* file);
 
-long sfSoundFile_getSampleCount(const sfSoundFile* file);
+long sfInputSoundFile_getSampleCount(const sfInputSoundFile* file);
 
-uint sfSoundFile_getChannelCount( const sfSoundFile* file);
+uint sfInputSoundFile_getChannelCount( const sfInputSoundFile* file);
 
-uint sfSoundFile_getSampleRate(const sfSoundFile* file);
+uint sfInputSoundFile_getSampleRate(const sfInputSoundFile* file);
 
-bool sfSoundFile_openReadFromFile(sfSoundFile* file, const char* filename);
+bool sfInputSoundFile_openFromFile(sfInputSoundFile* file, const char* filename);
 
-bool sfSoundFile_openReadFromMemory(sfSoundFile* file,const(void)* data, long sizeInBytes);
+bool sfInputSoundFile_openFromMemory(sfInputSoundFile* file,const(void)* data, long sizeInBytes);
 
-bool sfSoundFile_openReadFromStream(sfSoundFile* file, soundInputStream stream);
+bool sfInputSoundFile_openFromStream(sfInputSoundFile* file, soundInputStream stream);
 
-//bool sfSoundFile_openReadFromStream(sfSoundFile* file, void* stream);
+//bool sfInputSoundFile_openReadFromStream(sfInputSoundFile* file, void* stream);
 
-bool sfSoundFile_openWrite(sfSoundFile* file, const(char)* filename,uint channelCount,uint sampleRate);
+bool sfInputSoundFile_openForWriting(sfInputSoundFile* file, const(char)* filename,uint channelCount,uint sampleRate);
 
-long sfSoundFile_read(sfSoundFile* file, short* data, long sampleCount);
+long sfInputSoundFile_read(sfInputSoundFile* file, short* data, long sampleCount);
 
-void sfSoundFile_write(sfSoundFile* file, const short* data, long sampleCount);
+//void sfInputSoundFile_write(sfInputSoundFile* file, const short* data, long sampleCount);
 
-void sfSoundFile_seek(sfSoundFile* file, long timeOffset);
+void sfInputSoundFile_seek(sfInputSoundFile* file, long timeOffset);
 	}
 }

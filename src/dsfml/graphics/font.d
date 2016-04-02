@@ -169,7 +169,7 @@ class Font
 	 * 
 	 * Returns: Kerning value for first and second, in pixels
 	 */
-	int getKerning (dchar first, dchar second, uint characterSize) const 
+	float getKerning (dchar first, dchar second, uint characterSize) const 
 	{
 		return sfFont_getKerning(sfPtr, cast(uint)first, cast(uint)second, characterSize);	
 	}
@@ -184,9 +184,39 @@ class Font
 	 * 
 	 * Returns: Line spacing, in pixels
 	 */
-	int getLineSpacing (uint characterSize) const
+	float getLineSpacing (uint characterSize) const
 	{
 		return sfFont_getLineSpacing(sfPtr, characterSize);	
+	}
+	
+	/**
+	 * Get the position of the underline.
+	 * 
+	 * Underline position is the vertical offset to apply between the baseline and the underline.
+	 * 
+	 * Params:
+	 * 		characterSize	= Reference character size
+	 * 
+	 * Returns: Underline position, in pixels
+	 */
+	float getUnderlinePosition (uint characterSize) const
+	{
+		return sfFont_getUnderlinePosition(sfPtr, characterSize);
+	}
+	
+	/**
+	 * Get the thickness of the underline.
+	 * 
+	 * Underline thickness is the vertical size of the underline.
+	 * 
+	 * Params:
+	 * 		characterSize	= Reference character size
+	 * 
+	 * Returns: Underline thickness, in pixels
+	 */
+	float getUnderlineThickness (uint characterSize) const
+	{
+		return sfFont_getUnderlineThickness(sfPtr, characterSize);
 	}
 
 	/**
@@ -329,11 +359,17 @@ void sfFont_getGlyph(const(sfFont)* font, uint codePoint, int characterSize, boo
 
 
 //Get the kerning value corresponding to a given pair of characters in a font
-int sfFont_getKerning(const(sfFont)* font, uint first, uint second, uint characterSize);
+float sfFont_getKerning(const(sfFont)* font, uint first, uint second, uint characterSize);
 
 
 //Get the line spacing value
-int sfFont_getLineSpacing(const(sfFont)* font, uint characterSize);
+float sfFont_getLineSpacing(const(sfFont)* font, uint characterSize);
+
+//Get the position of the underline
+float sfFont_getUnderlinePosition (const(sfFont)* font, uint characterSize);
+
+//Get the thickness of the underline
+float sfFont_getUnderlineThickness (const(sfFont)* font, uint characterSize);
 
 
 //Get the texture pointer for a particular font

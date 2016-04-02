@@ -277,7 +277,9 @@ class RenderTexture : RenderTarget
 			states.shader = RenderStates.emptyShader;
 		}
 		
-		sfRenderTexture_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length),type,states.blendMode, states.transform.m_matrix.ptr, states.texture.sfPtr, states.shader.sfPtr);
+		sfRenderTexture_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length),type,states.blendMode.colorSrcFactor, states.blendMode.alphaDstFactor,
+			states.blendMode.colorEquation, states.blendMode.alphaSrcFactor, states.blendMode.alphaDstFactor, states.blendMode.alphaEquation, 
+			states.transform.m_matrix.ptr, states.texture.sfPtr, states.shader.sfPtr);
 	}
 
 	/**
@@ -478,7 +480,8 @@ void sfRenderTexture_mapCoordsToPixel(const sfRenderTexture* renderTexture, floa
 
 
 //Draw primitives defined by an array of vertices to a render texture
-void sfRenderTexture_drawPrimitives(sfRenderTexture* renderTexture,  const void* vertices, uint vertexCount, int type, int blendMode,const float* transform, const sfTexture* texture, const sfShader* shader);
+void sfRenderTexture_drawPrimitives(sfRenderTexture* renderTexture,  const void* vertices, uint vertexCount, int type, int colorSrcFactor, int colorDstFactor, int colorEquation,
+	int alphaSrcFactor, int alphaDstFactor, int alphaEquation, const float* transform, const sfTexture* texture, const sfShader* shader);
 
 //Save the current OpenGL render states and matrices
 void sfRenderTexture_pushGLStates(sfRenderTexture* renderTexture);

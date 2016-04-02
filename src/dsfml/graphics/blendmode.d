@@ -21,10 +21,10 @@ module dsfml.graphics.blendmode;
 /++
  + Available blending modes for drawing.
  + 
- + See_Also: http://www.sfml-dev.org/documentation/2.0/group__graphics.php#ga80c52fe2f7050d7f7573b7ed3c995388
+ + See_Also: http://www.sfml-dev.org/documentation/2.3/structsf_1_1BlendMode.php
  + Authors: Laurent Gomila, Jeremy DeHaan
  +/
-enum BlendMode
+/*enum BlendMode
 {
 	/// Pixel = Source * Source.a + Dest * (1 - Source.a)
 	Alpha,
@@ -34,4 +34,41 @@ enum BlendMode
 	Multiply,
 	/// Pixel = Source.
 	None
+}*/
+
+struct BlendMode
+{
+	enum Alpha = BlendMode(Factor.SrcAlpha, Factor.OneMinusSrcAlpha, Equation.Add,
+							Factor.One, Factor.OneMinusSrcAlpha, Equation.Add);
+	enum Add = BlendMode(Factor.SrcAlpha, Factor.One, Equation.Add,
+							Factor.One, Factor.One, Equation.Add);
+	enum Multiply = BlendMode(Factor.DstColor, Factor.Zero);
+	enum None = BlendMode (Factor.One, Factor.Zero);
+	
+	enum Factor
+	{
+		Zero,
+		One,
+		SrcColor,
+		OneMinunSrcColor,
+		DstColor,
+		OneMinusDstColor,
+		SrcAlpha,
+		OneMinusSrcAlpha,
+		DstAlpha,
+		OneMinusDstAlpha
+	}
+	
+	enum Equation
+	{
+		Add,
+		Subtract
+	}
+	
+	Factor colorSrcFactor = Factor.SrcAlpha;
+	Factor colorDstFactor = Factor.OneMinusSrcAlpha;
+	Equation colorEquation = Equation.Add;
+	Factor alphaSrcFactor = Factor.One;
+	Factor alphaDstFactor = Factor.OneMinusSrcAlpha;
+	Equation alphaEquation = Equation.Add;
 }
