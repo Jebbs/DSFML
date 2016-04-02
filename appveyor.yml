@@ -199,8 +199,9 @@ build_script:
 - echo %VCINSTALLDIR%
 - '"%compilersetup%" %compilersetupargs%'
 - cd ..
-- git clone --depth=1 https://github.com/Jebbs/DSFMLC.git
+- git clone --depth=1 https://github.com/aubade/DSFMLC.git
 - cd DSFMLC
+- git checkout 2.3
 - ps: if($env:toolchain -eq "mingw"){
         $env:Path = $env:compilerpath + $env:cmakepath;
        }
