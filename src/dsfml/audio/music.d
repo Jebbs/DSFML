@@ -78,7 +78,7 @@ class Music : SoundStream
 		//stop music if already playing
 		stop();
 
-		if(!m_file.openReadFromFile(filename))
+		if(!m_file.openFromFile(filename))
 		{
 			return false;
 		}
@@ -105,7 +105,7 @@ class Music : SoundStream
 	{
 		stop();
 
-		if(!m_file.openReadFromMemory(data))
+		if(!m_file.openFromMemory(data))
 		{
 			return false;
 		}
@@ -131,7 +131,7 @@ class Music : SoundStream
 	{
 		stop();
 
-		if(!m_file.openReadFromStream(stream))
+		if(!m_file.openFromStream(stream))
 		{
 			return false;
 		}

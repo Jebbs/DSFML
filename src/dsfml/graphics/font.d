@@ -355,7 +355,7 @@ void sfFont_destroy(sfFont* font);
 
 
 //Get a glyph in a font
-void sfFont_getGlyph(const(sfFont)* font, uint codePoint, int characterSize, bool bold, int* glyphAdvance, int* glyphBoundsLeft, int* glyphBoundsTop, int* glyphBoundsWidth, int* glyphBoundsHeight, int* glyphTextRectLeft, int* glyphTextRectTop, int* glyphTextRectWidth, int* glyphTextRectHeight);
+void sfFont_getGlyph(const(sfFont)* font, uint codePoint, int characterSize, bool bold, float* glyphAdvance, float* glyphBoundsLeft, float* glyphBoundsTop, float* glyphBoundsWidth, float* glyphBoundsHeight, int* glyphTextRectLeft, int* glyphTextRectTop, int* glyphTextRectWidth, int* glyphTextRectHeight);
 
 
 //Get the kerning value corresponding to a given pair of characters in a font
