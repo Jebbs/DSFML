@@ -20,6 +20,8 @@ If you use this software in a product, an acknowledgment in the product document
 module dsfml.audio.soundrecorder;
 
 import core.thread;
+import core.time;
+import dsfml.system.string;
 import dsfml.system.err;
 
 
@@ -89,7 +91,7 @@ class SoundRecorder
 		import dsfml.system.string;
 		sfSoundRecorder_start(sfPtr, theSampleRate);
 
-		err.write(toString(sfErr_getOutput()));
+		err.write(.toString(sfErr_getOutput()));
 	}
 
 	/// Stop the capture.
@@ -110,6 +112,79 @@ class SoundRecorder
 			return sfSoundRecorder_getSampleRate(sfPtr);
 		}
 	}
+	
+	/**
+	 *Get the name of the current audio capture device.
+	 *
+	 *Returns
+	 *   The name of the current audio capture device 
+	 */
+	string getDevice() const {
+		return .toString(sfSoundRecorder_getDevice(sfPtr));
+	}
+	/**
+	 *Set the audio capture device.
+	 *
+	 *This function sets the audio capture device to the device with the given name. It can be called on the fly (i.e: while recording). If you do so while recording and opening the device fails, it stops the recording.
+	 *
+	 *Parameters
+	 *   name	The name of the audio capture device
+	 *
+	 *Returns
+	 *   True, if it was able to set the requested device
+	 *
+	 *See also
+	 *   getAvailableDevices, getDefaultDevice 
+	 */
+	bool setDevice (string name) {
+		return sfSoundRecorder_setDevice(sfPtr, toStringz(name));
+	}
+	
+	/**
+	 *Get a list of the names of all available audio capture devices.
+	 *
+	 *This function returns an array of strings, containing the names of all available audio capture devices.
+	 *
+	 *Returns
+	 *  An array of strings containing the names 
+	 */
+	static const(string)[] getAvailableDevices() {
+		static string[] availableDevices;//stores all available devices after the first call
+		
+		//if getAvailableDevices hasn't been called yet
+		if(availableDevices.length == 0)
+		{
+			const (char)** devices;
+			size_t counts;
+			
+			//returns uints instead of structs due to 64 bit bug
+			devices = sfSoundRecorder_getAvailableDevices(&counts);
+			
+			//calculate real length
+			availableDevices.length = counts;
+			
+			//populate availableDevices
+			for(uint i = 0; i < counts; i++)
+			{
+				availableDevices[i] = .toString(devices[i]);
+			}
+			
+		}
+		
+		return availableDevices;
+	}
+	
+	/**
+	 *Get the name of the default audio capture device.
+	 *
+	 *This function returns the name of the default audio capture device. If none is available, an empty string is returned.
+	 *
+	 *Returns
+	 *   The name of the default audio capture device 
+	 */
+	static string getDefaultDevice() {
+		return .toString(sfSoundRecorder_getDefaultDevice());
+	}
 
 	/**
 	 * Check if the system supports audio capture.
@@ -125,6 +200,22 @@ class SoundRecorder
 
 	protected
 	{
+		/**
+		 *Set the processing interval.
+		 *
+		 * The processing interval controls the period between calls to the onProcessSamples function. You may want to use a small interval if you want to process the recorded data in real time, for example.
+		 *
+		 * Note: this is only a hint, the actual period may vary. So don't rely on this parameter to implement precise timing.
+		 *
+		 * The default processing interval is 100 ms.
+		 *
+		 * Parameters
+		 *    interval	Processing interval 
+    	*/
+		void setProcessingInterval (Duration interval) {
+			sfSoundRecorder_setProcessingInterval(sfPtr, interval.total!"usecs");
+		}
+		
 		/**
 		 * Start capturing audio data.
 		 * 
@@ -213,7 +304,17 @@ void sfSoundRecorder_stop(sfSoundRecorder* soundRecorder);
 
 uint sfSoundRecorder_getSampleRate(const sfSoundRecorder* soundRecorder);
 
+bool sfSoundRecorder_setDevice(sfSoundRecorder* soundRecorder, const(char)* name);
+
+const(char)* sfSoundRecorder_getDevice(const (sfSoundRecorder)* soundRecorder);
+
+const(char)** sfSoundRecorder_getAvailableDevices(size_t* count);
+
+const(char)* sfSoundRecorder_getDefaultDevice();
+
 bool sfSoundRecorder_isAvailable();
+
+void sfSoundRecorder_setProcessingInterval(sfSoundRecorder* soundRecorder, ulong time);
 
 const(char)* sfErr_getOutput();
 
