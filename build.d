@@ -286,9 +286,9 @@ void initialize()
 
 	//Setting up our aa with our lists of files because GDC crashes when searching for them at runtime
 	fileList["system"] = ["clock.d", "config.d", "err.d", "inputstream.d", "lock.d", "mutex.d", "package.d", "sleep.d", "string.d", "thread.d", "vector2.d", "vector3.d"];
-	fileList["audio"] = ["listener.d", "music.d", "package.d", "sound.d", "soundbuffer.d", "soundbufferrecorder.d", "soundfile.d", "soundrecorder.d", "soundsource.d", "soundstream.d"];
+	fileList["audio"] = ["listener.d", "music.d", "package.d", "sound.d", "soundbuffer.d", "soundbufferrecorder.d", "inputsoundfile.d", "soundrecorder.d", "soundsource.d", "soundstream.d"];
 	fileList["network"] = ["ftp.d", "http.d", "ipaddress.d", "package.d", "packet.d", "socket.d", "socketselector.d", "tcplistener.d", "tcpsocket.d", "udpsocket.d"];
-	fileList["window"] = ["context.d", "contextsettings.d", "event.d", "joystick.d", "keyboard.d", "mouse.d", "package.d", "videomode.d", "window.d", "windowhandle.d"];
+	fileList["window"] = ["context.d", "contextsettings.d", "event.d", "joystick.d", "keyboard.d", "mouse.d", "sensor.d", "touch.d", "package.d", "videomode.d", "window.d", "windowhandle.d"];
 	fileList["graphics"] = ["blendmode.d", "circleshape.d", "color.d", "convexshape.d", "drawable.d", "font.d", "glyph.d", "image.d", "package.d", "primitivetype.d", "rect.d", "rectangleshape.d", "renderstates.d", "rendertarget.d", "rendertexture.d", "renderwindow.d", "shader.d", "shape.d", "sprite.d", "text.d", "texture.d", "transform.d", "transformable.d", "vertex.d", "vertexarray.d", "view.d"];
 
 
