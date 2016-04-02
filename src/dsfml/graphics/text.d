@@ -449,10 +449,10 @@ private:
 			// Extract the current glyph's description
 			Glyph glyph = m_font.getGlyph(curChar, m_characterSize, bold);
 			
-			int left = glyph.bounds.left;
-			int top = glyph.bounds.top;
-			int right = glyph.bounds.left + glyph.bounds.width;
-			int bottom = glyph.bounds.top + glyph.bounds.height;
+			float left = glyph.bounds.left;
+			float top = glyph.bounds.top;
+			float right = glyph.bounds.left + glyph.bounds.width;
+			float bottom = glyph.bounds.top + glyph.bounds.height;
 			
 			float u1 = cast(float)(glyph.textureRect.left);
 			float v1 = cast(float)(glyph.textureRect.top);

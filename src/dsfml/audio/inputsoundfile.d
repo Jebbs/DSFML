@@ -40,7 +40,7 @@ struct InputSoundFile
 		sfInputSoundFile_destroy(m_soundFile);
 	}
 
-	bool openReadFromFile(string filename)
+	bool openFromFile(string filename)
 	{
 		import dsfml.system.string;
 		bool toReturn = sfInputSoundFile_openFromFile(m_soundFile, toStringz(filename));
@@ -48,14 +48,14 @@ struct InputSoundFile
 		return toReturn;
 	}
 
-	bool openReadFromMemory(const(void)[] data)
+	bool openFromMemory(const(void)[] data)
 	{
 		import dsfml.system.string;
 		bool toReturn = sfInputSoundFile_openFromMemory(m_soundFile, data.ptr, data.length);
 		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
-	bool openReadFromStream(InputStream stream)
+	bool openFromStream(InputStream stream)
 	{
 		import dsfml.system.string;
 		m_stream = new soundFileStream(stream);
@@ -65,24 +65,11 @@ struct InputSoundFile
 		return toReturn;
 	}
 
-	/*bool openWrite(string filename,uint channelCount,uint sampleRate)
-	{
-		import dsfml.system.string;
-		bool toReturn = sfInputSoundFile_openForWriting(m_soundFile, toStringz(filename),channelCount,sampleRate);
-		err.write(toString(sfErr_getOutput()));
-		return toReturn;
-	}*/
-
 	long read(ref short[] data)
 	{
 		return sfInputSoundFile_read(m_soundFile,data.ptr, data.length);
 
 	}
-
-	/*void write(const(short)[] data)
-	{
-		sfInputSoundFile_write(m_soundFile, data.ptr, data.length);
-	}*/
 
 	void seek(long timeOffset)
 	{
@@ -193,13 +180,9 @@ bool sfInputSoundFile_openFromMemory(sfInputSoundFile* file,const(void)* data, l
 
 bool sfInputSoundFile_openFromStream(sfInputSoundFile* file, soundInputStream stream);
 
-//bool sfInputSoundFile_openReadFromStream(sfInputSoundFile* file, void* stream);
-
 bool sfInputSoundFile_openForWriting(sfInputSoundFile* file, const(char)* filename,uint channelCount,uint sampleRate);
 
 long sfInputSoundFile_read(sfInputSoundFile* file, short* data, long sampleCount);
-
-//void sfInputSoundFile_write(sfInputSoundFile* file, const short* data, long sampleCount);
 
 void sfInputSoundFile_seek(sfInputSoundFile* file, long timeOffset);
 	}
