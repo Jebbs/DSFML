@@ -44,9 +44,8 @@ matrix:
 #Build and install DSFMLC
 install:
   - cd $HOME
-  - git clone --depth=1 https://github.com/aubade/DSFMLC.git
+  - git clone --depth=1 --branch 2.3 https://github.com/aubade/DSFMLC.git
   - cd DSFMLC
-  - git checkout 2.3
   - cmake .
   - make -j2
   - export LIBRARY_PATH=${HOME}/DSFMLC/lib
