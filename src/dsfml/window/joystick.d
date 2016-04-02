@@ -36,6 +36,16 @@ module dsfml.window.joystick;
 */
 final abstract class Joystick
 {
+	///Structure holding a joystick's identification; 
+	struct Identification {
+		///Name of the joystick
+		dstring name;
+		///Manufacturer identifier
+		uint vendorId;
+		///Product identifier
+		uint productId;
+	}
+	
 	//Constants related to joysticks capabilities.
 	enum
 	{
@@ -93,6 +103,24 @@ final abstract class Joystick
 	static float getAxisPosition(uint joystick, Axis axis)
 	{
 		return sfJoystick_getAxisPosition(joystick, axis);
+	}
+	
+	///Get the joystick information
+	///
+	///Params:
+	///		joystick = Index of the joystick.
+	///
+	///Returns: Structure containing the joystick information.
+	static Identification getIdentification(uint joystick) {
+		Identification identification;
+		const(dchar)* name;
+		size_t nameSize;
+		
+		sfJoystick_getIdentification(joystick, &name, &nameSize, &identification.vendorId, &identification.productId);
+		
+		identification.name = name[0..nameSize].idup;
+		
+		return identification;
 	}
 	
 	///Check if a joystick supports a given axis.
@@ -160,8 +188,10 @@ unittest
 		{
 			if(Joystick.isConnected(i))
 			{
+				auto id = Joystick.getIdentification(i);
 				joysticks[i] = true;
 				writeln("Joystick number ",i," is connected!");
+				writefln("Type: %s, ID: %x:%x", id.name, id.vendorId, id.productId);  
 			}
 		}
 	
@@ -204,6 +234,9 @@ bool sfJoystick_isConnected(uint joystick);
 
 //Return the number of buttons supported by a joystick
 uint sfJoystick_getButtonCount(uint joystick);
+
+//Return the identification structure for a joystick
+void sfJoystick_getIdentification(uint joystick, const(dchar)** name, size_t* nameLength, uint* vendorID, uint* productId);
 
 //Check if a joystick supports a given axis
 bool sfJoystick_hasAxis(uint joystick, int axis);

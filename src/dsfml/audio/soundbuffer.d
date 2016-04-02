@@ -21,7 +21,7 @@ module dsfml.audio.soundbuffer;
 
 import core.time;
 
-import dsfml.audio.soundfile;
+import dsfml.audio.inputsoundfile;
 import dsfml.audio.sound;
 
 import dsfml.system.inputstream;

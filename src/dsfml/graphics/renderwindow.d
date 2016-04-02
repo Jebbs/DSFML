@@ -537,7 +537,9 @@ class RenderWindow : Window, RenderTarget
 			states.shader = RenderStates.emptyShader;
 		}
 		
-		sfRenderWindow_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length), type,states.blendMode, states.transform.m_matrix.ptr,states.texture.sfPtr,states.shader.sfPtr);
+		sfRenderWindow_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length), type,states.blendMode.colorSrcFactor, states.blendMode.alphaDstFactor,
+			states.blendMode.colorEquation, states.blendMode.alphaSrcFactor, states.blendMode.alphaDstFactor, states.blendMode.alphaEquation,
+			states.transform.m_matrix.ptr,states.texture.sfPtr,states.shader.sfPtr);
 	}
 
 	/**
@@ -939,7 +941,8 @@ void sfRenderWindow_mapCoordsToPixel(const sfRenderWindow* renderWindow, float x
 
 
 //Draw primitives defined by an array of vertices to a render window
-void sfRenderWindow_drawPrimitives(sfRenderWindow* renderWindow,const (void)* vertices, uint vertexCount, int type, int blendMode,const(float)* transform, const(sfTexture)* texture, const(sfShader)* shader);
+void sfRenderWindow_drawPrimitives(sfRenderWindow* renderWindow,const (void)* vertices, uint vertexCount, int type, int colorSrcFactor, int colorDstFactor, int colorEquation,
+	int alphaSrcFactor, int alphaDstFactor, int alphaEquation, const (float)* transform, const (sfTexture)* texture, const (sfShader)* shader);
 
 //Save the current OpenGL render states and matrices
 void sfRenderWindow_pushGLStates(sfRenderWindow* renderWindow);

@@ -97,7 +97,11 @@ class Http
 			///Request in post mode, usually to send data to a page.
 			Post,
 			///Request a page's header only. 
-			Head
+			Head,
+			///Request in put mode, useful for a REST API
+			Put,
+			///Request in delete mode, useful for a REST API
+			Delete
 		}
 
 		package sfHttpRequest* sfPtrRequest;

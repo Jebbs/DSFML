@@ -30,6 +30,8 @@ public
 	import dsfml.window.joystick;
 	import dsfml.window.keyboard;
 	import dsfml.window.mouse;
+	import dsfml.window.touch;
+	import dsfml.window.sensor;
 	import dsfml.window.videomode;
 	import dsfml.window.window;
 	import dsfml.window.windowhandle;

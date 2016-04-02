@@ -178,7 +178,21 @@ class Window
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
-
+	
+	///Request the current window to be made the active foreground window.
+	void requestFocus()
+	{
+		sfWindow_requestFocus(sfPtr);
+	}
+	
+	///Check whether the window has the input focus
+	///
+	///Returns: True if the window has focus, false otherwise
+	bool hasFocus() const
+	{
+		return sfWindow_hasFocus(sfPtr);
+	}
+	
 	///Limit the framerate to a maximum fixed frequency.
 	///
 	///If a limit is set, the window will use a small delay after each call to display() to ensure that the current frame lasted long enough to match the framerate limit. SFML will try to match the given limit as much as it can, but since it internally uses sf::sleep, whose precision depends on the underlying OS, the results may be a little unprecise as well (for example, you can get 65 FPS when requesting 60).
@@ -598,6 +612,12 @@ private extern(C):
 
 	//Activate or deactivate a window as the current target for OpenGL rendering
 	 bool sfWindow_setActive(sfWindow* window, bool active);
+	 
+	 //Request the current window to be made the active foreground window.
+	 void sfWindow_requestFocus(sfWindow* window);
+	 
+	 //Check whether the window has the input focus
+	 bool sfWindow_hasFocus(const(sfWindow)* window);
 
 	//Display on screen what has been rendered to the window so far
 	 void sfWindow_display(sfWindow* window);

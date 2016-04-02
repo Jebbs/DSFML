@@ -43,11 +43,11 @@ import dsfml.audio.soundstream;
  +/
 class Music : SoundStream
 {
-	import dsfml.audio.soundfile;
+	import dsfml.audio.inputsoundfile;
 
 	private
 	{
-		SoundFile m_file;
+		InputSoundFile m_file;
 		Duration m_duration;
 		short[] m_samples;
 		Mutex m_mutex;

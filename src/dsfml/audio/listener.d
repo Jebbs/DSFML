@@ -60,6 +60,28 @@ final abstract class Listener
 	}
 
 	/** 
+	 * The upward vector of the listener in the scene. The upward vector defines the 3D axes of the listener (left, up, front) in the scene. The upward vector doesn't have to be normalized. 
+	 * 
+	 * The default listener's upward vector is (0, 1, 0).
+	 */
+	@property
+	{
+		static void UpVector(Vector3f orientation)
+		{
+			sfListener_setUpVector(orientation.x, orientation.y, orientation.z);
+		}
+
+		static Vector3f UpVector()
+		{
+			Vector3f temp;
+			
+			sfListener_getUpVector(&temp.x, &temp.y, &temp.z);
+			
+			return temp;
+		}
+	}
+
+	/** 
 	 * The global volume of all the sounds and musics. The volume is a number between 0 and 100; it is combined with the individual volume of each sound / music. 
 	 * 
 	 * The default value for the volume is 100 (maximum).
@@ -141,3 +163,6 @@ void sfListener_setDirection(float x, float y, float z);
 
 void sfListener_getDirection(float* x, float* y, float* z);
 
+void sfListener_setUpVector(float x, float y, float z);
+
+void sfListener_getUpVector(float* x, float* y, float* z);
