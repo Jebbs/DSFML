@@ -18,6 +18,8 @@ addons:
       - libsndfile1-dev
       - libx11-dev
       - libxrandr-dev
+      - libxcb-image0-dev
+      - libxcb-randr0-dev
 
 d: 
  - dmd-2.071.0
