@@ -42,8 +42,8 @@ struct BlendMode
 							Factor.One, Factor.OneMinusSrcAlpha, Equation.Add);
 	enum Add = BlendMode(Factor.SrcAlpha, Factor.One, Equation.Add,
 							Factor.One, Factor.One, Equation.Add);
-	enum Multiply = BlendMode(Factor.DstColor, Factor.Zero);
-	enum None = BlendMode (Factor.One, Factor.Zero);
+	enum Multiply = BlendMode(Factor.DstColor, Factor.Zero, Equation.Add, Factor.DstColor, Factor.Zero, Equation.Add);
+	enum None = BlendMode (Factor.One, Factor.Zero, Equation.Add, Factor.One, Factor.Zero, Equation.Add);
 	
 	enum Factor
 	{
@@ -71,22 +71,4 @@ struct BlendMode
 	Factor alphaSrcFactor = Factor.One;
 	Factor alphaDstFactor = Factor.OneMinusSrcAlpha;
 	Equation alphaEquation = Equation.Add;
-	
-	this(Factor colorSrc, Factor colorDst, Equation colorEqua,
-		 Factor alphaSrc, Factor alphaDst, Equation alphaEqua)
-	{
-		colorSrcFactor = colorSrc;
-		colorDstFactor = colorDst;
-		colorEquation = colorEqua;
-		
-		alphaSrcFactor = alphaSrc;
-		alphaDstFactor = alphaDst;
-		alphaEquation = alphaEquation;
-	}
-	
-	this(Factor srcFactor, Factor dstFactor, Equation equation = Equation.Add) {
-		colorSrcFactor = alphaSrcFactor = srcFactor;
-		colorDstFactor = alphaDstFactor = dstFactor;
-		colorEquation = alphaEquation = equation;
-	}
 }
