@@ -71,4 +71,22 @@ struct BlendMode
 	Factor alphaSrcFactor = Factor.One;
 	Factor alphaDstFactor = Factor.OneMinusSrcAlpha;
 	Equation alphaEquation = Equation.Add;
+	
+	this(Factor colorSrc, Factor colorDst, Equation colorEqua,
+		 Factor alphaSrc, Factor alphaDst, Equation alphaEqua)
+	{
+		colorSrcFactor = colorSrc;
+		colorDstFactor = colorDst;
+		colorEquation = colorEqua;
+		
+		alphaSrcFactor = alphaSrc;
+		alphaDstFactor = alphaDst;
+		alphaEquation = alphaEquation;
+	}
+	
+	this(Factor srcFactor, Factor dstFactor, Equation equation = Equation.Add) {
+		colorSrcFactor = alphaSrcFactor = srcFactor;
+		colorDstFactor = alphaDstFactor = dstFactor;
+		colorEquation = alphaEquation = equation;
+	}
 }
