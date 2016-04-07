@@ -32,21 +32,21 @@ import dsfml.system.err;
 
 /++
  + Abstract base class for streamed audio sources.
- + 
+ +
  + Unlike audio buffers (see SoundBuffer), audio streams are never completely loaded in memory.
- + 
+ +
  + Instead, the audio data is acquired continuously while the stream is playing. This behaviour allows to play a sound with no loading delay, and keeps the memory consumption very low.
- + 
+ +
  + Sound sources that need to be streamed are usually big files (compressed audio musics that would eat hundreds of MB in memory) or files that would take a lot of time to be received (sounds played over the network).
- + 
+ +
  + SoundStream is a base class that doesn't care about the stream source, which is left to the derived class. SFML provides a built-in specialization for big files (see Music). No network stream source is provided, but you can write your own by combining this class with the network module.
- + 
+ +
  + A derived class has to override two virtual functions:
  + 		- onGetData fills a new chunk of audio data to be played.
  + 		- onSeek changes the current playing position in the source
- + 
+ +
  + It is important to note that each SoundStream is played in its own separate thread, so that the streaming loop doesn't block the rest of the program. In particular, the OnGetData and OnSeek virtual functions may sometimes be called from this separate thread. It is important to keep this in mind, because you may have to take care of synchronization issues if you share data between threads.
- + 
+ +
  + See_Also: http://sfml-dev.org/documentation/2.0/classsf_1_1SoundStream.php#details
  + Authors: Laurent Gomila, Jeremy DeHaan
  +/
@@ -76,7 +76,7 @@ class SoundStream:SoundSource
 
 		sfSoundStream_initialize(sfPtr, channelCount, sampleRate);
 
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 
@@ -87,16 +87,16 @@ class SoundStream:SoundSource
 		{
 			sfSoundStream_setPitch(sfPtr, newPitch);
 		}
-		
+
 		float pitch()
 		{
 			return sfSoundStream_getPitch(sfPtr);
 		}
 	}
-	
+
 	/**
 	 * The volume of the sound.
-	 * 
+	 *
 	 * The volume is a vlue between 0 (mute) and 100 (full volume). The default value for the volume is 100.
 	 */
 	@property
@@ -111,10 +111,10 @@ class SoundStream:SoundSource
 			return sfSoundStream_getVolume(sfPtr);
 		}
 	}
-	
+
 	/**
 	 * The 3D position of the sound in the audio scene.
-	 * 
+	 *
 	 * Only sounds with one channel (mono sounds) can be spatialized. The default position of a sound is (0, 0, 0).
 	 */
 	@property
@@ -123,7 +123,7 @@ class SoundStream:SoundSource
 		{
 			sfSoundStream_setPosition(sfPtr, newPosition.x, newPosition.y, newPosition.z);
 		}
-		
+
 		Vector3f position()
 		{
 			Vector3f temp;
@@ -145,7 +145,7 @@ class SoundStream:SoundSource
 		{
 			sfSoundStream_setLoop(sfPtr, loop);
 		}
-		
+
 		bool isLooping()
 		{
 			return sfSoundStream_getLoop(sfPtr);
@@ -162,18 +162,18 @@ class SoundStream:SoundSource
 		void playingOffset(Duration offset)
 		{
 			sfSoundStream_setPlayingOffset(sfPtr, offset.total!"usecs");
-			
+
 		}
-		
+
 		Duration playingOffset()
 		{
 			return usecs(sfSoundStream_getPlayingOffset(sfPtr));
 		}
 	}
-	
+
 	/**
 	 * Make the sound's position relative to the listener (true) or absolute (false).
-	 * 
+	 *
 	 * Making a sound relative to the listener will ensure that it will always be played the same way regardless the position of the listener.  This can be useful for non-spatialized sounds, sounds that are produced by the listener, or sounds attached to it. The default value is false (position is absolute).
 	 */
 	@property
@@ -182,16 +182,16 @@ class SoundStream:SoundSource
 		{
 			sfSoundStream_setRelativeToListener(sfPtr, relative);
 		}
-		
+
 		bool relativeToListener()
 		{
 			return sfSoundStream_isRelativeToListener(sfPtr);
 		}
 	}
-	
+
 	/**
 	 * The minimum distance of the sound.
-	 * 
+	 *
 	 * The "minimum distance" of a sound is the maximum distance at which it is heard at its maximum volume. Further than the minimum distance, it will start to fade out according to its attenuation factor. A value of 0 ("inside the head of the listener") is an invalid value and is forbidden. The default value of the minimum distance is 1.
 	 */
 	@property
@@ -200,18 +200,18 @@ class SoundStream:SoundSource
 		{
 			sfSoundStream_setMinDistance(sfPtr, distance);
 		}
-		
+
 		float minDistance()
 		{
 			return sfSoundStream_getMinDistance(sfPtr);
 		}
 	}
-	
+
 	/**
 	 * The attenuation factor of the sound.
-	 * 
-	 * The attenuation is a multiplicative factor which makes the sound more or less loud according to its distance from the listener. An attenuation of 0 will produce a non-attenuated sound, i.e. its volume will always be the same whether it is heard from near or from far. 
-	 * 
+	 *
+	 * The attenuation is a multiplicative factor which makes the sound more or less loud according to its distance from the listener. An attenuation of 0 will produce a non-attenuated sound, i.e. its volume will always be the same whether it is heard from near or from far.
+	 *
 	 * On the other hand, an attenuation value such as 100 will make the sound fade out very quickly as it gets further from the listener. The default value of the attenuation is 1.
 	 */
 	@property
@@ -220,7 +220,7 @@ class SoundStream:SoundSource
 		{
 			sfSoundStream_setAttenuation(sfPtr, newAttenuation);
 		}
-		
+
 		float attenuation()
 		{
 			return sfSoundStream_getAttenuation(sfPtr);
@@ -242,7 +242,7 @@ class SoundStream:SoundSource
 			return sfSoundStream_getChannelCount(sfPtr);
 		}
 	}
-	
+
 	/**
 	* The stream sample rate of the stream
 	*
@@ -272,7 +272,7 @@ class SoundStream:SoundSource
 
 		sfSoundStream_play(sfPtr);
 
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	void pause()
@@ -288,7 +288,7 @@ class SoundStream:SoundSource
 	abstract bool onGetData(ref const(short)[] samples);
 
 	abstract void onSeek(Duration timeOffset);
-	
+
 
 }
 
@@ -312,12 +312,12 @@ public:
 class SoundStreamCallBacks: sfmlSoundStreamCallBacks
 {
 	SoundStream m_stream;
-	
+
 	this(SoundStream stream)
 	{
 		m_stream = stream;
 	}
-	
+
 	extern(C++) bool onGetData(Chunk* chunk)
 	{
 		const(short)[] samples;
@@ -330,14 +330,14 @@ class SoundStreamCallBacks: sfmlSoundStreamCallBacks
 		return ret;
 
 	}
-	
+
 	extern(C++) void onSeek(long time)
 	{
 		m_stream.onSeek(usecs(time));
 	}
-	
-	
-	
+
+
+
 }
 
 private extern(C):

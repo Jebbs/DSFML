@@ -22,6 +22,7 @@ module dsfml.window.event;
 
 import dsfml.window.keyboard;
 import dsfml.window.mouse;
+import dsfml.window.sensor;
 
 /**
 *Defines a system event and its parameters.
@@ -125,6 +126,21 @@ struct Event
 		///Y position of the mouse pointer, relative to the top of the owner window
 		int y;
 	}
+	
+	/**
+	 *Mouse wheel scroll events parameters (MouseWheelScrolled)
+	 */
+	struct MouseWheelScrollEvent
+	{
+		///Which wheel (for mice with multiple ones)
+		Mouse.Wheel wheel;
+		/// Wheel offset. High precision mice may use non-integral offsets.
+		float delta;
+		/// X position of the mouse pointer, relative to the left of the owner window
+		int x;
+		/// Y position of the mouse pointer, relative to the left of the owner window
+		int y;
+	}
 
 	/**
 	 *Size events parameters (Resized)
@@ -145,6 +161,29 @@ struct Event
 		/// UTF-32 unicode value of the character
 		dchar unicode;
 	}
+	/**
+	 *Sensor event parameters
+	 */
+	
+	struct SensorEvent
+	{
+		///Type of the sensor
+		Sensor.Type type;
+		float x;
+		float y;
+		float z;
+	}
+	/**
+	 *Touch Event parameters
+	 */
+	
+	struct TouchEvent
+	{
+		///Index of the finger in case of multi-touch events.
+		uint finger;
+		int x;
+		int y;
+	}
 
 	enum EventType
 	{
@@ -164,6 +203,8 @@ struct Event
 		KeyReleased,
 		///The mouse wheel was scrolled (data in event.mouseWheel)
 		MouseWheelMoved,
+		///The mouse wheel was scrolled (data in event.mouseWheelScroll)
+		MouseWheelScrolled,
 		///A mouse button was pressed (data in event.mouseButton)
 		MouseButtonPressed,
 		///A mouse button was released (data in event.mouseButton)
@@ -184,6 +225,14 @@ struct Event
 		JoystickConnected,
 		///A joystick was disconnected (data in event.joystickConnect)
 		JoystickDisconnected,
+		///A touch event began (data in event.touch)
+		TouchBegan,
+		///A touch moved (data in event.touch)
+		TouchMoved,
+		///A touch ended (data in event.touch)
+		TouchEnded,
+		///A sensor value changed (data in event.sensor)
+		SensorChanged,
 		
 		///Keep last -- the total number of event types
 		Count
@@ -206,12 +255,18 @@ struct Event
 		MouseButtonEvent mouseButton;
 		///Mouse wheel event parameters (Event::MouseWheelMoved)
 		MouseWheelEvent mouseWheel;
+		///Mouse wheel scroll event parameters
+		MouseWheelScrollEvent mouseWheelScroll;
 		///Joystick move event parameters (Event::JoystickMoved)
 		JoystickMoveEvent joystickMove;
 		///Joystick button event parameters (Event::JoystickButtonPressed, Event::JoystickButtonReleased)
 		JoystickButtonEvent joystickButton;
 		///Joystick (dis)connect event parameters (Event::JoystickConnected, Event::JoystickDisconnected)
 		JoystickConnectEvent joystickConnect;
+		///Touch event parameters
+		TouchEvent touch;
+		///Sensor event Parameters
+		SensorEvent sensor;
 		
 	}
 }
