@@ -49,13 +49,13 @@ import dsfml.system.err;
 class TcpSocket:Socket
 {
 	package sfTcpSocket* sfPtr;
-	
+
 	///Default constructor
 	this()
 	{
 		sfPtr = sfTcpSocket_create();
 	}
-	
+
 	///Destructor
 	~this()
 	{
@@ -82,9 +82,9 @@ class TcpSocket:Socket
 	IpAddress getRemoteAddress()
 	{
 		IpAddress temp;
-		
+
 		sfTcpSocket_getRemoteAddress(sfPtr,temp.m_address.ptr);
-		
+
 		return temp;
 	}
 
@@ -125,7 +125,7 @@ class TcpSocket:Socket
 	{
 		return sfTcpSocket_connect(sfPtr, host.m_address.ptr,port, timeout.total!"usecs");
 	}
-	
+
 	///Disconnect the socket from its remote peer.
 	///
 	///This function gracefully closes the connection. If the socket is not connected, this function has no effect.
@@ -134,7 +134,7 @@ class TcpSocket:Socket
 		sfTcpSocket_disconnect(sfPtr);
 	}
 
-	///Tell whether the socket is in blocking or non-blocking mode. 
+	///Tell whether the socket is in blocking or non-blocking mode.
 	///
 	///Returns: True if the socket is blocking, false otherwise.
 	bool isBlocking()
@@ -155,7 +155,7 @@ class TcpSocket:Socket
 		import dsfml.system.string;
 
 		Status toReturn = sfTcpSocket_send(sfPtr, data.ptr, data.length);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
@@ -236,29 +236,29 @@ unittest
 
 		//socket connecting to server
 		auto clientSocket = new TcpSocket();
-		
+
 		//listener looking for new sockets
 		auto listener = new TcpListener();
 		listener.listen(55003);
-		
+
 		//get our client socket to connect to the server
 		clientSocket.connect(IpAddress.LocalHost, 55003);
-		
-		
-		
+
+
+
 		//packet to send data
 		auto sendPacket = new Packet();
-		
-		
+
+
 		//Packet to receive data
 		auto receivePacket = new Packet();
-		
+
 		//socket on the server side connected to the client's socket
 		auto serverSocket = new TcpSocket();
-		
+
 		//accepts a new connection and binds it to the socket in the parameter
 		listener.accept(serverSocket);
-		
+
 		string temp = "I'm sending you stuff!";
 
 		//Let's greet the server!
@@ -266,7 +266,7 @@ unittest
 		//clientSocket.send(sendPacket);
 
 		clientSocket.send(temp);
-		
+
 		//And get the data on the server side
 		//serverSocket.receive(receivePacket);
 
@@ -274,17 +274,17 @@ unittest
 		size_t received;
 
 		serverSocket.receive(temp2, received);
-		
+
 		//What did we get from the client?
 		writeln("Gotten from client: ", cast(string)temp2[0..received]);
-		
+
 		//clear the packets to send/get new information
 		sendPacket.clear();
 		receivePacket.clear();
-		
+
 		//Respond back to the client
 		sendPacket.write("Hello, I'm your server.");
-		
+
 		serverSocket.send(sendPacket);
 
 		clientSocket.receive(receivePacket);
@@ -293,7 +293,7 @@ unittest
 		string message;
 		receivePacket.read!string(message);
 		writeln("Gotten from server: ", message);
-		
+
 		clientSocket.disconnect();
 		writeln();
 	}

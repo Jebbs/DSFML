@@ -31,24 +31,24 @@ import dsfml.system.err;
 
 /++
  + Shader class (vertex and fragment).
- + 
+ +
  + Shaders are programs written using a specific language, executed directly by the graphics card and allowing one to apply real-time operations to the rendered entities.
- + 
+ +
  + There are two kinds of shaders:
  + - Vertex shaders, that process vertices
  + - Fragment (pixel) shaders, that process pixels
- + 
+ +
  + A DSFML Shader can be composed of either a vertex shader alone, a fragment shader alone, or both combined (see the variants of the load functions).
- + 
+ +
  + Shaders are written in GLSL, which is a C-like language dedicated to OpenGL shaders. You'll probably need to learn its basics before writing your own shaders for SFML.
- + 
+ +
  + Like any D/C/C++ program, a shader has its own variables that you can set from your D application. DSFML's Shader handles 5 different types of variables:
  + - floats
  + - vectors (2, 3, or 4 components)
  + - colors
  + - textures
  + - transforms (matrices)
- + 
+ +
  + Authors: Laurent Gomila, Jeremy DeHaan
  + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Shader.php#details
  +/
@@ -66,19 +66,19 @@ class Shader
 	/// Special type/value that can be passed to setParameter, and that represents the texture of the object being drawn.
 	struct CurrentTextureType {};
 	static CurrentTextureType CurrentTexture;
-	
+
 
 	this()
 	{
 		//creates an empty shader
 		sfPtr=sfShader_construct();
 	}
-	
+
 	package this(sfShader* shader)
 	{
 		sfPtr = shader;
 	}
-	
+
 	~this()
 	{
 		import dsfml.system.config;
@@ -88,13 +88,13 @@ class Shader
 
 	/**
 	 * Load either the vertex or fragment shader from a file.
-	 * 
+	 *
 	 * This function loads a single shader, either vertex or fragment, identified by the second argument. The source must be a text file containing a valid shader in GLSL language. GLSL is a C-like language dedicated to OpenGL shaders; you'll probably need to read a good documentation for it before writing your own shaders.
-	 * 
+	 *
 	 * Params:
 	 * 		filename	= Path of the vertex or fragment shader file to load
 	 * 		type		= Type of shader (vertex or fragment)
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed.
 	 */
 	bool loadFromFile(string filename, Type type)
@@ -114,7 +114,7 @@ class Shader
 
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -122,13 +122,13 @@ class Shader
 
 	/**
 	 * Load both the vertex and fragment shaders from files.
-	 * 
+	 *
 	 * This function loads both the vertex and the fragment shaders. If one of them fails to load, the shader is left empty (the valid shader is unloaded). The sources must be text files containing valid shaders in GLSL language. GLSL is a C-like language dedicated to OpenGL shaders; you'll probably need to read a good documentation for it before writing your own shaders.
-	 * 
+	 *
 	 * Params:
 	 * 		vertexShaderFilename	= Path of the vertex shader file to load
 	 * 		fragmentShaderFilename	= Path of the fragment shader file to load
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed.
 	 */
 	bool loadFromFile(string vertexShaderFilename, string fragmentShaderFilename)
@@ -138,7 +138,7 @@ class Shader
 		bool ret = sfShader_loadFromFile(sfPtr, toStringz(vertexShaderFilename) , toStringz(fragmentShaderFilename));
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -146,13 +146,13 @@ class Shader
 
 	/**
 	 * Load either the vertex or fragment shader from a source code in memory.
-	 * 
+	 *
 	 * This function loads a single shader, either vertex or fragment, identified by the second argument. The source code must be a valid shader in GLSL language. GLSL is a C-like language dedicated to OpenGL shaders; you'll probably need to read a good documentation for it before writing your own shaders.
-	 * 
+	 *
 	 * Params:
 	 * 		shader	= String containing the source code of the shader
 	 * 		type	= Type of shader (vertex or fragment)
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed.
 	 */
 	bool loadFromMemory(string shader, Type type)
@@ -171,20 +171,20 @@ class Shader
 		}
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * Load both the vertex and fragment shaders from source codes in memory.
-	 * 
+	 *
 	 * This function loads both the vertex and the fragment shaders. If one of them fails to load, the shader is left empty (the valid shader is unloaded). The sources must be valid shaders in GLSL language. GLSL is a C-like language dedicated to OpenGL shaders; you'll probably need to read a good documentation for it before writing your own shaders.
-	 * 
+	 *
 	 * Params:
 	 * 		vertexShader	= String containing the source code of the vertex shader
 	 * 		fragmentShader	= String containing the source code of the fragment shader
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed.
 	 */
 	bool loadFromMemory(string vertexShader, string fragmentShader)
@@ -194,21 +194,21 @@ class Shader
 		bool ret = sfShader_loadFromMemory(sfPtr, toStringz(vertexShader) , toStringz(fragmentShader));
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
 	}
-	
+
 	/**
 	 * Load either the vertex or fragment shader from a custom stream.
-	 * 
+	 *
 	 * This function loads a single shader, either vertex or fragment, identified by the second argument. The source code must be a valid shader in GLSL language. GLSL is a C-like language dedicated to OpenGL shaders; you'll probably need to read a good documentation for it before writing your own shaders.
-	 * 
+	 *
 	 * Params:
 	 * 		stream	= Source stream to read from
 	 * 		type	= Type of shader (vertex or fragment)
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed.
 	 */
 	bool loadFromStream(InputStream stream, Type type)
@@ -227,7 +227,7 @@ class Shader
 		}
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -235,13 +235,13 @@ class Shader
 
 	/**
 	 * Load both the vertex and fragment shaders from custom streams.
-	 * 
+	 *
 	 * This function loads a single shader, either vertex or fragment, identified by the second argument. The source code must be a valid shader in GLSL language. GLSL is a C-like language dedicated to OpenGL shaders; you'll probably need to read a good documentation for it before writing your own shaders.
-	 * 
+	 *
 	 * Params:
 	 * 		vertexShaderStream		= Source stream to read the vertex shader from
 	 * 		fragmentShaderStream	= Source stream to read the fragment shader from
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed.
 	 */
 	bool loadFromStream(InputStream vertexShaderStream, InputStream fragmentShaderStream)
@@ -251,14 +251,14 @@ class Shader
 		bool ret = sfShader_loadFromStream(sfPtr, new shaderStream(vertexShaderStream), new shaderStream(fragmentShaderStream));
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 		return ret;
 	}
 
 	/**
 	 * Change a float parameter of the shader.
-	 * 
+	 *
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a float (float GLSL type).
 	 * 		x		= Value to assign
@@ -278,7 +278,7 @@ class Shader
 
 	/**
 	 * Change a 2-components vector parameter of the shader.
-	 * 
+	 *
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2x1 vector (vec2 GLSL type).
 	 * 		x		= First component of the value to assign
@@ -292,7 +292,7 @@ class Shader
 
 	/**
 	 * Change a 3-components vector parameter of the shader.
-	 * 
+	 *
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 3x1 vector (vec3 GLSL type).
 	 * 		x		= First component of the value to assign
@@ -307,7 +307,7 @@ class Shader
 
 	/**
 	 * Change a 4-components vector parameter of the shader.
-	 * 
+	 *
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 4x1 vector (vec4 GLSL type).
 	 * 		x		= First component of the value to assign
@@ -323,7 +323,7 @@ class Shader
 
 	/**
 	 * Change variable length vector parameter of the shader. The length of the set of floats must be between 1 and 4.
-	 * 
+	 *
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 4x1 vector (vec4 GLSL type).
 	 * 		val 	= The set of floats to assign.
@@ -346,7 +346,7 @@ class Shader
 
 	/**
 	 * Change a 2-components vector parameter of the shader.
-	 * 
+	 *
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2x1 vector (vec2 GLSL type).
 	 * 		vector	= Vector to assign
@@ -366,7 +366,7 @@ class Shader
 
 	/**
 	 * Change a 3-components vector parameter of the shader.
-	 * 
+	 *
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 3x1 vector (vec3 GLSL type).
 	 * 		vector	= Vector to assign
@@ -385,9 +385,9 @@ class Shader
 
 	/**
 	 * Change a color vector parameter of the shader.
-	 * 
+	 *
 	 * It is important to note that the components of the color are normalized before being passed to the shader. Therefore, they are converted from range [0 .. 255] to range [0 .. 1]. For example, a Color(255, 125, 0, 255) will be transformed to a vec4(1.0, 0.5, 0.0, 1.0) in the shader.
-	 * 
+	 *
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 4x1 vector (vec4 GLSL type).
 	 * 		color	= Color to assign
@@ -406,7 +406,7 @@ class Shader
 
 	/**
 	 * Change a matrix parameter of the shader.
-	 * 
+	 *
 	 * Params:
 	 * 		name		= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 4x4 matrix (mat4 GLSL type).
 	 * 		transform	= Transform to assign
@@ -425,11 +425,11 @@ class Shader
 
 	/**
 	 * Change a texture parameter of the shader.
-	 * 
+	 *
 	 * It is important to note that the texture parameter must remain alive as long as the shader uses it - no copoy is made internally.
-	 * 
+	 *
 	 * To use the texture of the object being draw, which cannot be known in advance, you can pass the special value Shader.CurrentTexture.
-	 * 
+	 *
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2D texture (sampler2D GLSL type).
 	 * 		texture	= Texture to assign
@@ -438,22 +438,22 @@ class Shader
 	{
 		import dsfml.system.string;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///ditto
 	void opIndexAssign(const(Texture) texture, string name)
 	{
 		import dsfml.system.string;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 
 	/**
 	 * Change a texture parameter of the shader.
-	 * 
+	 *
 	 * This overload maps a shader texture variable to the texture of the object being drawn, which cannot be known in advance. The second argument must be Shader.CurrentTexture.
-	 * 
+	 *
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2D texture (sampler2D GLSL type).
 	 */
@@ -465,9 +465,9 @@ class Shader
 
 	/**
 	 * Change a texture parameter of the shader.
-	 * 
+	 *
 	 * This overload maps a shader texture variable to the texture of the object being drawn, which cannot be known in advance. The value given must be Shader.CurrentTexture.
-	 * 
+	 *
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2D texture (sampler2D GLSL type).
 	 */
@@ -479,9 +479,9 @@ class Shader
 
 	/**
 	 * Bind a shader for rendering.
-	 * 
+	 *
 	 * This function is not part of the graphics API, it mustn't be used when drawing SFML entities. It must be used only if you mix Shader with OpenGL code.
-	 * 
+	 *
 	 * Params:
 	 * 		shader	= Shader to bind. Can be null to use no shader.
 	 */
@@ -492,16 +492,16 @@ class Shader
 
 	/**
 	 * Tell whether or not the system supports shaders.
-	 * 
+	 *
 	 * This function should always be called before using the shader features. If it returns false, then any attempt to use DSFML Shader will fail.
-	 * 
+	 *
 	 * Returns: True if shaders are supported, false otherwise
 	 */
 	static bool isAvailable()
 	{
 		import dsfml.system.string;
 		bool toReturn = sfShader_isAvailable();
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 }
@@ -514,11 +514,11 @@ unittest
 private extern(C++) interface shaderInputStream
 {
 	long read(void* data, long size);
-	
+
 	long seek(long position);
-	
+
 	long tell();
-	
+
 	long getSize();
 }
 
@@ -526,27 +526,27 @@ private extern(C++) interface shaderInputStream
 private class shaderStream:shaderInputStream
 {
 	private InputStream myStream;
-	
+
 	this(InputStream stream)
 	{
 		myStream = stream;
 	}
-	
+
 	extern(C++)long read(void* data, long size)
 	{
 		return myStream.read(data[0..cast(size_t)size]);
 	}
-	
+
 	extern(C++)long seek(long position)
 	{
 		return myStream.seek(position);
 	}
-	
+
 	extern(C++)long tell()
 	{
 		return myStream.tell();
 	}
-	
+
 	extern(C++)long getSize()
 	{
 		return myStream.getSize();
