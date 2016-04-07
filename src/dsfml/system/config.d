@@ -30,7 +30,7 @@ static if (__VERSION__ < 2064L)
 enum
 {
 	DSFML_VERSION_MAJOR = 2,
-	DSFML_VERSION_MINOR = 1
+	DSFML_VERSION_MINOR = 3
 }
 
 //destructor output for mixing in.
@@ -42,6 +42,6 @@ enum destructorOutput =`
 	}
 	else
 	{
-		
+
 	}`;
 
