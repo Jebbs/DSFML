@@ -32,22 +32,23 @@ import dsfml.graphics.renderstates;
 import dsfml.graphics.primitivetype;
 
 import dsfml.system.vector2;
+import std.typecons:Rebindable;
 
 import std.typecons:Rebindable;
 
 /++
  + Drawable representation of a texture, with its own transformations, color, etc.
- + 
+ +
  + Sprite is a drawable class that allows to easily display a texture (or a part of it) on a render target.
- + 
+ +
  + It inherits all the functions from Transformable: position, rotation, scale, origin. It also adds sprite-specific properties such as the texture to use, the part of it to display, and some convenience functions to change the overall color of the sprite, or to get its bounding rectangle.
- + 
+ +
  + Sprite works in combination with the Texture class, which loads and provides the pixel data of a given texture.
- + 
+ +
  + The separation of Sprite and Texture allows more flexibility and better performances: indeed a Texture is a heavy resource, and any operation on it is slow (often too slow for real-time applications). On the other side, a Sprite is a lightweight object which can use the pixel data of a Texture and draw it with its own transformation/color/blending attributes.
- + 
+ +
  + It is important to note that the Sprite instance doesn't copy the texture that it uses, it only keeps a reference to it. Thus, a Texture must not be destroyed while it is used by a Sprite (i.e. never write a function that uses a local Texture instance for creating a sprite).
- + 
+ +
  + Authors: Laurent Gomila, Jeremy DeHaan
  + See_Also: http://sfml-dev.org/documentation/2.0/classsf_1_1Sprite.php#details
  +/
@@ -68,7 +69,7 @@ class Sprite : Drawable, Transformable
 		m_texture = null;
 		m_textureRect = IntRect();
 	}
-	
+
 	this(const(Texture) texture)
 	{
 		// Constructor code
@@ -84,7 +85,7 @@ class Sprite : Drawable, Transformable
 
 	/**
 	 * The sub-rectangle of the texture that the sprite will display.
-	 * 
+	 *
 	 * The texture rect is useful when you don't want to display the whole texture, but rather a part of it. By default, the texture rect covers the entire texture.
 	 */
 	@property
@@ -107,7 +108,7 @@ class Sprite : Drawable, Transformable
 
 	/**
 	 * The global color of the sprite.
-	 * 
+	 *
 	 * This color is modulated (multiplied) with the sprite's texture. It can be used to colorize the sprite, or change its global opacity. By default, the sprite's color is opaque white.
 	 */
 	@property
@@ -125,14 +126,14 @@ class Sprite : Drawable, Transformable
 		{
 			return m_vertices[0].color;
 		}
-		
+
 	}
 
 	/**
 	 * Get the global bounding rectangle of the entity.
-	 * 
+	 *
 	 * The returned rectangle is in global coordinates, which means that it takes in account the transformations (translation, rotation, scale, ...) that are applied to the entity. In other words, this function returns the bounds of the sprite in the global 2D world's coordinate system.
-	 * 
+	 *
 	 * Returns: Global bounding rectangle of the entity
 	 */
 	FloatRect getGlobalBounds()
@@ -142,9 +143,9 @@ class Sprite : Drawable, Transformable
 
 	/**
 	 * Get the local bounding rectangle of the entity.
-	 * 
+	 *
 	 * The returned rectangle is in local coordinates, which means that it ignores the transformations (translation, rotation, scale, ...) that are applied to the entity. In other words, this function returns the bounds of the entity in the entity's coordinate system.
-	 * 
+	 *
 	 * Returns: Local bounding rectangle of the entity
 	 */
 	FloatRect getLocalBounds()
@@ -156,9 +157,9 @@ class Sprite : Drawable, Transformable
 
 	/**
 	 * Get the source texture of the sprite.
-	 * 
+	 *
 	 * If the sprite has no source texture, a NULL pointer is returned. The returned pointer is const, which means that you can't modify the texture when you retrieve it with this function.
-	 * 
+	 *
 	 * Returns: The sprite's texture
 	 */
 	const(Texture) getTexture()
@@ -168,11 +169,11 @@ class Sprite : Drawable, Transformable
 
 	/**
 	 * Change the source texture of the shape.
-	 * 
+	 *
 	 * The texture argument refers to a texture that must exist as long as the sprite uses it. Indeed, the sprite doesn't store its own copy of the texture, but rather keeps a pointer to the one that you passed to this function. If the source texture is destroyed and the sprite tries to use it, the behaviour is undefined. texture can be NULL to disable texturing.
-	 * 
+	 *
 	 * If resetRect is true, the TextureRect property of the sprite is automatically adjusted to the size of the new texture. If it is false, the texture rect is left unchanged.
-	 * 
+	 *
 	 * Params:
 	 * 		texture		= New texture
 	 * 		resetRect	= Should the texture rect be reset to the size of the new texture?
@@ -183,13 +184,13 @@ class Sprite : Drawable, Transformable
 		{
 			textureRect(IntRect(0,0,texture.getSize().x,texture.getSize().y));
 		}
-		
+
 		m_texture = texture;
 	}
 
 	/**
 	 * Draw the sprite to a render target.
-	 * 
+	 *
 	 * Params:
 	 * 		renderTarget	= Target to draw to
 	 * 		renderStates	= Current render states
@@ -206,7 +207,7 @@ class Sprite : Drawable, Transformable
 
 	/**
 	 * Create a new Sprite with the same data. Note that the texture is not copied, only its reference.
-	 * 
+	 *
 	 * Returns: A new Sprite object with the same data.
 	 */
 	@property
@@ -229,7 +230,7 @@ class Sprite : Drawable, Transformable
 	void updatePositions()
 	{
 		FloatRect bounds = getLocalBounds();
-		
+
 		m_vertices[0].position = Vector2f(0, 0);
 		m_vertices[1].position = Vector2f(0, bounds.height);
 		m_vertices[2].position = Vector2f(bounds.width, bounds.height);
@@ -242,7 +243,7 @@ class Sprite : Drawable, Transformable
 		float right = left + m_textureRect.width;
 		float top = (m_textureRect.top);
 		float bottom = top + m_textureRect.height;
-		
+
 		m_vertices[0].texCoords = Vector2f(left, top);
 		m_vertices[1].texCoords = Vector2f(left, bottom);
 		m_vertices[2].texCoords = Vector2f(right, bottom);

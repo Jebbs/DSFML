@@ -76,7 +76,7 @@ class Window
 		sfWindow_destroy(sfPtr);
 		m_needsToDelete = false;
 	}
-	
+
 	//TODO: Reduce to one constructor with a template parameter for the string types. Use sfWindow_createUnicode in case it has unicode in the title.
 
 	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
@@ -115,7 +115,7 @@ class Window
 		this();
 		create(handle, settings);
 	}
-	
+
 	~this()
 	{
 		import dsfml.system.config;
@@ -138,7 +138,7 @@ class Window
 			sfWindow_setPosition(sfPtr,newPosition.x, newPosition.y);
 			return newPosition;
 		}
-		
+
 		Vector2i position()
 		{
 			Vector2i temp;
@@ -146,7 +146,7 @@ class Window
 			return temp;
 		}
 	}
-	
+
 	///Get's or set's the window's size.
 	@property
 	{
@@ -178,13 +178,13 @@ class Window
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
-	
+
 	///Request the current window to be made the active foreground window.
 	void requestFocus()
 	{
 		sfWindow_requestFocus(sfPtr);
 	}
-	
+
 	///Check whether the window has the input focus
 	///
 	///Returns: True if the window has focus, false otherwise
@@ -192,7 +192,7 @@ class Window
 	{
 		return sfWindow_hasFocus(sfPtr);
 	}
-	
+
 	///Limit the framerate to a maximum fixed frequency.
 	///
 	///If a limit is set, the window will use a small delay after each call to display() to ensure that the current frame lasted long enough to match the framerate limit. SFML will try to match the given limit as much as it can, but since it internally uses sf::sleep, whose precision depends on the underlying OS, the results may be a little unprecise as well (for example, you can get 65 FPS when requesting 60).
@@ -296,7 +296,7 @@ class Window
 	{
 		sfWindow_setVisible(sfPtr,visible);
 	}
-	
+
 	///Enable or disable vertical synchronization.
 	///
 	///Activating vertical synchronization will limit the number of frames displayed to the refresh rate of the monitor. This can avoid some visual artifacts, and limit the framerate to a good value (but not constant across different computers).
@@ -412,7 +412,7 @@ class Window
 
 	///Pop the event on top of the event queue, if any, and return it.
 	///
-	///This function is not blocking: if there's no pending event then it will return false and leave event unmodified. Note that more than one event may be present in the event queue, thus you should always call this function in a loop to make sure that you process every pending event. 
+	///This function is not blocking: if there's no pending event then it will return false and leave event unmodified. Note that more than one event may be present in the event queue, thus you should always call this function in a loop to make sure that you process every pending event.
 	///
 	///Params:
     ///		event = Event to be returned.
@@ -422,10 +422,10 @@ class Window
 	{
 		return (sfWindow_pollEvent(sfPtr, &event));
 	}
-	
+
 	///Wait for an event and return it.
 	///
-	///This function is blocking: if there's no pending event then it will wait until an event is received. After this function returns (and no error occured), the event object is always valid and filled properly. This function is typically used when you have a thread that is dedicated to events handling: you want to make this thread sleep as long as no new event is received. 
+	///This function is blocking: if there's no pending event then it will wait until an event is received. After this function returns (and no error occured), the event object is always valid and filled properly. This function is typically used when you have a thread that is dedicated to events handling: you want to make this thread sleep as long as no new event is received.
 	///
 	///Params:
     ///		event = Event to be returned.
@@ -438,7 +438,7 @@ class Window
 
 	//TODO: Clean this shit up. The names are so bad. :(
 
-	//Gives a way for RenderWindow to send its mouse position 
+	//Gives a way for RenderWindow to send its mouse position
 	protected Vector2i getMousePosition()const
 	{
 		Vector2i temp;
@@ -470,7 +470,7 @@ class Window
 		return window.sfPtr;
 	}
 
-	
+
 }
 
 unittest
@@ -612,10 +612,10 @@ private extern(C):
 
 	//Activate or deactivate a window as the current target for OpenGL rendering
 	 bool sfWindow_setActive(sfWindow* window, bool active);
-	 
+
 	 //Request the current window to be made the active foreground window.
 	 void sfWindow_requestFocus(sfWindow* window);
-	 
+
 	 //Check whether the window has the input focus
 	 bool sfWindow_hasFocus(const(sfWindow)* window);
 
@@ -627,8 +627,8 @@ private extern(C):
 
 	//Change the joystick threshold
 	 void sfWindow_setJoystickThreshold(sfWindow* window, float threshold);
-	
-	
+
+
 	//Get the OS-specific handle of the window
 	 WindowHandle sfWindow_getSystemHandle(const(sfWindow)* window);
 

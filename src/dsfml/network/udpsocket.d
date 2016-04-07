@@ -57,7 +57,7 @@ class UdpSocket:Socket
 	{
 		sfPtr = sfUdpSocket_create();
 	}
-	
+
 	///Destructor
 	~this()
 	{
@@ -98,13 +98,13 @@ class UdpSocket:Socket
 	Status bind(ushort port)
 	{
 		import dsfml.system.string;
-		
+
 		Status toReturn = sfUdpSocket_bind(sfPtr,port);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
-	///Tell whether the socket is in blocking or non-blocking mode. 
+	///Tell whether the socket is in blocking or non-blocking mode.
 	///
 	///Returns: True if the socket is blocking, false otherwise.
 	bool isBlocking()
@@ -143,10 +143,10 @@ class UdpSocket:Socket
 	{
 		//temporary packet to be removed on function exit
 		scope SfPacket temp = new SfPacket();
-		
+
 		//getting packet's "to send" data
 		temp.append(packet.onSend());
-		
+
 		//send the data
 		return sfUdpSocket_sendPacket(sfPtr, temp.sfPtr,address.m_address.ptr,port);
 	}
@@ -166,13 +166,13 @@ class UdpSocket:Socket
 	Status receive(void[] data, out size_t sizeReceived,  out IpAddress address, out ushort port)
 	{
 		import dsfml.system.string;
-		
+
 		Status status;
 
 		void* temp = sfUdpSocket_receive(sfPtr, data.length, &sizeReceived, address.m_address.ptr, &port, &status);
-		
+
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
-		
+
 		data[0..sizeReceived] = temp[0..sizeReceived].dup;
 
 		return status;
@@ -198,10 +198,10 @@ class UdpSocket:Socket
 
 		//put data into the packet so that it can process it first if it wants.
 		packet.onRecieve(temp.getData());
-		
+
 		return status;
 	}
-	
+
 	///Unbind the socket from the local port to which it is bound.
 	///
 	///The port that the socket was previously using is immediately available after this function is called. If the socket is not bound to a port, this function has no effect.
@@ -209,7 +209,7 @@ class UdpSocket:Socket
 	{
 		sfUdpSocket_unbind(sfPtr);
 	}
-	
+
 }
 
 unittest
@@ -217,7 +217,7 @@ unittest
 	version(DSFML_Unittest_Network)
 	{
 		import std.stdio;
-		
+
 		writeln("Unittest for Udp Socket");
 
 		auto clientSocket = new UdpSocket();
