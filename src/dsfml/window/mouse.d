@@ -59,6 +59,14 @@ final abstract class Mouse
 		Count
 		
 	}
+	
+	enum Wheel
+	{
+		///Vertically oriented mouse wheel
+		VerticalWheel,
+		///Horizontally oriented mouse wheel
+		HorizontalWheel
+	}
 
 	///Set the current position of the mouse in desktop coordinates.
 	///

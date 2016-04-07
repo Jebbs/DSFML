@@ -48,7 +48,7 @@ class TcpListener:Socket
 	{
 		sfPtr = sfTcpListener_create();
 	}
-	
+
 	///Destructor
 	~this()
 	{
@@ -67,7 +67,7 @@ class TcpListener:Socket
 		return sfTcpListener_getLocalPort(sfPtr);
 	}
 
-	///Tell whether the socket is in blocking or non-blocking mode. 
+	///Tell whether the socket is in blocking or non-blocking mode.
 	///
 	///In blocking mode, calls will not return until they have completed their task. For example, a call to Receive in blocking mode won't return until some data was actually received. In non-blocking mode, calls will always return immediately, using the return code to signal whether there was data available or not. By default, all sockets are blocking.
 	///
@@ -90,9 +90,9 @@ class TcpListener:Socket
 	{
 		import dsfml.system.string;
 
-		Status toReturn = sfTcpListener_accept(sfPtr, socket.sfPtr); 
-		err.write(toString(sfErr_getOutput()));
-		return toReturn; 
+		Status toReturn = sfTcpListener_accept(sfPtr, socket.sfPtr);
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
+		return toReturn;
 	}
 
 	///Start listening for connections.
@@ -108,7 +108,7 @@ class TcpListener:Socket
 		import dsfml.system.string;
 
 		Status toReturn = sfTcpListener_listen(sfPtr, port);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
@@ -134,7 +134,7 @@ unittest
 		writeln("Unittest for Listener");
 		//socket connecting to server
 		auto clientSocket = new TcpSocket();
-		
+
 		//listener looking for new sockets
 		auto listener = new TcpListener();
 		listener.listen(55002);
@@ -147,11 +147,11 @@ unittest
 
 		//socket on the server side connected to the client's socket
 		auto serverSocket = new TcpSocket();
-		
+
 		//accepts a new connection and binds it to the socket in the parameter
 		listener.accept(serverSocket);
 
-		
+
 		clientSocket.disconnect();
 		writeln();
 	}

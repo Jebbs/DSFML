@@ -43,11 +43,11 @@ import dsfml.audio.soundstream;
  +/
 class Music : SoundStream
 {
-	import dsfml.audio.soundfile;
+	import dsfml.audio.inputsoundfile;
 
 	private
 	{
-		SoundFile m_file;
+		InputSoundFile m_file;
 		Duration m_duration;
 		short[] m_samples;
 		Mutex m_mutex;
@@ -78,7 +78,7 @@ class Music : SoundStream
 		//stop music if already playing
 		stop();
 
-		if(!m_file.openReadFromFile(filename))
+		if(!m_file.openFromFile(filename))
 		{
 			return false;
 		}
@@ -105,7 +105,7 @@ class Music : SoundStream
 	{
 		stop();
 
-		if(!m_file.openReadFromMemory(data))
+		if(!m_file.openFromMemory(data))
 		{
 			return false;
 		}
@@ -131,7 +131,7 @@ class Music : SoundStream
 	{
 		stop();
 
-		if(!m_file.openReadFromStream(stream))
+		if(!m_file.openFromStream(stream))
 		{
 			return false;
 		}

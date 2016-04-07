@@ -37,16 +37,16 @@ class Ftp
 	///Enumeration of transfer modes.
 	enum TransferMode
 	{
-		///Binary mode (file is transfered as a sequence of bytes) 
+		///Binary mode (file is transfered as a sequence of bytes)
 		Binary,
 		///Text mode using ASCII encoding.
 		Ascii,
-		///Text mode using EBCDIC encoding. 
+		///Text mode using EBCDIC encoding.
 		Ebcdic,
 	}
-	
+
 	package sfFtp* sfPtr;
-	
+
 	///Default Constructor.
 	this()
 	{
@@ -71,7 +71,7 @@ class Ftp
 	{
 		return new DirectoryResponse(sfFtp_getWorkingDirectory(sfPtr));
 	}
-	
+
 	///Get the contents of the given directory.
 	///
 	///This function retrieves the sub-directories and files contained in the given directory. It is not recursive. The directory parameter is relative to the current working directory.
@@ -197,7 +197,7 @@ class Ftp
 	{
 		return new Response(sfFtp_loginAnonymous(sfPtr));
 	}
-	
+
 	///Log in using a username and a password.
 	///
 	///Logging in is mandatory after connecting to the server. Users that are not logged in cannot perform any operation.
@@ -213,7 +213,7 @@ class Ftp
 		return new Response(sfFtp_login(sfPtr,toStringz(name), toStringz(password)));
 	}
 
-	///Go to the parent directory of the current one. 
+	///Go to the parent directory of the current one.
 	///
 	///Returns: Server response to the request.
 	Response parentDirectory()
@@ -267,6 +267,20 @@ class Ftp
 		return new Response(sfFtp_upload(sfPtr,toStringz(localFile),toStringz(remotePath),mode));
 	}
 
+	///Send a command to the FTP server.
+	///
+	///While the most often used commands are provided as member functions in the Ftp class, this method can be used to send any FTP command to the server. If the command requires one or more parameters, they can be specified in parameter. If the server returns information, you can extract it from the response using getMessage().
+	///
+	///Params:
+	///		command = Command to send.
+	///		parameter = Command parameter.
+	///
+	///Returns: Server response to the request.
+	Response sendCommand(string command, string parameter) {
+		import dsfml.system.string;
+		return new Response(sfFtp_sendCommand(sfPtr, toStringz(command), toStringz(parameter)));
+	}
+
 	///Specialization of FTP response returning a directory.
 	class DirectoryResponse:Response
 	{
@@ -276,11 +290,11 @@ class Ftp
 		package this(sfFtpDirectoryResponse* FtpDirectoryResponce)
 		{
 			import dsfml.system.string;
-			
-			Directory = toString(sfFtpDirectoryResponse_getDirectory(FtpDirectoryResponce));
-			
+
+			Directory = dsfml.system.string.toString(sfFtpDirectoryResponse_getDirectory(FtpDirectoryResponce));
+
 			super(sfFtpDirectoryResponse_getStatus(FtpDirectoryResponce), sfFtpDirectoryResponse_getMessage(FtpDirectoryResponce));
-			
+
 			sfFtpDirectoryResponse_destroy(FtpDirectoryResponce);
 		}
 
@@ -292,8 +306,8 @@ class Ftp
 			return Directory;
 		}
 	}
-	
-	///Specialization of FTP response returning a filename lisiting. 
+
+	///Specialization of FTP response returning a filename lisiting.
 	class ListingResponse:Response
 	{
 		private string[] Filenames;
@@ -306,15 +320,15 @@ class Ftp
 			Filenames.length = sfFtpListingResponse_getCount(FtpListingResponce);
 			for(int i = 0; i < Filenames.length; i++)
 			{
-				Filenames[i] = toString(sfFtpListingResponse_getName(FtpListingResponce,i));
+				Filenames[i] = dsfml.system.string.toString(sfFtpListingResponse_getName(FtpListingResponce,i));
 			}
-			
+
 			super(sfFtpListingResponse_getStatus(FtpListingResponce), sfFtpListingResponse_getMessage(FtpListingResponce));
-			
+
 			sfFtpListingResponse_destroy(FtpListingResponce);
-			
+
 		}
-		
+
 		///Return the array of directory/file names.
 		///
 		///Returns: Array containing the requested listing.
@@ -323,8 +337,8 @@ class Ftp
 			return Filenames;
 		}
 	}
-	
-	///Define a FTP response. 
+
+	///Define a FTP response.
 	class Response
 	{
 		///Status codes possibly returned by a FTP response.
@@ -334,7 +348,7 @@ class Ftp
 			ServiceReadySoon = 120,
 			DataConnectionAlreadyOpened = 125,
 			OpeningDataConnection = 150,
-			
+
 			Ok = 200,
 			PointlessCommand = 202,
 			SystemStatus = 211,
@@ -350,7 +364,7 @@ class Ftp
 			LoggedIn = 230,
 			FileActionOk = 250,
 			DirectoryOk = 257,
-			
+
 			NeedPassword = 331,
 			NeedAccountToLogIn = 332,
 			NeedInformation = 350,
@@ -360,7 +374,7 @@ class Ftp
 			FileActionAborted = 450,
 			LocalError = 451,
 			InsufficientStorageSpace = 452,
-			
+
 			CommandUnknown = 500,
 			ParametersUnknown = 501,
 			CommandNotImplemented = 502,
@@ -372,7 +386,7 @@ class Ftp
 			PageTypeUnknown = 551,
 			NotEnoughMemory = 552,
 			FilenameNotAllowed = 553,
-			
+
 			InvalidResponse = 1000,
 			ConnectionFailed = 1001,
 			ConnectionClosed = 1002,
@@ -394,20 +408,20 @@ class Ftp
 		{
 			import dsfml.system.string;
 			FtpStatus = status;
-			Message = toString(message);
+			Message = dsfml.system.string.toString(message);
 		}
 
 		///Get the full message contained in the response.
 		///
-		///Returns: The response message.
+		///Returns: The dsfml.system.string.toString( message.
 		string getMessage() const
 		{
 			return Message;
 		}
-		
+
 		///Get the status code of the response.
 		///
-		///Returns: Status code. 
+		///Returns: Status code.
 		Status getStatus() const
 		{
 			return FtpStatus;
@@ -627,3 +641,6 @@ sfFtpResponse* sfFtp_download(sfFtp* ftp, const(char)* distantFile, const(char)*
 
 ///Upload a file to a FTP server
 sfFtpResponse* sfFtp_upload(sfFtp* ftp, const(char)* localFile, const(char)* destPath, int mode);
+
+///Send a command to a FTP server
+sfFtpResponse* sfFtp_sendCommand(sfFtp* ftp, const(char)* command, const(char)* parameter);

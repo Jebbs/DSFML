@@ -76,7 +76,7 @@ class Window
 		sfWindow_destroy(sfPtr);
 		m_needsToDelete = false;
 	}
-	
+
 	//TODO: Reduce to one constructor with a template parameter for the string types. Use sfWindow_createUnicode in case it has unicode in the title.
 
 	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
@@ -115,7 +115,7 @@ class Window
 		this();
 		create(handle, settings);
 	}
-	
+
 	~this()
 	{
 		import dsfml.system.config;
@@ -138,7 +138,7 @@ class Window
 			sfWindow_setPosition(sfPtr,newPosition.x, newPosition.y);
 			return newPosition;
 		}
-		
+
 		Vector2i position()
 		{
 			Vector2i temp;
@@ -146,7 +146,7 @@ class Window
 			return temp;
 		}
 	}
-	
+
 	///Get's or set's the window's size.
 	@property
 	{
@@ -175,8 +175,22 @@ class Window
 	{
 		import dsfml.system.string;
 		bool toReturn = sfWindow_setActive(sfPtr, active);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
+	}
+
+	///Request the current window to be made the active foreground window.
+	void requestFocus()
+	{
+		sfWindow_requestFocus(sfPtr);
+	}
+
+	///Check whether the window has the input focus
+	///
+	///Returns: True if the window has focus, false otherwise
+	bool hasFocus() const
+	{
+		return sfWindow_hasFocus(sfPtr);
 	}
 
 	///Limit the framerate to a maximum fixed frequency.
@@ -282,7 +296,7 @@ class Window
 	{
 		sfWindow_setVisible(sfPtr,visible);
 	}
-	
+
 	///Enable or disable vertical synchronization.
 	///
 	///Activating vertical synchronization will limit the number of frames displayed to the refresh rate of the monitor. This can avoid some visual artifacts, and limit the framerate to a good value (but not constant across different computers).
@@ -341,7 +355,7 @@ class Window
 	{
 		import dsfml.system.string;
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(char,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///Create (or recreate) the window.
 	///
@@ -352,7 +366,7 @@ class Window
 	{
 		import dsfml.system.string;
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(wchar,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///Create (or recreate) the window.
 	///
@@ -363,7 +377,7 @@ class Window
 	{
 		import dsfml.system.string;
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	///Create (or recreate) the window from an existing control.
@@ -375,7 +389,7 @@ class Window
 	{
 		import dsfml.system.string;
 		sfWindow_createFromHandle(sfPtr, handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	///Display on screen what has been rendered to the window so far.
@@ -398,7 +412,7 @@ class Window
 
 	///Pop the event on top of the event queue, if any, and return it.
 	///
-	///This function is not blocking: if there's no pending event then it will return false and leave event unmodified. Note that more than one event may be present in the event queue, thus you should always call this function in a loop to make sure that you process every pending event. 
+	///This function is not blocking: if there's no pending event then it will return false and leave event unmodified. Note that more than one event may be present in the event queue, thus you should always call this function in a loop to make sure that you process every pending event.
 	///
 	///Params:
     ///		event = Event to be returned.
@@ -408,10 +422,10 @@ class Window
 	{
 		return (sfWindow_pollEvent(sfPtr, &event));
 	}
-	
+
 	///Wait for an event and return it.
 	///
-	///This function is blocking: if there's no pending event then it will wait until an event is received. After this function returns (and no error occured), the event object is always valid and filled properly. This function is typically used when you have a thread that is dedicated to events handling: you want to make this thread sleep as long as no new event is received. 
+	///This function is blocking: if there's no pending event then it will wait until an event is received. After this function returns (and no error occured), the event object is always valid and filled properly. This function is typically used when you have a thread that is dedicated to events handling: you want to make this thread sleep as long as no new event is received.
 	///
 	///Params:
     ///		event = Event to be returned.
@@ -424,7 +438,7 @@ class Window
 
 	//TODO: Clean this shit up. The names are so bad. :(
 
-	//Gives a way for RenderWindow to send its mouse position 
+	//Gives a way for RenderWindow to send its mouse position
 	protected Vector2i getMousePosition()const
 	{
 		Vector2i temp;
@@ -456,7 +470,7 @@ class Window
 		return window.sfPtr;
 	}
 
-	
+
 }
 
 unittest
@@ -599,6 +613,12 @@ private extern(C):
 	//Activate or deactivate a window as the current target for OpenGL rendering
 	 bool sfWindow_setActive(sfWindow* window, bool active);
 
+	 //Request the current window to be made the active foreground window.
+	 void sfWindow_requestFocus(sfWindow* window);
+
+	 //Check whether the window has the input focus
+	 bool sfWindow_hasFocus(const(sfWindow)* window);
+
 	//Display on screen what has been rendered to the window so far
 	 void sfWindow_display(sfWindow* window);
 
@@ -607,8 +627,8 @@ private extern(C):
 
 	//Change the joystick threshold
 	 void sfWindow_setJoystickThreshold(sfWindow* window, float threshold);
-	
-	
+
+
 	//Get the OS-specific handle of the window
 	 WindowHandle sfWindow_getSystemHandle(const(sfWindow)* window);
 
