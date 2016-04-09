@@ -391,6 +391,11 @@ class Texture
 	{
 		sfTexture_updateFromRenderWindow(sfPtr, window.sfPtr, x, y);
 	}
+
+	static void flush()
+	{
+		sfTexture_flush();
+	}
 }
 
 unittest
@@ -518,5 +523,7 @@ void sfTexture_bind(const sfTexture* texture);
 
 //Get the maximum texture size allowed
 uint sfTexture_getMaximumSize();
+
+void  sfTexture_flush();
 
 const(char)* sfErr_getOutput();
