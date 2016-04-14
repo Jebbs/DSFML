@@ -91,7 +91,7 @@ class TcpListener:Socket
 		import dsfml.system.string;
 
 		Status toReturn = sfTcpListener_accept(sfPtr, socket.sfPtr); 
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn; 
 	}
 
@@ -108,7 +108,7 @@ class TcpListener:Socket
 		import dsfml.system.string;
 
 		Status toReturn = sfTcpListener_listen(sfPtr, port);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 

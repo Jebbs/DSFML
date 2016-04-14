@@ -114,7 +114,7 @@ class Shader
 
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -138,7 +138,7 @@ class Shader
 		bool ret = sfShader_loadFromFile(sfPtr, toStringz(vertexShaderFilename) , toStringz(fragmentShaderFilename));
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -171,7 +171,7 @@ class Shader
 		}
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 		return ret;
 	}
@@ -194,7 +194,7 @@ class Shader
 		bool ret = sfShader_loadFromMemory(sfPtr, toStringz(vertexShader) , toStringz(fragmentShader));
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -227,7 +227,7 @@ class Shader
 		}
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -251,7 +251,7 @@ class Shader
 		bool ret = sfShader_loadFromStream(sfPtr, new shaderStream(vertexShaderStream), new shaderStream(fragmentShaderStream));
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 		return ret;
 	}
@@ -438,14 +438,14 @@ class Shader
 	{
 		import dsfml.system.string;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///ditto
 	void opIndexAssign(const(Texture) texture, string name)
 	{
 		import dsfml.system.string;
 		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 
@@ -501,7 +501,7 @@ class Shader
 	{
 		import dsfml.system.string;
 		bool toReturn = sfShader_isAvailable();
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 }

@@ -112,7 +112,7 @@ class Image
 
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -135,7 +135,7 @@ class Image
 		bool ret = sfImage_loadFromMemory(sfPtr, data.ptr, data.length);
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 		
 		return ret;
@@ -158,7 +158,7 @@ class Image
 		bool ret = sfImage_loadFromStream(sfPtr, new imageStream(stream));
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -297,7 +297,7 @@ class Image
 	{
 		import dsfml.system.string;
 		bool toReturn = sfImage_saveToFile(sfPtr, toStringz(fileName));
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 }

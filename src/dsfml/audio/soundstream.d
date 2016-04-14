@@ -76,7 +76,7 @@ class SoundStream:SoundSource
 
 		sfSoundStream_initialize(sfPtr, channelCount, sampleRate);
 
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 
@@ -272,7 +272,7 @@ class SoundStream:SoundSource
 
 		sfSoundStream_play(sfPtr);
 
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	void pause()

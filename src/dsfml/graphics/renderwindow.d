@@ -241,7 +241,7 @@ class RenderWindow : Window, RenderTarget
 	{
 		import dsfml.system.string;
 		bool toReturn = sfRenderWindow_setActive(sfPtr, active);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
@@ -419,7 +419,7 @@ class RenderWindow : Window, RenderTarget
 		import dsfml.system.string;
 		
 		sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(char,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 
 		//get view
 		m_currentView = new View(sfRenderWindow_getView(sfPtr));
@@ -438,7 +438,7 @@ class RenderWindow : Window, RenderTarget
 		import dsfml.system.string;
 		
 		sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(wchar,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 
 		//get view
 		m_currentView = new View(sfRenderWindow_getView(sfPtr));
@@ -457,7 +457,7 @@ class RenderWindow : Window, RenderTarget
 		import dsfml.system.string;
 		
 		sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 
 		//get view
 		m_currentView = new View(sfRenderWindow_getView(sfPtr));
@@ -476,7 +476,7 @@ class RenderWindow : Window, RenderTarget
 	{
 		import dsfml.system.string;
 		sfRenderWindow_createFromHandle(sfPtr, handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		//get view
 		m_currentView = new View(sfRenderWindow_getView(sfPtr));
 
@@ -665,7 +665,7 @@ class RenderWindow : Window, RenderTarget
 	{
 		import dsfml.system.string;
 		sfRenderWindow_pushGLStates(sfPtr);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	/**

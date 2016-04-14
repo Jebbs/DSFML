@@ -61,7 +61,7 @@ class SoundBuffer
 	{
 		import dsfml.system.string;
 		sfPtr = sfSoundBuffer_construct();
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	~this()
@@ -147,7 +147,7 @@ class SoundBuffer
 		}
 		else
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 			return false;
 		}
 	}
@@ -171,7 +171,7 @@ class SoundBuffer
 		else
 		{
 		    import dsfml.system.string;
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 			return false;
 		}
 	}
@@ -195,7 +195,7 @@ class SoundBuffer
 		else
 		{
 			import dsfml.system.string;
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 			return false;
 		}
 	}
@@ -221,7 +221,7 @@ class SoundBuffer
 		else
 		{
 			import dsfml.system.string;
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 			return false;
 		}
 	}
@@ -246,7 +246,7 @@ class SoundBuffer
 		else
 		{
 
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 			return false;
 		}
 	}

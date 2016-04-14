@@ -20,6 +20,8 @@ addons:
       - libxrandr-dev
 
 d: 
+ - dmd-2.071.0
+ - dmd-2.070.2
  - dmd-2.069.2
  - dmd-2.068.2
  - dmd-2.067.1

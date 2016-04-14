@@ -236,7 +236,7 @@ class Http
 		string getBody()
 		{
 			import dsfml.system.string;
-			return toString(sfHttpResponse_getBody(sfPtrResponse));
+			return dsfml.system.string.toString(sfHttpResponse_getBody(sfPtrResponse));
 		}
 
 		///Get the value of a field.
@@ -250,7 +250,7 @@ class Http
 		string getField(string field)
 		{
 			import dsfml.system.string;
-			return toString(sfHttpResponse_getField(sfPtrResponse,toStringz(field)));
+			return dsfml.system.string.toString(sfHttpResponse_getField(sfPtrResponse,toStringz(field)));
 		}
 
 		///Get the major HTTP version number of the response.
