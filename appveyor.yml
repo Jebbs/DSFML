@@ -13,6 +13,18 @@ branches:
 environment:
  matrix:
   - DC: dmd
+    DVersion: 2.071.0 
+    arch: x86
+  - DC: dmd
+    DVersion: 2.071.0 
+    arch: x64 
+  - DC: dmd
+    DVersion: 2.070.2 
+    arch: x86
+  - DC: dmd
+    DVersion: 2.070.2 
+    arch: x64 
+  - DC: dmd
     DVersion: 2.069.2 
     arch: x86
   - DC: dmd
