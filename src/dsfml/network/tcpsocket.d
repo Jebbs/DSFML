@@ -155,7 +155,7 @@ class TcpSocket:Socket
 		import dsfml.system.string;
 
 		Status toReturn = sfTcpSocket_send(sfPtr, data.ptr, data.length);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 

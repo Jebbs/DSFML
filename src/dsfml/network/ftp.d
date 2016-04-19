@@ -277,7 +277,7 @@ class Ftp
 		{
 			import dsfml.system.string;
 			
-			Directory = toString(sfFtpDirectoryResponse_getDirectory(FtpDirectoryResponce));
+			Directory = dsfml.system.string.toString(sfFtpDirectoryResponse_getDirectory(FtpDirectoryResponce));
 			
 			super(sfFtpDirectoryResponse_getStatus(FtpDirectoryResponce), sfFtpDirectoryResponse_getMessage(FtpDirectoryResponce));
 			
@@ -306,7 +306,7 @@ class Ftp
 			Filenames.length = sfFtpListingResponse_getCount(FtpListingResponce);
 			for(int i = 0; i < Filenames.length; i++)
 			{
-				Filenames[i] = toString(sfFtpListingResponse_getName(FtpListingResponce,i));
+				Filenames[i] = dsfml.system.string.toString(sfFtpListingResponse_getName(FtpListingResponce,i));
 			}
 			
 			super(sfFtpListingResponse_getStatus(FtpListingResponce), sfFtpListingResponse_getMessage(FtpListingResponce));
@@ -394,7 +394,7 @@ class Ftp
 		{
 			import dsfml.system.string;
 			FtpStatus = status;
-			Message = toString(message);
+			Message = dsfml.system.string.toString(message);
 		}
 
 		///Get the full message contained in the response.

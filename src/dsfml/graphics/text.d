@@ -34,6 +34,8 @@ import dsfml.graphics.primitivetype;
 
 import dsfml.system.vector2;
 
+import std.typecons:Rebindable;
+
 /++
  + Graphical text that can be drawn to a render target.
  + 

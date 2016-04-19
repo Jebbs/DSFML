@@ -175,7 +175,7 @@ class Window
 	{
 		import dsfml.system.string;
 		bool toReturn = sfWindow_setActive(sfPtr, active);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
@@ -341,7 +341,7 @@ class Window
 	{
 		import dsfml.system.string;
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(char,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///Create (or recreate) the window.
 	///
@@ -352,7 +352,7 @@ class Window
 	{
 		import dsfml.system.string;
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(wchar,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///Create (or recreate) the window.
 	///
@@ -363,7 +363,7 @@ class Window
 	{
 		import dsfml.system.string;
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	///Create (or recreate) the window from an existing control.
@@ -375,7 +375,7 @@ class Window
 	{
 		import dsfml.system.string;
 		sfWindow_createFromHandle(sfPtr, handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	///Display on screen what has been rendered to the window so far.

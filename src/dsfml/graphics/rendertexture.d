@@ -93,7 +93,7 @@ class RenderTexture : RenderTarget
 		import dsfml.system.string;
 
 		sfRenderTexture_create(sfPtr, width, height, depthBuffer);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 
 		//get view
 		m_currentView = new View(sfRenderTexture_getView(sfPtr));
@@ -385,7 +385,7 @@ class RenderTexture : RenderTarget
 	{
 		import dsfml.system.string;
 		sfRenderTexture_pushGLStates(sfPtr);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	/**

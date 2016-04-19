@@ -83,7 +83,7 @@ class Font
 		bool ret = sfFont_loadFromFile(sfPtr, toStringz(filename));
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 		
 		return ret;
@@ -106,7 +106,7 @@ class Font
 		bool ret = sfFont_loadFromMemory(sfPtr, data.ptr, data.length);
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 		
 		return ret;
@@ -132,7 +132,7 @@ class Font
 
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 		
 		return ret;

@@ -100,7 +100,7 @@ class UdpSocket:Socket
 		import dsfml.system.string;
 		
 		Status toReturn = sfUdpSocket_bind(sfPtr,port);
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 
@@ -171,7 +171,7 @@ class UdpSocket:Socket
 
 		void* temp = sfUdpSocket_receive(sfPtr, data.length, &sizeReceived, address.m_address.ptr, &port, &status);
 		
-		err.write(toString(sfErr_getOutput()));
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		
 		data[0..sizeReceived] = temp[0..sizeReceived].dup;
 

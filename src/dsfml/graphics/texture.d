@@ -93,7 +93,7 @@ class Texture
 		bool ret = sfTexture_loadFromFile(sfPtr, toStringz(filename) ,area.left, area.top,area.width, area.height);
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -124,7 +124,7 @@ class Texture
 		bool ret = sfTexture_loadFromMemory(sfPtr, data.ptr, data.length,area.left, area.top,area.width, area.height);
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -152,7 +152,7 @@ class Texture
 		bool ret = sfTexture_loadFromStream(sfPtr, new textureStream(stream), area.left, area.top,area.width, area.height);
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -180,7 +180,7 @@ class Texture
 		bool ret = sfTexture_loadFromImage(sfPtr, image.sfPtr, area.left, area.top,area.width, area.height);
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
@@ -269,7 +269,7 @@ class Texture
 		bool ret = sfTexture_create(sfPtr, width, height);
 		if(!ret)
 		{
-			err.write(toString(sfErr_getOutput()));
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
 		return ret;
