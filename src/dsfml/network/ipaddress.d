@@ -156,7 +156,7 @@ unittest
 
 		IpAddress googleIP = IpAddress("google.com");
 
-		writeln("Google's Ip address: ",googleIP.toString());
+		writeln("Google's Ip address: ",googleIP);
 
 		writeln("Your local Ip Address: ", IpAddress.getLocalAddress());
 
