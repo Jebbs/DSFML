@@ -138,10 +138,10 @@ class SoundBuffer
 	 *
 	 * Returns: True if loading succeeded, false if it failed
 	 */
-	bool loadFromFile(string filename)
+	bool loadFromFile(const(char)[] filename)
 	{
     	import dsfml.system.string;
-		if(sfSoundBuffer_loadFromFile(sfPtr, toStringz(filename)))
+		if(sfSoundBuffer_loadFromFile(sfPtr, filename.ptr, filename.length))
 		{
 		    return true;
 		}
@@ -236,10 +236,10 @@ class SoundBuffer
 	 *
 	 * Returns: True if saving succeeded, false if it failed
 	 */
-	bool saveToFile(string filename)
+	bool saveToFile(const(char)[] filename)
 	{
 		import dsfml.system.string;
-		if(sfSoundBuffer_saveToFile(sfPtr, toStringz(filename)))
+		if(sfSoundBuffer_saveToFile(sfPtr, filename.ptr, filename.length))
 		{
 			return true;
 		}
@@ -333,7 +333,7 @@ private extern(C):
 
 sfSoundBuffer* sfSoundBuffer_construct();
 
-bool sfSoundBuffer_loadFromFile(sfSoundBuffer* soundBuffer, const char* filename);
+bool sfSoundBuffer_loadFromFile(sfSoundBuffer* soundBuffer, const char* filename, size_t length);
 
 bool sfSoundBuffer_loadFromMemory(sfSoundBuffer* soundBuffer, const void* data, size_t sizeInBytes);
 
@@ -345,7 +345,7 @@ sfSoundBuffer* sfSoundBuffer_copy(const sfSoundBuffer* soundBuffer);
 
 void sfSoundBuffer_destroy(sfSoundBuffer* soundBuffer);
 
-bool sfSoundBuffer_saveToFile(const sfSoundBuffer* soundBuffer, const char* filename);
+bool sfSoundBuffer_saveToFile(const sfSoundBuffer* soundBuffer, const char* filename, size_t length);
 
 const(short)* sfSoundBuffer_getSamples(const sfSoundBuffer* soundBuffer);
 

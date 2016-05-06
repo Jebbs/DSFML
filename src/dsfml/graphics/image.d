@@ -104,11 +104,11 @@ class Image
 	 *
 	 * Returns: True if loading succeeded, false if it failed
 	 */
-	bool loadFromFile(string fileName)
+	bool loadFromFile(const(char)[] fileName)
 	{
 		import dsfml.system.string;
 
-		bool ret = sfImage_loadFromFile(sfPtr, toStringz(fileName));
+		bool ret = sfImage_loadFromFile(sfPtr, fileName.ptr, fileName.length);
 
 		if(!ret)
 		{
@@ -293,10 +293,10 @@ class Image
 	 *
 	 * Returns: True if saving was successful
 	 */
-	bool saveToFile(string fileName)
+	bool saveToFile(const(char)[] fileName)
 	{
 		import dsfml.system.string;
-		bool toReturn = sfImage_saveToFile(sfPtr, toStringz(fileName));
+		bool toReturn = sfImage_saveToFile(sfPtr, fileName.ptr, fileName.length);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
@@ -395,7 +395,7 @@ void sfImage_createFromColor(sfImage* image, uint width, uint height, ubyte r, u
 void sfImage_createFromPixels(sfImage* image, uint width, uint height, const(ubyte)* pixels);
 
 /// \brief Create an image from a file on disk
-bool sfImage_loadFromFile(sfImage* image, const(char)* filename);
+bool sfImage_loadFromFile(sfImage* image, const(char)* filename, size_t length);
 
 /// \brief Create an image from a file in memory
 bool sfImage_loadFromMemory(sfImage* image, const(void)* data, size_t size);
@@ -410,7 +410,7 @@ sfImage* sfImage_copy(const(sfImage)* image);
 void sfImage_destroy(sfImage* image);
 
 /// \brief Save an image to a file on disk
-bool sfImage_saveToFile(const sfImage* image, const char* filename);
+bool sfImage_saveToFile(const sfImage* image, const char* filename, size_t length);
 
 /// \brief Return the size of an image
 void sfImage_getSize(const sfImage* image, uint* width, uint* height);

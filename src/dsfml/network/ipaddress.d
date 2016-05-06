@@ -40,12 +40,11 @@ struct IpAddress
 	///
 	///Params:
     ///		address = IP address or network name.
-	this(string address)
+	this(const(char)[] address)
 	{
-		import dsfml.system.string;
-		sfIpAddress_fromString(toStringz(address) ,m_address.ptr);
+		sfIpAddress_fromString(address.ptr, address.length, m_address.ptr);
 	}
-	
+
 	///Construct the address from 4 bytes.
 	///
 	///Calling IpAddress(a, b, c, d) is equivalent to calling IpAddress("a.b.c.d"), but safer as it doesn't have to parse a string to get the address components.
@@ -59,7 +58,7 @@ struct IpAddress
 	{
 		sfIpAddress_fromBytes(byte0,byte1, byte2, byte3, m_address.ptr);
 	}
-	
+
 	///Construct the address from a 32-bits integer.
 	///
 	///This constructor uses the internal representation of the address directly. It should be used only if you got that representation from IpAddress::ToInteger().
@@ -78,7 +77,7 @@ struct IpAddress
 	///Returns: 32-bits unsigned integer representation of the address.
 	int toInteger() const
 	{
-		return sfIpAddress_toInteger(m_address.ptr);
+		return sfIpAddress_toInteger(m_address.ptr, m_address.length);
 	}
 
 	///Get a string representation of the address.
@@ -86,19 +85,15 @@ struct IpAddress
 	///The returned string is the decimal representation of the IP address (like "192.168.1.56"), even if it was constructed from a host name.
 	///
 	///Returns: String representation of the address
-	string toString() const
+	void toString(scope void delegate(const char[]) sink) const
 	{
-		import std.conv;
-		//TODO: possibly cache the string? Maybe with a needsUpdatingMethod?
-
-		//Remove any null characters from the string representation
 		int i = 0;
-		while((m_address[i] != 0) )
+		while(( i < m_address.length && m_address[i] != 0) )
 		{
 			++i;
 		}
 		//and present the string.
-		return m_address[0..i].to!string();
+		sink(m_address[0..i]);
 	}
 
 	///Get the computer's local address.
@@ -112,7 +107,7 @@ struct IpAddress
 		sfIpAddress_getLocalAddress(temp.m_address.ptr);
 		return temp;
 	}
-	
+
 	///Get the computer's public address.
 	///
 	///The public address is the address of the computer from the internet point of view, i.e. something like 89.54.1.169.
@@ -129,12 +124,12 @@ struct IpAddress
 		sfIpAddress_getPublicAddress(temp.m_address.ptr, timeout.total!"usecs");
 		return temp;
 	}
-	
-	///Value representing an empty/invalid address. 
+
+	///Value representing an empty/invalid address.
 	static immutable(IpAddress) None;
-	///The "localhost" address (for connecting a computer to itself locally) 
+	///The "localhost" address (for connecting a computer to itself locally)
 	static immutable(IpAddress) LocalHost;
-	///The "broadcast" address (for sending UDP messages to everyone on a local network) 
+	///The "broadcast" address (for sending UDP messages to everyone on a local network)
 	static immutable(IpAddress) Broadcast;
 
 	static this()
@@ -149,7 +144,7 @@ unittest
 	version(DSFML_Unittest_Network)
 	{
 		import std.stdio;
-		
+
 		writeln("Unittest for IpAdress");
 
 
@@ -175,7 +170,7 @@ private extern(C):
 //Note: These functions rely on passing an existing array for the ipAddress.
 
 ///Create an address from a string
-void sfIpAddress_fromString(const(char)* address, char* ipAddress);
+void sfIpAddress_fromString(const(char)* address, size_t addressLength, char* ipAddress);
 
 ///Create an address from 4 bytes
 void sfIpAddress_fromBytes(ubyte byte0, ubyte byte1, ubyte byte2, ubyte byte3, char* ipAddress);
@@ -184,7 +179,7 @@ void sfIpAddress_fromBytes(ubyte byte0, ubyte byte1, ubyte byte2, ubyte byte3, c
 void sfIpAddress_fromInteger(uint address, char* ipAddress);
 
 ///Get an integer representation of the address
-uint sfIpAddress_toInteger(const(char)* ipAddress);
+uint sfIpAddress_toInteger(const(char)* ipAddress, size_t length);
 
 ///Get the computer's local address
 void sfIpAddress_getLocalAddress(char* ipAddress);
