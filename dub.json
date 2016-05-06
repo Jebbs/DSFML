@@ -3,7 +3,7 @@
         "description": "DSFML binding for SFML-The Simple and Fast Multimedia Library",
         "authors": ["Jeremy DeHaan"],
         "homepage": "https://github.com/Jebbs/DSFML",
-        "version":"2.3.0",
+        "version":"2.3",
         "license": "Zlib",
         "dependencies": {
             "dsfml:audio": "~>2.3",
