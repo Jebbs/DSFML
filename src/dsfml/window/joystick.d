@@ -38,7 +38,7 @@ final abstract class Joystick
 {
 	///Structure holding a joystick's identification;
 	struct Identification {
-		private static dstring[uint[2]] nameCache;
+		private static dstring[immutable(uint)[2]] nameCache;
 		///Index of the joystick
 		uint index;
 		///Name of the joystick
