@@ -44,7 +44,13 @@ final abstract class Joystick
 		///Name of the joystick
 		@property dstring name() {
 			//In theory, each vid:pid combination should only have one name associated with it.
-			auto cachedName = [vendorId, productId] in nameCache;
+			//slightly arcane syntax to make older GDC happy.
+			uint[2] tempkey;
+			tempkey[0] = vendorId;
+			tempkey[1] = productId;
+			immutable(uint)[2] key = tempkey;
+
+			dstring* cachedName = (key in nameCache);
 			if (cachedName !is null) {
 				return *cachedName;
 			} else {
@@ -56,7 +62,7 @@ final abstract class Joystick
 
 				sfJoystick_getIdentificationName(index, retrievedName.ptr);
 
-				nameCache[[vendorId, productId]] = assumeUnique(retrievedName);
+				nameCache[key] = assumeUnique(retrievedName);
 
 				return assumeUnique(retrievedName);
 			}
