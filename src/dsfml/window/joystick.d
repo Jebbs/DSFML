@@ -57,14 +57,15 @@ final abstract class Joystick
 				import std.exception;
 
 				dchar[] retrievedName;
+				dstring retval;
 
 				retrievedName.length = sfJoystick_getIdentificationNameLength(index);
 
 				sfJoystick_getIdentificationName(index, retrievedName.ptr);
 
-				nameCache[key] = assumeUnique(retrievedName);
+				nameCache[key] = retval = assumeUnique(retrievedName);
 
-				return assumeUnique(retrievedName);
+				return retval;
 			}
 		}
 
