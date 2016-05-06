@@ -50,7 +50,7 @@ matrix:
 #Build and install DSFMLC
 install:
   - cd $HOME
-  - git clone --depth=1 --branch 2.3-passthrough https://github.com/aubade/DSFMLC.git
+  - git clone --depth=1 --branch 2.3-stringpassthrough https://github.com/aubade/DSFMLC.git
   - cd DSFMLC
   - cmake .
   - make -j2
