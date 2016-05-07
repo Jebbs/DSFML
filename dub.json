@@ -3,13 +3,14 @@
         "description": "DSFML binding for SFML-The Simple and Fast Multimedia Library",
         "authors": ["Jeremy DeHaan"],
         "homepage": "https://github.com/Jebbs/DSFML",
+        "version":"2.3.0",
         "license": "Zlib",
         "dependencies": {
-            "dsfml:audio": "~master",
-            "dsfml:graphics": "~master",
-            "dsfml:window": "~master",
-            "dsfml:network": "~master",
-            "dsfml:system": "~master"
+            "dsfml:audio": "~>2.3",
+            "dsfml:graphics": "~>2.3",
+            "dsfml:window": "~>2.3",
+            "dsfml:network": "~>2.3",
+            "dsfml:system": "~>2.3"
         },
         "subPackages":
         [
@@ -17,43 +18,44 @@
                         "name": "audio",
                         "targetType": "library",
                         "sourcePaths": ["src/dsfml/audio"],
-                        "libs": [ "dsfml-audio" ],
-                        "libs-linux": ["openal","sndfile"],
-                        "dependencies": 
-                        { 
-                                "dsfml:system": "~master" 
+                        "libs": [ "dsfmlc-audio" ],
+                        "dflags":["-m32mscoff"],
+                        "dependencies":
+                        {
+                                "dsfml:system": "~>2.3"
                         }
                 },
                 {
                         "name": "graphics",
                         "targetType": "library",
                         "sourcePaths": ["src/dsfml/graphics"],
-                        "libs": [ "dsfml-graphics" ],
-                        "libs-linux":["jpeg","GL","GLU","freetype","GLEW"],
-                        "dependencies": 
-                        { 
-                                "dsfml:system": "~master",
-                                "dsfml:window": "~master"
+                        "libs": [ "dsfmlc-graphics" ],
+                        "dflags":["-m32mscoff"],
+                        "dependencies":
+                        {
+                                "dsfml:system": "~>2.3",
+                                "dsfml:window": "~>2.3"
                         }
                 },
                 {
                         "name": "window",
                         "sourcePaths": ["src/dsfml/window"],
-                        "libs": [ "dsfml-window" ],
-                        "libs-linux":["X11","Xrandr"],
-                        "dependencies": 
-                        { 
-                                "dsfml:system": "~master" 
+                        "libs": [ "dsfmlc-window" ],
+                        "dflags":["-m32mscoff"],
+                        "dependencies":
+                        {
+                                "dsfml:system": "~>2.3"
                         }
                 },
                 {
                         "name": "network",
                         "targetType": "library",
                         "sourcePaths": ["src/dsfml/network"],
-                        "libs": [ "dsfml-network" ],
-                        "dependencies": 
-                        { 
-                                "dsfml:system": "~master" 
+                        "libs": [ "dsfmlc-network" ],
+                        "dflags":["-m32mscoff"],
+                        "dependencies":
+                        {
+                                "dsfml:system": "~>2.3"
                         }
                 },
                 {
@@ -61,7 +63,8 @@
                         "targetType": "library",
                         "importPaths": ["src/"],
                         "sourcePaths": ["src/dsfml/system"],
-                        "libs": [ "dsfml-system" ]
+                        "dflags":["-m32mscoff"],
+                        "libs": [ "dsfmlc-system" ]
                 }
         ]
 }

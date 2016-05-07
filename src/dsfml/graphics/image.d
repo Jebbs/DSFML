@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,18 +15,8 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
 module dsfml.graphics.image;
 
 import dsfml.system.vector2;
@@ -40,173 +30,153 @@ import dsfml.system.err;
 
 /++
  + Class for loading, manipulating and saving images.
- + 
+ +
  + Image is an abstraction to manipulate images as bidimensional arrays of pixels.
- + 
+ +
  + The class provides functions to load, read, write and save pixels, as well as many other useful functions.
- + 
+ +
  + Image can handle a unique internal representation of pixels, which is RGBA 32 bits. This means that a pixel must be composed of 8 bits red, green, blue and alpha channels – just like a Color. All the functions that return an array of pixels follow this rule, and all parameters that you pass to Image functions (such as loadFromPixels) must use this representation as well.
- + 
+ +
  + A Image can be copied, but it is a heavy resource and if possible you should always use [const] references to pass or return them to avoid useless copies.
- + 
+ +
  + Authors: Laurent Gomila, Jeremy DeHaan
  + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Image.php#details
  +/
 class Image
 {
 	package sfImage* sfPtr;
-	
+
 	this()
 	{
-		//Creates a null Image
+		sfPtr = sfImage_construct();
 	}
-	
+
 	package this(sfImage* image)
 	{
 		sfPtr = image;
 	}
-	
+
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfImage_destroy(sfPtr);
 	}
 
 	/**
 	 * Create the image and fill it with a unique color.
-	 * 
+	 *
 	 * Params:
 	 * 		width	= Width of the image
 	 * 		height	= Height of the image
 	 * 		color	= Fill color
-	 * 
-	 * Returns: True if loading succeeded, false if it failed
+	 *
 	 */
-	bool create(uint width, uint height, Color color)
+	void create(uint width, uint height, Color color)
 	{
-		//if the Image already exists, destroy it first
-		if(sfPtr)
-		{
-			sfImage_destroy(sfPtr);
-		}
 
-		sfPtr = sfImage_createFromColor(width, height,color.r, color.b, color.g, color.a);
-		return (sfPtr != null);
+		sfImage_createFromColor(sfPtr, width, height,color.r, color.b, color.g, color.a);
 	}
-	
+
 	/**
 	 * Create the image from an array of pixels.
-	 * 
+	 *
 	 * The pixel array is assumed to contain 32-bits RGBA pixels, and have the given width and height. If not, this is an undefined behaviour. If pixels is null, an empty image is created.
-	 * 
+	 *
 	 * Params:
 	 * 		width	= Width of the image
 	 * 		height	= Height of the image
 	 * 		pixels	= Array of pixels to copy to the image
-	 * 
-	 * Returns: True if loading succeeded, false if it failed
+	 *
 	 */
-	bool create(uint width, uint height, const ref ubyte[] pixels)
+	void create(uint width, uint height, const ref ubyte[] pixels)
 	{
-		//if the Image already exists, destroy it first
-		if(sfPtr)
-		{
-			sfImage_destroy(sfPtr);
-		}
-
-		sfPtr = sfImage_createFromPixels(width, height,pixels.ptr);
-		return (sfPtr != null);
+		sfImage_createFromPixels(sfPtr, width, height,pixels.ptr);
 	}
 
 	/**
 	 * Load the image from a file on disk.
-	 * 
+	 *
 	 * The supported image formats are bmp, png, tga, jpg, gif, psd, hdr and pic. Some format options are not supported, like progressive jpeg. If this function fails, the image is left unchanged.
-	 * 
+	 *
 	 * Params:
 	 * 		filename	= Path of the image file to load
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed
 	 */
-	bool loadFromFile(string fileName)
+	bool loadFromFile(const(char)[] fileName)
 	{
-		import std.conv;
-		import std.string;
-		//if the Image already exists, destroy it first
-		if(sfPtr)
+		import dsfml.system.string;
+
+		bool ret = sfImage_loadFromFile(sfPtr, fileName.ptr, fileName.length);
+
+		if(!ret)
 		{
-			sfImage_destroy(sfPtr);
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
-		sfPtr = sfImage_createFromFile(toStringz(fileName));
-
-		err.write(text(sfErrGraphics_getOutput()));
-
-		return (sfPtr != null);
+		return ret;
 	}
 
 	/**
 	 * Load the image from a file in memory.
-	 * 
+	 *
 	 * The supported image formats are bmp, png, tga, jpg, gif, psd, hdr and pic. Some format options are not supported, like progressive jpeg. If this function fails, the image is left unchanged.
-	 * 
+	 *
 	 * Params:
 	 * 		data	= Data file in memory to load
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed
 	 */
 	bool loadFromMemory(const(void)[] data)
 	{
-		import std.conv;
-		//if the Image already exists, destroy it first
-		if(sfPtr)
+		import dsfml.system.string;
+
+		bool ret = sfImage_loadFromMemory(sfPtr, data.ptr, data.length);
+		if(!ret)
 		{
-			sfImage_destroy(sfPtr);
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
-		sfPtr = sfImage_createFromMemory(data.ptr, data.length);
-		err.write(text(sfErrGraphics_getOutput()));
-		return (sfPtr != null);
+		return ret;
 	}
 
 	/**
 	 * Load the image from a custom stream.
-	 * 
+	 *
 	 * The supported image formats are bmp, png, tga, jpg, gif, psd, hdr and pic. Some format options are not supported, like progressive jpeg. If this function fails, the image is left unchanged.
-	 * 
+	 *
 	 * Params:
 	 * 		stream	= Source stream to read from
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed
 	 */
 	bool loadFromStream(InputStream stream)
 	{
-		import std.conv;
-		//if the Image already exists, destroy it first
-		if(sfPtr)
+		import dsfml.system.string;
+
+		bool ret = sfImage_loadFromStream(sfPtr, new imageStream(stream));
+		if(!ret)
 		{
-			sfImage_destroy(sfPtr);
+			err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		}
 
-		sfPtr = sfImage_createFromStream(new imageStream(stream));
-		err.write(text(sfErrGraphics_getOutput()));
-		return (sfPtr == null)?false:true;
+		return ret;
 	}
 
 	/**
 	 * Get the color of a pixel
-	 * 
+	 *
 	 * This function doesn't check the validity of the pixel coordinates; using out-of-range values will result in an undefined behaviour.
-	 * 
+	 *
 	 * Params:
 	 * 		x	= X coordinate of the pixel to get
 	 * 		y	= Y coordinate of the pixel to get
-	 * 
+	 *
 	 * Returns: Color of the pixel at coordinates (x, y)
 	 */
 	Color getPixel(uint x, uint y)
-	{ 
+	{
 		Color temp;
 		sfImage_getPixel(sfPtr, x,y, &temp.r, &temp.b, &temp.g, &temp.a);
 		return temp;
@@ -214,16 +184,16 @@ class Image
 
 	/**
 	 * Get the read-only array of pixels that make up the image.
-	 * 
+	 *
 	 * The returned value points to an array of RGBA pixels made of 8 bits integers components. The size of the array is width * height * 4 (getSize().x * getSize().y * 4). Warning: the returned pointer may become invalid if you modify the image, so you should never store it for too long.
-	 * 
+	 *
 	 * Returns: Read-only array of pixels that make up the image.
 	 */
 	const(ubyte)[] getPixelArray()
 	{
 		Vector2u size = getSize();
 		int length = size.x * size.y * 4;
-		
+
 		if(length!=0)
 		{
 			return sfImage_getPixelsPtr(sfPtr)[0..length];
@@ -237,7 +207,7 @@ class Image
 
 	/**
 	 * Return the size (width and height) of the image.
-	 * 
+	 *
 	 * Returns: Size of the image, in pixels.
 	 */
 	Vector2u getSize()
@@ -249,9 +219,9 @@ class Image
 
 	/**
 	 * Change the color of a pixel.
-	 * 
+	 *
 	 * This function doesn't check the validity of the pixel coordinates, using out-of-range values will result in an undefined behaviour.
-	 * 
+	 *
 	 * Params:
 	 * 		x		= X coordinate of pixel to change
 	 * 		y		= Y coordinate of pixel to change
@@ -264,11 +234,11 @@ class Image
 
 	/**
 	 * Copy pixels from another image onto this one.
-	 * 
+	 *
 	 * This function does a slow pixel copy and should not be used intensively. It can be used to prepare a complex static image from several others, but if you need this kind of feature in real-time you'd better use RenderTexture.
-	 * 
+	 *
 	 * If sourceRect is empty, the whole image is copied. If applyAlpha is set to true, the transparency of source pixels is applied. If it is false, the pixels are copied unchanged with their alpha value.
-	 * 
+	 *
 	 * Params:
 	 * 		source		= Source image to copy
 	 * 		destX		= X coordinate of the destination position
@@ -283,9 +253,9 @@ class Image
 
 	/**
 	 * Create a transparency mask from a specified color-key.
-	 * 
+	 *
 	 * This function sets the alpha value of every pixel matching the given color to alpha (0 by default) so that they become transparent.
-	 * 
+	 *
 	 * Params:
 	 * 		color	= Color to make transparent
 	 * 		alpha	= Alpha value to assign to transparent pixels
@@ -294,7 +264,7 @@ class Image
 	{
 		sfImage_createMaskFromColor(sfPtr,maskColor.r,maskColor.b, maskColor.g, maskColor.a, alpha);
 	}
-	
+
 	@property
 	Image dup() const
 	{
@@ -315,19 +285,19 @@ class Image
 
 	/**
 	 * Save the image to a file on disk.
-	 * 
+	 *
 	 * The format of the image is automatically deduced from the extension. The supported image formats are bmp, png, tga and jpg. The destination file is overwritten if it already exists. This function fails if the image is empty.
-	 * 
+	 *
 	 * Params:
 	 * 		filename	= Path of the file to save
-	 * 
+	 *
 	 * Returns: True if saving was successful
 	 */
-	bool saveToFile(string fileName)
+	bool saveToFile(const(char)[] fileName)
 	{
-		import std.conv;
-		bool toReturn = sfImage_saveToFile(sfPtr, fileName.ptr);
-		err.write(text(sfErrGraphics_getOutput()));
+		import dsfml.system.string;
+		bool toReturn = sfImage_saveToFile(sfPtr, fileName.ptr, fileName.length);
+		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
 }
@@ -342,7 +312,7 @@ unittest
 
 		auto image = new Image();
 
-		assert(image.create(100,100,Color.Blue));
+		image.create(100,100,Color.Blue);
 
 		assert(image.getPixel(0,0) == Color.Blue);
 
@@ -366,42 +336,42 @@ unittest
 }
 
 
-private extern(C++) interface sfmlInputStream
+private extern(C++) interface imageInputStream
 {
 	long read(void* data, long size);
-	
+
 	long seek(long position);
-	
+
 	long tell();
-	
+
 	long getSize();
 }
 
 
-private class imageStream:sfmlInputStream
+private class imageStream:imageInputStream
 {
 	private InputStream myStream;
-	
+
 	this(InputStream stream)
 	{
 		myStream = stream;
 	}
-	
+
 	extern(C++)long read(void* data, long size)
 	{
 		return myStream.read(data[0..cast(size_t)size]);
 	}
-	
+
 	extern(C++)long seek(long position)
 	{
 		return myStream.seek(position);
 	}
-	
+
 	extern(C++)long tell()
 	{
 		return myStream.tell();
 	}
-	
+
 	extern(C++)long getSize()
 	{
 		return myStream.getSize();
@@ -413,31 +383,34 @@ package extern(C) struct sfImage;
 
 private extern(C):
 
-sfImage* sfImage_create(uint width, uint height);
+//Construct a new image
+sfImage* sfImage_construct();
+
+void sfImage_create(sfImage* image, uint width, uint height);
 
 /// \brief Create an image and fill it with a unique color
-sfImage* sfImage_createFromColor(uint width, uint height, ubyte r, ubyte b, ubyte g, ubyte a);
+void sfImage_createFromColor(sfImage* image, uint width, uint height, ubyte r, ubyte b, ubyte g, ubyte a);
 
 /// \brief Create an image from an array of pixels
-sfImage* sfImage_createFromPixels(uint width, uint height, const ubyte* pixels);
+void sfImage_createFromPixels(sfImage* image, uint width, uint height, const(ubyte)* pixels);
 
 /// \brief Create an image from a file on disk
-sfImage* sfImage_createFromFile(const char* filename);
+bool sfImage_loadFromFile(sfImage* image, const(char)* filename, size_t length);
 
 /// \brief Create an image from a file in memory
-sfImage* sfImage_createFromMemory(const void* data, size_t size);
+bool sfImage_loadFromMemory(sfImage* image, const(void)* data, size_t size);
 
 /// \brief Create an image from a custom stream
-sfImage* sfImage_createFromStream(sfmlInputStream stream);
+bool sfImage_loadFromStream(sfImage* image, imageInputStream stream);
 
 /// \brief Copy an existing image
-sfImage* sfImage_copy(const sfImage* image);
+sfImage* sfImage_copy(const(sfImage)* image);
 
 /// \brief Destroy an existing image
 void sfImage_destroy(sfImage* image);
 
 /// \brief Save an image to a file on disk
-bool sfImage_saveToFile(const sfImage* image, const char* filename);
+bool sfImage_saveToFile(const sfImage* image, const char* filename, size_t length);
 
 /// \brief Return the size of an image
 void sfImage_getSize(const sfImage* image, uint* width, uint* height);
@@ -463,4 +436,4 @@ void sfImage_flipHorizontally(sfImage* image);
 /// \brief Flip an image vertically (top <-> bottom)
 void sfImage_flipVertically(sfImage* image);
 
-const(char)* sfErrGraphics_getOutput();
+const(char)* sfErr_getOutput();

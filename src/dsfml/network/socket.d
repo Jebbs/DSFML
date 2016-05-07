@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,31 +15,30 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module contianing the Socket abstract class
 module dsfml.network.socket;
 
-//base class for sockets
+///Base class for all the socket types. 
 abstract class Socket
 {
 	//TODO: Add methods to this so that they can be overridden by the socket classes?
+
+	///Status codes that may be returned by socket functions.
 	enum Status
 	{
-		Done, /// The socket has sent / received the data
-		NotReady, /// The socket is not ready to send / receive data yet
-		Disconnected, /// The TCP socket has been disconnected
-		Error /// An unexpected error happened
+		/// The socket has sent / received the data
+		Done, 
+		/// The socket is not ready to send / receive data yet
+		NotReady, 
+		/// The TCP socket has been disconnected
+		Disconnected, 
+		/// An unexpected error happened
+		Error 
 	}
+
+	///Special value that tells the system to pick any available port.
+	enum AnyPort = 0;
 }
 

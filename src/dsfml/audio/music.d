@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,27 +15,17 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
 module dsfml.audio.music;
 
+import core.time;
+
 import dsfml.system.mutex;
-import dsfml.system.time;
 import dsfml.system.inputstream;
 
 import dsfml.audio.soundstream;
-import dsfml.audio.soundfile;
+
 
 /++
  + Streamed music played from an audio file.
@@ -53,10 +43,12 @@ import dsfml.audio.soundfile;
  +/
 class Music : SoundStream
 {
+	import dsfml.audio.inputsoundfile;
+
 	private
 	{
-		SoundFile m_file;
-		Time m_duration;
+		InputSoundFile m_file;
+		Duration m_duration;
 		short[] m_samples;
 		Mutex m_mutex;
 	}
@@ -86,7 +78,7 @@ class Music : SoundStream
 		//stop music if already playing
 		stop();
 
-		if(!m_file.openReadFromFile(filename))
+		if(!m_file.openFromFile(filename))
 		{
 			return false;
 		}
@@ -113,7 +105,7 @@ class Music : SoundStream
 	{
 		stop();
 
-		if(!m_file.openReadFromMemory(data))
+		if(!m_file.openFromMemory(data))
 		{
 			return false;
 		}
@@ -139,7 +131,7 @@ class Music : SoundStream
 	{
 		stop();
 
-		if(!m_file.openReadFromStream(stream))
+		if(!m_file.openFromStream(stream))
 		{
 			return false;
 		}
@@ -151,14 +143,14 @@ class Music : SoundStream
 
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		stop();
 	}
 
 	/// Get the total duration of the music.
 	/// Returns: Music duration
-	Time getDuration()
+	Duration getDuration()
 	{
 		return m_duration;
 	}
@@ -171,21 +163,20 @@ class Music : SoundStream
 		 * This function fills the chunk from the next samples to read from the audio file.
 		 * 
 		 * Params:
-		 * 		data =	Chunk of data to fill
+		 * 		samples =	Array of samples to fill
 		 * 
 		 * Returns: True to continue playback, false to stop.
 		 */
-		override bool onGetData(ref Chunk data)
+		override bool onGetData(ref const(short)[] samples)
 		{
 			import dsfml.system.lock;
 
 			Lock lock = Lock(m_mutex);
 
-			data.sampleCount = cast(size_t)m_file.read(m_samples);
-			data.samples = m_samples.ptr;
+			auto length = cast(size_t)m_file.read(m_samples);
+			samples = m_samples[0..length];
 
-
-			return data.sampleCount == m_samples.length;
+			return (samples.length == m_samples.length);
 		}
 		/**
 		 * Change the current playing position in the stream source.
@@ -195,13 +186,13 @@ class Music : SoundStream
 		 * 
 		 * Implements SoundStream.
 		 */
-		override void onSeek(Time timeOffset)
+		override void onSeek(Duration timeOffset)
 		{
 			import dsfml.system.lock;
 
-			Lock lock =Lock(m_mutex);
+			Lock lock = Lock(m_mutex);
 
-			m_file.seek(timeOffset.asMicroseconds());
+			m_file.seek(timeOffset.total!"usecs");
 		}
 	}
 
@@ -227,7 +218,7 @@ class Music : SoundStream
 			uint sampleRate = m_file.getSampleRate();
 
 			// Compute the music duration
-			m_duration = seconds(cast(float)(sampleCount) / sampleRate / channelCount);
+			m_duration = usecs(sampleCount * 1_000_000 / sampleRate / channelCount);
 			
 			// Resize the internal buffer so that it can contain 1 second of audio samples
 			m_samples.length = sampleRate * channelCount;
@@ -252,7 +243,7 @@ unittest
 		auto music = new Music();
 
 		//TODO: update this for a real unit test users can run themselves.
-		if(!music.openFromFile("res/hal1.ogg"))
+		if(!music.openFromFile("res/TestMusic.ogg"))
 		{
 			return;
 		}
@@ -262,7 +253,7 @@ unittest
 		writeln("Playing music for 5 seconds");
 
 		music.play();
-		while(clock.getElapsedTime().asSeconds() < 5)
+		while(clock.getElapsedTime().total!"seconds" < 5)
 		{
 			//playing music in seoarate thread while main thread is stuck here
 		}
@@ -275,5 +266,3 @@ unittest
 		writeln();
 	}
 }
-
-

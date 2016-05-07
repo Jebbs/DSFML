@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,27 +15,16 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 module dsfml.graphics.blendmode;
 
 /++
  + Available blending modes for drawing.
  + 
- + See_Also: http://www.sfml-dev.org/documentation/2.0/group__graphics.php#ga80c52fe2f7050d7f7573b7ed3c995388
+ + See_Also: http://www.sfml-dev.org/documentation/2.3/structsf_1_1BlendMode.php
  + Authors: Laurent Gomila, Jeremy DeHaan
  +/
-enum BlendMode
+/*enum BlendMode
 {
 	/// Pixel = Source * Source.a + Dest * (1 - Source.a)
 	Alpha,
@@ -45,4 +34,41 @@ enum BlendMode
 	Multiply,
 	/// Pixel = Source.
 	None
+}*/
+
+struct BlendMode
+{
+	enum Alpha = BlendMode(Factor.SrcAlpha, Factor.OneMinusSrcAlpha, Equation.Add,
+							Factor.One, Factor.OneMinusSrcAlpha, Equation.Add);
+	enum Add = BlendMode(Factor.SrcAlpha, Factor.One, Equation.Add,
+							Factor.One, Factor.One, Equation.Add);
+	enum Multiply = BlendMode(Factor.DstColor, Factor.Zero, Equation.Add, Factor.DstColor, Factor.Zero, Equation.Add);
+	enum None = BlendMode (Factor.One, Factor.Zero, Equation.Add, Factor.One, Factor.Zero, Equation.Add);
+	
+	enum Factor
+	{
+		Zero,
+		One,
+		SrcColor,
+		OneMinunSrcColor,
+		DstColor,
+		OneMinusDstColor,
+		SrcAlpha,
+		OneMinusSrcAlpha,
+		DstAlpha,
+		OneMinusDstAlpha
+	}
+	
+	enum Equation
+	{
+		Add,
+		Subtract
+	}
+	
+	Factor colorSrcFactor = Factor.SrcAlpha;
+	Factor colorDstFactor = Factor.OneMinusSrcAlpha;
+	Equation colorEquation = Equation.Add;
+	Factor alphaSrcFactor = Factor.One;
+	Factor alphaDstFactor = Factor.OneMinusSrcAlpha;
+	Equation alphaEquation = Equation.Add;
 }

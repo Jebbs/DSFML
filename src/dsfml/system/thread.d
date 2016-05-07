@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,51 +15,60 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-//This class should only be used for initial porting!
-//Please use D's regular thread functionality when you can!
-
+///A module containing the DSFML Thread class
 module dsfml.system.thread;
 
 import core = core.thread;
 
+/**
+ *Utility class to manipulate threads.
+ *
+ *Threads provide a way to run multiple parts of the code in parallel.
+ *
+ *When you launch a new thread, the execution is split and both the new thread and the caller run in parallel. 
+ *
+ *To use a Thread, you construct it directly with the function to execute as the entry point of the thread.
+ */
 class Thread
 {
 	private core.Thread m_thread;
 
+	///Construct the thread from a functor with no argument
+	///
+	///Params:
+	///		fn  = The function to use as the entry point of the thread.
+	///		sz  = The size of the stack.
 	this(void function() fn, size_t sz = 0)
 	{
 		m_thread = new core.Thread(fn,sz);
 	}
 
+	///Construct the thread from a delegate with no argument
+	///
+	///Params:
+	///		dg  = The delegate to use as the entry point of the thread.
+	///		sz  = The size of the stack.
 	this(void delegate() dg, size_t sz = 0)
 	{
 		m_thread = new core.Thread(dg, sz);
 	}
 
+	///Destructor
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 
+	///Run the thread.
 	void launch()
 	{
 		m_thread.start();
 	}
 
+	///Wait until the thread finishes.
 	void wait()
 	{
 		if(m_thread.isRunning())
@@ -68,9 +77,13 @@ class Thread
 		}
 	}
 
-	//There is no way to stop threads in D! Mostly because it is considered unsafe. I'll leave this here for now.
-	//void terminate()
-
+	version(linux)
+	{
+		static void XInitThreads()
+		{
+            linux_XInitThreads();
+		}
+	}
 
 }
 
@@ -81,6 +94,9 @@ unittest
 	version(DSFML_Unittest_System)
 	{
 		import std.stdio;
+		import dsfml.system.sleep;
+		import core.time;
+		
 
 		void secondThreadHello()
 		{
@@ -108,21 +124,23 @@ unittest
 			writeln("Hello from the main thread!");
 		}
 
+		sleep(seconds(1));
 
+		//writeln("Letting a thread run completely before going back to the main thread.");
 
-		writeln("Letting a thread run completely before going back to the main thread.");
+		//secondThread = new Thread(&secondThreadHello);//To prevent threading errors, create a new thread before calling launch again
 
-		secondThread = new Thread(&secondThreadHello);//To prevent threading errors, create a new thread before calling launch again
+		//secondThread.launch();
 
-		secondThread.launch();
+		//secondThread.wait();
 
-		secondThread.wait();
-
-		for(int i = 0; i < 10; ++i)
-		{
-			writeln("Hello from the main thread!");
-		}
+		//for(int i = 0; i < 10; ++i)
+		//{
+		//	writeln("Hello from the main thread!");
+		//}
 	}
 
 }
 
+
+version(linux) package extern(C) void linux_XInitThreads();

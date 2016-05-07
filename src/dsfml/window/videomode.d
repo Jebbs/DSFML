@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,26 +15,41 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
+
+///A module containing the VideoMode Struct
 module dsfml.window.videomode;
 
+/**
+ *VideoMode defines a video mode (width, height, bpp)
+ *
+ *A video mode is defined by a width and a height (in pixels) and a depth (in bits per pixel).
+ *
+ *Video modes are used to setup windows (Window class) at creation time.
+ *
+ *The main usage of video modes is for fullscreen mode: indeed you must use one of the valid video modes allowed by the OS (which are defined by what the monitor and the graphics card support), otherwise your window creation will just fail.
+ *
+ *VideoMode provides a static function for retrieving the list of all the video modes supported by the system: getFullscreenModes().
+ *
+ *A custom video mode can also be checked directly for fullscreen compatibility with its isValid() function.
+ *
+ *Additionnally, VideoMode provides a static function to get the mode currently used by the desktop: getDesktopMode(). This allows to build windows with the same size or pixel depth as the current resolution.
+ */
 struct VideoMode
 {
+	///Video mode width, in pixels.
 	uint width;
+	///Video mode height, in pixels. 
 	uint height;
+	///Video mode pixel depth, in bits per pixels. 
 	uint bitsPerPixel;
 	
+	///Construct the video mode with its attributes.
+	///
+	///Params:
+    ///		modeWidth = Width in pixels.
+    ///		modeHeight = Height in pixels.
+    ///		modeBitsPerPixel = Pixel depths in bits per pixel.
 	this(uint Width, uint Height, uint bits= 32)
 	{
 		width = Width;
@@ -42,18 +57,9 @@ struct VideoMode
 		bitsPerPixel = bits;
 	}
 
-	bool isValid() const
-	{
-		return sfVideoMode_isValid(width, height, bitsPerPixel);
-	}
-	
-	//used for debugging
-	string toString()
-	{
-		import std.conv: text;
-		return "Width: " ~ text(width) ~ " Height: " ~ text(height) ~ " Bits per pixel: " ~ text(bitsPerPixel);
-	}
-
+	///Get the current desktop video mode.
+	///
+	///Returns: Current desktop video mode.
 	static VideoMode getDesktopMode()
 	{
 		VideoMode temp;
@@ -61,6 +67,11 @@ struct VideoMode
 		return temp;
 	}
 	
+	///Retrieve all the video modes supported in fullscreen mode.
+	///
+	///When creating a fullscreen window, the video mode is restricted to be compatible with what the graphics driver and monitor support. This function returns the complete list of all video modes that can be used in fullscreen mode. The returned array is sorted from best to worst, so that the first element will always give the best mode (higher width, height and bits-per-pixel).
+	///
+	///Returns: Array containing all the supported fullscreen modes.
 	static VideoMode[] getFullscreenModes()
 	{
 		static VideoMode[] videoModes;//stores all video modes after the first call
@@ -90,7 +101,25 @@ struct VideoMode
 		}
 		
 		return videoModes;
-		
+	}
+
+	///Tell whether or not the video mode is valid.
+	///
+	///The validity of video modes is only relevant when using fullscreen windows; otherwise any video mode can be used with no restriction.
+	///
+	///Returns: True if the video mode is valid for fullscreen mode.
+	bool isValid() const
+	{
+		return sfVideoMode_isValid(width, height, bitsPerPixel);
+	}
+
+	///Returns a string representation of the video mode.
+	///
+	///Returns: The video mode as a string in terms of width, height, and bits per pixel.
+	string toString()
+	{
+		import std.conv: text;
+		return "Width: " ~ text(width) ~ " Height: " ~ text(height) ~ " Bits per pixel: " ~ text(bitsPerPixel);
 	}
 }
 
@@ -102,7 +131,7 @@ unittest
 		
 		writeln("Unit test for VideoMode struct");
 		
-		uint modesCount = VideoMode.getFullscreenModes().length;
+		size_t modesCount = VideoMode.getFullscreenModes().length;
 		
 		writeln("There are ", modesCount, " full screen modes available.");
 		writeln("Your current desktop video mode is ",VideoMode.getDesktopMode().toString());

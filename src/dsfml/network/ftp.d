@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,185 +15,341 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing the Ftp class.
 module dsfml.network.ftp;
 
-import dsfml.system.time;
+import core.time;
+
 import dsfml.network.ipaddress;
-import std.string;
 
 
+/**
+ *A FTP client.
+ *
+ *The Ftp class is a very simple FTP client that allows you to communicate with a FTP server.
+ *
+ *The FTP protocol allows you to manipulate a remote file system (list files, upload, download, create, remove, ...).
+ */
 class Ftp
 {
+	///Enumeration of transfer modes.
 	enum TransferMode
 	{
+		///Binary mode (file is transfered as a sequence of bytes)
 		Binary,
+		///Text mode using ASCII encoding.
 		Ascii,
+		///Text mode using EBCDIC encoding.
 		Ebcdic,
 	}
-	
-	sfFtp* sfPtr;
-	
+
+	package sfFtp* sfPtr;
+
+	///Default Constructor.
 	this()
 	{
 		sfPtr = sfFtp_create();
 	}
+
+	///Destructor
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 		sfFtp_destroy(sfPtr);
 	}
 
+
+	///Get the current working directory.
+	///
+	///The working directory is the root path for subsequent operations involving directories and/or filenames.
+	///
+	///Returns: Server response to the request.
 	DirectoryResponse getWorkingDirectory()
 	{
 		return new DirectoryResponse(sfFtp_getWorkingDirectory(sfPtr));
 	}
-	
-	ListingResponse getDirectoryListing(string directory = "")
+
+	///Get the contents of the given directory.
+	///
+	///This function retrieves the sub-directories and files contained in the given directory. It is not recursive. The directory parameter is relative to the current working directory.
+	///
+	///Returns: Server response to the request.
+	ListingResponse getDirectoryListing(const(char)[] directory = "")
 	{
-		return new ListingResponse(sfFtp_getDirectoryListing(sfPtr, toStringz(directory)));
+		import dsfml.system.string;
+		return new ListingResponse(sfFtp_getDirectoryListing(sfPtr, directory.ptr, directory.length));
+	}
+	///Change the current working directory.
+	///
+	///The new directory must be relative to the current one.
+	///
+	///Returns: Server response to the request.
+	Response changeDirectory(const(char)[] directory)
+	{
+		import dsfml.system.string;
+		return new Response(sfFtp_changeDirectory(sfPtr, directory.ptr, directory.length));
 	}
 
-	Response changeDirectory(string directory)
+	///Connect to the specified FTP server.
+	///
+	///The port has a default value of 21, which is the standard port used by the FTP protocol. You shouldn't use a different value, unless you really know what you do.
+	///This function tries to connect to the server so it may take a while to complete, especially if the server is not reachable. To avoid blocking your application for too long, you can use a timeout. The default value, Time::Zero, means that the system timeout will be used (which is usually pretty long).
+	///
+	///Params:
+	///		address = Address of the FTP server to connect to.
+	///		port    = Port used for the connection.
+	///		timeout = Maximum time to wait.
+	///
+	///Returns: Server response to the request.
+	Response connect(IpAddress address, ushort port = 21, Duration timeout = Duration.zero())
 	{
-		return new Response(sfFtp_changeDirectory(sfPtr,toStringz(directory)));
+		return new Response(sfFtp_connect(sfPtr, address.m_address.ptr, address.m_address.length, port, timeout.total!"usecs"));
 	}
 
-	Response connect(IpAddress address, ushort port = 21, Time timeout = Time.Zero)
+	///Connect to the specified FTP server.
+	///
+	///The port has a default value of 21, which is the standard port used by the FTP protocol. You shouldn't use a different value, unless you really know what you do.
+	///This function tries to connect to the server so it may take a while to complete, especially if the server is not reachable. To avoid blocking your application for too long, you can use a timeout. The default value, Time::Zero, means that the system timeout will be used (which is usually pretty long).
+	///
+	///Params:
+	///		address = Name or ddress of the FTP server to connect to.
+	///		port    = Port used for the connection.
+	///		timeout = Maximum time to wait.
+	///
+	///Returns: Server response to the request.
+	Response connect(const(char)[] address, ushort port = 21, Duration timeout = Duration.zero())
 	{
-		return new Response(sfFtp_connect(sfPtr, address.m_address.ptr, port, timeout.asMicroseconds()));
+		auto iaddress = IpAddress(address);
+		return new Response(sfFtp_connect(sfPtr, iaddress.m_address.ptr, iaddress.m_address.length, port, timeout.total!"usecs"));
 	}
 
-	Response connect(string address, ushort port = 21, Time timeout = Time.Zero)
+	///Remove an existing directory.
+	///
+	///The directory to remove must be relative to the current working directory. Use this function with caution, the directory will be removed permanently!
+	///
+	///Params:
+	///		name = Name of the directory to remove.
+	///
+	///Returns: Server response to the request.
+	Response deleteDirectory(const(char)[] name)
 	{
-
-		return new Response(sfFtp_connect(sfPtr, IpAddress(address).m_address.ptr, port, timeout.asMicroseconds()));
+		import dsfml.system.string;
+		return new Response(sfFtp_deleteDirectory(sfPtr, name.ptr, name.length));
 	}
 
-	Response deleteDirectory(string name)
+	///Remove an existing file.
+	///
+	///The file name must be relative to the current working directory. Use this function with caution, the file will be removed permanently!
+	///
+	///Params:
+	///		name = Name of the file to remove.
+	///
+	///Returns: Server response to the request.
+	Response deleteFile(const(char)[] name)
 	{
-		return new Response(sfFtp_deleteDirectory(sfPtr, toStringz(name)));
+		import dsfml.system.string;
+		return new Response(sfFtp_deleteFile(sfPtr, name.ptr, name.length));
 	}
 
-	Response deleteFile(string name)
-	{
-		return new Response(sfFtp_deleteFile(sfPtr, toStringz(name)));
-	}
-
+	///Close the connection with the server.
+	///
+	///Returns: Server response to the request.
 	Response disconnect()
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_disconnect(sfPtr));
 	}
 
-	Response download(string remoteFile, string localPath, TransferMode mode = TransferMode.Binary)
+	///Download a file from the server.
+	///
+	///The filename of the distant file is relative to the current working directory of the server, and the local destination path is relative to the current directory of your application.
+	///
+	///Params:
+	///		remoteFile = Filename of the distant file to download.
+	///		localPath  = Where to put to file on the local computer.
+	///		mode = Transfer mode.
+	///
+	///Returns: Server response to the request.
+	Response download(const(char)[] remoteFile, const(char)[] localPath, TransferMode mode = TransferMode.Binary)
 	{
-		return new Response(sfFtp_download(sfPtr, toStringz(remoteFile),toStringz(localPath),mode));
+		import dsfml.system.string;
+		return new Response(sfFtp_download(sfPtr, remoteFile.ptr, remoteFile.length, localPath.ptr, localPath.length ,mode));
 	}
 
-
+	///Send a null command to keep the connection alive.
+	///
+	///This command is useful because the server may close the connection automatically if no command is sent.
+	///
+	///Returns: Server response to the request.
 	Response keepAlive()
 	{
 		return new Response(sfFtp_keepAlive(sfPtr));
 	}
 
+	///Log in using an anonymous account.
+	///
+	///Logging in is mandatory after connecting to the server. Users that are not logged in cannot perform any operation.
+	///
+	///Returns: Server response to the request.
 	Response login()
 	{
 		return new Response(sfFtp_loginAnonymous(sfPtr));
 	}
-	
-	Response login(string name, string password)
+
+	///Log in using a username and a password.
+	///
+	///Logging in is mandatory after connecting to the server. Users that are not logged in cannot perform any operation.
+	///
+	///Params:
+	///		name = User name.
+	///		password = The password.
+	///
+	///Returns: Server response to the request.
+	Response login(const(char)[] name, const(char)[] password)
 	{
-		return new Response(sfFtp_login(sfPtr,toStringz(name), toStringz(password)));
+		import dsfml.system.string;
+		return new Response(sfFtp_login(sfPtr, name.ptr, name.length, password.ptr, password.length));
 	}
 
+	///Go to the parent directory of the current one.
+	///
+	///Returns: Server response to the request.
 	Response parentDirectory()
 	{
+		import dsfml.system.string;
 		return new Response(sfFtp_parentDirectory(sfPtr));
 	}
-	Response createDirectory(string name)
+
+	///Create a new directory.
+	///
+	///The new directory is created as a child of the current working directory.
+	///
+	///Params:
+	///		name = Name of the directory to create.
+	///
+	///Returns: Server response to the request.
+	Response createDirectory(const(char)[] name)
 	{
-		return new Response(sfFtp_createDirectory(sfPtr, toStringz(name)));
+		import dsfml.system.string;
+		return new Response(sfFtp_createDirectory(sfPtr, name.ptr, name.length));
 	}
 
-	Response renameFile(string name, string newName)
+	///Rename an existing file.
+	///
+	///The filenames must be relative to the current working directory.
+	///
+	///Params:
+	///		file = File to rename.
+	///		newName = New name of the file.
+	///
+	///Returns: Server response to the request.
+	Response renameFile(const(char)[] file, const(char)[] newName)
 	{
-		return new Response(sfFtp_renameFile(sfPtr,toStringz(name),toStringz(newName)));
+		import dsfml.system.string;
+		return new Response(sfFtp_renameFile(sfPtr, file.ptr, file.length, newName.ptr, newName.length));
 	}
 
-	Response upload(string localFile, string remotePath, TransferMode mode = TransferMode.Binary)
+	///Upload a file to the server.
+	///
+	///The name of the local file is relative to the current working directory of your application, and the remote path is relative to the current directory of the FTP server.
+	///
+	///Params:
+	///		localFile = Path of the local file to upload.
+	///		remotePath = Where to put the file on the server.
+	///		mode = Transfer mode.
+	///
+	///Returns: Server response to the request.
+	Response upload(const(char)[] localFile, const(char)[] remotePath, TransferMode mode = TransferMode.Binary)
 	{
-		return new Response(sfFtp_upload(sfPtr,toStringz(localFile),toStringz(remotePath),mode));
+		import dsfml.system.string;
+		return new Response(sfFtp_upload(sfPtr, localFile.ptr, localFile.length, remotePath.ptr, remotePath.length, mode));
 	}
 
+	///Send a command to the FTP server.
+	///
+	///While the most often used commands are provided as member functions in the Ftp class, this method can be used to send any FTP command to the server. If the command requires one or more parameters, they can be specified in parameter. If the server returns information, you can extract it from the response using getMessage().
+	///
+	///Params:
+	///		command = Command to send.
+	///		parameter = Command parameter.
+	///
+	///Returns: Server response to the request.
+	Response sendCommand(const(char)[] command, const(char)[] parameter) {
+		import dsfml.system.string;
+		return new Response(sfFtp_sendCommand(sfPtr, command.ptr, command.length, parameter.ptr, parameter.length));
+	}
+
+	///Specialization of FTP response returning a directory.
 	class DirectoryResponse:Response
 	{
 		private string Directory;
 
+		//Internally used constructor
 		package this(sfFtpDirectoryResponse* FtpDirectoryResponce)
 		{
-			import std.conv;
-			
-			Directory = sfFtpDirectoryResponse_getDirectory(FtpDirectoryResponce).to!string();
-			
+			import dsfml.system.string;
+
+			Directory = dsfml.system.string.toString(sfFtpDirectoryResponse_getDirectory(FtpDirectoryResponce));
+
 			super(sfFtpDirectoryResponse_getStatus(FtpDirectoryResponce), sfFtpDirectoryResponse_getMessage(FtpDirectoryResponce));
-			
+
 			sfFtpDirectoryResponse_destroy(FtpDirectoryResponce);
 		}
-		
+
+		///Get the directory returned in the response.
+		///
+		///Returns: Directory name.
 		string getDirectory()
 		{
 			return Directory;
 		}
 	}
-	
+
+	///Specialization of FTP response returning a filename lisiting.
 	class ListingResponse:Response
 	{
 		private string[] Filenames;
 
+		//Internally used constructor
 		package this(sfFtpListingResponse* FtpListingResponce)
 		{
-			import std.conv;
+			import dsfml.system.string;
 
 			Filenames.length = sfFtpListingResponse_getCount(FtpListingResponce);
 			for(int i = 0; i < Filenames.length; i++)
 			{
-				Filenames[i] = text(sfFtpListingResponse_getName(FtpListingResponce,i));
+				Filenames[i] = dsfml.system.string.toString(sfFtpListingResponse_getName(FtpListingResponce,i));
 			}
-			
+
 			super(sfFtpListingResponse_getStatus(FtpListingResponce), sfFtpListingResponse_getMessage(FtpListingResponce));
-			
+
 			sfFtpListingResponse_destroy(FtpListingResponce);
-			
+
 		}
-		
+
+		///Return the array of directory/file names.
+		///
+		///Returns: Array containing the requested listing.
 		const(string[]) getFilenames()
 		{
 			return Filenames;
 		}
 	}
-	
+
+	///Define a FTP response.
 	class Response
 	{
+		///Status codes possibly returned by a FTP response.
 		enum Status
 		{
 			RestartMarkerReply = 110,
 			ServiceReadySoon = 120,
 			DataConnectionAlreadyOpened = 125,
 			OpeningDataConnection = 150,
-			
+
 			Ok = 200,
 			PointlessCommand = 202,
 			SystemStatus = 211,
@@ -209,7 +365,7 @@ class Ftp
 			LoggedIn = 230,
 			FileActionOk = 250,
 			DirectoryOk = 257,
-			
+
 			NeedPassword = 331,
 			NeedAccountToLogIn = 332,
 			NeedInformation = 350,
@@ -219,7 +375,7 @@ class Ftp
 			FileActionAborted = 450,
 			LocalError = 451,
 			InsufficientStorageSpace = 452,
-			
+
 			CommandUnknown = 500,
 			ParametersUnknown = 501,
 			CommandNotImplemented = 502,
@@ -231,7 +387,7 @@ class Ftp
 			PageTypeUnknown = 551,
 			NotEnoughMemory = 552,
 			FilenameNotAllowed = 553,
-			
+
 			InvalidResponse = 1000,
 			ConnectionFailed = 1001,
 			ConnectionClosed = 1002,
@@ -241,30 +397,43 @@ class Ftp
 		private Status FtpStatus;
 		private string Message;
 
+		//Internally used constructor.
 		package this(sfFtpResponse* FtpResponce)
 		{
 			this(sfFtpResponse_getStatus(FtpResponce),sfFtpResponse_getMessage(FtpResponce));
 			sfFtpResponse_destroy(FtpResponce);
 		}
-		
+
+		//Internally used constructor.
 		package this(Ftp.Response.Status status = Ftp.Response.Status.InvalidResponse, const(char)* message = "")
 		{
-			import std.conv;
+			import dsfml.system.string;
 			FtpStatus = status;
-			Message = message.to!string();
+			Message = dsfml.system.string.toString(message);
 		}
 
-		string getMessage()
+		///Get the full message contained in the response.
+		///
+		///Returns: The dsfml.system.string.toString( message.
+		string getMessage() const
 		{
 			return Message;
 		}
-		
-		Status getStatus()
+
+		///Get the status code of the response.
+		///
+		///Returns: Status code.
+		Status getStatus() const
 		{
 			return FtpStatus;
 		}
 
-		bool isOk()
+		///Check if the status code means a success.
+		///
+		///This function is defined for convenience, it is equivalent to testing if the status code is < 400.
+		///
+		///Returns: True if the status is a success, false if it is a failure.
+		bool isOk() const
 		{
 			return FtpStatus< 400;
 		}
@@ -281,7 +450,7 @@ unittest
 
 		auto ftp = new Ftp();
 
-		auto responce = ftp.connect("ftp.digitalmars.com");
+		auto responce = ftp.connect("ftp.microsoft.com");
 
 		if(responce.isOk())
 		{
@@ -416,7 +585,7 @@ void sfFtp_destroy(sfFtp* ftp);
 
 
 ///Connect to the specified FTP server
-sfFtpResponse* sfFtp_connect(sfFtp* ftp, const(char)* serverIP, ushort port, long timeout);
+sfFtpResponse* sfFtp_connect(sfFtp* ftp, const(char)* serverIP, size_t length, ushort port, long timeout);
 
 
 ///Log in using an anonymous account
@@ -424,7 +593,7 @@ sfFtpResponse* sfFtp_loginAnonymous(sfFtp* ftp);
 
 
 ///Log in using a username and a password
-sfFtpResponse* sfFtp_login(sfFtp* ftp, const(char)* userName, const(char)* password);
+sfFtpResponse* sfFtp_login(sfFtp* ftp, const(char)* userName, size_t userNameLength, const(char)* password, size_t passwordLength);
 
 
 ///Close the connection with the server
@@ -440,11 +609,11 @@ sfFtpDirectoryResponse* sfFtp_getWorkingDirectory(sfFtp* ftp);
 
 
 ///Get the contents of the given directory
-sfFtpListingResponse* sfFtp_getDirectoryListing(sfFtp* ftp, const(char)* directory);
+sfFtpListingResponse* sfFtp_getDirectoryListing(sfFtp* ftp, const(char)* directory, size_t length);
 
 
 ///Change the current working directory
-sfFtpResponse* sfFtp_changeDirectory(sfFtp* ftp, const(char)* directory);
+sfFtpResponse* sfFtp_changeDirectory(sfFtp* ftp, const(char)* directory, size_t length);
 
 
 ///Go to the parent directory of the current one
@@ -452,25 +621,27 @@ sfFtpResponse* sfFtp_parentDirectory(sfFtp* ftp);
 
 
 ///Create a new directory
-sfFtpResponse* sfFtp_createDirectory(sfFtp* ftp, const(char)* name);
+sfFtpResponse* sfFtp_createDirectory(sfFtp* ftp, const(char)* name, size_t length);
 
 
 ///Remove an existing directory
-sfFtpResponse* sfFtp_deleteDirectory(sfFtp* ftp, const(char)* name);
+sfFtpResponse* sfFtp_deleteDirectory(sfFtp* ftp, const(char)* name, size_t length);
 
 
 ///Rename an existing file
-sfFtpResponse* sfFtp_renameFile(sfFtp* ftp, const(char)* file, const(char)* newName);
+sfFtpResponse* sfFtp_renameFile(sfFtp* ftp, const(char)* file, size_t fileLength, const(char)* newName, size_t newNameLength);
 
 
 ///Remove an existing file
-sfFtpResponse* sfFtp_deleteFile(sfFtp* ftp, const(char)* name);
+sfFtpResponse* sfFtp_deleteFile(sfFtp* ftp, const(char)* name, size_t length);
 
 
 ///Download a file from a FTP server
-sfFtpResponse* sfFtp_download(sfFtp* ftp, const(char)* distantFile, const(char)* destPath, int mode);
+sfFtpResponse* sfFtp_download(sfFtp* ftp, const(char)* distantFile, size_t distantFileLength, const(char)* destPath, size_t destPathLength, int mode);
 
 
 ///Upload a file to a FTP server
-sfFtpResponse* sfFtp_upload(sfFtp* ftp, const(char)* localFile, const(char)* destPath, int mode);
+sfFtpResponse* sfFtp_upload(sfFtp* ftp, const(char)* localFile, size_t localFileLength, const(char)* destPath, size_t destPathLength, int mode);
 
+///Send a command to a FTP server
+sfFtpResponse* sfFtp_sendCommand(sfFtp* ftp, const(char)* command, size_t commandLength, const(char)* parameter, size_t parameterLength);

@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,17 +15,6 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
 module dsfml.audio.listener;
@@ -65,6 +54,28 @@ final abstract class Listener
 			Vector3f temp;
 			
 			sfListener_getDirection(&temp.x, &temp.y, &temp.z);
+			
+			return temp;
+		}
+	}
+
+	/** 
+	 * The upward vector of the listener in the scene. The upward vector defines the 3D axes of the listener (left, up, front) in the scene. The upward vector doesn't have to be normalized. 
+	 * 
+	 * The default listener's upward vector is (0, 1, 0).
+	 */
+	@property
+	{
+		static void UpVector(Vector3f orientation)
+		{
+			sfListener_setUpVector(orientation.x, orientation.y, orientation.z);
+		}
+
+		static Vector3f UpVector()
+		{
+			Vector3f temp;
+			
+			sfListener_getUpVector(&temp.x, &temp.y, &temp.z);
 			
 			return temp;
 		}
@@ -118,8 +129,9 @@ unittest
 		writeln("Unit test for Listener");
 
 		float volume = Listener.GlobalVolume;
-		volume-=30;
+		volume-=10;
 		Listener.GlobalVolume = volume;
+
 
 		Vector3f pos = Listener.Position;
 		pos.x += 10;
@@ -151,3 +163,6 @@ void sfListener_setDirection(float x, float y, float z);
 
 void sfListener_getDirection(float* x, float* y, float* z);
 
+void sfListener_setUpVector(float x, float y, float z);
+
+void sfListener_getUpVector(float* x, float* y, float* z);

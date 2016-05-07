@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,29 +15,45 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing the InputStream interface.
 module dsfml.system.inputstream;
 
+/**
+*Abstract class for custom file input streams.
+*
+*This class allows users to define their own file input sources from which SFML can load resources.
+*
+*SFML resource classes like sf::Texture and sf::SoundBuffer provide loadFromFile and loadFromMemory functions, which read data from conventional sources.
+*However, if you have data coming from a different source (over a network, embedded, encrypted, compressed, etc) you can derive your own class from sf::InputStream and load SFML resources with their loadFromStream function.
+*/
 interface InputStream
 {
+	///Read data from the stream.
+	///
+	///Params:
+ 	///	data =	Buffer where to copy the read data
+ 	///			and sized to the amount of bytes to be read.
+ 	///
+ 	///Returns: The number of bytes actually read, or -1 on error.
 	long read(void[] data);
 
+	///Change the current reading position.
+	///Params:
+    ///			position = The position to seek to, from the beginning.
+    ///
+	///Returns: The position actually sought to, or -1 on error.
 	long seek(long position);
 
+	///Get the current reading position in the stream.
+	///
+	///Returns: The current position, or -1 on error. 
 	long tell();
 
+	///Return the size of the stream.
+	///
+	///Returns: The total number of bytes available in the stream, or -1 on error.
 	long getSize();
 }
 
@@ -154,11 +170,11 @@ unittest
 		writeln();
 		writeln("Using a basic file stream to load a texture that exists.");
 		auto successStream = new FileStream();
-		successStream.open("Crono.png");//using a png of Crono for now. Will replace with something that won't get me in trouble
-		if(streamTexture.loadFromStream(successStream))
-		{
-			writeln("Texture loaded!");
-		}
+		successStream.open("res/TestImage.png");//using a png of Crono for now. Will replace with something that won't get me in trouble
+		assert(streamTexture.loadFromStream(successStream));
+		
+		writeln("Texture loaded!");
+		
 
 		writeln();
 

@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,36 +15,50 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing a numeric 2D vector type.
 module dsfml.system.vector2;
 
-import std.conv;
 import std.traits;
 
+/**
+ *Utility template struct for manipulating 2-dimensional vectors
+ *
+ *Vector2 is a simple class that defines a mathematical vector with two coordinates (x and y).
+ *
+ *It can be used to represent anything that has two dimensions: a size, a point, a velocity, etc.
+ *
+ *The template parameter T is the type of the coordinates. It can be any type that supports arithmetic operations (+, -, /, *) and comparisons (==, !=), for example int or float.
+ */
 struct Vector2(T)
 	if(isNumeric!(T))
 {
-	public T x;
-	public T y;
+	///X coordinate of the vector
+	T x;
+	///Y coordinate of the vector
+	T y;
 	
+	///Construct the vector from its coordinates
+	///
+	///Params:
+	///		X = X coordinate.
+	///		Y = Y coordinate.
 	this(T X,T Y)
 	{	
 		x = X;
 		y = Y;	
 	}
-	
+
+	///Construct the vector from another type of vector
+	///
+	///Params:
+	///	otherVector = Vector to convert.
+	this(E)(Vector2!(E) otherVector)
+	{
+		x = cast(T)(otherVector.x);
+		y = cast(T)(otherVector.y);
+	}
 
 	
 	//I think it could be a useful function, but
@@ -143,7 +157,14 @@ return Vector2!(T)(0,0);
 			return this;
 		}
 	}
-	
+
+	//assign operator
+	ref Vector2!(T) opAssign(E)(Vector2!(E) otherVector)
+	{
+		x = cast(T)(otherVector.x);
+		y = cast(T)(otherVector.y);
+		return this;
+	}
 	
 	//Compare operator
 	bool opEquals(E)(const Vector2!(E) otherVector) const
@@ -155,6 +176,7 @@ return Vector2!(T)(0,0);
 	//figured it would be useful for testing, debugging, etc
 	string toString() const
 	{
+		import std.conv;
 		return "X: " ~ text(x) ~ " Y: " ~ text(y);
 	}
 }

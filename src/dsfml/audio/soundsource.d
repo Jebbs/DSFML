@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,17 +15,6 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
 module dsfml.audio.soundsource;
@@ -44,7 +33,7 @@ import dsfml.system.err;
  + See_Also: http://sfml-dev.org/documentation/2.0/classsf_1_1SoundSource.php#details
  + Authors: Laurent Gomila, Jeremy DeHaan
  +/
-class SoundSource
+interface SoundSource
 {
 	/// Enumeration of the sound source states.
 	enum Status
@@ -57,30 +46,6 @@ class SoundSource
 		Playing
 	}
 
-	this(const(SoundSource) copy)
-	{
-		//Copy Constructor?
-		//TODO: Look into this
-	}
-
-	protected this()
-	{
-		import std.conv;
-
-		sfSoundSource_ensureALInit();
-		err.write(text(sfErrAudio_getOutput()));
-		
-		
-		sfSoundSource_initialize(&m_source);
-	}
-
-	~this()
-	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
-		sfSoundSource_destroy(&m_source);
-	}
-
 	/**
 	 * The pitch of the sound.
 	 * 
@@ -88,15 +53,9 @@ class SoundSource
 	 */
 	@property
 	{
-		void pitch(float newPitch)
-		{
-			sfSoundSource_setPitch(m_source,newPitch);
-		}
-
-		float pitch()
-		{
-			return sfSoundSource_getPitch(m_source);
-		}
+		void pitch(float newPitch);
+		
+		float pitch();
 	}
 
 	/**
@@ -106,15 +65,9 @@ class SoundSource
 	 */
 	@property
 	{
-		void volume(float newVolume)
-		{
-			sfSoundSource_setVolume(m_source,newVolume);
-		}
+		void volume(float newVolume);
 
-		float volume()
-		{
-			return sfSoundSource_getVolume(m_source);
-		}
+		float volume();
 	}
 
 	/**
@@ -124,20 +77,9 @@ class SoundSource
 	 */
 	@property
 	{
-		void position(Vector3f newPosition)
-		{
-			sfSoundSource_setPosition(m_source,newPosition.x, newPosition.y,newPosition.z);
-		}
+		void position(Vector3f newPosition);
 
-		Vector3f position()
-		{
-			Vector3f temp;
-
-			sfSoundSource_getPosition(m_source, &temp.x,&temp.y, &temp.z);
-
-			return temp;
-		}
-
+		Vector3f position();
 	}
 
 	/**
@@ -147,15 +89,9 @@ class SoundSource
 	 */
 	@property
 	{
-		void relativeToListener(bool relative)
-		{
-			sfSoundSource_setRelativeToListener(m_source, relative);
-		}
+		void relativeToListener(bool relative);
 
-		bool relativeToListener()
-		{
-			return sfSoundSource_isRelativeToListener(m_source);
-		}
+		bool relativeToListener();
 	}
 	
 	/**
@@ -165,15 +101,9 @@ class SoundSource
 	 */
 	@property
 	{
-		void minDistance(float distance)
-		{
-			sfSoundSource_setMinDistance(m_source, distance);
-		}
+		void minDistance(float distance);
 
-		float minDistance()
-		{
-			return sfSoundSource_getMinDistance(m_source);
-		}
+		float minDistance();
 	}
 	
 	/**
@@ -185,65 +115,14 @@ class SoundSource
 	 */
 	@property
 	{
-		void attenuation(float newAttenuation)
-		{
-			sfSoundSource_setAttenuation(m_source, newAttenuation);
-		}
+		void attenuation(float newAttenuation);
 
-		float attenuation()
-		{
-			return sfSoundSource_getAttenuation(m_source);
-		}
+		float attenuation();
 	}
 
-	protected
-	{
-		/// Get the current status of the sound (stopped, paused, playing)
-		/// Returns: Current status of the sound
-		Status getStatus()
-		{
-			return cast(Status)sfSoundSource_getStatus(m_source);
-		}
-
-		uint m_source;
-	}
 }
 
 private extern(C):
-
-
-void sfSoundSource_ensureALInit();
-
-void sfSoundSource_initialize(uint* sourceID);
-
-void sfSoundSource_setPitch(uint sourceID, float pitch);
-
-void sfSoundSource_setVolume(uint sourceID, float volume);
-
-void sfSoundSource_setPosition(uint sourceID, float x, float y, float z);
-
-void sfSoundSource_setRelativeToListener(uint sourceID,bool relative);
-
-void sfSoundSource_setMinDistance(uint sourceID, float distance);
-
-void sfSoundSource_setAttenuation(uint sourceID, float attenuation);
-
-
-float sfSoundSource_getPitch(uint sourceID);
-
-float sfSoundSource_getVolume(uint sourceID);
-
-void sfSoundSource_getPosition(uint sourceID, float* x, float* y, float* z);
-
-bool sfSoundSource_isRelativeToListener(uint sourceID);
-
-float sfSoundSource_getMinDistance(uint sourceID);
-
-float sfSoundSource_getAttenuation(uint sourceID);
-
-int sfSoundSource_getStatus(uint sourceID);
-
-void sfSoundSource_destroy(uint* souceID);
 
 const(char)* sfErrAudio_getOutput();
 

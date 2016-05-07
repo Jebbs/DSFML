@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,58 +15,70 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing the Clock class.
 module dsfml.system.clock;
 
-public import dsfml.system.time;
+public import core.time;
 
+/**
+ *Utility class that measures the elapsed time.
+ *
+ *Clock is a lightweight class for measuring time.
+ *
+ *Its provides the most precise time that the underlying OS can achieve (generally microseconds or nanoseconds).
+ *It also ensures monotonicity, which means that the returned time can never go backward, even if the system time is changed.
+ */
 class Clock
 {
-	package sfClock* sfPtr;
+	static if(__VERSION__ < 2067L)
+	{
+		alias MonoTime = TickDuration;
+		alias currTime = TickDuration.currSystemTick;
+	}
+	else
+	{
+		alias currTime = MonoTime.currTime;
+	}
 	
+	package MonoTime m_startTime;
+	
+	///Default constructor.
 	this()
 	{
-		sfPtr = sfClock_create();
+		m_startTime = currTime;
 	}
 	
-	package this(sfClock* clock)
-	{
-		sfPtr = clock;
-	}
-	
+	///Destructor
 	~this()
 	{
-		debug import dsfml.system.config;
-		debug mixin(destructorOutput);
-		sfClock_destroy(sfPtr);
+		import dsfml.system.config;
+		mixin(destructorOutput);
 	}
 	
-	Time getElapsedTime() const
+	///Get the elapsed time.
+	///
+	///This function returns the time elapsed since the last call to restart() (or the construction of the instance if restart() has not been called).
+	///
+	///Returns: Time elapsed .
+	Duration getElapsedTime() const
 	{
-		return Time(sfClock_getElapsedTime(sfPtr));
+		return cast(Duration)(currTime - m_startTime);
 	}
 	
-	Time restart()
+	///Restart the clock.  
+	///
+	///This function puts the time counter back to zero. It also returns the time elapsed since the clock was started.
+	///
+	///Returns: Time elapsed.
+	Duration restart()
 	{
-		return Time(sfClock_restart(sfPtr));
-	}
-	
-	@property
-	Clock dup() const
-	{
-		return new Clock(sfClock_copy(sfPtr));
+		MonoTime now = currTime;
+		auto elapsed = now - m_startTime;
+		m_startTime = now;
+
+		return cast(Duration)elapsed;
 	}
 	
 }
@@ -85,24 +97,12 @@ unittest
 
 		writeln("Counting Time for 5 seconds.(rounded to nearest second)");
 
-		while(clock.getElapsedTime().asSeconds()<5)
+		while(clock.getElapsedTime().total!"seconds" < 5)
 		{
-			writeln(ceil(clock.getElapsedTime().asSeconds()));
+			writeln(clock.getElapsedTime().total!"seconds");
 			sleep(seconds(1));
 		}
 
 		writeln();
 	}
 }
-
-
-private extern(C):
-
-struct sfClock;
-
-sfClock* sfClock_create();
-sfClock* sfClock_copy(const(sfClock*) clock);
-void sfClock_destroy(sfClock* clock);
-long sfClock_getElapsedTime(const(sfClock*) clock);
-long sfClock_restart(sfClock* clock);
-

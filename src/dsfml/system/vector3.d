@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,31 +15,38 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
+///A module containing a numeric 3D vector type.
 module dsfml.system.vector3;
 
-import std.conv;
 import std.traits;
 
+/**
+ *Utility template struct for manipulating 3-dimensional vectors
+ *
+ *Vector3 is a simple class that defines a mathematical vector with three coordinates (x, y and z).
+ *
+ *It can be used to represent anything that has three dimensions: a size, a point, a velocity, etc.
+ *
+ *The template parameter T is the type of the coordinates. It can be any type that supports arithmetic operations (+, -, /, *) and comparisons (==, !=), for example int or float.
+ */
 struct Vector3(T)
 	if(isNumeric!(T))
 {
+	///X coordinate of the vector.
 	T x;
+	///Y coordinate of the vector.
 	T y;
+	///Z coordinate of the vector.
 	T z;
 	
+	///Construct the vector from its coordinates
+	///
+	///Params:
+	///		X = X coordinate.
+	///		Y = Y coordinate.
+	///		Z = Z coordinate.
 	this(T X,T Y,T Z)
 	{
 		
@@ -47,6 +54,17 @@ struct Vector3(T)
 		y = Y;	
 		z = Z;
 		
+	}
+
+	///Construct the vector from another type of vector
+	///
+	///Params:
+	///	otherVector = Vector to convert.
+	this(E)(Vector3!(E) otherVector)
+	{
+		x = cast(T)(otherVector.x);
+		y = cast(T)(otherVector.y);
+		z = cast(T)(otherVector.z);
 	}
 
 	
@@ -128,7 +146,15 @@ struct Vector3(T)
 			return this;
 		}
 	}
-	
+
+	//assign operator
+	ref Vector3!(T) opAssign(E)(Vector3!(E) otherVector)
+	{
+		x = cast(T)(otherVector.x);
+		y = cast(T)(otherVector.y);
+		z = cast(T)(otherVector.z);
+		return this;
+	}
 	
 	/* Omitted for the same reason as Vector3's normalize.
 * I very much would like to include it though!
@@ -149,7 +175,8 @@ return Vector3!(T)(0,0,0);
 */
 	string toString() const
 	{
-		return "X: " ~ text(x) ~ " Y: " ~ text(y) ~ text(" Z: ") ~ text(z);
+		import std.conv;
+		return "X: " ~ text(x) ~ " Y: " ~ text(y) ~ " Z: " ~ text(z);
 	}
 }
 

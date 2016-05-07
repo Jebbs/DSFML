@@ -1,7 +1,7 @@
 /*
 DSFML - The Simple and Fast Multimedia Library for D
 
-Copyright (c) <2013> <Jeremy DeHaan>
+Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
@@ -15,40 +15,50 @@ If you use this software in a product, an acknowledgment in the product document
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution
-
-
-***All code is based on code written by Laurent Gomila***
-
-
-External Libraries Used:
-
-SFML - The Simple and Fast Multimedia Library
-Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
-
-All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-//This class should only be used for initial porting!
-//Please use D's regular thread functionality when you can!
-
+///A module containing the Mutex class used by DSFML.
 module dsfml.system.mutex;
 
 import core = core.sync.mutex;
 
+/**
+ *Blocks concurrent access to shared resources from multiple threads.
+ *
+ *Mutex stands for "MUTual EXclusion".
+ *
+ *A mutex is a synchronization object, used when multiple threads are involved.
+ *
+ *When you want to protect a part of the code from being accessed simultaneously by multiple threads, you typically use a mutex.
+ *When a thread is locked by a mutex, any other thread trying to lock it will be blocked until the mutex is released by the thread that locked it.
+ *This way, you can allow only one thread at a time to access a critical region of your code.
+ */
 class Mutex
 {
 	private core.Mutex m_mutex;
 
+	///Default Constructor
 	this()
 	{
 		m_mutex = new core.Mutex();
 	}
 
+	//Destructor
+	~this()
+	{
+		import dsfml.system.config;
+		mixin(destructorOutput);
+	}
+
+	///Lock the mutex
+	///
+	///If the mutex is already locked in another thread, this call will block the execution until the mutex is released.
 	void lock()
 	{
 		m_mutex.lock();
 	}
 
+	//Unlock the mutex
 	void unlock()
 	{
 		m_mutex.unlock();
@@ -64,7 +74,7 @@ unittest
 	{
 		import dsfml.system.thread;
 		import dsfml.system.sleep;
-		import dsfml.system.time;
+		import core.time;
 		import std.stdio;
 
 		auto mutex = new Mutex();
