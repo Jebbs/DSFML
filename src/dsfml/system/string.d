@@ -18,7 +18,7 @@ If you use this software in a product, an acknowledgment in the product document
 */
 
 /**
- *A module containing functions for interacting with strings going to and from 
+ *A module containing functions for interacting with strings going to and from
  *a C/C++ library as well as converting between D's string types. This module has no dependencies
  *except for std.utf.
  */
@@ -36,53 +36,14 @@ immutable(T)[] toString(T)(in const(T)* str) pure
 	return str[0..strlen(str)].idup;
 }
 
-///Returns a pointer to a C style string created from a D string type
-///
-///Params:
-///		str = The D style string to convert.
-///
-///Returns: the C style string pointer.
-const(T)* toStringz(T)(in immutable(T)[] str) nothrow 
-	if (is(T == dchar)||is(T == wchar)||is(T == char))
-{
-	//TODO: get rid of GC usage without adding dependencies?
-
-	//a means to store the copy after returning the address
-	static T[] copy;
-
-	//if str is just ""
-	if(str.length == 0)
-	{
-		copy = new T[1];
-		copy[0] = 0;
-		return copy.ptr;
-	}
-
-	//Already zero terminated
-	if(str[$-1] == 0)
-	{
-		return str.ptr;
-	}
-	//not zero terminated
-	else
-	{
-		copy = new T[str.length+1];
-		copy[0..str.length] = str[];
-		copy[$-1] = 0;
-
-		return copy.ptr;
-
-	}
-}
-
 ///Returns the same string in a different utf encoding
 ///
 ///Params:
 ///		str = The string to convert.
 ///
 ///Returns: the C style string pointer.
-immutable(U)[] stringConvert(T, U)(in immutable(T)[] str) pure
-if ((is(T == dchar)||is(T == wchar)||is(T == char)) &&	
+immutable(U)[] stringConvert(T, U)(in T[] str) pure
+if ((is(T == dchar)||is(T == wchar)||is(T == char)) &&
 	(is(U == dchar)||is(U == wchar)||is(U == char)))
 {
 	import std.utf;
@@ -123,21 +84,8 @@ unittest
 	version(DSFML_Unittest_System)
 	{
 		import std.stdio;
-		
+
 		writeln("Unit test for string functions");
-
-		string str1 = "Hello, World";
-		wstring str2 = "Hello, World";
-		dstring str3 = "Hello, World";
-
-		const(char)* cstr1 = toStringz(str1);
-		const(wchar)* cstr2 = toStringz(str2);
-		const(dchar)* cstr3 = toStringz(str3);
-
-		assert(strlen(cstr1) == 12);
-		assert(strlen(cstr2) == 12);
-		assert(strlen(cstr3) == 12);
-
 	}
 
 }

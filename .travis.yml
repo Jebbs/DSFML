@@ -26,8 +26,6 @@ addons:
       - libflac-dev
 
 d: 
- - dmd-2.071.0
- - dmd-2.070.2
  - dmd-2.069.2
  - dmd-2.068.2
  - dmd-2.067.1
@@ -35,9 +33,6 @@ d:
  - gdc-5.2.0
  - gdc-4.9.3
  - gdc-4.8.2
- - ldc-1.0.0-alpha1
- - ldc-0.17.1
- - ldc-0.17.0
  - ldc-0.16.1
  - ldc-0.16.0
  - ldc-0.15.1
@@ -55,7 +50,7 @@ matrix:
 #Build and install DSFMLC
 install:
   - cd $HOME
-  - git clone --depth=1 --branch 2.3 https://github.com/aubade/DSFMLC.git
+  - git clone --depth=1 --branch 2.3 https://github.com/Jebbs/DSFMLC.git
   - cd DSFMLC
   - cmake .
   - make -j2

@@ -50,7 +50,7 @@ class Http
 	{
 		import dsfml.system.string;
 		sfPtr = sfHttp_create();
-		sfHttp_setHost(sfPtr, toStringz(host),port);
+		sfHttp_setHost(sfPtr, host.ptr, host.length ,port);
 	}
 
 	///Destructor
@@ -71,7 +71,7 @@ class Http
 	void setHost(string host, ushort port = 0)
 	{
 		import dsfml.system.string;
-		sfHttp_setHost(sfPtr, toStringz(host),port);
+		sfHttp_setHost(sfPtr, host.ptr, host.length,port);
 	}
 
 	///Send a HTTP request and return the server's response.
@@ -116,9 +116,9 @@ class Http
 		{
 			import dsfml.system.string;
 			sfPtrRequest = sfHttpRequest_create();
-			sfHttpRequest_setUri(sfPtrRequest, toStringz(uri));
+			sfHttpRequest_setUri(sfPtrRequest, uri.ptr, uri.length);
 			sfHttpRequest_setMethod(sfPtrRequest, method);
-			sfHttpRequest_setBody(sfPtrRequest,toStringz(requestBody));
+			sfHttpRequest_setBody(sfPtrRequest, requestBody.ptr, requestBody.length);
 		}
 
 		///Destructor
@@ -138,7 +138,7 @@ class Http
 		void setBody(string requestBody)
 		{
 			import dsfml.system.string;
-			sfHttpRequest_setBody(sfPtrRequest,toStringz(requestBody));
+			sfHttpRequest_setBody(sfPtrRequest, requestBody.ptr, requestBody.length);
 		}
 
 		///Set the value of a field.
@@ -148,10 +148,10 @@ class Http
 		///Params:
     	///		field = Name of the field to set.
     	///		value = Value of the field.
-		void setField(string feild, string value)
+		void setField(string field, string value)
 		{
 			import dsfml.system.string;
-			sfHttpRequest_setField(sfPtrRequest,toStringz(feild),toStringz(value));
+			sfHttpRequest_setField(sfPtrRequest, field.ptr, field.length , value.ptr, value.length);
 		}
 
 		///Set the HTTP version for the request.
@@ -186,7 +186,7 @@ class Http
 		void setUri(string uri)
 		{
 			import dsfml.system.string;
-			sfHttpRequest_setUri(sfPtrRequest,toStringz(uri));
+			sfHttpRequest_setUri(sfPtrRequest, uri.ptr, uri.length);
 		}
 	}
 
@@ -251,10 +251,10 @@ class Http
     	///		field = Name of the field to get.
     	///
 		///Returns: Value of the field, or empty string if not found.
-		string getField(string field)
+		string getField(const(char)[] field)
 		{
 			import dsfml.system.string;
-			return dsfml.system.string.toString(sfHttpResponse_getField(sfPtrResponse,toStringz(field)));
+			return dsfml.system.string.toString(sfHttpResponse_getField(sfPtrResponse, field.ptr, field.length));
 		}
 
 		///Get the major HTTP version number of the response.
@@ -333,7 +333,7 @@ void sfHttpRequest_destroy(sfHttpRequest* httpRequest);
 
 
 ///Set the value of a header field of a HTTP request
-void sfHttpRequest_setField(sfHttpRequest* httpRequest, const(char)* field, const(char)* value);
+void sfHttpRequest_setField(sfHttpRequest* httpRequest, const(char)* field, size_t fieldLength, const(char)* value, size_t valueLength);
 
 
 ///Set a HTTP request method
@@ -341,7 +341,7 @@ void sfHttpRequest_setMethod(sfHttpRequest* httpRequest, int method);
 
 
 ///Set a HTTP request URI
-void sfHttpRequest_setUri(sfHttpRequest* httpRequest, const(char)* uri);
+void sfHttpRequest_setUri(sfHttpRequest* httpRequest, const(char)* uri, size_t length);
 
 
 ///Set the HTTP version of a HTTP request
@@ -349,7 +349,7 @@ void sfHttpRequest_setHttpVersion(sfHttpRequest* httpRequest,uint major, uint mi
 
 
 ///Set the body of a HTTP request
-void sfHttpRequest_setBody(sfHttpRequest* httpRequest, const(char)* ody);
+void sfHttpRequest_setBody(sfHttpRequest* httpRequest, const(char)* ody, size_t length);
 
 
 //HTTP Response Functions
@@ -359,7 +359,7 @@ void sfHttpResponse_destroy(sfHttpResponse* httpResponse);
 
 
 ///Get the value of a field of a HTTP response
-const(char)* sfHttpResponse_getField(const sfHttpResponse* httpResponse, const(char)* field);
+const(char)* sfHttpResponse_getField(const sfHttpResponse* httpResponse, const(char)* field, size_t length);
 
 
 ///Get the status code of a HTTP reponse
@@ -389,7 +389,7 @@ void sfHttp_destroy(sfHttp* http);
 
 
 ///Set the target host of a HTTP object
-void sfHttp_setHost(sfHttp* http, const(char)* host, ushort port);
+void sfHttp_setHost(sfHttp* http, const(char)* host, size_t length, ushort port);
 
 
 ///Send a HTTP request and return the server's response.

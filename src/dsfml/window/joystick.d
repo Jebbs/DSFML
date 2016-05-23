@@ -38,8 +38,37 @@ final abstract class Joystick
 {
 	///Structure holding a joystick's identification;
 	struct Identification {
+		private static dstring[immutable(uint)[2]] nameCache;
+		///Index of the joystick
+		uint index;
 		///Name of the joystick
-		dstring name;
+		@property dstring name() {
+			//In theory, each vid:pid combination should only have one name associated with it.
+			//slightly arcane syntax to make older GDC happy.
+			uint[2] tempkey;
+			tempkey[0] = vendorId;
+			tempkey[1] = productId;
+			immutable(uint)[2] key = tempkey;
+
+			dstring* cachedName = (key in nameCache);
+			if (cachedName !is null) {
+				return *cachedName;
+			} else {
+				import std.exception;
+
+				dchar[] retrievedName;
+				dstring retval;
+
+				retrievedName.length = sfJoystick_getIdentificationNameLength(index);
+
+				sfJoystick_getIdentificationName(index, retrievedName.ptr);
+
+				nameCache[key] = retval = assumeUnique(retrievedName);
+
+				return retval;
+			}
+		}
+
 		///Manufacturer identifier
 		uint vendorId;
 		///Product identifier
@@ -112,14 +141,9 @@ final abstract class Joystick
 	///
 	///Returns: Structure containing the joystick information.
 	static Identification getIdentification(uint joystick) {
-		import std.exception;
 		Identification identification;
-		dchar[] name;
-		name.length = sfJoystick_getIdentificationNameSize(joystick);
 
-		sfJoystick_getIdentification(joystick, name.ptr, &identification.vendorId, &identification.productId);
-
-		identification.name = assumeUnique(name);
+		sfJoystick_getIdentification(joystick, &identification.vendorId, &identification.productId);
 
 		return identification;
 	}
@@ -237,10 +261,13 @@ bool sfJoystick_isConnected(uint joystick);
 uint sfJoystick_getButtonCount(uint joystick);
 
 //Return the length of the joystick identification structure's name
-size_t sfJoystick_getIdentificationNameSize(uint joystick);
+size_t sfJoystick_getIdentificationNameLength(uint joystick);
+
+//Write the name of the joystick into a D-allocated string buffer.
+void sfJoystick_getIdentificationName (uint joystick, dchar* nameBuffer);
 
 //Return the identification structure for a joystick
-void sfJoystick_getIdentification(uint joystick, dchar* nameBuffer, uint* vendorID, uint* productId);
+void sfJoystick_getIdentification(uint joystick, uint* vendorID, uint* productId);
 
 //Check if a joystick supports a given axis
 bool sfJoystick_hasAxis(uint joystick, int axis);

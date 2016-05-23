@@ -76,11 +76,11 @@ class Font
 	 *
 	 * Returns: True if loading succeeded, false if it failed.
 	 */
-	bool loadFromFile(string filename)
+	bool loadFromFile(const(char)[] filename)
 	{
 		import dsfml.system.string;
 
-		bool ret = sfFont_loadFromFile(sfPtr, toStringz(filename));
+		bool ret = sfFont_loadFromFile(sfPtr, filename.ptr, filename.length);
 		if(!ret)
 		{
 			err.write(dsfml.system.string.toString(sfErr_getOutput()));
@@ -335,7 +335,7 @@ private extern(C):
 sfFont* sfFont_construct();
 
 //Create a new font from a file
-bool sfFont_loadFromFile(sfFont* font, const(char)* filename);
+bool sfFont_loadFromFile(sfFont* font, const(char)* filename, size_t length);
 
 
 //Create a new image font a file in memory
