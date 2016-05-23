@@ -34,16 +34,16 @@ struct InputSoundFile
 	{
 		m_soundFile = sfInputSoundFile_create();
 	}
-	
+
 	~this()
 	{
 		sfInputSoundFile_destroy(m_soundFile);
 	}
 
-	bool openFromFile(string filename)
+	bool openFromFile(const(char)[] filename)
 	{
 		import dsfml.system.string;
-		bool toReturn = sfInputSoundFile_openFromFile(m_soundFile, toStringz(filename));
+		bool toReturn = sfInputSoundFile_openFromFile(m_soundFile, filename.ptr, filename.length);
 		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
@@ -75,16 +75,16 @@ struct InputSoundFile
 	{
 		import dsfml.system.string;
 		sfInputSoundFile_seek(m_soundFile, timeOffset);
-		
+
 		//Temporary fix for a bug where attempting to write to err
 		//throws an exception in a thread created in C++. This causes
 		//the program to explode. Hooray.
-		
+
 		//This fix will skip the call to err.write if there was no error
 		//to report. If there is an error, well, the program will still explode,
-		//but the user should see the error prior to the call that will make the 
+		//but the user should see the error prior to the call that will make the
 		//program explode.
-		
+
 		string temp = toString(sfErr_getOutput());
 		if(temp.length > 0)
 		{
@@ -116,11 +116,11 @@ private
 extern(C++) interface soundInputStream
 {
 	long read(void* data, long size);
-	
+
 	long seek(long position);
-	
+
 	long tell();
-	
+
 	long getSize();
 }
 
@@ -128,17 +128,17 @@ extern(C++) interface soundInputStream
 class soundFileStream:soundInputStream
 {
 	private InputStream myStream;
-	
+
 	this(InputStream stream)
 	{
 		myStream = stream;
 	}
-	
+
 	extern(C++)long read(void* data, long size)
 	{
 		return myStream.read(data[0..cast(size_t)size]);
 	}
-	
+
 	extern(C++)long seek(long position)
 	{
 		return myStream.seek(position);
@@ -148,7 +148,7 @@ class soundFileStream:soundInputStream
 	{
 		return myStream.tell();
 	}
-	
+
 	extern(C++)long getSize()
 	{
 		return myStream.getSize();
@@ -174,7 +174,7 @@ uint sfInputSoundFile_getChannelCount( const sfInputSoundFile* file);
 
 uint sfInputSoundFile_getSampleRate(const sfInputSoundFile* file);
 
-bool sfInputSoundFile_openFromFile(sfInputSoundFile* file, const char* filename);
+bool sfInputSoundFile_openFromFile(sfInputSoundFile* file, const char* filename, size_t length);
 
 bool sfInputSoundFile_openFromMemory(sfInputSoundFile* file,const(void)* data, long sizeInBytes);
 

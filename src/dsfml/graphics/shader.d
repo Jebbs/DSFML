@@ -97,7 +97,7 @@ class Shader
 	 *
 	 * Returns: True if loading succeeded, false if it failed.
 	 */
-	bool loadFromFile(string filename, Type type)
+	bool loadFromFile(const(char)[] filename, Type type)
 	{
 		import dsfml.system.string;
 
@@ -105,11 +105,11 @@ class Shader
 
 		if(type == Type.Vertex)
 		{
-			ret = sfShader_loadFromFile(sfPtr, toStringz(filename) , null);
+			ret = sfShader_loadFromFile(sfPtr, filename.ptr, filename.length, null, 0);
 		}
 		else
 		{
-			ret = sfShader_loadFromFile(sfPtr, null , toStringz(filename) );
+			ret = sfShader_loadFromFile(sfPtr, null, 0 , filename.ptr, filename.length);
 		}
 
 		if(!ret)
@@ -131,11 +131,12 @@ class Shader
 	 *
 	 * Returns: True if loading succeeded, false if it failed.
 	 */
-	bool loadFromFile(string vertexShaderFilename, string fragmentShaderFilename)
+	bool loadFromFile(const(char)[] vertexShaderFilename, const(char)[] fragmentShaderFilename)
 	{
 		import dsfml.system.string;
 
-		bool ret = sfShader_loadFromFile(sfPtr, toStringz(vertexShaderFilename) , toStringz(fragmentShaderFilename));
+		bool ret = sfShader_loadFromFile(sfPtr, vertexShaderFilename.ptr, vertexShaderFilename.length,
+										 fragmentShaderFilename.ptr, fragmentShaderFilename.length);
 		if(!ret)
 		{
 			err.write(dsfml.system.string.toString(sfErr_getOutput()));
@@ -155,7 +156,7 @@ class Shader
 	 *
 	 * Returns: True if loading succeeded, false if it failed.
 	 */
-	bool loadFromMemory(string shader, Type type)
+	bool loadFromMemory(const(char)[] shader, Type type)
 	{
 		import dsfml.system.string;
 
@@ -163,11 +164,11 @@ class Shader
 
 		if(type == Type.Vertex)
 		{
-			ret = sfShader_loadFromMemory(sfPtr, toStringz(shader) , null);
+			ret = sfShader_loadFromMemory(sfPtr, shader.ptr, shader.length, null, 0);
 		}
 		else
 		{
-			ret = sfShader_loadFromMemory(sfPtr, null , toStringz(shader) );
+			ret = sfShader_loadFromMemory(sfPtr, null, 0 , shader.ptr, shader.length );
 		}
 		if(!ret)
 		{
@@ -187,11 +188,11 @@ class Shader
 	 *
 	 * Returns: True if loading succeeded, false if it failed.
 	 */
-	bool loadFromMemory(string vertexShader, string fragmentShader)
+	bool loadFromMemory(const(char)[] vertexShader, const(char)[] fragmentShader)
 	{
 		import dsfml.system.string;
 
-		bool ret = sfShader_loadFromMemory(sfPtr, toStringz(vertexShader) , toStringz(fragmentShader));
+		bool ret = sfShader_loadFromMemory(sfPtr, vertexShader.ptr, vertexShader.length , fragmentShader.ptr, fragmentShader.length);
 		if(!ret)
 		{
 			err.write(dsfml.system.string.toString(sfErr_getOutput()));
@@ -263,17 +264,17 @@ class Shader
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a float (float GLSL type).
 	 * 		x		= Value to assign
 	 */
-	 void setParameter(string name, float x)
+	 void setParameter(const(char)[] name, float x)
 	{
 		import dsfml.system.string;
-		sfShader_setFloatParameter(sfPtr, toStringz(name), x);
+		sfShader_setFloatParameter(sfPtr, name.ptr, name.length, x);
 	}
 
 	///ditto
-	void opIndexAssign(float x, string name)
+	void opIndexAssign(float x, const(char)[] name)
 	{
 		import dsfml.system.string;
-		sfShader_setFloatParameter(sfPtr, toStringz(name), x);
+		sfShader_setFloatParameter(sfPtr, name.ptr, name.length, x);
 	}
 
 	/**
@@ -284,10 +285,10 @@ class Shader
 	 * 		x		= First component of the value to assign
 	 * 		y		= Second component of the value to assign
 	 */
-	void setParameter(string name, float x, float y)
+	void setParameter(const(char)[] name, float x, float y)
 	{
 		import dsfml.system.string;
-		sfShader_setFloat2Parameter(sfPtr, toStringz(name), x, y);
+		sfShader_setFloat2Parameter(sfPtr, name.ptr, name.length, x, y);
 	}
 
 	/**
@@ -299,10 +300,10 @@ class Shader
 	 * 		y		= Second component of the value to assign
 	 * 		z		= Third component of the value to assign
 	 */
-	void setParameter(string name, float x, float y, float z)
+	void setParameter(const(char)[] name, float x, float y, float z)
 	{
 		import dsfml.system.string;
-		sfShader_setFloat3Parameter(sfPtr, toStringz(name), x,y,z);
+		sfShader_setFloat3Parameter(sfPtr, name.ptr, name.length, x,y,z);
 	}
 
 	/**
@@ -315,10 +316,10 @@ class Shader
 	 * 		z		= Third component of the value to assign
 	 * 		w		= Fourth component of the value to assign
 	 */
-	void setParameter(string name, float x, float y, float z, float w)
+	void setParameter(const(char)[] name, float x, float y, float z, float w)
 	{
 		import dsfml.system.string;
-		sfShader_setFloat4Parameter(sfPtr, toStringz(name), x, y, z, w);
+		sfShader_setFloat4Parameter(sfPtr, name.ptr, name.length, x, y, z, w);
 	}
 
 	/**
@@ -328,20 +329,20 @@ class Shader
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 4x1 vector (vec4 GLSL type).
 	 * 		val 	= The set of floats to assign.
 	 */
-	void opIndexAssign(float[] val, string name)
+	void opIndexAssign(float[] val, const(char)[] name)
 	{
 		import dsfml.system.string;
 		//assert to make sure that val is of proper length at run time
 		assert((val.length >0) && (val.length <= 4));
 
 		if(val.length == 1)
-			sfShader_setFloatParameter(sfPtr, toStringz(name), val[0]);
+			sfShader_setFloatParameter(sfPtr, name.ptr, name.length, val[0]);
 		else if(val.length == 2)
-			sfShader_setFloat2Parameter(sfPtr, toStringz(name), val[0], val[1]);
+			sfShader_setFloat2Parameter(sfPtr, name.ptr, name.length, val[0], val[1]);
 		else if(val.length == 3)
-			sfShader_setFloat3Parameter(sfPtr, toStringz(name), val[0], val[1], val[2]);
+			sfShader_setFloat3Parameter(sfPtr, name.ptr, name.length, val[0], val[1], val[2]);
 		else if(val.length >= 4)
-			sfShader_setFloat4Parameter(sfPtr, toStringz(name), val[0], val[1], val[2], val[3]);
+			sfShader_setFloat4Parameter(sfPtr, name.ptr, name.length, val[0], val[1], val[2], val[3]);
 	}
 
 	/**
@@ -351,17 +352,17 @@ class Shader
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2x1 vector (vec2 GLSL type).
 	 * 		vector	= Vector to assign
 	 */
-	void setParameter(string name, Vector2f vector)
+	void setParameter(const(char)[] name, Vector2f vector)
 	{
 		import dsfml.system.string;
-		sfShader_setFloat2Parameter(sfPtr, toStringz(name), vector.x, vector.y);
+		sfShader_setFloat2Parameter(sfPtr, name.ptr, name.length, vector.x, vector.y);
 	}
 
 	///ditto
-	void opIndexAssign(Vector2f vector, string name)
+	void opIndexAssign(Vector2f vector, const(char)[] name)
 	{
 		import dsfml.system.string;
-		sfShader_setFloat2Parameter(sfPtr, toStringz(name), vector.x, vector.y);
+		sfShader_setFloat2Parameter(sfPtr, name.ptr, name.length, vector.x, vector.y);
 	}
 
 	/**
@@ -371,16 +372,16 @@ class Shader
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 3x1 vector (vec3 GLSL type).
 	 * 		vector	= Vector to assign
 	 */
-	void setParameter(string name, Vector3f vector)
+	void setParameter(const(char)[] name, Vector3f vector)
 	{
 		import dsfml.system.string;
-		sfShader_setFloat3Parameter(sfPtr, toStringz(name), vector.x, vector.y, vector.z);
+		sfShader_setFloat3Parameter(sfPtr, name.ptr, name.length, vector.x, vector.y, vector.z);
 	}
 	///ditto
-	void opIndexAssign(Vector3f vector, string name)
+	void opIndexAssign(Vector3f vector, const(char)[] name)
 	{
 		import dsfml.system.string;
-		sfShader_setFloat3Parameter(sfPtr, toStringz(name), vector.x, vector.y, vector.z);
+		sfShader_setFloat3Parameter(sfPtr, name.ptr, name.length, vector.x, vector.y, vector.z);
 	}
 
 	/**
@@ -392,16 +393,16 @@ class Shader
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 4x1 vector (vec4 GLSL type).
 	 * 		color	= Color to assign
 	 */
-	void setParameter(string name, Color color)
+	void setParameter(const(char)[] name, Color color)
 	{
 		import dsfml.system.string;
-		sfShader_setColorParameter(sfPtr, toStringz(name), color.r, color.g, color.b, color.a);
+		sfShader_setColorParameter(sfPtr, name.ptr, name.length, color.r, color.g, color.b, color.a);
 	}
 	///ditto
-	void opIndexAssign(Color color, string name)
+	void opIndexAssign(Color color, const(char)[] name)
 	{
 		import dsfml.system.string;
-		sfShader_setColorParameter(sfPtr, toStringz(name), color.r, color.g, color.b, color.a);
+		sfShader_setColorParameter(sfPtr, name.ptr, name.length, color.r, color.g, color.b, color.a);
 	}
 
 	/**
@@ -411,16 +412,16 @@ class Shader
 	 * 		name		= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 4x4 matrix (mat4 GLSL type).
 	 * 		transform	= Transform to assign
 	 */
-	void setParameter(string name, Transform transform)
+	void setParameter(const(char)[] name, Transform transform)
 	{
 		import dsfml.system.string;
-		sfShader_setTransformParameter(sfPtr, toStringz(name), transform.m_matrix.ptr);
+		sfShader_setTransformParameter(sfPtr, name.ptr, name.length, transform.m_matrix.ptr);
 	}
 	///ditto
-	void opIndexAssign(Transform transform, string name)
+	void opIndexAssign(Transform transform, const(char)[] name)
 	{
 		import dsfml.system.string;
-		sfShader_setTransformParameter(sfPtr, toStringz(name), transform.m_matrix.ptr);
+		sfShader_setTransformParameter(sfPtr, name.ptr, name.length, transform.m_matrix.ptr);
 	}
 
 	/**
@@ -434,17 +435,17 @@ class Shader
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2D texture (sampler2D GLSL type).
 	 * 		texture	= Texture to assign
 	 */
-	void setParameter(string name, const(Texture) texture)
+	void setParameter(const(char)[] name, const(Texture) texture)
 	{
 		import dsfml.system.string;
-		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
+		sfShader_setTextureParameter(sfPtr, name.ptr, name.length, texture.sfPtr);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///ditto
-	void opIndexAssign(const(Texture) texture, string name)
+	void opIndexAssign(const(Texture) texture, const(char)[] name)
 	{
 		import dsfml.system.string;
-		sfShader_setTextureParameter(sfPtr, toStringz(name), texture.sfPtr);
+		sfShader_setTextureParameter(sfPtr, name.ptr, name.length, texture.sfPtr);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
@@ -457,10 +458,10 @@ class Shader
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2D texture (sampler2D GLSL type).
 	 */
-	void setParameter(string name, CurrentTextureType)
+	void setParameter(const(char)[] name, CurrentTextureType)
 	{
 		import dsfml.system.string;
-		sfShader_setCurrentTextureParameter(sfPtr, toStringz(name));
+		sfShader_setCurrentTextureParameter(sfPtr, name.ptr, name.length);
 	}
 
 	/**
@@ -471,10 +472,10 @@ class Shader
 	 * Params:
 	 * 		name	= The name of the variable to change in the shader. The corresponding parameter in the shader must be a 2D texture (sampler2D GLSL type).
 	 */
-	void opIndexAssign(CurrentTextureType, string name)
+	void opIndexAssign(CurrentTextureType, const(char)[] name)
 	{
 		import dsfml.system.string;
-		sfShader_setCurrentTextureParameter(sfPtr, toStringz(name));
+		sfShader_setCurrentTextureParameter(sfPtr, name.ptr, name.length);
 	}
 
 	/**
@@ -562,10 +563,10 @@ private extern(C):
 sfShader* sfShader_construct();
 
 //Load both the vertex and fragment shaders from files
-bool sfShader_loadFromFile(sfShader* shader, const(char)* vertexShaderFilename, const char* fragmentShaderFilename);
+bool sfShader_loadFromFile(sfShader* shader, const(char)* vertexShaderFilename, size_t vertexShaderFilenameLength, const char* fragmentShaderFilename, size_t fragmentShaderFilenameLength);
 
 //Load both the vertex and fragment shaders from source codes in memory
-bool sfShader_loadFromMemory(sfShader* shader, const(char)* vertexShader, const char* fragmentShader);
+bool sfShader_loadFromMemory(sfShader* shader, const(char)* vertexShader, size_t vertexShaderLength, const char* fragmentShader, size_t fragmentShaderLength);
 
 //Load both the vertex and fragment shaders from custom streams
 bool sfShader_loadFromStream(sfShader* shader, shaderInputStream vertexShaderStream, shaderInputStream fragmentShaderStream);
@@ -574,28 +575,28 @@ bool sfShader_loadFromStream(sfShader* shader, shaderInputStream vertexShaderStr
 void sfShader_destroy(sfShader* shader);
 
 //Change a float parameter of a shader
-void sfShader_setFloatParameter(sfShader* shader, const char* name, float x);
+void sfShader_setFloatParameter(sfShader* shader, const char* name, size_t length, float x);
 
 //Change a 2-components vector parameter of a shader
-void sfShader_setFloat2Parameter(sfShader* shader, const char* name, float x, float y);
+void sfShader_setFloat2Parameter(sfShader* shader, const char* name, size_t length, float x, float y);
 
 //Change a 3-components vector parameter of a shader
-void sfShader_setFloat3Parameter(sfShader* shader, const char* name, float x, float y, float z);
+void sfShader_setFloat3Parameter(sfShader* shader, const char* name, size_t length, float x, float y, float z);
 
 //Change a 4-components vector parameter of a shader
-void sfShader_setFloat4Parameter(sfShader* shader, const char* name, float x, float y, float z, float w);
+void sfShader_setFloat4Parameter(sfShader* shader, const char* name, size_t length, float x, float y, float z, float w);
 
 //Change a color parameter of a shader
-void sfShader_setColorParameter(sfShader* shader, const char* name, ubyte r, ubyte g, ubyte b, ubyte a);
+void sfShader_setColorParameter(sfShader* shader, const char* name, size_t length, ubyte r, ubyte g, ubyte b, ubyte a);
 
 //Change a matrix parameter of a shader
-void sfShader_setTransformParameter(sfShader* shader, const char* name, float* transform);
+void sfShader_setTransformParameter(sfShader* shader, const char* name, size_t length, float* transform);
 
 //Change a texture parameter of a shader
-void sfShader_setTextureParameter(sfShader* shader, const char* name, const sfTexture* texture);
+void sfShader_setTextureParameter(sfShader* shader, const char* name, size_t length, const sfTexture* texture);
 
 //Change a texture parameter of a shader
-void sfShader_setCurrentTextureParameter(sfShader* shader, const char* name);
+void sfShader_setCurrentTextureParameter(sfShader* shader, const char* name, size_t length);
 
 //Bind a shader for rendering (activate it)
 void sfShader_bind(const sfShader* shader);

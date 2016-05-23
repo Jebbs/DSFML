@@ -27,24 +27,24 @@ import dsfml.system.err;
 
 /++
  + Abstract base class for capturing sound data.
- + 
+ +
  + SoundBuffer provides a simple interface to access the audio recording capabilities of the computer (the microphone).
- + 
+ +
  + As an abstract base class, it only cares about capturing sound samples, the task of making something useful with them is left to the derived class. Note that SFML provides a built-in specialization for saving the captured data to a sound buffer (see SoundBufferRecorder).
- + 
+ +
  + A derived class has only one virtual function to override:
- + 
+ +
  + onProcessSamples provides the new chunks of audio samples while the capture happens
- + 
+ +
  + Moreover, two additionnal virtual functions can be overriden as well if necessary:
- + 
+ +
  + onStart is called before the capture happens, to perform custom initializations
  + onStop is called after the capture ends, to perform custom cleanup
- + 
+ +
  + The audio capture feature may not be supported or activated on every platform, thus it is recommended to check its availability with the isAvailable() function. If it returns false, then any attempt to use an audio recorder will fail.
- + 
+ +
  + It is important to note that the audio capture happens in a separate thread, so that it doesn't block the rest of the program. In particular, the onProcessSamples and onStop virtual functions (but not onStart) will be called from this separate thread. It is important to keep this in mind, because you may have to take care of synchronization issues if you share data between threads.
- + 
+ +
  + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1SoundRecorder.php#details
  + Authors: Laurent Gomila, Jeremy DeHaan
  +/
@@ -61,9 +61,9 @@ class SoundRecorder
 		sfPtr = sfSoundRecorder_construct(callBacks);
 
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
-		
+
 		//Fix for some strange bug that I can't seem to track down.
-		//This bug causes the array in SoundBufferRecorder to segfault if 
+		//This bug causes the array in SoundBufferRecorder to segfault if
 		//its length reaches 1024, but creating an array of this size before capturing happens
 		//seems to fix it. This fix should allow other implementations to not segfault as well.
 		//I will look into the cause when I have more time, but this at least renders it usable.
@@ -82,7 +82,7 @@ class SoundRecorder
 	/**
 	 * Start the capture.
 	 * The sampleRate parameter defines the number of audio samples captured per second. The higher, the better the quality (for example, 44100 samples/sec is CD quality). This function uses its own thread so that it doesn't block the rest of the program while the capture runs. Please note that only one capture can happen at the same time.
-	 * 
+	 *
 	 * Params:
 	 * 		sampleRate =	Desired capture rate, in number of samples per second
 	 */
@@ -102,7 +102,7 @@ class SoundRecorder
 
 	/**
 	 * Get the sample rate in samples per second.
-	 * 
+	 *
 	 * The sample rate defines the number of audio samples captured per second. The higher, the better the quality (for example, 44100 samples/sec is CD quality).
 	 */
 	@property
@@ -112,12 +112,12 @@ class SoundRecorder
 			return sfSoundRecorder_getSampleRate(sfPtr);
 		}
 	}
-	
+
 	/**
 	 *Get the name of the current audio capture device.
 	 *
 	 *Returns
-	 *   The name of the current audio capture device 
+	 *   The name of the current audio capture device
 	 */
 	string getDevice() const {
 		return .toString(sfSoundRecorder_getDevice(sfPtr));
@@ -134,53 +134,53 @@ class SoundRecorder
 	 *   True, if it was able to set the requested device
 	 *
 	 *See also
-	 *   getAvailableDevices, getDefaultDevice 
+	 *   getAvailableDevices, getDefaultDevice
 	 */
-	bool setDevice (string name) {
-		return sfSoundRecorder_setDevice(sfPtr, toStringz(name));
+	bool setDevice (const(char)[] name) {
+		return sfSoundRecorder_setDevice(sfPtr, name.ptr, name.length);
 	}
-	
+
 	/**
 	 *Get a list of the names of all available audio capture devices.
 	 *
 	 *This function returns an array of strings, containing the names of all available audio capture devices.
 	 *
 	 *Returns
-	 *  An array of strings containing the names 
+	 *  An array of strings containing the names
 	 */
 	static const(string)[] getAvailableDevices() {
 		static string[] availableDevices;//stores all available devices after the first call
-		
+
 		//if getAvailableDevices hasn't been called yet
 		if(availableDevices.length == 0)
 		{
 			const (char)** devices;
 			size_t counts;
-			
+
 			//returns uints instead of structs due to 64 bit bug
 			devices = sfSoundRecorder_getAvailableDevices(&counts);
-			
+
 			//calculate real length
 			availableDevices.length = counts;
-			
+
 			//populate availableDevices
 			for(uint i = 0; i < counts; i++)
 			{
 				availableDevices[i] = .toString(devices[i]);
 			}
-			
+
 		}
-		
+
 		return availableDevices;
 	}
-	
+
 	/**
 	 *Get the name of the default audio capture device.
 	 *
 	 *This function returns the name of the default audio capture device. If none is available, an empty string is returned.
 	 *
 	 *Returns
-	 *   The name of the default audio capture device 
+	 *   The name of the default audio capture device
 	 */
 	static string getDefaultDevice() {
 		return .toString(sfSoundRecorder_getDefaultDevice());
@@ -188,9 +188,9 @@ class SoundRecorder
 
 	/**
 	 * Check if the system supports audio capture.
-	 * 
+	 *
 	 * This function should always be called before using the audio capture features. If it returns false, then any attempt to use SoundRecorder or one of its derived classes will fail.
-	 * 
+	 *
 	 * Returns: True if audio capture is supported, false otherwise
 	 */
 	static bool isAvailable()
@@ -210,17 +210,17 @@ class SoundRecorder
 		 * The default processing interval is 100 ms.
 		 *
 		 * Parameters
-		 *    interval	Processing interval 
+		 *    interval	Processing interval
     	*/
 		void setProcessingInterval (Duration interval) {
 			sfSoundRecorder_setProcessingInterval(sfPtr, interval.total!"usecs");
 		}
-		
+
 		/**
 		 * Start capturing audio data.
-		 * 
+		 *
 		 * This virtual function may be overriden by a derived class if something has to be done every time a new capture starts. If not, this function can be ignored; the default implementation does nothing.
-		 * 
+		 *
 		 * Returns: True to the start the capture, or false to abort it.
 		 */
 		bool onStart()
@@ -230,19 +230,19 @@ class SoundRecorder
 
 		/**
 		 * Process a new chunk of recorded samples.
-		 * 
+		 *
 		 * This virtual function is called every time a new chunk of recorded data is available. The derived class can then do whatever it wants with it (storing it, playing it, sending it over the network, etc.).
-		 * 
+		 *
 		 * Params:
 		 * 		samples =	Array of the new chunk of recorded samples
-		 * 
+		 *
 		 * Returns: True to continue the capture, or false to stop it
 		 */
 		abstract bool onProcessSamples(const(short)[] samples);
 
 		/**
 		 * Stop capturing audio data.
-		 * 
+		 *
 		 * This virtual function may be overriden by a derived class if something has to be done every time the capture ends. If not, this function can be ignored; the default implementation does nothing.
 		 */
 		void onStop()
@@ -304,7 +304,7 @@ void sfSoundRecorder_stop(sfSoundRecorder* soundRecorder);
 
 uint sfSoundRecorder_getSampleRate(const sfSoundRecorder* soundRecorder);
 
-bool sfSoundRecorder_setDevice(sfSoundRecorder* soundRecorder, const(char)* name);
+bool sfSoundRecorder_setDevice(sfSoundRecorder* soundRecorder, const(char)* name, size_t length);
 
 const(char)* sfSoundRecorder_getDevice(const (sfSoundRecorder)* soundRecorder);
 

@@ -95,8 +95,6 @@ class Window
 	this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 		if (is(T == dchar)||is(T == wchar)||is(T == char))
 	{
-		import dsfml.system.string;
-
 		this();
 		create(mode, title, style, settings);
 	}
@@ -262,28 +260,30 @@ class Window
 	///
 	///Params:
     ///		title = New title.
-	void setTitle(string newTitle)
+	void setTitle(const(char)[] newTitle)
 	{
 		import dsfml.system.string;
-		sfWindow_setUnicodeTitle(sfPtr, toStringz(stringConvert!(char, dchar)(newTitle)));
+
+		auto convertedTitle = stringConvert!(char, dchar)(newTitle);
+		sfWindow_setUnicodeTitle(sfPtr, convertedTitle.ptr, convertedTitle.length);
 	}
 	///Change the title of the window.
 	///
 	///Params:
     ///		title = New title.
-	void setTitle(wstring newTitle)
+	void setTitle(const(wchar)[] newTitle)
 	{
 		import dsfml.system.string;
-		sfWindow_setUnicodeTitle(sfPtr, toStringz(stringConvert!(wchar, dchar)(newTitle)));
+		auto convertedTitle = stringConvert!(wchar, dchar)(newTitle);
+		sfWindow_setUnicodeTitle(sfPtr, convertedTitle.ptr, convertedTitle.length);
 	}
 	///Change the title of the window.
 	///
 	///Params:
     ///		title = New title.
-	void setTitle(dstring newTitle)
+	void setTitle(const(dchar)[] newTitle)
 	{
-		import dsfml.system.string;
-		sfWindow_setUnicodeTitle(sfPtr, toStringz(newTitle));
+		sfWindow_setUnicodeTitle(sfPtr, newTitle.ptr, newTitle.length);
 	}
 
 	///Show or hide the window.
@@ -351,10 +351,12 @@ class Window
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	void create(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
 		import dsfml.system.string;
-		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(char,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+
+		auto convertedTitle = stringConvert!(char,dchar)(title);
+		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///Create (or recreate) the window.
@@ -362,10 +364,11 @@ class Window
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	void create(VideoMode mode, wstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	void create(VideoMode mode, const(wchar)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
 		import dsfml.system.string;
-		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(wchar,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		auto convertedTitle = stringConvert!(wchar,dchar)(title);
+		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///Create (or recreate) the window.
@@ -373,10 +376,10 @@ class Window
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	void create(VideoMode mode, dstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	void create(VideoMode mode, const(dchar)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
 	{
 		import dsfml.system.string;
-		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, title.ptr, title.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
@@ -554,7 +557,7 @@ private extern(C):
 	sfWindow* sfWindow_construct();
 
 	//Construct a new window (with a UTF-32 title)
-	void sfWindow_createFromSettings(sfWindow* window, uint width, uint height, uint bitsPerPixel, const(dchar)* title, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
+	void sfWindow_createFromSettings(sfWindow* window, uint width, uint height, uint bitsPerPixel, const(dchar)* title, size_t titleLength, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
 
 	//Construct a window from an existing control
 	void sfWindow_createFromHandle(sfWindow* window, WindowHandle handle, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
@@ -590,10 +593,10 @@ private extern(C):
 	void sfWindow_setSize(sfWindow* window, uint width, uint height);
 
 	//Change the title of a window
-	void sfWindow_setTitle(sfWindow* window, const(char)* title);
+	void sfWindow_setTitle(sfWindow* window, const(char)* title, size_t length);
 
 	//Change the title of a window (with a UTF-32 string)
-	void sfWindow_setUnicodeTitle(sfWindow* window, const(dchar)* title);
+	void sfWindow_setUnicodeTitle(sfWindow* window, const(dchar)* title, size_t length);
 
 	//Change a window's icon
 	void sfWindow_setIcon(sfWindow* window, uint width, uint height, const(ubyte)* pixels);
