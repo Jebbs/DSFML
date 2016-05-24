@@ -252,7 +252,7 @@ unittest
 		serverSocket.receive(temp2,received, receivedFrom, receivedPort);
 
 		//What did we get?!
-		writeln("The data received from ", receivedFrom.toString(), " at port ", receivedPort, " was: ", cast(string)temp2[0..received]);
+		writeln("The data received from ", receivedFrom, " at port ", receivedPort, " was: ", cast(string)temp2[0..received]);
 
 
 		writeln();

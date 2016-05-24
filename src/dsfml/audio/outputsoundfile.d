@@ -25,9 +25,9 @@ import dsfml.system.err;
 /**
  *Provide write access to sound files.
  *
- *This class encodes audio samples to a sound file. 
+ *This class encodes audio samples to a sound file.
  *
- *It is used internally by higher-level classes such as sf::SoundBuffer, but can also be useful if you want to create audio files from 
+ *It is used internally by higher-level classes such as sf::SoundBuffer, but can also be useful if you want to create audio files from
  *custom data sources, like generated audio samples.
  */
 struct OutputSoundFile
@@ -38,16 +38,16 @@ struct OutputSoundFile
 	{
 		m_soundFile = sfOutputSoundFile_create();
 	}
-	
+
 	~this()
 	{
 		sfOutputSoundFile_destroy(m_soundFile);
 	}
 
-	bool openFromFile(string filename,uint channelCount,uint sampleRate)
+	bool openFromFile(const(char)[] filename,uint channelCount,uint sampleRate)
 	{
 		import dsfml.system.string;
-		bool toReturn = sfOutputSoundFile_openFromFile(m_soundFile, toStringz(filename),channelCount,sampleRate);
+		bool toReturn = sfOutputSoundFile_openFromFile(m_soundFile, filename.ptr, filename.length,channelCount,sampleRate);
 		err.write(toString(sfErr_getOutput()));
 		return toReturn;
 	}
@@ -71,7 +71,7 @@ sfOutputSoundFile* sfOutputSoundFile_create();
 
 void sfOutputSoundFile_destroy(sfOutputSoundFile* file);
 
-bool sfOutputSoundFile_openFromFile(sfOutputSoundFile* file, const(char)* filename,uint channelCount,uint sampleRate);
+bool sfOutputSoundFile_openFromFile(sfOutputSoundFile* file, const(char)* filename, size_t length, uint channelCount,uint sampleRate);
 
 void sfOutputSoundFile_write(sfOutputSoundFile* file, const short* data, long sampleCount);
 
