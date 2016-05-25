@@ -240,18 +240,8 @@ class RenderTexture : RenderTarget
 	 * 		drawable	= Object to draw
 	 * 		states		= Render states to use for drawing
 	 */
-	override void draw(Drawable drawable, RenderStates states = RenderStates.Default)
+	override void draw(Drawable drawable, RenderStates states = RenderStates.init)
 	{
-		//Confirms that even a blank render states struct won't break anything during drawing
-		if(states.texture is null)
-		{
-			states.texture = RenderStates.emptyTexture;
-		}
-		if(states.shader is null)
-		{
-			states.shader = RenderStates.emptyShader;
-		}
-
 		drawable.draw(this, states);
 	}
 
@@ -263,23 +253,13 @@ class RenderTexture : RenderTarget
 	 * 		type		= Type of primitives to draw
 	 * 		states		= Render states to use for drawing
 	 */
-	override void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default)
+	override void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.init)
 	{
 		import std.algorithm;
 
-		//Confirms that even a blank render states struct won't break anything during drawing
-		if(states.texture is null)
-		{
-			states.texture = RenderStates.emptyTexture;
-		}
-		if(states.shader is null)
-		{
-			states.shader = RenderStates.emptyShader;
-		}
-
 		sfRenderTexture_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length),type,states.blendMode.colorSrcFactor, states.blendMode.alphaDstFactor,
 			states.blendMode.colorEquation, states.blendMode.alphaSrcFactor, states.blendMode.alphaDstFactor, states.blendMode.alphaEquation,
-			states.transform.m_matrix.ptr, states.texture.sfPtr, states.shader.sfPtr);
+			states.transform.m_matrix.ptr, states.texture?states.texture.sfPtr:null, states.shader?states.shader.sfPtr:null);
 	}
 
 	/**

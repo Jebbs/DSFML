@@ -438,14 +438,14 @@ class Shader
 	void setParameter(const(char)[] name, const(Texture) texture)
 	{
 		import dsfml.system.string;
-		sfShader_setTextureParameter(sfPtr, name.ptr, name.length, texture.sfPtr);
+		sfShader_setTextureParameter(sfPtr, name.ptr, name.length, texture?texture.sfPtr:null);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///ditto
 	void opIndexAssign(const(Texture) texture, const(char)[] name)
 	{
 		import dsfml.system.string;
-		sfShader_setTextureParameter(sfPtr, name.ptr, name.length, texture.sfPtr);
+		sfShader_setTextureParameter(sfPtr, name.ptr, name.length, texture?texture.sfPtr:null);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
