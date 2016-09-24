@@ -186,7 +186,7 @@ struct View
 	  See also
 	      getInverseTransform
 	*/
-
+	//We have both const and mutable overloads so when the object is mutable, we can lazily cache the transform.
 	Transform getTransform()
 	{
 		import std.math;
@@ -194,22 +194,22 @@ struct View
 	    if (!m_transformUpdated)
 	    {
 	        // Rotation components
-	        float angle  = m_rotation * 3.141592654f / 180.f;
+	        float angle  = m_rotation * 3.141592654f / 180.0;
 	        float cosine = cos(angle);
 	        float sine   = sin(angle);
 	        float tx     = -m_center.x * cosine - m_center.y * sine + m_center.x;
 	        float ty     =  m_center.x * sine - m_center.y * cosine + m_center.y;
 
 	        // Projection components
-	        float a =  2.f / m_size.x;
-	        float b = -2.f / m_size.y;
+	        float a =  2.0 / m_size.x;
+	        float b = -2.0 / m_size.y;
 	        float c = -a * m_center.x;
 	        float d = -b * m_center.y;
 
 	        // Rebuild the projection matrix
 	        m_transform = Transform( a * cosine, a * sine,   a * tx + c,
 	                                -b * sine,   b * cosine, b * ty + d,
-	                                 0.f,        0.f,        1.f);
+	                                 0.0,        0.0,        1.0);
 	        m_transformUpdated = true;
 	    }
 
@@ -217,6 +217,32 @@ struct View
 	}
 
 
+	Transform getTransform() const
+	{
+		import std.math;
+	    // Recompute the matrix
+	    Transform currentTransform;
+
+        // Rotation components
+        float angle  = m_rotation * 3.141592654f / 180.0;
+        float cosine = cos(angle);
+        float sine   = sin(angle);
+        float tx     = -m_center.x * cosine - m_center.y * sine + m_center.x;
+        float ty     =  m_center.x * sine - m_center.y * cosine + m_center.y;
+
+        // Projection components
+        float a =  2.0 / m_size.x;
+        float b = -2.0 / m_size.y;
+        float c = -a * m_center.x;
+        float d = -b * m_center.y;
+
+        // Rebuild the projection matrix
+        currentTransform = Transform( a * cosine, a * sine,   a * tx + c,
+                                -b * sine,   b * cosine, b * ty + d,
+                                 0.0,        0.0,        1.0);
+
+	    return currentTransform;
+	}
 
 	/**
 	  Get the inverse projection transform of the view.
@@ -242,6 +268,12 @@ struct View
 	    return m_inverseTransform;
 	}
 
+	Transform getInverseTransform() const
+	{
+	    // Recompute the matrix if needed
+        return getTransform().getInverse();
+	}
+
 	package
 	{
 		Vector2f m_center = Vector2f(500, 500);
@@ -254,7 +286,7 @@ struct View
 		bool m_transformUpdated;
 		bool m_invTransformUpdated;
 		Transform m_transform;
-		Transform m_invTransform;
+		Transform m_inverseTransform;
 	}
 }
 
@@ -270,7 +302,7 @@ unittest
 		writeln("Unit test for View");
 
 		//the portion of the screen the view is displaying is at position (0,0) with a width of 100 and a height of 100
-		auto view = new View(FloatRect(0,0,100,100));
+		auto view = View(FloatRect(0,0,100,100));
 
 		//the portion of the screen the view is displaying is at position (0,0) and takes up the remaining size of the screen.(expressed as a ratio)
 		view.viewport = FloatRect(0,0,1,1);
