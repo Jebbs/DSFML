@@ -187,7 +187,7 @@ build_script:
 - echo %VCINSTALLDIR%
 - '"%compilersetup%" %compilersetupargs%'
 - cd ..
-- git clone --depth=1 --branch 2.3 https://github.com/Jebbs/DSFMLC.git
+- git clone --depth=1 --branch 2.3-dview https://github.com/aubade/DSFMLC.git
 - cd DSFMLC
 - ps: if($env:toolchain -eq "mingw"){
         $env:Path = $env:compilerpath + $env:cmakepath;

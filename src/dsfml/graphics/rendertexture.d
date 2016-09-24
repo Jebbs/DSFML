@@ -64,8 +64,6 @@ class RenderTexture : RenderTarget
 	{
 		sfPtr = sfRenderTexture_construct();
 		m_texture = new Texture(sfRenderTexture_getTexture(sfPtr));
-		m_currentView = new View();
-		m_defaultView = new View();
 	}
 
 	~this()
@@ -94,13 +92,6 @@ class RenderTexture : RenderTarget
 
 		sfRenderTexture_create(sfPtr, width, height, depthBuffer);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
-
-		//get view
-		m_currentView = new View(sfRenderTexture_getView(sfPtr));
-
-		//get default view
-		m_defaultView = new View(sfRenderTexture_getDefaultView(sfPtr));
-
 	}
 
 	/**
@@ -128,15 +119,29 @@ class RenderTexture : RenderTarget
 	 */
 	@property
 	{
-		override const(View) view(const(View) newView)
+		override View view(View newView)
 		{
-			sfRenderTexture_setView(sfPtr, newView.sfPtr);
-			m_currentView = new View(sfRenderTexture_getView(sfPtr));
-			return m_currentView;
+			sfRenderTexture_setView(sfPtr, newView.center.x, newView.center.y, newView.size.x, newView.size.y, newView.rotation,
+									newView.viewport.left, newView.viewport.top, newView.viewport.width, newView.viewport.height);
+			return newView;
 		}
-		override const(View) view() const
+		override View view() const
 		{
-			return m_currentView;
+			View currentView;
+
+			Vector2f currentCenter, currentSize;
+			float currentRotation;
+			FloatRect currentViewport;
+
+			sfRenderTexture_getView(sfPtr, &currentCenter.x, &currentCenter.y, &currentSize.x, &currentSize.y, &currentRotation,
+									&currentViewport.left, &currentViewport.top, &currentViewport.width, &currentViewport.height);
+
+			currentView.center = currentCenter;
+			currentView.size = currentSize;
+			currentView.rotation = currentRotation;
+			currentView.viewport = currentViewport;
+
+			return currentView;
 		}
 	}
 
@@ -147,9 +152,23 @@ class RenderTexture : RenderTarget
 	 *
 	 * Returns: The default view of the render target.
 	 */
-	const(View) getDefaultView() const // note: if refactored, change documentation of view property above
+	View getDefaultView() const // note: if refactored, change documentation of view property above
 	{
-		return m_defaultView;
+		View currentView;
+
+		Vector2f currentCenter, currentSize;
+		float currentRotation;
+		FloatRect currentViewport;
+
+		sfRenderTexture_getDefaultView(sfPtr, &currentCenter.x, &currentCenter.y, &currentSize.x, &currentSize.y, &currentRotation,
+								&currentViewport.left, &currentViewport.top, &currentViewport.width, &currentViewport.height);
+
+		currentView.center = currentCenter;
+		currentView.size = currentSize;
+		currentView.rotation = currentRotation;
+		currentView.viewport = currentViewport;
+
+		return currentView;
 	}
 
 	/**
@@ -161,23 +180,6 @@ class RenderTexture : RenderTarget
 	{
 		Vector2u temp;
 		sfRenderTexture_getSize(sfPtr, &temp.x, &temp.y);
-		return temp;
-	}
-
-	/**
-	 * Get the viewport of a view, applied to this render target.
-	 *
-	 * The viewport is defined in the view as a ratio, this function simply applies this ratio to the current dimensions of the render target to calculate the pixels rectangle that the viewport actually covers in the target.
-	 *
-	 * Params:
-	 * 		view	= The view for which we want to compute the viewport
-	 *
-	 * Returns: Viewport rectangle, expressed in pixels
-	 */
-	IntRect getViewport(const(View) view) const
-	{
-		IntRect temp;
-		sfRenderTexture_getViewport(sfPtr, view.sfPtr, &temp.left, &temp.top, &temp.width, &temp.height);
 		return temp;
 	}
 
@@ -260,86 +262,6 @@ class RenderTexture : RenderTarget
 		sfRenderTexture_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length),type,states.blendMode.colorSrcFactor, states.blendMode.alphaDstFactor,
 			states.blendMode.colorEquation, states.blendMode.alphaSrcFactor, states.blendMode.alphaDstFactor, states.blendMode.alphaEquation,
 			states.transform.m_matrix.ptr, states.texture?states.texture.sfPtr:null, states.shader?states.shader.sfPtr:null);
-	}
-
-	/**
-	 * Convert a point fom target coordinates to world coordinates, using the current view.
-	 *
-	 * This function is an overload of the mapPixelToCoords function that implicitely uses the current view.
-	 *
-	 * Params:
-	 * 		point	= Pixel to convert
-	 *
-	 * Returns: The converted point, in "world" coordinates.
-	 */
-	Vector2f mapPixelToCoords(Vector2i point) const
-	{
-		Vector2f temp;
-		sfRenderTexture_mapPixelToCoords(sfPtr,point.x, point.y, &temp.x, &temp.y, null);
-		return temp;
-	}
-
-	/**
-	 * Convert a point from target coordinates to world coordinates.
-	 *
-	 * This function finds the 2D position that matches the given pixel of the render-target. In other words, it does the inverse of what the graphics card does, to find the initial position of a rendered pixel.
-	 *
-	 * Initially, both coordinate systems (world units and target pixels) match perfectly. But if you define a custom view or resize your render-target, this assertion is not true anymore, ie. a point located at (10, 50) in your render-target may map to the point (150, 75) in your 2D world – if the view is translated by (140, 25).
-	 *
-	 * For render-windows, this function is typically used to find which point (or object) is located below the mouse cursor.
-	 *
-	 * This version uses a custom view for calculations, see the other overload of the function if you want to use the current view of the render-target.
-	 *
-	 * Params:
-	 * 		point	= Pixel to convert
-	 * 		view	= The view to use for converting the point
-	 *
-	 * Returns: The converted point, in "world" coordinates.
-	 */
-	Vector2f mapPixelToCoords(Vector2i point, const(View) view) const
-	{
-		Vector2f temp;
-		sfRenderTexture_mapPixelToCoords(sfPtr,point.x, point.y, &temp.x, &temp.y, view.sfPtr);
-		return temp;
-	}
-
-	/**
-	 * Convert a point from target coordinates to world coordinates, using the current view.
-	 *
-	 * This function is an overload of the mapPixelToCoords function that implicitely uses the current view.
-	 *
-	 * Params:
-	 * 		point	= Point to convert
-	 *
-	 * The converted point, in "world" coordinates
-	 */
-	Vector2i mapCoordsToPixel(Vector2f point) const
-	{
-		Vector2i temp;
-		sfRenderTexture_mapCoordsToPixel(sfPtr,point.x, point.y, &temp.x, &temp.y,null);
-		return temp;
-	}
-
-	/**
-	 * Convert a point from world coordinates to target coordinates.
-	 *
-	 * This function finds the pixel of the render-target that matches the given 2D point. In other words, it goes through the same process as the graphics card, to compute the final position of a rendered point.
-	 *
-	 * Initially, both coordinate systems (world units and target pixels) match perfectly. But if you define a custom view or resize your render-target, this assertion is not true anymore, ie. a point located at (150, 75) in your 2D world may map to the pixel (10, 50) of your render-target – if the view is translated by (140, 25).
-	 *
-	 * This version uses a custom view for calculations, see the other overload of the function if you want to use the current view of the render-target.
-	 *
-	 * Params:
-	 * 		point	= Point to convert
-	 * 		view	= The view to use for converting the point
-	 *
-	 * Returns: The converted point, in target coordinates (pixels)
-	 */
-	Vector2i mapCoordsToPixel(Vector2f point, const(View) view) const
-	{
-		Vector2i temp;
-		sfRenderTexture_mapCoordsToPixel(sfPtr,point.x, point.y, &temp.x, &temp.y,view.sfPtr);
-		return temp;
 	}
 
 	/**
@@ -438,26 +360,19 @@ void sfRenderTexture_display(sfRenderTexture* renderTexture);
 void sfRenderTexture_clear(sfRenderTexture* renderTexture, ubyte r, ubyte g, ubyte b, ubyte a);
 
 //Change the current active view of a render texture
-void sfRenderTexture_setView(sfRenderTexture* renderTexture, const sfView* view);
+void sfRenderTexture_setView(sfRenderTexture* renderTexture, float centerX, float centerY, float sizeX,
+												float sizeY, float rotation, float viewportLeft, float viewportTop, float viewportWidth,
+												float viewportHeight);
 
 //Get the current active view of a render texture
-sfView* sfRenderTexture_getView(const sfRenderTexture* renderTexture);
+void sfRenderTexture_getView(const sfRenderTexture* renderTexture, float* centerX, float* centerY, float* sizeX,
+												float* sizeY, float* rotation, float* viewportLeft, float* viewportTop, float* viewportWidth,
+												float* viewportHeight);
 
 //Get the default view of a render texture
-sfView* sfRenderTexture_getDefaultView(const sfRenderTexture* renderTexture);
-
-//Get the viewport of a view applied to this target
-void sfRenderTexture_getViewport(const sfRenderTexture* renderTexture, const sfView* view, int* rectLeft, int* rectTop, int* rectWidth, int* rectHeight);
-
-//Convert a point from texture coordinates to world coordinates
-void sfRenderTexture_mapPixelToCoords(const sfRenderTexture* renderTexture, int xIn, int yIn, float* xOut, float* yOut, const sfView* targetView);
-
-//Convert a point from world coordinates to texture coordinates
-void sfRenderTexture_mapCoordsToPixel(const sfRenderTexture* renderTexture, float xIn, float yIn, int* xOut, int* yOut, const sfView* targetView);
-
-//Draw a drawable object to the render-target
-//void sfRenderTexture_drawText(sfRenderTexture* renderTexture, const sfText* object, int blendMode,const float* transform, const sfTexture* texture, const sfShader* shader);
-
+void sfRenderTexture_getDefaultView(const sfRenderTexture* renderTexture, float* centerX, float* centerY, float* sizeX,
+												float* sizeY, float* rotation, float* viewportLeft, float* viewportTop, float* viewportWidth,
+												float* viewportHeight);
 
 //Draw primitives defined by an array of vertices to a render texture
 void sfRenderTexture_drawPrimitives(sfRenderTexture* renderTexture,  const void* vertices, uint vertexCount, int type, int colorSrcFactor, int colorDstFactor, int colorEquation,
