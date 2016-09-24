@@ -74,7 +74,7 @@ class RenderWindow : Window, RenderTarget
 	}
 
 	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
-	this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 		if (is(T == dchar)||is(T == wchar)||is(T == char))
 	{
 
@@ -82,7 +82,7 @@ class RenderWindow : Window, RenderTarget
 		create(mode, title, style, settings);
 	}
 
-	this(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
+	this(WindowHandle handle, ContextSettings settings = ContextSettings.init)
 	{
 		this();
 		create(handle, settings);
@@ -416,7 +416,7 @@ class RenderWindow : Window, RenderTarget
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	override void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	override void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
 
@@ -437,7 +437,7 @@ class RenderWindow : Window, RenderTarget
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	override void create(VideoMode mode, const(wchar)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	override void create(VideoMode mode, const(wchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
 		auto convertedTitle = stringConvert!(wchar, dchar)(title);
@@ -457,7 +457,7 @@ class RenderWindow : Window, RenderTarget
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	override void create(VideoMode mode, const(dchar)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	override void create(VideoMode mode, const(dchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
 		sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, title.ptr, title.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
@@ -476,7 +476,7 @@ class RenderWindow : Window, RenderTarget
 	///Use this function if you want to create an OpenGL rendering area into an already existing control. If the window was already created, it closes it first.
 	///
 	///The second parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	override void create(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
+	override void create(WindowHandle handle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
 		sfRenderWindow_createFromHandle(sfPtr, handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
@@ -505,18 +505,8 @@ class RenderWindow : Window, RenderTarget
 	 * 		drawable	= Object to draw
 	 * 		states		= Render states to use for drawing
 	 */
-	void draw(Drawable drawable, RenderStates states = RenderStates.Default)
+	void draw(Drawable drawable, RenderStates states = RenderStates.init)
 	{
-		//Confirms that even a blank render states struct won't break anything during drawing
-		if(states.texture is null)
-		{
-			states.texture = RenderStates.emptyTexture;
-		}
-		if(states.shader is null)
-		{
-			states.shader = RenderStates.emptyShader;
-		}
-
 		drawable.draw(this,states);
 	}
 
@@ -528,22 +518,13 @@ class RenderWindow : Window, RenderTarget
 	 * 		type		= Type of primitives to draw
 	 * 		states		= Render states to use for drawing
 	 */
-	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.Default)
+	void draw(const(Vertex)[] vertices, PrimitiveType type, RenderStates states = RenderStates.init)
 	{
 		import std.algorithm;
-		//Confirms that even a blank render states struct won't break anything during drawing
-		if(states.texture is null)
-		{
-			states.texture = RenderStates.emptyTexture;
-		}
-		if(states.shader is null)
-		{
-			states.shader = RenderStates.emptyShader;
-		}
 
 		sfRenderWindow_drawPrimitives(sfPtr, vertices.ptr, cast(uint)min(uint.max, vertices.length), type,states.blendMode.colorSrcFactor, states.blendMode.alphaDstFactor,
 			states.blendMode.colorEquation, states.blendMode.alphaSrcFactor, states.blendMode.alphaDstFactor, states.blendMode.alphaEquation,
-			states.transform.m_matrix.ptr,states.texture.sfPtr,states.shader.sfPtr);
+			states.transform.m_matrix.ptr,states.texture?states.texture.sfPtr:null,states.shader?states.shader.sfPtr:null);
 	}
 
 	/**

@@ -56,7 +56,9 @@ struct IpAddress
     ///		byte3 = Fourth byte of the address.
 	this(ubyte byte0,ubyte byte1,ubyte byte2,ubyte byte3)
 	{
-		sfIpAddress_fromBytes(byte0,byte1, byte2, byte3, m_address.ptr);
+		import std.string:sformat;
+		auto length = m_address.sformat("%3d.%3d.%3d,%3d", byte0, byte1, byte2, byte3).length;
+		m_address[length..$] = 0;
 	}
 
 	///Construct the address from a 32-bits integer.
@@ -67,7 +69,19 @@ struct IpAddress
     ///		address = 4 bytes of the address packed into a 32-bits integer.
 	this(uint address)
 	{
-		sfIpAddress_fromInteger(address, m_address.ptr);
+		union AddrConvert
+		{
+			uint addr;
+			ubyte[4] addrbytes;
+		}
+		auto converted = AddrConvert(address);
+		version (LittleEndian)
+		{
+			with (converted) this(addrbytes[3], addrbytes[2], addrbytes[1], addrbytes[0]);
+		} else version (BigEndian)
+		{
+			with (converted) this(addrbytes[0], addrbytes[1], addrbytes[2], addrbytes[3]);
+		} else static assert (0, "Unknown Endianness");
 	}
 
 	///Get an integer representation of the address.
@@ -128,15 +142,9 @@ struct IpAddress
 	///Value representing an empty/invalid address.
 	static immutable(IpAddress) None;
 	///The "localhost" address (for connecting a computer to itself locally)
-	static immutable(IpAddress) LocalHost;
+	static immutable(IpAddress) LocalHost = IpAddress(127, 0, 0, 1);
 	///The "broadcast" address (for sending UDP messages to everyone on a local network)
-	static immutable(IpAddress) Broadcast;
-
-	static this()
-	{
-		LocalHost = IpAddress(127,0,0,1);
-		Broadcast = IpAddress(255,255,255,255);
-	}
+	static immutable(IpAddress) Broadcast = IpAddress(255, 255, 255, 255);
 }
 
 unittest
@@ -153,6 +161,10 @@ unittest
 		assert(address1 == IpAddress.None);
 
 		assert(IpAddress.LocalHost == IpAddress("127.0.0.1"));
+		
+		assert (IpAddress("127.0.0.1") == IpAddress(127, 0, 0, 1));
+		version (LittleEndian)  assert(IpAddress(127, 0, 0, 1) == IpAddress(0x0100007f));
+		version (BigEndian)  assert(IpAddress(127, 0, 0, 1) == IpAddress(0x7f000001));
 
 		IpAddress googleIP = IpAddress("google.com");
 
@@ -171,12 +183,6 @@ private extern(C):
 
 ///Create an address from a string
 void sfIpAddress_fromString(const(char)* address, size_t addressLength, char* ipAddress);
-
-///Create an address from 4 bytes
-void sfIpAddress_fromBytes(ubyte byte0, ubyte byte1, ubyte byte2, ubyte byte3, char* ipAddress);
-
-///Construct an address from a 32-bits integer
-void sfIpAddress_fromInteger(uint address, char* ipAddress);
 
 ///Get an integer representation of the address
 uint sfIpAddress_toInteger(const(char)* ipAddress, size_t length);
