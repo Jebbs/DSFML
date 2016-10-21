@@ -92,7 +92,7 @@ class Window
 	///  	title = Title of the window.
 	///   	style = Window style.
 	///    	settings = Additional settings for the underlying OpenGL context.
-	this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 		if (is(T == dchar)||is(T == wchar)||is(T == char))
 	{
 		this();
@@ -108,7 +108,7 @@ class Window
 	///Params:
     ///		handle = Platform-specific handle of the control.
     ///		settings = Additional settings for the underlying OpenGL context.
-	this(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
+	this(WindowHandle handle, ContextSettings settings = ContextSettings.init)
 	{
 		this();
 		create(handle, settings);
@@ -351,7 +351,7 @@ class Window
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
 
@@ -364,7 +364,7 @@ class Window
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	void create(VideoMode mode, const(wchar)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	void create(VideoMode mode, const(wchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
 		auto convertedTitle = stringConvert!(wchar,dchar)(title);
@@ -376,7 +376,7 @@ class Window
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	void create(VideoMode mode, const(dchar)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	void create(VideoMode mode, const(dchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, title.ptr, title.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
@@ -388,7 +388,7 @@ class Window
 	///Use this function if you want to create an OpenGL rendering area into an already existing control. If the window was already created, it closes it first.
 	///
 	///The second parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	void create(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
+	void create(WindowHandle handle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
 		sfWindow_createFromHandle(sfPtr, handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
