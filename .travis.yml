@@ -25,7 +25,7 @@ addons:
       - libvorbis-dev
       - libflac-dev
 
-d: 
+d:
  - dmd-2.069.2
  - dmd-2.068.2
  - dmd-2.067.1
@@ -50,7 +50,7 @@ matrix:
 #Build and install DSFMLC
 install:
   - cd $HOME
-  - git clone --depth=1 --branch 2.3-dview https://github.com/aubade/DSFMLC.git
+  - git clone --depth=1 --branch 2.4 https://github.com/jebbs/DSFMLC.git
   - cd DSFMLC
   - cmake .
   - make -j2
@@ -58,8 +58,6 @@ install:
   - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/DSFMLC/lib
   - cd $TRAVIS_BUILD_DIR
 
-script: 
+script:
   - ${DMD} build.d
   - ./build -unittest
-
-
