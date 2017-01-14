@@ -32,7 +32,7 @@ import core.time;
 class Http
 {
 	package sfHttp* sfPtr;
-	
+
 	///Default constructor
 	this()
 	{
@@ -45,14 +45,14 @@ class Http
 	///
 	///Params:
     ///		host = Web server to connect to.
-    ///		port = Port to use for connection. 
+    ///		port = Port to use for connection.
 	this(string host, ushort port = 0)
 	{
 		import dsfml.system.string;
 		sfPtr = sfHttp_create();
-		sfHttp_setHost(sfPtr, toStringz(host),port);
+		sfHttp_setHost(sfPtr, host.ptr, host.length ,port);
 	}
-	
+
 	///Destructor
 	~this()
 	{
@@ -60,18 +60,18 @@ class Http
 		mixin(destructorOutput);
 		sfHttp_destroy(sfPtr);
 	}
-	
+
 	///Set the target host.
 	///
 	///This function just stores the host address and port, it doesn't actually connect to it until you send a request. The port has a default value of 0, which means that the HTTP client will use the right port according to the protocol used (80 for HTTP, 443 for HTTPS). You should leave it like this unless you really need a port other than the standard one, or use an unknown protocol.
 	///
 	///Params:
     ///		host = Web server to connect to.
-    ///		port = Port to use for connection. 
+    ///		port = Port to use for connection.
 	void setHost(string host, ushort port = 0)
 	{
 		import dsfml.system.string;
-		sfHttp_setHost(sfPtr, toStringz(host),port);
+		sfHttp_setHost(sfPtr, host.ptr, host.length,port);
 	}
 
 	///Send a HTTP request and return the server's response.
@@ -85,19 +85,23 @@ class Http
 	{
 		return new Response(sfHttp_sendRequest(sfPtr,request.sfPtrRequest,timeout.total!"usecs"));
 	}
-	
-	///Define a HTTP request. 
+
+	///Define a HTTP request.
 	static class Request
 	{
-		///Enumerate the available HTTP methods for a request. 
+		///Enumerate the available HTTP methods for a request.
 		enum Method
 		{
-			///Request in get mode, standard method to retrieve a page. 
+			///Request in get mode, standard method to retrieve a page.
 			Get,
 			///Request in post mode, usually to send data to a page.
 			Post,
-			///Request a page's header only. 
-			Head
+			///Request a page's header only.
+			Head,
+			///Request in put mode, useful for a REST API
+			Put,
+			///Request in delete mode, useful for a REST API
+			Delete
 		}
 
 		package sfHttpRequest* sfPtrRequest;
@@ -112,11 +116,11 @@ class Http
 		{
 			import dsfml.system.string;
 			sfPtrRequest = sfHttpRequest_create();
-			sfHttpRequest_setUri(sfPtrRequest, toStringz(uri));
+			sfHttpRequest_setUri(sfPtrRequest, uri.ptr, uri.length);
 			sfHttpRequest_setMethod(sfPtrRequest, method);
-			sfHttpRequest_setBody(sfPtrRequest,toStringz(requestBody));
+			sfHttpRequest_setBody(sfPtrRequest, requestBody.ptr, requestBody.length);
 		}
-		
+
 		///Destructor
 		~this()
 		{
@@ -134,7 +138,7 @@ class Http
 		void setBody(string requestBody)
 		{
 			import dsfml.system.string;
-			sfHttpRequest_setBody(sfPtrRequest,toStringz(requestBody));
+			sfHttpRequest_setBody(sfPtrRequest, requestBody.ptr, requestBody.length);
 		}
 
 		///Set the value of a field.
@@ -144,10 +148,10 @@ class Http
 		///Params:
     	///		field = Name of the field to set.
     	///		value = Value of the field.
-		void setField(string feild, string value)
+		void setField(string field, string value)
 		{
 			import dsfml.system.string;
-			sfHttpRequest_setField(sfPtrRequest,toStringz(feild),toStringz(value));
+			sfHttpRequest_setField(sfPtrRequest, field.ptr, field.length , value.ptr, value.length);
 		}
 
 		///Set the HTTP version for the request.
@@ -172,7 +176,7 @@ class Http
 		{
 			sfHttpRequest_setMethod(sfPtrRequest,method);
 		}
-		
+
 		///Set the requested URI.
 		///
 		///The URI is the resource (usually a web page or a file) that you want to get or post. The URI is "/" (the root page) by default.
@@ -182,10 +186,10 @@ class Http
 		void setUri(string uri)
 		{
 			import dsfml.system.string;
-			sfHttpRequest_setUri(sfPtrRequest,toStringz(uri));
+			sfHttpRequest_setUri(sfPtrRequest, uri.ptr, uri.length);
 		}
 	}
-	
+
 	///Define a HTTP response.
 	class Response
 	{
@@ -219,7 +223,7 @@ class Http
 
 			InvalidResponse = 1000,
 			ConnectionFailed = 1001
-			
+
 		}
 
 		package sfHttpResponse* sfPtrResponse;
@@ -247,10 +251,10 @@ class Http
     	///		field = Name of the field to get.
     	///
 		///Returns: Value of the field, or empty string if not found.
-		string getField(string field)
+		string getField(const(char)[] field)
 		{
 			import dsfml.system.string;
-			return dsfml.system.string.toString(sfHttpResponse_getField(sfPtrResponse,toStringz(field)));
+			return dsfml.system.string.toString(sfHttpResponse_getField(sfPtrResponse, field.ptr, field.length));
 		}
 
 		///Get the major HTTP version number of the response.
@@ -260,15 +264,15 @@ class Http
 		{
 			return sfHttpResponse_getMajorVersion(sfPtrResponse);
 		}
-		
-		///Get the minor HTTP version number of the response. 
+
+		///Get the minor HTTP version number of the response.
 		///
 		///Returns: Minor HTTP version number.
 		uint getMinorHttpVersion()
 		{
 			return sfHttpResponse_getMinorVersion(sfPtrResponse);
 		}
-		
+
 		///Get the response status code.
 		///
 		///The status code should be the first thing to be checked after receiving a response, it defines whether it is a success, a failure or anything else (see the Status enumeration).
@@ -286,13 +290,13 @@ unittest
 	version(DSFML_Unittest_Network)
 	{
 		import std.stdio;
-		
+
 		writeln("Unittest for Http");
 
 		auto http = new Http();
 
 		http.setHost("http://www.sfml-dev.org");
-		
+
 		// Prepare a request to get the 'features.php' page
 		auto request = new Http.Request("learn.php");
 
@@ -309,7 +313,7 @@ unittest
 		else
 		{
 			writeln("Error: ", status);
-		}   
+		}
 		writeln();
 	}
 }
@@ -322,71 +326,71 @@ struct sfHttp;
 
 ///Create a new HTTP request
 sfHttpRequest* sfHttpRequest_create();
-	
-	
+
+
 ///Destroy a HTTP request
 void sfHttpRequest_destroy(sfHttpRequest* httpRequest);
-	
-	
+
+
 ///Set the value of a header field of a HTTP request
-void sfHttpRequest_setField(sfHttpRequest* httpRequest, const(char)* field, const(char)* value);
-	
-	
+void sfHttpRequest_setField(sfHttpRequest* httpRequest, const(char)* field, size_t fieldLength, const(char)* value, size_t valueLength);
+
+
 ///Set a HTTP request method
 void sfHttpRequest_setMethod(sfHttpRequest* httpRequest, int method);
-	
-	
+
+
 ///Set a HTTP request URI
-void sfHttpRequest_setUri(sfHttpRequest* httpRequest, const(char)* uri);
-	
-	
+void sfHttpRequest_setUri(sfHttpRequest* httpRequest, const(char)* uri, size_t length);
+
+
 ///Set the HTTP version of a HTTP request
 void sfHttpRequest_setHttpVersion(sfHttpRequest* httpRequest,uint major, uint minor);
-	
-	
+
+
 ///Set the body of a HTTP request
-void sfHttpRequest_setBody(sfHttpRequest* httpRequest, const(char)* ody);
-	
-	
+void sfHttpRequest_setBody(sfHttpRequest* httpRequest, const(char)* ody, size_t length);
+
+
 //HTTP Response Functions
-	
+
 ///Destroy a HTTP response
 void sfHttpResponse_destroy(sfHttpResponse* httpResponse);
-	
-	
+
+
 ///Get the value of a field of a HTTP response
-const(char)* sfHttpResponse_getField(const sfHttpResponse* httpResponse, const(char)* field);
-	
-	
+const(char)* sfHttpResponse_getField(const sfHttpResponse* httpResponse, const(char)* field, size_t length);
+
+
 ///Get the status code of a HTTP reponse
 Http.Response.Status sfHttpResponse_getStatus(const sfHttpResponse* httpResponse);
-	
-	
+
+
 ///Get the major HTTP version number of a HTTP response
 uint sfHttpResponse_getMajorVersion(const sfHttpResponse* httpResponse);
-	
-	
+
+
 ///Get the minor HTTP version number of a HTTP response
 uint sfHttpResponse_getMinorVersion(const sfHttpResponse* httpResponse);
-	
-	
+
+
 ///Get the body of a HTTP response
 const(char)* sfHttpResponse_getBody(const sfHttpResponse* httpResponse);
-	
-	
+
+
 //HTTP Functions
-	
+
 ///Create a new Http object
 sfHttp* sfHttp_create();
-	
-	
+
+
 ///Destroy a Http object
 void sfHttp_destroy(sfHttp* http);
-	
-	
+
+
 ///Set the target host of a HTTP object
-void sfHttp_setHost(sfHttp* http, const(char)* host, ushort port);
-	
-	
+void sfHttp_setHost(sfHttp* http, const(char)* host, size_t length, ushort port);
+
+
 ///Send a HTTP request and return the server's response.
 sfHttpResponse* sfHttp_sendRequest(sfHttp* http, const(sfHttpRequest)* request, long timeout);

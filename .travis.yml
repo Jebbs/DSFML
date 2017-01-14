@@ -17,11 +17,15 @@ addons:
       - libpthread-stubs0-dev
       - libsndfile1-dev
       - libx11-dev
+      - libx11-xcb-dev
       - libxrandr-dev
+      - libxcb-image0-dev
+      - libxcb-randr0-dev
+      - libudev-dev
+      - libvorbis-dev
+      - libflac-dev
 
-d: 
- - dmd-2.071.0
- - dmd-2.070.2
+d:
  - dmd-2.069.2
  - dmd-2.068.2
  - dmd-2.067.1
@@ -29,9 +33,6 @@ d:
  - gdc-5.2.0
  - gdc-4.9.3
  - gdc-4.8.2
- - ldc-1.0.0-alpha1
- - ldc-0.17.1
- - ldc-0.17.0
  - ldc-0.16.1
  - ldc-0.16.0
  - ldc-0.15.1
@@ -49,7 +50,7 @@ matrix:
 #Build and install DSFMLC
 install:
   - cd $HOME
-  - git clone --depth=1 https://github.com/Jebbs/DSFMLC.git
+  - git clone --depth=1 --branch 2.4 https://github.com/jebbs/DSFMLC.git
   - cd DSFMLC
   - cmake .
   - make -j2
@@ -57,8 +58,6 @@ install:
   - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/DSFMLC/lib
   - cd $TRAVIS_BUILD_DIR
 
-script: 
+script:
   - ${DMD} build.d
   - ./build -unittest
-
-

@@ -1,2 +1,10 @@
 #Ignore these things because they are annoying
 *.DS_Store
+*.obj
+*.o
+lib/
+*.exe
+CMakeFiles/
+*.cmake
+Makefile
+CMakeCache.txt

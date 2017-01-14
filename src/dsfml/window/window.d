@@ -76,7 +76,7 @@ class Window
 		sfWindow_destroy(sfPtr);
 		m_needsToDelete = false;
 	}
-	
+
 	//TODO: Reduce to one constructor with a template parameter for the string types. Use sfWindow_createUnicode in case it has unicode in the title.
 
 	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
@@ -92,11 +92,9 @@ class Window
 	///  	title = Title of the window.
 	///   	style = Window style.
 	///    	settings = Additional settings for the underlying OpenGL context.
-	this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 		if (is(T == dchar)||is(T == wchar)||is(T == char))
 	{
-		import dsfml.system.string;
-
 		this();
 		create(mode, title, style, settings);
 	}
@@ -110,12 +108,12 @@ class Window
 	///Params:
     ///		handle = Platform-specific handle of the control.
     ///		settings = Additional settings for the underlying OpenGL context.
-	this(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
+	this(WindowHandle handle, ContextSettings settings = ContextSettings.init)
 	{
 		this();
 		create(handle, settings);
 	}
-	
+
 	~this()
 	{
 		import dsfml.system.config;
@@ -138,7 +136,7 @@ class Window
 			sfWindow_setPosition(sfPtr,newPosition.x, newPosition.y);
 			return newPosition;
 		}
-		
+
 		Vector2i position()
 		{
 			Vector2i temp;
@@ -146,7 +144,7 @@ class Window
 			return temp;
 		}
 	}
-	
+
 	///Get's or set's the window's size.
 	@property
 	{
@@ -177,6 +175,20 @@ class Window
 		bool toReturn = sfWindow_setActive(sfPtr, active);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
+	}
+
+	///Request the current window to be made the active foreground window.
+	void requestFocus()
+	{
+		sfWindow_requestFocus(sfPtr);
+	}
+
+	///Check whether the window has the input focus
+	///
+	///Returns: True if the window has focus, false otherwise
+	bool hasFocus() const
+	{
+		return sfWindow_hasFocus(sfPtr);
 	}
 
 	///Limit the framerate to a maximum fixed frequency.
@@ -248,28 +260,30 @@ class Window
 	///
 	///Params:
     ///		title = New title.
-	void setTitle(string newTitle)
+	void setTitle(const(char)[] newTitle)
 	{
 		import dsfml.system.string;
-		sfWindow_setUnicodeTitle(sfPtr, toStringz(stringConvert!(char, dchar)(newTitle)));
+
+		auto convertedTitle = stringConvert!(char, dchar)(newTitle);
+		sfWindow_setUnicodeTitle(sfPtr, convertedTitle.ptr, convertedTitle.length);
 	}
 	///Change the title of the window.
 	///
 	///Params:
     ///		title = New title.
-	void setTitle(wstring newTitle)
+	void setTitle(const(wchar)[] newTitle)
 	{
 		import dsfml.system.string;
-		sfWindow_setUnicodeTitle(sfPtr, toStringz(stringConvert!(wchar, dchar)(newTitle)));
+		auto convertedTitle = stringConvert!(wchar, dchar)(newTitle);
+		sfWindow_setUnicodeTitle(sfPtr, convertedTitle.ptr, convertedTitle.length);
 	}
 	///Change the title of the window.
 	///
 	///Params:
     ///		title = New title.
-	void setTitle(dstring newTitle)
+	void setTitle(const(dchar)[] newTitle)
 	{
-		import dsfml.system.string;
-		sfWindow_setUnicodeTitle(sfPtr, toStringz(newTitle));
+		sfWindow_setUnicodeTitle(sfPtr, newTitle.ptr, newTitle.length);
 	}
 
 	///Show or hide the window.
@@ -282,7 +296,7 @@ class Window
 	{
 		sfWindow_setVisible(sfPtr,visible);
 	}
-	
+
 	///Enable or disable vertical synchronization.
 	///
 	///Activating vertical synchronization will limit the number of frames displayed to the refresh rate of the monitor. This can avoid some visual artifacts, and limit the framerate to a good value (but not constant across different computers).
@@ -337,10 +351,11 @@ class Window
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	void create(VideoMode mode, string title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
-		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(char,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		auto convertedTitle = stringConvert!(char,dchar)(title);
+		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///Create (or recreate) the window.
@@ -348,10 +363,11 @@ class Window
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	void create(VideoMode mode, wstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	void create(VideoMode mode, const(wchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
-		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(stringConvert!(wchar,dchar)(title)), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		auto convertedTitle = stringConvert!(wchar,dchar)(title);
+		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 	///Create (or recreate) the window.
@@ -359,10 +375,10 @@ class Window
 	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
 	///
 	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	void create(VideoMode mode, dstring title, Style style = Style.DefaultStyle, ref const(ContextSettings) settings = ContextSettings.Default)
+	void create(VideoMode mode, const(dchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
-		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, toStringz(title), style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
+		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, title.ptr, title.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
@@ -371,7 +387,7 @@ class Window
 	///Use this function if you want to create an OpenGL rendering area into an already existing control. If the window was already created, it closes it first.
 	///
 	///The second parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	void create(WindowHandle handle, ref const(ContextSettings) settings = ContextSettings.Default)
+	void create(WindowHandle handle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
 		sfWindow_createFromHandle(sfPtr, handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
@@ -398,7 +414,7 @@ class Window
 
 	///Pop the event on top of the event queue, if any, and return it.
 	///
-	///This function is not blocking: if there's no pending event then it will return false and leave event unmodified. Note that more than one event may be present in the event queue, thus you should always call this function in a loop to make sure that you process every pending event. 
+	///This function is not blocking: if there's no pending event then it will return false and leave event unmodified. Note that more than one event may be present in the event queue, thus you should always call this function in a loop to make sure that you process every pending event.
 	///
 	///Params:
     ///		event = Event to be returned.
@@ -408,10 +424,10 @@ class Window
 	{
 		return (sfWindow_pollEvent(sfPtr, &event));
 	}
-	
+
 	///Wait for an event and return it.
 	///
-	///This function is blocking: if there's no pending event then it will wait until an event is received. After this function returns (and no error occured), the event object is always valid and filled properly. This function is typically used when you have a thread that is dedicated to events handling: you want to make this thread sleep as long as no new event is received. 
+	///This function is blocking: if there's no pending event then it will wait until an event is received. After this function returns (and no error occured), the event object is always valid and filled properly. This function is typically used when you have a thread that is dedicated to events handling: you want to make this thread sleep as long as no new event is received.
 	///
 	///Params:
     ///		event = Event to be returned.
@@ -424,7 +440,7 @@ class Window
 
 	//TODO: Clean this shit up. The names are so bad. :(
 
-	//Gives a way for RenderWindow to send its mouse position 
+	//Gives a way for RenderWindow to send its mouse position
 	protected Vector2i getMousePosition()const
 	{
 		Vector2i temp;
@@ -456,7 +472,7 @@ class Window
 		return window.sfPtr;
 	}
 
-	
+
 }
 
 unittest
@@ -540,7 +556,7 @@ private extern(C):
 	sfWindow* sfWindow_construct();
 
 	//Construct a new window (with a UTF-32 title)
-	void sfWindow_createFromSettings(sfWindow* window, uint width, uint height, uint bitsPerPixel, const(dchar)* title, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
+	void sfWindow_createFromSettings(sfWindow* window, uint width, uint height, uint bitsPerPixel, const(dchar)* title, size_t titleLength, int style, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
 
 	//Construct a window from an existing control
 	void sfWindow_createFromHandle(sfWindow* window, WindowHandle handle, uint depthBits, uint stencilBits, uint antialiasingLevel, uint majorVersion, uint minorVersion);
@@ -576,10 +592,10 @@ private extern(C):
 	void sfWindow_setSize(sfWindow* window, uint width, uint height);
 
 	//Change the title of a window
-	void sfWindow_setTitle(sfWindow* window, const(char)* title);
+	void sfWindow_setTitle(sfWindow* window, const(char)* title, size_t length);
 
 	//Change the title of a window (with a UTF-32 string)
-	void sfWindow_setUnicodeTitle(sfWindow* window, const(dchar)* title);
+	void sfWindow_setUnicodeTitle(sfWindow* window, const(dchar)* title, size_t length);
 
 	//Change a window's icon
 	void sfWindow_setIcon(sfWindow* window, uint width, uint height, const(ubyte)* pixels);
@@ -599,6 +615,12 @@ private extern(C):
 	//Activate or deactivate a window as the current target for OpenGL rendering
 	 bool sfWindow_setActive(sfWindow* window, bool active);
 
+	 //Request the current window to be made the active foreground window.
+	 void sfWindow_requestFocus(sfWindow* window);
+
+	 //Check whether the window has the input focus
+	 bool sfWindow_hasFocus(const(sfWindow)* window);
+
 	//Display on screen what has been rendered to the window so far
 	 void sfWindow_display(sfWindow* window);
 
@@ -607,8 +629,8 @@ private extern(C):
 
 	//Change the joystick threshold
 	 void sfWindow_setJoystickThreshold(sfWindow* window, float threshold);
-	
-	
+
+
 	//Get the OS-specific handle of the window
 	 WindowHandle sfWindow_getSystemHandle(const(sfWindow)* window);
 

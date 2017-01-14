@@ -21,7 +21,7 @@ module dsfml.audio.soundbuffer;
 
 import core.time;
 
-import dsfml.audio.soundfile;
+import dsfml.audio.inputsoundfile;
 import dsfml.audio.sound;
 
 import dsfml.system.inputstream;
@@ -39,17 +39,17 @@ import dsfml.system.err;
 
 /++
  + Storage for audio samples defining a sound.
- + 
+ +
  + A sample is a 16 bits signed integer that defines the amplitude of the sound at a given time. The sound is then restituted by playing these samples at a high rate (for example, 44100 samples per second is the standard rate used for playing CDs). In short, audio samples are like texture pixels, and a SoundBuffer is similar to a Texture.
- + 
+ +
  + A sound buffer can be loaded from a file (see loadFromFile() for the complete list of supported formats), from memory, from a custom stream (see InputStream) or directly from an array of samples. It can also be saved back to a file.
- + 
- + Sound buffers alone are not very useful: they hold the audio data but cannot be played. To do so, you need to use the sf::Sound class, which provides functions to play/pause/stop the sound as well as changing the way it is outputted (volume, pitch, 3D position, ...). 
- + 
+ +
+ + Sound buffers alone are not very useful: they hold the audio data but cannot be played. To do so, you need to use the sf::Sound class, which provides functions to play/pause/stop the sound as well as changing the way it is outputted (volume, pitch, 3D position, ...).
+ +
  + This separation allows more flexibility and better performances: indeed a sf::SoundBuffer is a heavy resource, and any operation on it is slow (often too slow for real-time applications). On the other side, a sf::Sound is a lightweight object, which can use the audio data of a sound buffer and change the way it is played without actually modifying that data. Note that it is also possible to bind several Sound instances to the same SoundBuffer.
- + 
+ +
  + It is important to note that the Sound instance doesn't copy the buffer that it uses, it only keeps a reference to it. Thus, a SoundBuffer must not be destructed while it is used by a Sound (i.e. never write a function that uses a local SoundBuffer instance for loading a sound).
- + 
+ +
  + See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1SoundBuffer.php#details
  + Authors: Laurent Gomila, Jeremy DeHaan
  +/
@@ -70,15 +70,15 @@ class SoundBuffer
 		mixin(destructorOutput);
 		sfSoundBuffer_destroy(sfPtr);
 	}
-	
+
 	//TODO: copy constructor?
 	//So many possible properties....
 
-	/** 
+	/**
 	 * Get the array of audio samples stored in the buffer.
-	 * 
+	 *
 	 *  The format of the returned samples is 16 bits signed integer (sf::Int16). The total number of samples in this array is given by the getSampleCount() function.
-	 * 
+	 *
 	 *  Returns: Read-only pointer to the array of sound samples
 	 */
 	const(short[]) getSamples() const
@@ -95,9 +95,9 @@ class SoundBuffer
 
 	/**
 	 * Get the sample rate of the sound.
-	 * 
+	 *
 	 * The sample rate is the number of samples played per second. The higher, the better the quality (for example, 44100 samples/s is CD quality).
-	 * 
+	 *
 	 * Returns: Sample rate (number of samples per second)
 	 */
 	uint getSampleRate() const
@@ -107,9 +107,9 @@ class SoundBuffer
 
 	/**
 	 * Get the number of channels used by the sound.
-	 * 
+	 *
 	 * If the sound is mono then the number of channels will be 1, 2 for stereo, etc.
-	 * 
+	 *
 	 * Returns: Number of channels
 	 */
 	uint getChannelCount() const
@@ -119,7 +119,7 @@ class SoundBuffer
 
 	/**
 	 * Get the total duration of the sound.
-	 * 
+	 *
 	 * Returns: Sound duration
 	 */
 	Duration getDuration() const
@@ -130,18 +130,18 @@ class SoundBuffer
 
 	/**
 	 * Load the sound buffer from a file.
-	 * 
+	 *
 	 * Here is a complete list of all the supported audio formats: ogg, wav, flac, aiff, au, raw, paf, svx, nist, voc, ircam, w64, mat4, mat5 pvf, htk, sds, avr, sd2, caf, wve, mpc2k, rf64.
-	 * 
+	 *
 	 * Params:
 	 * 		filename =	Path of the sound file to load
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed
 	 */
-	bool loadFromFile(string filename)
+	bool loadFromFile(const(char)[] filename)
 	{
     	import dsfml.system.string;
-		if(sfSoundBuffer_loadFromFile(sfPtr, toStringz(filename)))
+		if(sfSoundBuffer_loadFromFile(sfPtr, filename.ptr, filename.length))
 		{
 		    return true;
 		}
@@ -154,12 +154,12 @@ class SoundBuffer
 
 	/**
 	 * Load the sound buffer from a file in memory.
-	 * 
+	 *
 	 * Here is a complete list of all the supported audio formats: ogg, wav, flac, aiff, au, raw, paf, svx, nist, voc, ircam, w64, mat4, mat5 pvf, htk, sds, avr, sd2, caf, wve, mpc2k, rf64.
-	 * 
+	 *
 	 * Params:
 	 * 		data =	The array of data
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed
 	 */
 	bool loadFromMemory(const(void)[] data)
@@ -178,16 +178,16 @@ class SoundBuffer
 
 	/*
 	 * Load the sound buffer from a custom stream.
-	 * 
+	 *
 	 * Here is a complete list of all the supported audio formats: ogg, wav, flac, aiff, au, raw, paf, svx, nist, voc, ircam, w64, mat4, mat5 pvf, htk, sds, avr, sd2, caf, wve, mpc2k, rf64.
-	 * 
+	 *
 	 * Params:
 	 * 		stream =	Source stream to read from
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed
 	 */
 	bool loadFromStream(InputStream stream)
-	{	
+	{
 		if(sfSoundBuffer_loadFromStream(sfPtr, new SoundBufferStream(stream)))
 		{
 			return true;
@@ -202,14 +202,14 @@ class SoundBuffer
 
 	/**
 	 * Load the sound buffer from an array of audio samples.
-	 * 
+	 *
 	 * The assumed format of the audio samples is 16 bits signed integer (short).
-	 * 
+	 *
 	 * Params:
 	 * 		samples =	Array of samples in memory
 	 * 		channelCount =	Number of channels (1 = mono, 2 = stereo, ...)
 	 * 		sampleRate =	Sample rate (number of samples to play per second)
-	 * 
+	 *
 	 * Returns: True if loading succeeded, false if it failed
 	 */
 	bool loadFromSamples(const(short[]) samples, uint channelCount, uint sampleRate)
@@ -228,18 +228,18 @@ class SoundBuffer
 
 	/**
 	 * Save the sound buffer to an audio file.
-	 * 
+	 *
 	 * Here is a complete list of all the supported audio formats: ogg, wav, flac, aiff, au, raw, paf, svx, nist, voc, ircam, w64, mat4, mat5 pvf, htk, sds, avr, sd2, caf, wve, mpc2k, rf64.
-	 * 
+	 *
 	 * Params:
 	 * 		filename =	Path of the sound file to write
-	 * 
+	 *
 	 * Returns: True if saving succeeded, false if it failed
 	 */
-	bool saveToFile(string filename)
+	bool saveToFile(const(char)[] filename)
 	{
 		import dsfml.system.string;
-		if(sfSoundBuffer_saveToFile(sfPtr, toStringz(filename)))
+		if(sfSoundBuffer_saveToFile(sfPtr, filename.ptr, filename.length))
 		{
 			return true;
 		}
@@ -250,7 +250,7 @@ class SoundBuffer
 			return false;
 		}
 	}
-	
+
 
 }
 
@@ -288,11 +288,11 @@ unittest
 private extern(C++) interface sfmlInputStream
 {
 	long read(void* data, long size);
-		
+
 	long seek(long position);
-		
+
 	long tell();
-		
+
 	long getSize();
 }
 
@@ -315,12 +315,12 @@ private class SoundBufferStream:sfmlInputStream
 	{
 		return myStream.seek(position);
 	}
-	
+
 	extern(C++)long tell()
 	{
 		return myStream.tell();
 	}
-	
+
 	extern(C++)long getSize()
 	{
 		return myStream.getSize();
@@ -333,7 +333,7 @@ private extern(C):
 
 sfSoundBuffer* sfSoundBuffer_construct();
 
-bool sfSoundBuffer_loadFromFile(sfSoundBuffer* soundBuffer, const char* filename);
+bool sfSoundBuffer_loadFromFile(sfSoundBuffer* soundBuffer, const char* filename, size_t length);
 
 bool sfSoundBuffer_loadFromMemory(sfSoundBuffer* soundBuffer, const void* data, size_t sizeInBytes);
 
@@ -345,7 +345,7 @@ sfSoundBuffer* sfSoundBuffer_copy(const sfSoundBuffer* soundBuffer);
 
 void sfSoundBuffer_destroy(sfSoundBuffer* soundBuffer);
 
-bool sfSoundBuffer_saveToFile(const sfSoundBuffer* soundBuffer, const char* filename);
+bool sfSoundBuffer_saveToFile(const sfSoundBuffer* soundBuffer, const char* filename, size_t length);
 
 const(short)* sfSoundBuffer_getSamples(const sfSoundBuffer* soundBuffer);
 
