@@ -1,0 +1,4 @@
+#Ignore these things because they are annoying
+CMakeFiles/
+*.cmake
+Makefile
