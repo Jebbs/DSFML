@@ -59,7 +59,8 @@ interface InputStream
 
 unittest
 {
-	version(DSFML_Unittest_System)
+	//version(DSFML_Unittest_System)
+	version(none) //temporarily not doing this test
 	{
 		import dsfml.graphics.texture;
 		import std.stdio;
