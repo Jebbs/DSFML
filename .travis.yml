@@ -66,4 +66,4 @@ install:
 
 script:
   - ${DMD} build.d
-  - ./build -unittest
+  - ./build --unittest
