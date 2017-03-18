@@ -118,17 +118,14 @@ bool checkSwitchErrors()
     //if other Switchs are used with -all
     if(buildingAll)
     {
-        if(buildingLibs || buildingDoc || buildingInterfaceFiles || buildingUnittests)
+        if(buildingLibs || buildingDoc ||
+           buildingInterfaceFiles || buildingUnittests)
         {
-            writeln("Can't use -all with any other build switches (-lib, -doc, -import, -unittest)");
+            writeln("Can't use -all with any other build switches ",
+                    "(-lib, -doc, -import, -unittest)");
+
             return false;
         }
-
-        if(unittestLibraryLocation == "")
-        {
-            writeln("Not putting in a location for shared libraries will only work if they are in a standard location.");
-        }
-
     }
 
     return true;
@@ -137,7 +134,7 @@ bool checkSwitchErrors()
 //initialize all build settings
 void initialize()
 {
-    //Setting up our aa with our lists of files because GDC crashes when searching for them at runtime
+    //populate file lists
     fileList["system"] = ["clock", "config", "err", "inputstream", "lock",
                           "mutex", "package", "sleep", "string", "thread",
                           "vector2", "vector3"];
@@ -159,29 +156,9 @@ void initialize()
                             "drawable", "font", "glyph", "image", "package",
                             "primitivetype", "rect", "rectangleshape",
                             "renderstates", "rendertarget", "rendertexture",
-                            "renderwindow", "shader", "shape", "sprite", 
+                            "renderwindow", "shader", "shape", "sprite",
                             "text", "texture", "transform", "transformable",
                             "vertex", "vertexarray", "view"];
-
-    objectList["system"] = ["Err.cpp", "String.cpp"];
-
-    objectList["audio"] = ["Err.cpp", "InputSoundFile.cpp", "Listener.cpp",
-                           "OutputSoundFile.cpp", "Sound.cpp",
-                           "SoundBuffer.cpp", "SoundRecorder.cpp",
-                           "SoundStream.cpp"];
-
-    objectList["network"] = ["Err.cpp", "Ftp.cpp", "Http.cpp",
-                            "IpAddress.cpp", "Packet.cpp", 
-                            "SocketSelector.cpp", "TcpListener.cpp", 
-                            "TcpSocket.cpp", "UdpSocket.cpp"];
-
-    objectList["window"] = ["Context.cpp", "Err.cpp", "Joystick.cpp",
-                            "Keyboard.cpp", "Mouse.cpp", "Sensor.cpp",
-                            "Touch.cpp", "VideoMode.cpp", "Window.cpp"];
-
-    objectList["graphics"] = ["Font.cpp", "Image.cpp", "RenderTexture.cpp",
-                              "RenderWindow.cpp", "Shader.cpp", "Texture.cpp",
-                              "DText.cpp", "Text.cpp", "Transform.cpp"];
 
     archSwitch = "";
 
@@ -219,7 +196,6 @@ void initialize()
         archSwitch = "-m64";
     }
 
-
     writeln();
 }
 
@@ -230,37 +206,64 @@ void initializeDMD()
         writeln("Building for Windows with dmd");
         prefix = "";
         extension = ".lib";
+        objExt = ".obj";
 
+        //Default to 64 bit on windows because why wouldn't we?
         if(!force64Build || !force32Build)
         {
             archSwitch = " -m64";
         }
 
         makefileProgram = "nmake";
-        makefileType = `"NMake Makefiles"`; 
+        makefileType = `"NMake Makefiles"`;
 
-        //string linkToSFMLLibs = "-L/VERBOSE:LIB -L/LIBPATH:SFML\\lib sfml-graphics-s.lib sfml-window-s.lib sfml-audio-s.lib sfml-network-s.lib sfml-system-s.lib ";
-        //linkToSFMLLibs~= "-L/LIBPATH:lib dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib dsfmlc-network.lib dsfmlc-system.lib ";
+        string linkToSFMLLibs = "-L/LIBPATH:lib -L/LIBPATH:SFML\\lib "~
+        "-L/LIBPATH:SFML\\extlibs\\libs-msvc-universal\\x64 ";
 
-        string linkToSFMLLibs = "-L/LIBPATH:lib dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib dsfmlc-network.lib dsfmlc-system.lib ";
-        linkToSFMLLibs~= "-L/VERBOSE:LIB -L/LIBPATH:SFML\\lib sfml-graphics-s.lib sfml-window-s.lib sfml-audio-s.lib sfml-network-s.lib sfml-system-s.lib ";
+        linlToSFMLLibs ~=
+        "dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib " ~
+        "dsfmlc-network.lib dsfmlc-system.lib ";
 
+        linkToSFMLLibs~=
+        "sfml-graphics-s.lib sfml-window-s.lib sfml-audio-s.lib "~
+        "sfml-network-s.lib sfml-system-s.lib ";
 
-        linkToSFMLLibs~= "-L/LIBPATH:SFML\\extlibs\\libs-msvc-universal\\x64 opengl32.lib gdi32.lib flac.lib freetype.lib jpeg.lib ogg.lib openal32.lib vorbis.lib vorbisenc.lib vorbisfile.lib ws2_32.lib winmm.lib user32.lib";
-
-        objExt = ".obj";
+        linkToSFMLLibs~=
+        "opengl32.lib gdi32.lib flac.lib freetype.lib jpeg.lib ogg.lib "~
+        "openal32.lib vorbis.lib vorbisenc.lib vorbisfile.lib ws2_32.lib "~
+        "winmm.lib user32.lib ";
     }
     else version(linux)
     {
         writeln("Building for Linux with dmd");
         prefix = "lib";
         extension = ".a";
+        objExt = ".o";
+
+        makefileProgram = "make";
+        makefileType = `"Unix Makefiles"`;
+
+
+        string linkToSFMLLibs = "-L-Llib -L-LSFML/lib ";
+
+        linkToSFMLLibs ~=
+        "-L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-audio " ~
+        "-L-ldsfmlc-network -L-ldsfmlc-system ";
+
+        linkToSFMLLibs ~=
+        "-L-lsfml-graphics-s -L-lsfml-window-s -L-lsfml-audio-s "~
+        "-L-lsfml-network-s -L-lsfml-system-s ";
+
+        linkToSFMLLibs ~=
+        "-L-lstdc++ -L-lFLAC -L-logg -L-lvorbisfile -L-lvorbisenc -L-lvorbis "~
+        "-L-lopenal -L-lX11 -L-ludev -L-lGL -L-lXrandr -L-ljpeg -L-lfreetype";
     }
     else
     {
         writeln("Building for OSX with dmd");
         prefix = "lib";
         extension = ".a";
+        objExt = ".o";
     }
 
     singleFileSwitches = archSwitch ~ " -c -O -release -inline -Isrc";
@@ -269,7 +272,7 @@ void initializeDMD()
     //interfaceCompilerSwitches = " -c -o- -op -H -Hd"~quoteString(interfaceDirectory);
 
     unittestCompilerSwitches ="-main -unittest -version=DSFML_Unittest_System -version=DSFML_Unittest_Window -version=DSFML_Unittest_Graphics -version=DSFML_Unittest_Audio -version=DSFML_Unittest_Network "~linkToSFMLLibs;
-
+    //unittestCompilerSwitches ="-main -unittest -version=DSFML_Unittest_Network "~linkToSFMLLibs;
     //libCompilerSwitches = "-lib -O -release -inline -I"~quoteString(impDirectory);
     //docCompilerSwitches = "-c -o- -op -D -Dd"~quoteString(docDirectory);
     //interfaceCompilerSwitches = " -c -o- -op -H -Hd"~quoteString(interfaceDirectory);
@@ -302,7 +305,7 @@ bool buildLibs()
         //oh shit, what up?
         return false;
     }
-    
+
     writeln();
 
     //go trhough each module directory, build d source files if need be,
@@ -315,7 +318,8 @@ bool buildLibs()
             continue;
         }
 
-        int numberOfFiles = fileList[theModule].length + 1; //includes lib file
+        //+1 for lib file
+        size_t numberOfFiles = fileList[theModule].length + 1;
         int currentFile = 1;
         string files = "";
         foreach (string name; fileList[theModule])
@@ -323,7 +327,8 @@ bool buildLibs()
             string objectFile = "src/dsfml/" ~theModule~"/"~name~objExt;
             string dFile = "src/dsfml/" ~theModule~"/"~name~".d";
 
-            string buildCommand = compiler~dFile~singleFileSwitches~" -of" ~objectFile;
+            string buildCommand = compiler~dFile~singleFileSwitches~
+                                  " -of" ~objectFile;
 
             if(needToBuild(objectFile, dFile))
             {
@@ -336,26 +341,19 @@ bool buildLibs()
                     return false;
                 }
             }
-            
+
             files~= objectFile ~ " ";
             currentFile++;
         }
 
-        string cppObjDir = "src/DSFMLC/" ~ toUpper(theModule[0]) ~ theModule[1..$] ~ "/CMakeFiles/dsfmlc-"~theModule~".dir";
-
-
-        //foreach(string name; objectList[theModule])
-        //{
-        //    files~= cppObjDir~"/"~name ~ objExt ~ " ";
-        //}
 
         string buildCommand = compiler ~ files;
 
-        version(DigitalMars) 
+        version(DigitalMars)
         {
             //build the static libs directly
-            buildCommand ~= " -lib lib/dsfmlc-" ~theModule~extension ~ " -oflib/dsfml-"~theModule~extension~archSwitch;
-            //buildCommand ~= " -L/VERBOSE:LIB" ~ " " ~archSwitch;
+            buildCommand ~= " -lib lib/"~prefix~"dsfmlc-"~theModule~extension ~
+            " -oflib/dsfml-"~theModule~extension~archSwitch;
         }
         else version(GNU)
         {
@@ -367,7 +365,7 @@ bool buildLibs()
             //buildCommand ~= " -of="~quoteString(libDirectory~prefix~"dsfml-"~theModule~extension);
         }
 
-        
+
         //always rebuilds the lib in case the cpp files were re-built
         auto status = executeShell(buildCommand);
 
@@ -391,13 +389,14 @@ bool buildUnittests()
     foreach(theModule; modules)
     {
         if(!exists("SFML/lib/"~prefix~"sfml-"~theModule~"-s"~extension))
-        {   
-            writeln("SFML/lib/"~prefix~"sfml-"~theModule~extension, " not found.");
-            writeln("Building unit tests requires SFML libs in dsfml/SFML/lib/ directory.");
+        {
+            writeln("SFML/lib/"~prefix~"sfml-"~theModule~extension,
+                    " not found.");
+            writeln("Building unit tests requires SFML libs in ",
+                    "dsfml/SFML/lib/ directory.");
             return false;
         }
     }
-
 
     if(!exists("CMakeCache.txt"))
     {
@@ -421,27 +420,19 @@ bool buildUnittests()
 
     foreach(theModule;modules)
     {
-        //this doesn't need to be done at runtime, fix
-        string cppObjDir = "src/DSFMLC/" ~ toUpper(theModule[0]) ~ theModule[1..$] ~ "/CMakeFiles/dsfmlc-"~theModule~".dir";
-
         foreach(string name; fileList[theModule])
         {
             files~= "src/dsfml/" ~theModule~"/"~name~".d ";
         }
-
-        //foreach(string name; objectList[theModule])
-        //{
-        //    files~= cppObjDir~"/"~name ~ objExt ~ " ";
-        //}
     }
 
     string buildCommand = compiler;
 
-        version(DigitalMars) 
+        version(DigitalMars)
         {
             //build the static libs directly
-            buildCommand ~= unittestCompilerSwitches~archSwitch~" "~files~"-ofunittest/unittest.exe";
-            //buildCommand ~= " -L/VERBOSE:LIB" ~ " " ~archSwitch;
+            buildCommand ~= unittestCompilerSwitches~archSwitch~" "~files;
+            buildCommand ~= "-ofunittest/unittest";
         }
         else version(GNU)
         {
@@ -453,12 +444,17 @@ bool buildUnittests()
             //buildCommand ~= " -of="~quoteString(libDirectory~prefix~"dsfml-"~theModule~extension);
         }
 
-        writeln(buildCommand);
+        version(windows)
+        {
+            buildCommand ~= ".exe";
+        }
+
+        //writeln(buildCommand);
 
 
         //std.file.write("cmdFile")
         //remove(deleteme);
-        
+
 
 
         auto status = executeShell(buildCommand);
@@ -473,19 +469,21 @@ bool buildUnittests()
 }
 
 /**
+ * Display the progress as a percentage given the current file is next.
  *
- * 
+ * Display example:
+ * [ 20%] Building dsfml/src/system/clock.d
  */
-void progressOutput(int current, int total, string file)
+void progressOutput(int current, size_t total, string file)
 {
-    int percentage = (current*100)/total;
+    size_t percentage = (current*100)/total;
 
-    writefln("[%3d%%] Building %s", percentage, file);
+    writefln("[%3u%%] Building %s", percentage, file);
 }
 
 /**
  * Checks the timestamps on the object file and its associated source file.
- * 
+ *
  * If the source file has been more recently updated than the object file was
  * built, or if the object file doesn't yet exist, this will return true.
  */
@@ -498,7 +496,7 @@ bool needToBuild(string objLocation, string srcLocation)
 }
 
 string singleSplitter(string haystack, char needle, ref int startPos)
-{   
+{
     int i;
     for(i = startPos; i < haystack.length; i++)
     {
@@ -521,7 +519,7 @@ string pathToMSVCToolChain()
     auto path = singleSplitter(paths, ';', start);
 
     while(path !is null)
-    {   
+    {
 
         if(canFind(path, "dmd2"))
         {
@@ -545,7 +543,7 @@ string pathToMSVCToolChain()
 }
 
 int main(string[] args)
-{   
+{
     GetoptResult optInfo;
     try
     {

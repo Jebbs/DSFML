@@ -30,9 +30,13 @@ All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license
 
 // Headers
 #ifdef _WIN32
-#include <windows.h>//flush
-#endif
+#include <windows.h>
 #include <gl/gl.h>//flush
+
+#elif __linux__
+#include <GL/gl.h>
+#endif
+
 
 #include <DSFMLC/Graphics/Texture.h>
 #include <DSFMLC/Graphics/TextureStruct.h>

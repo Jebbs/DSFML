@@ -49,14 +49,20 @@ matrix:
 
 #Build and install DSFMLC
 install:
-  - cd $HOME
-  - git clone --depth=1 --branch 2.4 https://github.com/jebbs/DSFMLC.git
-  - cd DSFMLC
-  - cmake .
-  - make -j2
-  - export LIBRARY_PATH=${HOME}/DSFMLC/lib
-  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/DSFMLC/lib
-  - cd $TRAVIS_BUILD_DIR
+#  - cd $HOME
+#  - git clone --depth=1 --branch 2.4 https://github.com/jebbs/DSFMLC.git
+#  - cd DSFMLC
+#  - cmake .
+#  - make -j2
+#  - export LIBRARY_PATH=${HOME}/DSFMLC/lib
+#  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/DSFMLC/lib
+#  - cd $TRAVIS_BUILD_DIR
+   - git submodule init
+   - git submodule update
+   - cd SFML
+   - cmake -DBUILD_SHARED_LIBS=false .
+   - make
+   - cd ..
 
 script:
   - ${DMD} build.d
