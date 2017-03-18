@@ -1,4 +1,3 @@
-#Ignore these things because they are annoying
 *.DS_Store
 *.obj
 *.o
@@ -8,3 +7,5 @@ CMakeFiles/
 *.cmake
 Makefile
 CMakeCache.txt
+libdsfml.a
+.dub/
