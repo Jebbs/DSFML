@@ -544,28 +544,42 @@ string pathToMSVCToolChain()
 
 int main(string[] args)
 {
-    GetoptResult optInfo;
-    try
+
+    static if (__VERSION__ < 2067L)
     {
-        optInfo = getopt(args,
+	    getopt(args,
         "lib", "Build static libraries.", &buildingLibs,
         "m32", "Force 32 bit building.", &force32Build,
         "m64", "Force 64 bit building.", &force64Build,
         "unittest", "Build DSFML unit test executable", &buildingUnittests
         );
     }
-    catch(GetOptException e)
+    else
     {
-        writeln(e.msg);
-        return -1;
-    }
 
-    if(optInfo.helpWanted)
-    {
-        defaultGetoptPrinter("Switch Information\n"
-        ~"Default (no switches passed) will be to build static libraries with the compiler that built this.",
-        optInfo.options);
-        return 0;
+        GetoptResult optInfo;
+        try
+        {
+            optInfo = getopt(args,
+            "lib", "Build static libraries.", &buildingLibs,
+            "m32", "Force 32 bit building.", &force32Build,
+            "m64", "Force 64 bit building.", &force64Build,
+            "unittest", "Build DSFML unit test executable", &buildingUnittests
+            );
+        }
+        catch(GetOptException e)
+        {
+            writeln(e.msg);
+            return -1;
+        }
+
+        if(optInfo.helpWanted)
+        {
+            defaultGetoptPrinter("Switch Information\n"
+            ~"Default (no switches passed) will be to build static libraries with the compiler that built this.",
+            optInfo.options);
+            return 0;
+        }
     }
 
     //default to building libs
