@@ -450,7 +450,7 @@ unittest
 
 		auto ftp = new Ftp();
 
-		auto responce = ftp.connect("ftp.microsoft.com");
+		auto responce = ftp.connect("ftp.hq.nasa.gov");//Thanks, NASA!
 
 		if(responce.isOk())
 		{
