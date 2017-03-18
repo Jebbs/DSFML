@@ -21,9 +21,9 @@ If you use this software in a product, an acknowledgment in the product document
 module dsfml.system.config;
 
 //Check to confirm compiler is at least v2.064
-static if (__VERSION__ < 2064L)
+static if (__VERSION__ < 2067L)
 {
-	static assert(0, "Please upgrade your compiler to v2.064 or later");
+	static assert(0, "Please upgrade your compiler to v2.067 or later");
 }
 
 ///DSFML version enum

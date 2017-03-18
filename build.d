@@ -25,6 +25,10 @@ import std.algorithm;
 import std.array;
 import std.getopt;
 
+static if (__VERSION__ < 2067L)
+{
+	static assert(0, "Please upgrade your compiler to v2.067 or later");
+}
 
 version(DigitalMars)
 {
@@ -545,41 +549,28 @@ string pathToMSVCToolChain()
 int main(string[] args)
 {
 
-    static if (__VERSION__ < 2067L)
+    GetoptResult optInfo;
+    try
     {
-	    getopt(args,
+        optInfo = getopt(args,
         "lib", "Build static libraries.", &buildingLibs,
         "m32", "Force 32 bit building.", &force32Build,
         "m64", "Force 64 bit building.", &force64Build,
         "unittest", "Build DSFML unit test executable", &buildingUnittests
         );
     }
-    else
+    catch(GetOptException e)
     {
+        writeln(e.msg);
+        return -1;
+    }
 
-        GetoptResult optInfo;
-        try
-        {
-            optInfo = getopt(args,
-            "lib", "Build static libraries.", &buildingLibs,
-            "m32", "Force 32 bit building.", &force32Build,
-            "m64", "Force 64 bit building.", &force64Build,
-            "unittest", "Build DSFML unit test executable", &buildingUnittests
-            );
-        }
-        catch(GetOptException e)
-        {
-            writeln(e.msg);
-            return -1;
-        }
-
-        if(optInfo.helpWanted)
-        {
-            defaultGetoptPrinter("Switch Information\n"
-            ~"Default (no switches passed) will be to build static libraries with the compiler that built this.",
-            optInfo.options);
-            return 0;
-        }
+    if(optInfo.helpWanted)
+    {
+        defaultGetoptPrinter("Switch Information\n"
+        ~"Default (no switches passed) will be to build static libraries with the compiler that built this.",
+        optInfo.options);
+        return 0;
     }
 
     //default to building libs
