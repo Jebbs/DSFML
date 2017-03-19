@@ -9,3 +9,9 @@ Makefile
 CMakeCache.txt
 libdsfml.a
 .dub/
+build
+build.exe
+unittest/unittest
+unittest/unittest.exe
+unittest/Text.png
+unittest/log.txt
