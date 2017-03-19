@@ -177,7 +177,7 @@ void initialize()
     }
     else
     {
-        //initializeLDC();
+        initializeLDC();
     }
 
     if(force32Build)
@@ -332,6 +332,85 @@ void initializeGDC()
 
 }
 
+
+void initializeLDC()
+{
+    version (Windows)
+    {
+        writeln("Building for Windows with dmd");
+        prefix = "";
+        extension = ".lib";
+        objExt = ".obj";
+
+        //Default to 64 bit on windows because why wouldn't we?
+        if(!force64Build || !force32Build)
+        {
+            archSwitch = " -m64";
+        }
+
+        makefileProgram = "nmake";
+        makefileType = `"NMake Makefiles"`;
+
+        string linkToSFMLLibs = "-L=LIBPATH:lib -L=LIBPATH:SFML\\lib "~
+        "-L=LIBPATH:SFML\\extlibs\\libs-msvc-universal\\x64 ";
+
+        linlToSFMLLibs ~=
+        "dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib " ~
+        "dsfmlc-network.lib dsfmlc-system.lib ";
+
+        linkToSFMLLibs~=
+        "sfml-graphics-s.lib sfml-window-s.lib sfml-audio-s.lib "~
+        "sfml-network-s.lib sfml-system-s.lib ";
+
+        linkToSFMLLibs~=
+        "opengl32.lib gdi32.lib flac.lib freetype.lib jpeg.lib ogg.lib "~
+        "openal32.lib vorbis.lib vorbisenc.lib vorbisfile.lib ws2_32.lib "~
+        "winmm.lib user32.lib ";
+    }
+    else version(linux)
+    {
+        writeln("Building for Linux with dmd");
+        prefix = "lib";
+        extension = ".a";
+        objExt = ".o";
+
+        makefileProgram = "make";
+        makefileType = `"Unix Makefiles"`;
+
+
+        string linkToSFMLLibs = "-L=-Llib -L=-LSFML/lib ";
+
+        linkToSFMLLibs ~=
+        "-L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio " ~
+        "-L=-ldsfmlc-network -L=-ldsfmlc-system ";
+
+        linkToSFMLLibs ~=
+        "-L=-lsfml-graphics-s -L=-lsfml-window-s -L=-lsfml-audio-s "~
+        "-L=-lsfml-network-s -L=-lsfml-system-s ";
+
+        linkToSFMLLibs ~=
+        "-L=-lstdc++ -L=-lFLAC -L=-logg -L=-lvorbisfile -L=-lvorbisenc "~
+        "-L=-lvorbis -L=-lopenal -L=-lX11 -L=-ludev -L=-lGL -L=-lXrandr "~
+        "-L=-ljpeg -L=-lfreetype";
+    }
+    else
+    {
+        writeln("Building for OSX with dmd");
+        prefix = "lib";
+        extension = ".a";
+        objExt = ".o";
+    }
+
+    singleFileSwitches = archSwitch ~ " -c -O -release -I=src";
+    libCompilerSwitches = archSwitch ~ " -lib  -I=src";
+
+    unittestCompilerSwitches =
+    "-main -unittest -d-version=DSFML_Unittest_System " ~
+    "-d-version=DSFML_Unittest_Window -d-version=DSFML_Unittest_Graphics " ~
+    "-d-version=DSFML_Unittest_Audio -d-version=DSFML_Unittest_Network "~
+    linkToSFMLLibs;
+}
+
 //build the static libraries. Returns true on successful build, false on unsuccessful build
 bool buildLibs()
 {
@@ -427,9 +506,6 @@ bool buildLibs()
         }
         else version(GNU)
         {
-
-
-
             writeln("building the library");
 
             //we want to use ar here, so we'll completely reset the build command
@@ -442,6 +518,8 @@ bool buildLibs()
         }
         else
         {
+            buildCommand ~= " -lib lib/"~prefix~"dsfmlc-"~theModule~extension ~
+            " -of=lib/"~prefix~"dsfml-"~theModule~extension~archSwitch;
             //buildCommand ~= " -of="~quoteString(libDirectory~prefix~"dsfml-"~theModule~extension);
         }
 
@@ -522,6 +600,8 @@ bool buildUnittests()
         }
         else
         {
+            buildCommand ~= unittestCompilerSwitches~archSwitch~" "~files;
+            buildCommand ~= "-of=unittest/unittest";
             //buildCommand ~= " -of="~quoteString(libDirectory~prefix~"dsfml-"~theModule~extension);
         }
 
