@@ -401,7 +401,7 @@ void initializeLDC()
         objExt = ".o";
     }
 
-    singleFileSwitches = archSwitch ~ " -c -O -release -I=src";
+    singleFileSwitches = archSwitch ~ " -c -O -release -oq -I=src";
     libCompilerSwitches = archSwitch ~ " -lib  -I=src";
 
     unittestCompilerSwitches =
