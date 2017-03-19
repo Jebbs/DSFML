@@ -4,6 +4,7 @@ os:
 
 language: d
 
+dist: trusty
 sudo: false
 
 addons:
