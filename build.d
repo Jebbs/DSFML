@@ -509,14 +509,13 @@ bool buildUnittests()
 
         version(DigitalMars)
         {
-            //build the static libs directly
             buildCommand ~= unittestCompilerSwitches~archSwitch~" "~files;
             buildCommand ~= "-ofunittest/unittest";
         }
         else version(GNU)
         {
-            //build the object stuff and then build the archive
-            //buildCommand ~= " -o"~quoteString(libDirectory~"dsfml-"~theModule~".o")~" && ar rcs lib/libdsfml-"~theModule~extension~" " ~"lib/dsfml-"~theModule~".o";
+            buildCommand ~= unittestCompilerSwitches~archSwitch~" "~files;
+            buildCommand ~= "-ounittest/unittest";
         }
         else
         {
