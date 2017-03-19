@@ -299,19 +299,19 @@ void initializeGDC()
         makefileType = `"Unix Makefiles"`;
 
 
-        string linkToSFMLLibs = "-L-Llib -L-LSFML/lib ";
+        string linkToSFMLLibs = "-Llib -LSFML/lib ";
 
         linkToSFMLLibs ~=
-        "-L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-audio " ~
-        "-L-ldsfmlc-network -L-ldsfmlc-system ";
+        "-ldsfmlc-graphics -ldsfmlc-window -ldsfmlc-audio " ~
+        "-ldsfmlc-network -ldsfmlc-system ";
 
         linkToSFMLLibs ~=
-        "-L-lsfml-graphics-s -L-lsfml-window-s -L-lsfml-audio-s "~
-        "-L-lsfml-network-s -L-lsfml-system-s ";
+        "-lsfml-graphics-s -lsfml-window-s -lsfml-audio-s "~
+        "-lsfml-network-s -lsfml-system-s ";
 
         linkToSFMLLibs ~=
-        "-L-lstdc++ -L-lFLAC -L-logg -L-lvorbisfile -L-lvorbisenc -L-lvorbis "~
-        "-L-lopenal -L-lX11 -L-ludev -L-lGL -L-lXrandr -L-ljpeg -L-lfreetype";
+        "-lstdc++ -lFLAC -logg -lvorbisfile -lvorbisenc -lvorbis "~
+        "-lopenal -lX11 -ludev -lGL -lXrandr -ljpeg -lfreetype";
     }
     else
     {
@@ -325,10 +325,11 @@ void initializeGDC()
     libCompilerSwitches = archSwitch ~ " -Isrc";
 
     unittestCompilerSwitches =
-    "-main -unittest -version=DSFML_Unittest_System " ~
-    "-version=DSFML_Unittest_Window -version=DSFML_Unittest_Graphics " ~
-    "-version=DSFML_Unittest_Audio -version=DSFML_Unittest_Network "~
+    "-funittest -fversion=DSFML_Unittest_System " ~
+    "-fversion=DSFML_Unittest_Window -fversion=DSFML_Unittest_Graphics " ~
+    "-fversion=DSFML_Unittest_Audio -fversion=DSFML_Unittest_Network "~
     linkToSFMLLibs;
+
 }
 
 //build the static libraries. Returns true on successful build, false on unsuccessful build
@@ -514,8 +515,10 @@ bool buildUnittests()
         }
         else version(GNU)
         {
-            buildCommand ~= unittestCompilerSwitches~archSwitch~" "~files;
-            buildCommand ~= "-ounittest/unittest";
+            std.file.write("main.d", "void main(){}");
+
+            buildCommand ~= "main.d "~files~unittestCompilerSwitches~archSwitch~
+            " -ounittest/unittest -Wl,--verbose";
         }
         else
         {
@@ -536,6 +539,11 @@ bool buildUnittests()
 
 
         auto status = executeShell(buildCommand);
+
+        version(GNU)
+        {
+            std.file.remove("main.d");
+        }
 
         if(status.status !=0)
         {
