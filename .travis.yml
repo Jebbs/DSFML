@@ -71,6 +71,6 @@ install:
    - cd $TRAVIS_BUILD_DIR
 
 script:
-  - ech0 ${DMD} build.d
+  - echo ${DMD} build.d
   - ${DMD} build.d
   - ./build --unittest
