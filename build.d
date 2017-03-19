@@ -173,7 +173,7 @@ void initialize()
     }
     else version(GNU)
     {
-        //initializeGDC();
+        initializeGDC();
     }
     else
     {
@@ -275,11 +275,60 @@ void initializeDMD()
     //docCompilerSwitches = "-c -o- -op -D -Dd"~quoteString(docDirectory);
     //interfaceCompilerSwitches = " -c -o- -op -H -Hd"~quoteString(interfaceDirectory);
 
-    unittestCompilerSwitches ="-main -unittest -version=DSFML_Unittest_System -version=DSFML_Unittest_Window -version=DSFML_Unittest_Graphics -version=DSFML_Unittest_Audio -version=DSFML_Unittest_Network "~linkToSFMLLibs;
+    unittestCompilerSwitches =
+    "-main -unittest -version=DSFML_Unittest_System " ~
+    "-version=DSFML_Unittest_Window -version=DSFML_Unittest_Graphics " ~
+    "-version=DSFML_Unittest_Audio -version=DSFML_Unittest_Network "~
+    linkToSFMLLibs;
     //unittestCompilerSwitches ="-main -unittest -version=DSFML_Unittest_Network "~linkToSFMLLibs;
     //libCompilerSwitches = "-lib -O -release -inline -I"~quoteString(impDirectory);
     //docCompilerSwitches = "-c -o- -op -D -Dd"~quoteString(docDirectory);
     //interfaceCompilerSwitches = " -c -o- -op -H -Hd"~quoteString(interfaceDirectory);
+}
+
+void initializeGDC()
+{
+    version(linux)
+    {
+        writeln("Building for Linux with gdc");
+        prefix = "lib";
+        extension = ".a";
+        objExt = ".o";
+
+        makefileProgram = "make";
+        makefileType = `"Unix Makefiles"`;
+
+
+        string linkToSFMLLibs = "-L-Llib -L-LSFML/lib ";
+
+        linkToSFMLLibs ~=
+        "-L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-audio " ~
+        "-L-ldsfmlc-network -L-ldsfmlc-system ";
+
+        linkToSFMLLibs ~=
+        "-L-lsfml-graphics-s -L-lsfml-window-s -L-lsfml-audio-s "~
+        "-L-lsfml-network-s -L-lsfml-system-s ";
+
+        linkToSFMLLibs ~=
+        "-L-lstdc++ -L-lFLAC -L-logg -L-lvorbisfile -L-lvorbisenc -L-lvorbis "~
+        "-L-lopenal -L-lX11 -L-ludev -L-lGL -L-lXrandr -L-ljpeg -L-lfreetype";
+    }
+    else
+    {
+        writeln("Building for OSX with dmd");
+        prefix = "lib";
+        extension = ".a";
+        objExt = ".o";
+    }
+
+    singleFileSwitches = archSwitch ~ " -c -O3 -frelease -Isrc";
+    libCompilerSwitches = archSwitch ~ " -Isrc";
+
+    unittestCompilerSwitches =
+    "-main -unittest -version=DSFML_Unittest_System " ~
+    "-version=DSFML_Unittest_Window -version=DSFML_Unittest_Graphics " ~
+    "-version=DSFML_Unittest_Audio -version=DSFML_Unittest_Network "~
+    linkToSFMLLibs;
 }
 
 //build the static libraries. Returns true on successful build, false on unsuccessful build
@@ -291,6 +340,8 @@ bool buildLibs()
     {
         mkdir("lib/");
     }
+
+
 
     if(!exists("CMakeCache.txt"))
     {
@@ -313,7 +364,7 @@ bool buildLibs()
     writeln();
 
     //go trhough each module directory, build d source files if need be,
-    //populate a list of all object files (both d and cpp), 
+    //populate a list of all object files (both d and cpp),
     //and build a static lib.
     foreach(theModule;modules)
     {
@@ -331,8 +382,22 @@ bool buildLibs()
             string objectFile = "src/dsfml/" ~theModule~"/"~name~objExt;
             string dFile = "src/dsfml/" ~theModule~"/"~name~".d";
 
-            string buildCommand = compiler~dFile~singleFileSwitches~
+            version(DigitalMars)
+            {
+                string buildCommand = compiler~dFile~singleFileSwitches~
                                   " -of" ~objectFile;
+            }
+            else version(GNU)
+            {
+                string buildCommand = compiler~dFile~singleFileSwitches~
+                                  " -o" ~objectFile;
+            }
+            else version(LDC)
+            {
+                string buildCommand = compiler~dFile~singleFileSwitches~
+                                  " -of=" ~objectFile;
+            }
+
 
             if(needToBuild(objectFile, dFile))
             {
@@ -357,12 +422,22 @@ bool buildLibs()
         {
             //build the static libs directly
             buildCommand ~= " -lib lib/"~prefix~"dsfmlc-"~theModule~extension ~
-            " -oflib/dsfml-"~theModule~extension~archSwitch;
+            " -oflib/"~prefix~"dsfml-"~theModule~extension~archSwitch;
         }
         else version(GNU)
         {
-            //build the object stuff and then build the archive
-            //buildCommand ~= " -o"~quoteString(libDirectory~"dsfml-"~theModule~".o")~" && ar rcs lib/libdsfml-"~theModule~extension~" " ~"lib/dsfml-"~theModule~".o";
+
+
+
+            writeln("building the library");
+
+            //we want to use ar here, so we'll completely reset the build command
+
+            buildCommand = "cd "~"src/dsfml/"~theModule~"/ && "~
+            "ar -x ../../../lib/"~prefix~"dsfmlc-"~theModule~extension ~ " && "~
+            " ar rcs ../../../lib/libdsfml-"~theModule~extension~" *"~objExt~"&& "~
+            "cd ../../../";
+
         }
         else
         {
