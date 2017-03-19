@@ -402,7 +402,7 @@ void initializeLDC()
     }
 
     singleFileSwitches = archSwitch ~ " -c -O -release -oq -I=src";
-    libCompilerSwitches = archSwitch ~ " -lib  -I=src";
+    libCompilerSwitches = archSwitch ~ " -lib -oq -I=src";
 
     unittestCompilerSwitches =
     "-main -unittest -d-version=DSFML_Unittest_System " ~
