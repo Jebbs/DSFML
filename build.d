@@ -402,7 +402,7 @@ void initializeLDC()
     }
 
     singleFileSwitches = archSwitch ~ " -c -O -release -oq -I=src";
-    libCompilerSwitches = archSwitch ~ " -lib -oq -I=src";
+    libCompilerSwitches = archSwitch ~ " -lib -I=src";
 
     unittestCompilerSwitches =
     "-main -unittest -d-version=DSFML_Unittest_System " ~
@@ -600,7 +600,7 @@ bool buildUnittests()
         }
         else
         {
-            buildCommand ~= unittestCompilerSwitches~archSwitch~" "~files;
+            buildCommand ~= unittestCompilerSwitches~archSwitch~" -oq "~files;
             buildCommand ~= "-of=unittest/unittest";
             //buildCommand ~= " -of="~quoteString(libDirectory~prefix~"dsfml-"~theModule~extension);
         }
