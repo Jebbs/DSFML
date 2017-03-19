@@ -34,8 +34,8 @@ d:
  - dmd-2.069.2
  - dmd-2.068.2
  - dmd-2.067.1
- - gdc-6.3.0
- - gdc-5.4.0
+#- gdc-6.3.0 These don't work on Travis CI yet
+#- gdc-5.4.0
  - gdc-4.9.4
  - gdc-4.8.5
  - ldc-1.2.0-beta1
@@ -47,10 +47,10 @@ d:
 #GDC is not supported on OS X :(
 matrix:
   exclude:
-  - os: osx
-    d: gdc-6.3.0
-  - os: osx
-    d: gdc-5.4.0
+#  - os: osx
+#    d: gdc-6.3.0
+#  - os: osx
+#    d: gdc-5.4.0
   - os: osx
     d: gdc-4.9.4
   - os: osx
