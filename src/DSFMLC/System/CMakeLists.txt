@@ -11,13 +11,6 @@ set(SRC
     ${INCROOT}/Export.h
 )
 
-if(UNIX AND NOT APPLE)#linux
-    set(SRC
-        ${SRC}
-        ${SRCROOT}/Threads.cpp
-        ${INCROOT}/Threads.h
-    )
-endif()
 
 #build only object files that can be linked into a d static library
 add_library(dsfmlc-system STATIC ${SRC})

@@ -255,12 +255,14 @@ void initializeDMD()
         "-L-ldsfmlc-network -L-ldsfmlc-system ";
 
         linkToSFMLLibs ~=
-        "-L-lsfml-graphics-s -L-lsfml-window-s -L-lsfml-audio-s "~
-        "-L-lsfml-network-s -L-lsfml-system-s ";
+        "-L-lsfml-graphics -L-lsfml-window -L-lsfml-audio "~
+        "-L-lsfml-network -L-lsfml-system ";
 
-        linkToSFMLLibs ~=
-        "-L-lstdc++ -L-lFLAC -L-logg -L-lvorbisfile -L-lvorbisenc -L-lvorbis "~
-        "-L-lopenal -L-lX11 -L-ludev -L-lGL -L-lXrandr -L-ljpeg -L-lfreetype";
+        linkToSFMLLibs ~= "-L-lstdc++ ";
+
+        //linkToSFMLLibs ~=
+        //"-L-lstdc++ -L-lFLAC -L-logg -L-lvorbisfile -L-lvorbisenc -L-lvorbis "~
+        //"-L-lopenal -L-lX11 -L-ludev -L-lGL -L-lXrandr -L-ljpeg -L-lfreetype";
     }
     else
     {
@@ -268,6 +270,24 @@ void initializeDMD()
         prefix = "lib";
         extension = ".a";
         objExt = ".o";
+
+        makefileProgram = "make";
+        makefileType = `"Unix Makefiles"`;
+
+
+        string linkToSFMLLibs = "-L-Llib -L-LSFML/lib ";
+
+        linkToSFMLLibs ~=
+        "-L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-audio " ~
+        "-L-ldsfmlc-network -L-ldsfmlc-system ";
+
+        linkToSFMLLibs ~=
+        "-L-lsfml-graphics -L-lsfml-window -L-lsfml-audio "~
+        "-L-lsfml-network -L-lsfml-system ";
+
+        //linkToSFMLLibs ~=
+        //"-L-lstdc++ -L-lFLAC -L-logg -L-lvorbisfile -L-lvorbisenc -L-lvorbis "~
+        //"-L-lopenal -L-lX11 -L-ludev -L-lGL -L-lXrandr -L-ljpeg -L-lfreetype";
     }
 
     singleFileSwitches = archSwitch ~ " -c -O -release -inline -Isrc";
@@ -288,6 +308,9 @@ void initializeDMD()
 
 void initializeGDC()
 {
+
+    //need to set up for windows and macOS later
+
     version(linux)
     {
         writeln("Building for Linux with gdc");
@@ -306,20 +329,16 @@ void initializeGDC()
         "-ldsfmlc-network -ldsfmlc-system ";
 
         linkToSFMLLibs ~=
-        "-lsfml-graphics-s -lsfml-window-s -lsfml-audio-s "~
-        "-lsfml-network-s -lsfml-system-s ";
+        "-lsfml-graphics -lsfml-window -lsfml-audio "~
+        "-lsfml-network -lsfml-system ";
 
-        linkToSFMLLibs ~=
-        "-lstdc++ -lFLAC -logg -lvorbisfile -lvorbisenc -lvorbis "~
-        "-lopenal -lX11 -ludev -lGL -lXrandr -ljpeg -lfreetype";
+        linkToSFMLLibs ~= "-lstdc++ ";
+
+        //linkToSFMLLibs ~=
+        //"-lstdc++ -lFLAC -logg -lvorbisfile -lvorbisenc -lvorbis "~
+        //"-lopenal -lX11 -ludev -lGL -lXrandr -ljpeg -lfreetype";
     }
-    else
-    {
-        writeln("Building for OSX with dmd");
-        prefix = "lib";
-        extension = ".a";
-        objExt = ".o";
-    }
+
 
     singleFileSwitches = archSwitch ~ " -c -O3 -frelease -Isrc";
     libCompilerSwitches = archSwitch ~ " -Isrc";
@@ -332,9 +351,9 @@ void initializeGDC()
 
 }
 
-
 void initializeLDC()
 {
+    //fix this before testing on windows
     version (Windows)
     {
         writeln("Building for Windows with dmd");
@@ -385,13 +404,15 @@ void initializeLDC()
         "-L=-ldsfmlc-network -L=-ldsfmlc-system ";
 
         linkToSFMLLibs ~=
-        "-L=-lsfml-graphics-s -L=-lsfml-window-s -L=-lsfml-audio-s "~
-        "-L=-lsfml-network-s -L=-lsfml-system-s ";
+        "-L=-lsfml-graphics -L=-lsfml-window -L=-lsfml-audio "~
+        "-L=-lsfml-network -L=-lsfml-system ";
 
-        linkToSFMLLibs ~=
-        "-L=-lstdc++ -L=-lFLAC -L=-logg -L=-lvorbisfile -L=-lvorbisenc "~
-        "-L=-lvorbis -L=-lopenal -L=-lX11 -L=-ludev -L=-lGL -L=-lXrandr "~
-        "-L=-ljpeg -L=-lfreetype";
+        linkToSFMLLibs ~= "-L=-lstdc++ ";
+
+        //linkToSFMLLibs ~=
+        //"-L=-lstdc++ -L=-lFLAC -L=-logg -L=-lvorbisfile -L=-lvorbisenc "~
+        //"-L=-lvorbis -L=-lopenal -L=-lX11 -L=-ludev -L=-lGL -L=-lXrandr "~
+        //"-L=-ljpeg -L=-lfreetype";
     }
     else
     {
@@ -399,6 +420,21 @@ void initializeLDC()
         prefix = "lib";
         extension = ".a";
         objExt = ".o";
+
+        makefileProgram = "make";
+        makefileType = `"Unix Makefiles"`;
+
+
+        string linkToSFMLLibs = "-L=-Llib -L=-LSFML/lib ";
+
+        linkToSFMLLibs ~=
+        "-L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio " ~
+        "-L=-ldsfmlc-network -L=-ldsfmlc-system ";
+
+        linkToSFMLLibs ~=
+        "-L=-lsfml-graphics -L=-lsfml-window -L=-lsfml-audio "~
+        "-L=-lsfml-network -L=-lsfml-system ";
+
     }
 
     singleFileSwitches = archSwitch ~ " -c -O -release -oq -I=src";
@@ -541,14 +577,30 @@ bool buildLibs()
 
 bool buildUnittests()
 {
+
+    version(Windows)
+    {
+        //technically, we also need .lib files because Windows is stupid, but
+        //the build script will only look for the .dll's.
+        string dynamicExtension = ".dll";
+    }
+    else version(linux)
+    {
+        string dynamicExtension = ".so";
+    }
+    else
+    {
+        string dynamicExtension = ".dylib";
+    }
+
     import std.ascii; //toUpper
     //string[2] testModules = ["system", "network"];
     //check to make sure ALL SFML libs were built
     foreach(theModule; modules)
     {
-        if(!exists("SFML/lib/"~prefix~"sfml-"~theModule~"-s"~extension))
+        if(!exists("SFML/lib/"~prefix~"sfml-"~theModule~dynamicExtension))
         {
-            writeln("SFML/lib/"~prefix~"sfml-"~theModule~extension,
+            writeln("SFML/lib/"~prefix~"sfml-"~theModule~dynamicExtension,
                     " not found.");
             writeln("Building unit tests requires SFML libs in ",
                     "dsfml/SFML/lib/ directory.");
