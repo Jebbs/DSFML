@@ -205,6 +205,9 @@ void initialize()
 
 void initializeDMD()
 {
+
+    string linkToSFMLLibs = "";
+
     version (Windows)
     {
         writeln("Building for Windows with dmd");
@@ -221,7 +224,7 @@ void initializeDMD()
         makefileProgram = "nmake";
         makefileType = `"NMake Makefiles"`;
 
-        string linkToSFMLLibs = "-L/LIBPATH:lib -L/LIBPATH:SFML\\lib "~
+        linkToSFMLLibs = "-L/LIBPATH:lib -L/LIBPATH:SFML\\lib "~
         "-L/LIBPATH:SFML\\extlibs\\libs-msvc-universal\\x64 ";
 
         linlToSFMLLibs ~=
@@ -248,7 +251,7 @@ void initializeDMD()
         makefileType = `"Unix Makefiles"`;
 
 
-        string linkToSFMLLibs = "-L-Llib -L-LSFML/lib ";
+        linkToSFMLLibs = "-L-Llib -L-LSFML/lib ";
 
         linkToSFMLLibs ~=
         "-L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-audio " ~
@@ -275,7 +278,7 @@ void initializeDMD()
         makefileType = `"Unix Makefiles"`;
 
 
-        string linkToSFMLLibs = "-L-Llib -L-LSFML/lib ";
+        linkToSFMLLibs = "-L-Llib -L-LSFML/lib ";
 
         linkToSFMLLibs ~=
         "-L-ldsfmlc-graphics -L-ldsfmlc-window -L-ldsfmlc-audio " ~
@@ -311,6 +314,8 @@ void initializeGDC()
 
     //need to set up for windows and macOS later
 
+    string linkToSFMLLibs = "";
+
     version(linux)
     {
         writeln("Building for Linux with gdc");
@@ -322,7 +327,7 @@ void initializeGDC()
         makefileType = `"Unix Makefiles"`;
 
 
-        string linkToSFMLLibs = "-Llib -LSFML/lib ";
+        linkToSFMLLibs = "-Llib -LSFML/lib ";
 
         linkToSFMLLibs ~=
         "-ldsfmlc-graphics -ldsfmlc-window -ldsfmlc-audio " ~
@@ -353,6 +358,8 @@ void initializeGDC()
 
 void initializeLDC()
 {
+    string linkToSFMLLibs = "";
+
     //fix this before testing on windows
     version (Windows)
     {
@@ -370,7 +377,7 @@ void initializeLDC()
         makefileProgram = "nmake";
         makefileType = `"NMake Makefiles"`;
 
-        string linkToSFMLLibs = "-L=LIBPATH:lib -L=LIBPATH:SFML\\lib "~
+        linkToSFMLLibs = "-L=LIBPATH:lib -L=LIBPATH:SFML\\lib "~
         "-L=LIBPATH:SFML\\extlibs\\libs-msvc-universal\\x64 ";
 
         linlToSFMLLibs ~=
@@ -397,7 +404,7 @@ void initializeLDC()
         makefileType = `"Unix Makefiles"`;
 
 
-        string linkToSFMLLibs = "-L=-Llib -L=-LSFML/lib ";
+        linkToSFMLLibs = "-L=-Llib -L=-LSFML/lib ";
 
         linkToSFMLLibs ~=
         "-L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio " ~
@@ -425,7 +432,7 @@ void initializeLDC()
         makefileType = `"Unix Makefiles"`;
 
 
-        string linkToSFMLLibs = "-L=-Llib -L=-LSFML/lib ";
+        linkToSFMLLibs = "-L=-Llib -L=-LSFML/lib ";
 
         linkToSFMLLibs ~=
         "-L=-ldsfmlc-graphics -L=-ldsfmlc-window -L=-ldsfmlc-audio " ~
