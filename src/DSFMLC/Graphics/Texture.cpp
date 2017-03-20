@@ -28,16 +28,6 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-// Headers
-#ifdef _WIN32
-#include <windows.h>
-#include <gl/gl.h>//flush
-
-#elif __linux__
-#include <GL/gl.h>
-#endif
-
-
 #include <DSFMLC/Graphics/Texture.h>
 #include <DSFMLC/Graphics/TextureStruct.h>
 #include <DSFMLC/Graphics/ImageStruct.h>
@@ -181,9 +171,4 @@ void sfTexture_bind(const sfTexture* texture)
 DUint sfTexture_getMaximumSize()
 {
     return sf::Texture::getMaximumSize();
-}
-
-void sfTexture_flush()
-{
-    glFlush();
 }

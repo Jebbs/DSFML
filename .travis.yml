@@ -67,8 +67,9 @@ install:
 #  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/DSFMLC/lib
 #  - cd $TRAVIS_BUILD_DIR
    - cd SFML
-   - cmake -DBUILD_SHARED_LIBS=false .
-   - make
+   - cmake .
+   - make -j2
+   - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/SFML/lib
    - cd $TRAVIS_BUILD_DIR
 
 script:

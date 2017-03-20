@@ -391,18 +391,7 @@ class Texture
 	{
 		sfTexture_updateFromRenderWindow(sfPtr, window.sfPtr, x, y);
 	}
-	
-	/**
-	 * Flushes the OpenGL command buffer.
-	 *
-	 * Using this is only necessary when using updateFromPixels() from a non-main thread.
-	 *
-	 */
-	static void flush()
-	{
-		sfTexture_flush();
-	}
-	
+
 }
 
 unittest
@@ -532,6 +521,6 @@ void sfTexture_bind(const sfTexture* texture);
 uint sfTexture_getMaximumSize();
 
 //Flush the OpenGL command buffer.
-void  sfTexture_flush();
+//void  sfTexture_flush();
 
 const(char)* sfErr_getOutput();

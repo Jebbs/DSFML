@@ -77,26 +77,16 @@ class Thread
 		}
 	}
 
-	version(linux)
-	{
-		static void XInitThreads()
-		{
-            linux_XInitThreads();
-		}
-	}
-
 }
 
 unittest
 {
-
-
 	version(DSFML_Unittest_System)
 	{
 		import std.stdio;
 		import dsfml.system.sleep;
 		import core.time;
-		
+
 
 		void secondThreadHello()
 		{
@@ -143,4 +133,4 @@ unittest
 }
 
 
-version(linux) package extern(C) void linux_XInitThreads();
+//version(linux) package extern(C) void linux_XInitThreads();
