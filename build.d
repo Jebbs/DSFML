@@ -365,7 +365,7 @@ void initializeLDC()
     //fix this before testing on windows
     version (Windows)
     {
-        writeln("Building for Windows with dmd");
+        writeln("Building for Windows with ldc");
         prefix = "";
         extension = ".lib";
         objExt = ".obj";
@@ -397,7 +397,7 @@ void initializeLDC()
     }
     else version(linux)
     {
-        writeln("Building for Linux with dmd");
+        writeln("Building for Linux with ldc");
         prefix = "lib";
         extension = ".a";
         objExt = ".o";
@@ -425,7 +425,7 @@ void initializeLDC()
     }
     else
     {
-        writeln("Building for OSX with dmd");
+        writeln("Building for OSX with ldc");
         prefix = "lib";
         extension = ".a";
         objExt = ".o";
@@ -443,6 +443,8 @@ void initializeLDC()
         linkToSFMLLibs ~=
         "-L=-lsfml-graphics -L=-lsfml-window -L=-lsfml-audio "~
         "-L=-lsfml-network -L=-lsfml-system ";
+
+        linkToSFMLLibs ~= "-L=-lstdc++ -L=-rpath -L=. ";
 
 
     }
@@ -575,8 +577,18 @@ bool buildLibs()
         }
         else
         {
-            buildCommand ~= " -lib lib/"~prefix~"dsfmlc-"~theModule~extension ~
-            " -of=lib/"~prefix~"dsfml-"~theModule~extension~archSwitch;
+            version(OSX)
+            {
+                buildCommand = "cd "~"src/dsfml/"~theModule~"/ && "~
+                "ar -x ../../../lib/"~prefix~"dsfmlc-"~theModule~extension ~ " && "~
+                " ar rcs ../../../lib/libdsfml-"~theModule~extension~" *"~objExt~"&& "~
+                "cd ../../../";
+            }
+            else
+            {
+                buildCommand ~= " -lib lib/"~prefix~"dsfmlc-"~theModule~extension ~
+                " -of=lib/"~prefix~"dsfml-"~theModule~extension~archSwitch;
+            }
             //buildCommand ~= " -of="~quoteString(libDirectory~prefix~"dsfml-"~theModule~extension);
         }
 
