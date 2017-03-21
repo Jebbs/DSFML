@@ -288,6 +288,8 @@ void initializeDMD()
         "-L-lsfml-graphics -L-lsfml-window -L-lsfml-audio "~
         "-L-lsfml-network -L-lsfml-system ";
 
+        linkToSFMLLibs ~= "-L-lstdc++ -L-rpath -L. ";
+
         //linkToSFMLLibs ~=
         //"-L-lstdc++ -L-lFLAC -L-logg -L-lvorbisfile -L-lvorbisenc -L-lvorbis "~
         //"-L-lopenal -L-lX11 -L-ludev -L-lGL -L-lXrandr -L-ljpeg -L-lfreetype";
@@ -442,6 +444,7 @@ void initializeLDC()
         "-L=-lsfml-graphics -L=-lsfml-window -L=-lsfml-audio "~
         "-L=-lsfml-network -L=-lsfml-system ";
 
+
     }
 
     singleFileSwitches = archSwitch ~ " -c -O -release -oq -I=src";
@@ -543,9 +546,20 @@ bool buildLibs()
 
         version(DigitalMars)
         {
-            //build the static libs directly
-            buildCommand ~= " -lib lib/"~prefix~"dsfmlc-"~theModule~extension ~
-            " -oflib/"~prefix~"dsfml-"~theModule~extension~archSwitch;
+            //adding the library to dmd doesn't work on OSX
+            version(OSX)
+            {
+                buildCommand = "cd "~"src/dsfml/"~theModule~"/ && "~
+                "ar -x ../../../lib/"~prefix~"dsfmlc-"~theModule~extension ~ " && "~
+                " ar rcs ../../../lib/libdsfml-"~theModule~extension~" *"~objExt~"&& "~
+                "cd ../../../";
+            }
+            else
+            {
+                //build the static libs directly
+                buildCommand ~= " -lib -L-Llib/ -L-l"~"dsfmlc-"~theModule~extension ~
+                " -oflib/"~prefix~"dsfml-"~theModule~extension~archSwitch;
+            }
         }
         else version(GNU)
         {
@@ -570,8 +584,11 @@ bool buildLibs()
         //always rebuilds the lib in case the cpp files were re-built
         auto status = executeShell(buildCommand);
 
+        //writeln(buildCommand);
+
         if(status.status !=0)
         {
+            writeln("Something happened!");
             writeln(status.output);
             return false;
         }
@@ -647,8 +664,8 @@ bool buildUnittests()
 
         version(DigitalMars)
         {
-            buildCommand ~= unittestCompilerSwitches~archSwitch~" "~files;
-            buildCommand ~= "-ofunittest/unittest";
+            buildCommand ~= files~" "~unittestCompilerSwitches~archSwitch;
+            buildCommand ~= " -ofunittest/unittest";
         }
         else version(GNU)
         {
