@@ -178,7 +178,7 @@ void sfShader_setTextureParameter(sfShader* shader, const char* name, size_t len
 
 void sfShader_setCurrentTextureParameter(sfShader* shader, const char* name, size_t length)
 {
-    shader->This.setParameter(std::string(name, length), sf::Shader::CurrentTexture);
+    shader->This.setParameter(std::string(name, length), sf::Shader::CurrentTextureType());
 }
 
 
