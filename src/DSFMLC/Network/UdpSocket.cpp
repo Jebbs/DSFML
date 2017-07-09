@@ -85,8 +85,7 @@ DUshort sfUdpSocket_getLocalPort(const sfUdpSocket* socket)
 
 DInt sfUdpSocket_bind(sfUdpSocket* socket, DUshort port)
 {
-
-    return static_cast<DInt>(socket->This.bind(port));
+    return static_cast<DInt>(socket->This.bind(port, sf::IpAddress(0,0,0,0)));
 }
 
 

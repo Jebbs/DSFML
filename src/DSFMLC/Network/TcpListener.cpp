@@ -33,6 +33,7 @@ All Libraries used by SFML
 #include <DSFMLC/Network/TcpListener.h>
 #include <DSFMLC/Network/TcpListenerStruct.h>
 #include <DSFMLC/Network/TcpSocketStruct.h>
+#include <SFML/Network/IpAddress.hpp>
 
 
 sfTcpListener* sfTcpListener_create(void)
@@ -69,7 +70,7 @@ DUshort sfTcpListener_getLocalPort(const sfTcpListener* listener)
 ////////////////////////////////////////////////////////////
 DInt sfTcpListener_listen(sfTcpListener* listener,DUshort port)
 {
-    return listener->This.listen(port);
+    return listener->This.listen(port, sf::IpAddress(0,0,0,0));
 }
 
 

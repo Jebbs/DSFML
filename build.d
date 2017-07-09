@@ -227,18 +227,19 @@ void initializeDMD()
         linkToSFMLLibs = "-L/LIBPATH:lib -L/LIBPATH:SFML\\lib "~
         "-L/LIBPATH:SFML\\extlibs\\libs-msvc-universal\\x64 ";
 
-        linlToSFMLLibs ~=
+        linkToSFMLLibs ~=
         "dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib " ~
         "dsfmlc-network.lib dsfmlc-system.lib ";
 
         linkToSFMLLibs~=
-        "sfml-graphics-s.lib sfml-window-s.lib sfml-audio-s.lib "~
-        "sfml-network-s.lib sfml-system-s.lib ";
+        "sfml-graphics.lib sfml-window.lib sfml-audio.lib "~
+        "sfml-network.lib sfml-system.lib ";
 
-        linkToSFMLLibs~=
+        /*linkToSFMLLibs~=
         "opengl32.lib gdi32.lib flac.lib freetype.lib jpeg.lib ogg.lib "~
         "openal32.lib vorbis.lib vorbisenc.lib vorbisfile.lib ws2_32.lib "~
         "winmm.lib user32.lib ";
+        */
     }
     else version(linux)
     {
@@ -382,7 +383,7 @@ void initializeLDC()
         linkToSFMLLibs = "-L=LIBPATH:lib -L=LIBPATH:SFML\\lib "~
         "-L=LIBPATH:SFML\\extlibs\\libs-msvc-universal\\x64 ";
 
-        linlToSFMLLibs ~=
+        linkToSFMLLibs ~=
         "dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib " ~
         "dsfmlc-network.lib dsfmlc-system.lib ";
 
@@ -618,7 +619,7 @@ bool buildUnittests()
     {
         //technically, we also need .lib files because Windows is stupid, but
         //the build script will only look for the .dll's.
-        string dynamicExtension = ".dll";
+        string dynamicExtension = "-2.dll";
     }
     else version(linux)
     {
@@ -693,12 +694,12 @@ bool buildUnittests()
             //buildCommand ~= " -of="~quoteString(libDirectory~prefix~"dsfml-"~theModule~extension);
         }
 
-        version(windows)
+        version(Windows)
         {
             buildCommand ~= ".exe";
         }
 
-        //writeln(buildCommand);
+        writeln(buildCommand);
 
 
         //std.file.write("cmdFile")
