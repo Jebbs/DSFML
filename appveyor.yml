@@ -1,5 +1,5 @@
 # Build version format
-version: 2.1.{build}
+version: 2.4.{build}
 
 os: Visual Studio 2015
 
@@ -29,24 +29,7 @@ environment:
     arch: x86
   - DC: dmd
     DVersion: 2.067.1
-    arch: x64
-  - DC: dmd
-    DVersion: 2.066.1
-    arch: x86
-  - DC: dmd
-    DVersion: 2.066.1
-    arch: x64
-  - DC: gdc
-    DVersion: 5.2.0
-    arch: x86
-  - DC: gdc
-    DVersion: 5.2.0
-    arch: x64
-  - DC: gdc
-    DVersion: 4.9.3
-    arch: x86
-  - DC: gdc
-    DVersion: 4.9.3
+
     arch: x64
   - DC: ldc
     DVersion: 0.16.1
@@ -160,9 +143,6 @@ before_build:
   - ps : if($env:DC -eq "dmd"){
           $env:Dcompilerpath = "C:\dmd2\windows\bin;";
           $env:outputfile = "-ofbuild.exe";
-          if($env:arch -eq "x86"){
-            $env:makecommand = "nmake & implib";
-          }
          }
         elseif($env:DC -eq "gdc"){
           $env:outputfile = "-obuild.exe";
@@ -182,23 +162,21 @@ before_build:
 
 
 
-#Build DSFMLC and then build DSFML with it
+#Build SFML and then build DSFML
 build_script:
 - echo %VCINSTALLDIR%
 - '"%compilersetup%" %compilersetupargs%'
-- cd ..
-- git clone --depth=1 --branch 2.4 https://github.com/jebbs/DSFMLC.git
-- cd DSFMLC
+- cd SFML
 - ps: if($env:toolchain -eq "mingw"){
         $env:Path = $env:compilerpath + $env:cmakepath;
        }
 - cmake -G"%maketype%" .
 - '%makecommand%'
-- cd "C:\\projects\\dsfml"
+- cd ..
 - ps : $env:Path = $env:Dcompilerpath + $env:Path
 - ps: if($env:DC -eq "ldc2"){
         $env:compilersetup = "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall";
        }
 - '"%compilersetup%" %compilersetupargs%'
 - '%DC% build.d %outputfile%'
-- 'build.exe -%DConf% -unittest:C:\projects\DSFMLC\lib\'
+- 'build.exe --%DConf% --unittest
