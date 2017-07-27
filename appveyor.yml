@@ -179,4 +179,4 @@ build_script:
        }
 - '"%compilersetup%" %compilersetupargs%'
 - '%DC% build.d %outputfile%'
-- 'build.exe --%DConf% --unittest
+- 'build.exe --%DConf% --unittest'
