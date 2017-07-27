@@ -164,6 +164,7 @@ before_build:
 
 #Build SFML and then build DSFML
 build_script:
+- git submodule update --init --recursive
 - echo %VCINSTALLDIR%
 - '"%compilersetup%" %compilersetupargs%'
 - cd SFML
