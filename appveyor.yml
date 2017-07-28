@@ -158,6 +158,9 @@ install:
 #Install the D compiler
 - ps: SetUpDCompiler
 
+#add a sub folder for the sfml download
+- mkdir sfml\\lib
+
 #download and unpack sfml binaries
 - ps: InstallSFML
 
