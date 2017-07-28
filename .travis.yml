@@ -43,7 +43,6 @@ d:
  - ldc-1.2.0
  - ldc-1.1.1
  - ldc-0.17.2
- - ldc-0.16.1
 
 #GDC is not supported on OS X :(
 matrix:

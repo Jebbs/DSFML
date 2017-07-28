@@ -72,9 +72,6 @@ environment:
   - DC: ldc
     DVersion: 0.17.2
     arch: x64
-  - DC: ldc
-    DVersion: 0.16.1
-    arch: x64
 
 
 #Set up our powershell functions
