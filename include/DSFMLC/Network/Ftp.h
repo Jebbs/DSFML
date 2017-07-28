@@ -106,7 +106,7 @@ DSFML_NETWORK_API void sfFtp_destroy(sfFtp* ftp);
 
 
 //Connect to the specified FTP server
-DSFML_NETWORK_API sfFtpResponse* sfFtp_connect(sfFtp* ftp, const char* serverIP, size_t serverIPLength, DUshort port, DLong timeout);
+DSFML_NETWORK_API sfFtpResponse* sfFtp_connect(sfFtp* ftp, sf::IpAddress* serverIP, DUshort port, DLong timeout);
 
 
 //Log in using an anonymous account

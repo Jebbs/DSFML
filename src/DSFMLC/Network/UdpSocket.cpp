@@ -83,9 +83,9 @@ DUshort sfUdpSocket_getLocalPort(const sfUdpSocket* socket)
 
 
 
-DInt sfUdpSocket_bind(sfUdpSocket* socket, DUshort port)
+DInt sfUdpSocket_bind(sfUdpSocket* socket, DUshort port, sf::IpAddress* ipAddress)
 {
-    return static_cast<DInt>(socket->This.bind(port, sf::IpAddress(0,0,0,0)));
+    return static_cast<DInt>(socket->This.bind(port, *ipAddress));
 }
 
 
@@ -95,54 +95,37 @@ void sfUdpSocket_unbind(sfUdpSocket* socket)
 }
 
 
-DInt sfUdpSocket_send(sfUdpSocket* socket, const void* data, size_t size, const char* ipAddress, DUshort port)
+DInt sfUdpSocket_send(sfUdpSocket* socket, const void* data, size_t size, sf::IpAddress* receiver, DUshort port)
 {
-
-    // Convert the address
-    sf::IpAddress receiver(ipAddress);
-
-    return static_cast<DInt>(socket->This.send(data, size, receiver, port));
+    return static_cast<DInt>(socket->This.send(data, size, *receiver, port));
 }
 
 
 
-void* sfUdpSocket_receive(sfUdpSocket* socket, size_t maxSize, size_t* sizeReceived, char* ipAddress, DUshort* port, DInt* status)
+void* sfUdpSocket_receive(sfUdpSocket* socket, size_t maxSize, size_t* sizeReceived, sf::IpAddress* sender, DUshort* port, DInt* status)
 {
-    //D didn't like passing an array to C++ and having it altered here, so we will be creating a temp
-    //way to store the data and pass it up to D. It should work, so I will look into a different/better solution for 2.2.
+    //TODO: use an existing array in the D side, and fill it here (for 2.4)
 
     sfUdpSocket_destroyInternalData();
     receivedData = new char[maxSize];
 
-    // Call SFML internal function
-    sf::IpAddress sender;
-
-    *status = static_cast<DInt>(socket->This.receive(receivedData, maxSize, *sizeReceived, sender, *port));
-    
-    strncpy(ipAddress, sender.toString().c_str(), 16);
+    *status = static_cast<DInt>(socket->This.receive(receivedData, maxSize, *sizeReceived, *sender, *port));
 
     return static_cast<void*>(receivedData);
 }
 
 
 
-DInt sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, const char* ipAddress, DUshort port)
+DInt sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, sf::IpAddress* receiver, DUshort port)
 {
-    // Convert the address
-    sf::IpAddress receiver(ipAddress);
-
-    return static_cast<DInt>(socket->This.send(packet->This, receiver, port));
+    return static_cast<DInt>(socket->This.send(packet->This, *receiver, port));
 }
 
 
 
-DInt sfUdpSocket_receivePacket(sfUdpSocket* socket, sfPacket* packet, char* ipAddress, DUshort* port)
+DInt sfUdpSocket_receivePacket(sfUdpSocket* socket, sfPacket* packet, sf::IpAddress* sender, DUshort* port)
 {
-    sf::IpAddress sender;
-
-    DInt status = static_cast<DInt>(socket->This.receive(packet->This, sender, *port));
-    
-    strncpy(ipAddress, sender.toString().c_str(), 16);
+    DInt status = static_cast<DInt>(socket->This.receive(packet->This, *sender, *port));
 
     return status;
 }

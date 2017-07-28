@@ -63,7 +63,7 @@ DSFML_NETWORK_API DUshort sfUdpSocket_getLocalPort(const sfUdpSocket* socket);
 
 
 //Bind a UDP socket to a specific port
-DSFML_NETWORK_API DInt sfUdpSocket_bind(sfUdpSocket* socket, DUshort port);
+DSFML_NETWORK_API DInt sfUdpSocket_bind(sfUdpSocket* socket, DUshort port, sf::IpAddress* ipAddress);
 
 
 //Unbind a UDP socket from the local port to which it is bound
@@ -71,19 +71,19 @@ DSFML_NETWORK_API void sfUdpSocket_unbind(sfUdpSocket* socket);
 
 
 //Send raw data to a remote peer with a UDP socket
-DSFML_NETWORK_API DInt sfUdpSocket_send(sfUdpSocket* socket, const void* data, size_t size, const char* ipAddress, DUshort port);
+DSFML_NETWORK_API DInt sfUdpSocket_send(sfUdpSocket* socket, const void* data, size_t size, sf::IpAddress* receiver, DUshort port);
 
 
 //Receive raw data from a remote peer with a UDP socket
-DSFML_NETWORK_API void* sfUdpSocket_receive(sfUdpSocket* socket, size_t maxSize, size_t* sizeReceived, char* ipAddress, DUshort* port, DInt* status);
+DSFML_NETWORK_API void* sfUdpSocket_receive(sfUdpSocket* socket, size_t maxSize, size_t* sizeReceived, sf::IpAddress* sender, DUshort* port, DInt* status);
 
 
 //Send a formatted packet of data to a remote peer with a UDP socket
-DSFML_NETWORK_API DInt sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, const char* ipAddress, DUshort port);
+DSFML_NETWORK_API DInt sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, sf::IpAddress* receiver, DUshort port);
 
 
 //Receive a formatted packet of data from a remote peer with a UDP socket
-DSFML_NETWORK_API DInt sfUdpSocket_receivePacket(sfUdpSocket* socket, sfPacket* packet, char* address, DUshort* port);
+DSFML_NETWORK_API DInt sfUdpSocket_receivePacket(sfUdpSocket* socket, sfPacket* packet, sf::IpAddress* sender, DUshort* port);
 
 
 #endif // SFML_UDPSOCKET_H

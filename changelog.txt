@@ -1,5 +1,9 @@
-Changes 2.1->2.4
-------------------
+DSFML 2.4
+=========
+
+General
+=======
+
 Added Supported Compilers:
 - DMD 2.074.1, 2.075.0
 - LDC 1.2.0, 1.3.0
@@ -9,3 +13,27 @@ Dropped Supported Compilers:
 - LDC 1.0.0 (Not correctly configured on Travic CI for OSX)
 - LDC 0.17.x (New versions of this compiler are not built for Windows)
 - LDC 0.16.1 (Droped support for DMD version 2.067)
+
+Network
+=======
+
+IpAddress
+---------
+Updated IpAddress to match the current SFML IpAddress structure, and changed all
+IpAddress usage to use the structure directly instead of relying on internal
+helper functions.
+
+Updated the IpAddress from bytes and from uint constructors to run at compile
+time.
+
+Added the IpAddress.Any constant, which represents any Ip Address.
+
+TcpListener
+----------
+The listen function can now accept a specific IpAddress to listen to, and
+defaults to IpAddress.Any.
+
+UdpSocket
+----------
+The bind function can now accept a specific IpAddress to be bound to, and
+defaults to IpAddress.Any.

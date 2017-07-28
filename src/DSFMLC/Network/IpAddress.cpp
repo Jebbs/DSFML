@@ -30,58 +30,23 @@ All Libraries used by SFML
 
 // Headers
 #include <DSFMLC/Network/IpAddress.h>
-#include <SFML/Network/IpAddress.hpp>
 #include <string.h>
 
 
-namespace
-{
-    // Helper function for converting a SFML address to an array one
-    void fromSFMLAddress(sf::IpAddress address, char* ipAddress)
-    {
-        strncpy(ipAddress, address.toString().c_str(), 16);
-    }
 
-    // Helper function for converting an array address to a SFML one
-    sf::IpAddress toSFMLAddress(const char* ipAddress, size_t length)
-    {
-        return sf::IpAddress(std::string(ipAddress, length));
-    }
+DUint sfIpAddress_integerFromString(const char* address, size_t addressLength)
+{
+    return sf::IpAddress(std::string(address, addressLength)).toInteger();
 }
 
 
-void sfIpAddress_fromString(const char* address, size_t addressLength, char* ipAddress)
+void sfIpAddress_getLocalAddress(sf::IpAddress* ipAddress)
 {
-    fromSFMLAddress(sf::IpAddress(std::string(address, addressLength)), ipAddress);
+     *ipAddress = sf::IpAddress::getLocalAddress();
 }
 
 
-void sfIpAddress_fromBytes(DUbyte byte0, DUbyte byte1, DUbyte byte2, DUbyte byte3, char* ipAddress)
+void sfIpAddress_getPublicAddress(sf::IpAddress* ipAddress, DLong timeout)
 {
-    fromSFMLAddress(sf::IpAddress(byte0, byte1, byte2, byte3), ipAddress);
-}
-
-
-void sfIpAddress_fromInteger(DUint address, char* ipAddress)
-{
-    fromSFMLAddress(sf::IpAddress(address), ipAddress);
-}
-
-
-DUint sfIpAddress_toInteger(const char* ipAddress, size_t length)
-{
-    return toSFMLAddress(ipAddress, length).toInteger();
-}
-
-
-void sfIpAddress_getLocalAddress(char* ipAddress)
-{
-     fromSFMLAddress(sf::IpAddress::getLocalAddress(),ipAddress);
-}
-
-
-////////////////////////////////////////////////////////////
-void sfIpAddress_getPublicAddress(char* ipAddress, DLong timeout)
-{
-    fromSFMLAddress(sf::IpAddress::getPublicAddress(sf::microseconds(timeout)), ipAddress);
+    *ipAddress = sf::IpAddress::getPublicAddress(sf::microseconds(timeout));
 }
