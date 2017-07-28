@@ -25,9 +25,9 @@ import std.algorithm;
 import std.array;
 import std.getopt;
 
-static if (__VERSION__ < 2067L)
+static if (__VERSION__ < 2068L)
 {
-	static assert(0, "Please upgrade your compiler to v2.067 or later");
+	static assert(0, "Please upgrade your compiler to v2.068 or later");
 }
 
 version(DigitalMars)
@@ -364,7 +364,7 @@ void initializeLDC()
     string linkToSFMLLibs = "";
 
     //fix this before testing on windows
-    version (Windows)
+    version(Windows)
     {
         writeln("Building for Windows with ldc");
         prefix = "";
@@ -380,21 +380,22 @@ void initializeLDC()
         makefileProgram = "nmake";
         makefileType = `"NMake Makefiles"`;
 
-        linkToSFMLLibs = "-L=LIBPATH:lib -L=LIBPATH:SFML\\lib "~
-        "-L=LIBPATH:SFML\\extlibs\\libs-msvc-universal\\x64 ";
+         linkToSFMLLibs = "-L=/LIBPATH:lib -L=/LIBPATH:SFML\\lib "~
+        "-L=/LIBPATH:SFML\\extlibs\\libs-msvc-universal\\x64 ";
 
         linkToSFMLLibs ~=
         "dsfmlc-graphics.lib dsfmlc-window.lib dsfmlc-audio.lib " ~
         "dsfmlc-network.lib dsfmlc-system.lib ";
 
         linkToSFMLLibs~=
-        "sfml-graphics-s.lib sfml-window-s.lib sfml-audio-s.lib "~
-        "sfml-network-s.lib sfml-system-s.lib ";
+        "sfml-graphics.lib sfml-window.lib sfml-audio.lib "~
+        "sfml-network.lib sfml-system.lib ";
 
-        linkToSFMLLibs~=
+        /*linkToSFMLLibs~=
         "opengl32.lib gdi32.lib flac.lib freetype.lib jpeg.lib ogg.lib "~
         "openal32.lib vorbis.lib vorbisenc.lib vorbisfile.lib ws2_32.lib "~
         "winmm.lib user32.lib ";
+        */
     }
     else version(linux)
     {
