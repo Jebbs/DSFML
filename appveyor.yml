@@ -140,7 +140,7 @@ init:
 - ps: function InstallSFML
       {
         $version = $env:arch;
-        $WebLocation = "http://dsfml.com/bins/ci/windows/sfml-$($version).zip"
+        $WebLocation = "http://dsfml.com/bins/ci/windows/sfml-$($version).zip";
         $DownloadLocation = "SFML\\lib\\sfml-$($version).zip";
         (new-object net.webclient).DownloadFile($WebLocation, $DownloadLocation);
         7z x "sfml-$($version).zip" > $null;
