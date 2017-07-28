@@ -139,15 +139,16 @@ init:
 #downloads and installs sfml binaries
 - ps: function InstallSFML
       {
+        pwd;
         $version = $env:arch;
         $curdir = Convert-Path .;
         $WebLocation = "http://dsfml.com/bins/ci/windows/sfml-$($version).zip";
         New-Item "$($curdir)\\SFML\\lib" -type directory
-        $DownloadLocation = "$($curdir)\\SFML\\lib\\sfml-$($version).zip";
+        $DownloadLocation = "C:\\sfml-$($version).zip";
         (new-object net.webclient).DownloadFile($WebLocation, $DownloadLocation);
-        pushd "$($curdir)\\SFML\\lib\\"
-        7z x "sfml-$($version).zip" > $null;
-        popd
+#        pushd "$($curdir)\\SFML\\lib\\"
+#        7z x "sfml-$($version).zip" > $null;
+#        popd
     }
 
 
