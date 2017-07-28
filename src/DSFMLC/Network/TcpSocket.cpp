@@ -81,12 +81,10 @@ DUshort sfTcpSocket_getLocalPort(const sfTcpSocket* socket)
 }
 
 
-void sfTcpSocket_getRemoteAddress(const sfTcpSocket* socket, char* ipAddress)
+void sfTcpSocket_getRemoteAddress(const sfTcpSocket* socket, sf::IpAddress* ipAddress)
 {
 
-    sf::IpAddress address = socket->This.getRemoteAddress();
-    strncpy(ipAddress, address.toString().c_str(), 16);
-
+    *ipAddress = socket->This.getRemoteAddress();
 }
 
 
@@ -96,12 +94,9 @@ DUshort sfTcpSocket_getRemotePort(const sfTcpSocket* socket)
 }
 
 
-DInt sfTcpSocket_connect(sfTcpSocket* socket, const char* hostIP, DUshort port, DLong timeout)
+DInt sfTcpSocket_connect(sfTcpSocket* socket, const sf::IpAddress* ipAddress, DUshort port, DLong timeout)
 {
-    sf::IpAddress address(hostIP);
-
-
-    return socket->This.connect(address, port, sf::microseconds(timeout));
+    return socket->This.connect(*ipAddress, port, sf::microseconds(timeout));
 }
 
 

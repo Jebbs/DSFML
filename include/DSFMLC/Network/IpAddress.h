@@ -33,35 +33,20 @@ All Libraries used by SFML
 
 // Headers
 #include <DSFMLC/Network/Export.h>
+#include <SFML/Network/IpAddress.hpp>
 #include <stddef.h>
 
 
-//Note: These functions rely on passing an existing array for the ipAddress.
-//It will not allocate data into a null pointer for functions that return a new IP Address
-
-
-//Create an address from a string
-DSFML_NETWORK_API void sfIpAddress_fromString(const char* address, size_t addressLength, char* ipAddress);
-
-
-//Create an address from 4 bytes
-DSFML_NETWORK_API void sfIpAddress_fromBytes(DUbyte byte0, DUbyte byte1, DUbyte byte2, DUbyte byte3, char* ipAddress);
-
-
-//Construct an address from a 32-bits integer
-DSFML_NETWORK_API void sfIpAddress_fromInteger(DUint address, char* ipAddress);
-
-
-//Get an integer representation of the address
-DSFML_NETWORK_API DUint sfIpAddress_toInteger(const char* ipAddress, size_t length);
+//Get the host integer representation from a string
+DSFML_NETWORK_API DUint sfIpAddress_integerFromString(const char* address, size_t addressLength);
 
 
 //Get the computer's local address
-DSFML_NETWORK_API void sfIpAddress_getLocalAddress(char* ipAddress);
+DSFML_NETWORK_API void sfIpAddress_getLocalAddress(sf::IpAddress* ipAddress);
 
 
 //Get the computer's public address
-DSFML_NETWORK_API void sfIpAddress_getPublicAddress(char* ipAddress, DLong timeout);
+DSFML_NETWORK_API void sfIpAddress_getPublicAddress(sf::IpAddress* ipAddress, DLong timeout);
 
 
 #endif // DSFML_IPADDRESS_H

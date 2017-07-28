@@ -21,9 +21,9 @@ If you use this software in a product, an acknowledgment in the product document
 module dsfml.network.tcplistener;
 
 
+import dsfml.network.ipaddress;
 import dsfml.network.socket;
 import dsfml.network.tcpsocket;
-
 import dsfml.system.err;
 
 /**
@@ -103,11 +103,11 @@ class TcpListener:Socket
     ///		port = Port to listen for new connections.
     ///
 	///Returns: Status code.
-	Status listen(ushort port)
+	Status listen(ushort port, IpAddress address = IpAddress.Any)
 	{
 		import dsfml.system.string;
 
-		Status toReturn = sfTcpListener_listen(sfPtr, port);
+		Status toReturn = sfTcpListener_listen(sfPtr, port, &address);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
 	}
@@ -181,7 +181,7 @@ ushort sfTcpListener_getLocalPort(const(sfTcpListener)* listener);
 
 
 //Start listening for connections
-Socket.Status sfTcpListener_listen(sfTcpListener* listener, ushort port);
+Socket.Status sfTcpListener_listen(sfTcpListener* listener, ushort port, IpAddress* address);
 
 
 //Accept a new connection

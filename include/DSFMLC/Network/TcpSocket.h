@@ -63,7 +63,7 @@ DSFML_NETWORK_API DUshort sfTcpSocket_getLocalPort(const sfTcpSocket* socket);
 
 
 //Get the address of the connected peer of a TCP socket
-DSFML_NETWORK_API void sfTcpSocket_getRemoteAddress(const sfTcpSocket* socket, char* ipAddress);
+DSFML_NETWORK_API void sfTcpSocket_getRemoteAddress(const sfTcpSocket* socket, sf::IpAddress* ipAddress);
 
 
 //Get the port of the connected peer to which a TCP socket is connected
@@ -71,7 +71,7 @@ DSFML_NETWORK_API DUshort sfTcpSocket_getRemotePort(const sfTcpSocket* socket);
 
 
 //Connect a TCP socket to a remote peer
-DSFML_NETWORK_API DInt sfTcpSocket_connect(sfTcpSocket* socket, const char* hostIP, DUshort port, DLong timeout);
+DSFML_NETWORK_API DInt sfTcpSocket_connect(sfTcpSocket* socket, const sf::IpAddress* ipAddress, DUshort port, DLong timeout);
 
 
 //Disconnect a TCP socket from its remote peer
