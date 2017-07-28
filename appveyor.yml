@@ -143,9 +143,9 @@ init:
         $version = $env:arch;
         $curdir = Convert-Path .;
         $WebLocation = "http://dsfml.com/bins/ci/windows/sfml-$($version).zip";
-        $DownloadLocation = "C:\\sfml-$($version).zip";
+        $DownloadLocation = "C:\\projects\\dsfml\\sfml\\lib\\sfml-$($version).zip";
         (new-object net.webclient).DownloadFile($WebLocation, $DownloadLocation);
-        pushd C:\\;
+        pushd sfml\\lib;
         7z x "sfml-$($version).zip" > $null;
         popd
     }
