@@ -69,9 +69,6 @@ environment:
   - DC: ldc
     DVersion: 1.1.1
     arch: x64
-  - DC: ldc
-    DVersion: 0.17.2
-    arch: x64
 
 
 #Set up our powershell functions
@@ -139,7 +136,6 @@ init:
 #downloads and installs sfml binaries
 - ps: function InstallSFML
       {
-        pwd;
         $version = $env:arch;
         $curdir = Convert-Path .;
         $WebLocation = "http://dsfml.com/bins/ci/windows/sfml-$($version).zip";

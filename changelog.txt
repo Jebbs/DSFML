@@ -7,4 +7,5 @@ Added Supported Compilers:
 Dropped Supported Compilers:
 - DMD 2.067.1 (Windows version does not include mscoff32 libs)
 - LDC 1.0.0 (Not correctly configured on Travic CI for OSX)
+- LDC 0.17.x (New versions of this compiler are not built for Windows)
 - LDC 0.16.1 (Droped support for DMD version 2.067)
