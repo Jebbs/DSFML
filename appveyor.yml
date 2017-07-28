@@ -136,11 +136,27 @@ init:
         }
     }
 
+#downloads and installs sfml binaries
+- ps: function InstallSFML
+      {
+        $version = $env:arch;
+        $WebLocation = "http://dsfml.com/bins/ci/windows/sfml-$($version).zip"
+        $DownloadLocation = "SFML\\lib\\sfml-$($version).zip";
+        (new-object net.webclient).DownloadFile($WebLocation, $DownloadLocation);
+        7z x "sfml-$($version).zip" > $null;
+    }
 
 
 install:
+# setup sfml sources
+- git submodule update --init --recursive
+
 #Install the D compiler
 - ps: SetUpDCompiler
+
+#download and unpack sfml binaries
+- ps: InstallSFML
+
 
 
 before_build:
@@ -198,16 +214,15 @@ before_build:
 
 #Build SFML and then build DSFML
 build_script:
-- git submodule update --init --recursive
 - echo %VCINSTALLDIR%
 - '"%compilersetup%" %compilersetupargs%'
-- cd SFML
-- ps: if($env:toolchain -eq "mingw"){
-        $env:Path = $env:compilerpath + $env:cmakepath;
-       }
-- cmake -G"%maketype%" .
-- '%makecommand%'
-- cd ..
+#- cd SFML
+#- ps: if($env:toolchain -eq "mingw"){
+#        $env:Path = $env:compilerpath + $env:cmakepath;
+#       }
+#- cmake -G"%maketype%" .
+#- '%makecommand%'
+#- cd ..
 - ps : $env:Path = $env:Dcompilerpath + $env:Path
 - ps: if($env:DC -eq "ldc2"){
         $env:compilersetup = "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall";
