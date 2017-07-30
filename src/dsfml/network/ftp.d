@@ -106,7 +106,7 @@ class Ftp
 	///Returns: Server response to the request.
 	Response connect(IpAddress address, ushort port = 21, Duration timeout = Duration.zero())
 	{
-		return new Response(sfFtp_connect(sfPtr, address.m_address.ptr, address.m_address.length, port, timeout.total!"usecs"));
+		return new Response(sfFtp_connect(sfPtr, &address, port, timeout.total!"usecs"));
 	}
 
 	///Connect to the specified FTP server.
@@ -123,7 +123,7 @@ class Ftp
 	Response connect(const(char)[] address, ushort port = 21, Duration timeout = Duration.zero())
 	{
 		auto iaddress = IpAddress(address);
-		return new Response(sfFtp_connect(sfPtr, iaddress.m_address.ptr, iaddress.m_address.length, port, timeout.total!"usecs"));
+		return new Response(sfFtp_connect(sfPtr, &iaddress, port, timeout.total!"usecs"));
 	}
 
 	///Remove an existing directory.
@@ -585,7 +585,7 @@ void sfFtp_destroy(sfFtp* ftp);
 
 
 ///Connect to the specified FTP server
-sfFtpResponse* sfFtp_connect(sfFtp* ftp, const(char)* serverIP, size_t length, ushort port, long timeout);
+sfFtpResponse* sfFtp_connect(sfFtp* ftp, IpAddress* serverIP, ushort port, long timeout);
 
 
 ///Log in using an anonymous account

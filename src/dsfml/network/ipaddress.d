@@ -20,7 +20,7 @@ If you use this software in a product, an acknowledgment in the product document
 ///A module containing the IpAddress struct.
 module dsfml.network.ipaddress;
 
-import core.time;
+public import core.time;
 
 /**
  *Encapsulate an IPv4 network address.
@@ -31,8 +31,8 @@ import core.time;
  */
 struct IpAddress
 {
-	//Initialize m_address with "0.0.0.0" and finish filling it out with /0 characters.
-	package char[16] m_address = ['0','.','0','.','0','.','0', 0,0,0,0,0,0,0,0,0];
+	package uint m_address;
+	package bool m_valid;
 
 	///Construct the address from a string.
 	///
@@ -42,7 +42,8 @@ struct IpAddress
     ///		address = IP address or network name.
 	this(const(char)[] address)
 	{
-		sfIpAddress_fromString(address.ptr, address.length, m_address.ptr);
+		m_address=  htonl(sfIpAddress_integerFromString(address.ptr, address.length));
+		m_valid = true;
 	}
 
 	///Construct the address from 4 bytes.
@@ -56,7 +57,8 @@ struct IpAddress
     ///		byte3 = Fourth byte of the address.
 	this(ubyte byte0,ubyte byte1,ubyte byte2,ubyte byte3)
 	{
-		sfIpAddress_fromBytes(byte0,byte1, byte2, byte3, m_address.ptr);
+		m_address = htonl((byte0 << 24) | (byte1 << 16) | (byte2 << 8) | byte3);
+		m_valid = true;
 	}
 
 	///Construct the address from a 32-bits integer.
@@ -67,7 +69,9 @@ struct IpAddress
     ///		address = 4 bytes of the address packed into a 32-bits integer.
 	this(uint address)
 	{
-		sfIpAddress_fromInteger(address, m_address.ptr);
+		m_address = htonl(address);
+
+		m_valid = true;
 	}
 
 	///Get an integer representation of the address.
@@ -77,23 +81,27 @@ struct IpAddress
 	///Returns: 32-bits unsigned integer representation of the address.
 	int toInteger() const
 	{
-		return sfIpAddress_toInteger(m_address.ptr, m_address.length);
+		return ntohl(m_address);
 	}
 
 	///Get a string representation of the address.
 	///
 	///The returned string is the decimal representation of the IP address (like "192.168.1.56"), even if it was constructed from a host name.
 	///
+	///This string is built using an internal buffer. If you need to store the string, make a copy.
+	///
 	///Returns: String representation of the address
-	void toString(scope void delegate(const char[]) sink) const
+	const(char)[] toString() const @nogc @trusted
 	{
-		int i = 0;
-		while(( i < m_address.length && m_address[i] != 0) )
-		{
-			++i;
-		}
-		//and present the string.
-		sink(m_address[0..i]);
+		import core.stdc.stdio: sprintf;
+
+		//internal string buffer to prevent using the GC to build the strings
+		static char[16] m_string;
+
+		ubyte* bytes = cast(ubyte*)&m_address;
+		int length = sprintf(m_string.ptr, "%d.%d.%d.%d", bytes[0], bytes[1], bytes[2], bytes[3]);
+
+		return m_string[0..length];
 	}
 
 	///Get the computer's local address.
@@ -104,7 +112,7 @@ struct IpAddress
 	static IpAddress getLocalAddress()
 	{
 		IpAddress temp;
-		sfIpAddress_getLocalAddress(temp.m_address.ptr);
+		sfIpAddress_getLocalAddress(&temp);
 		return temp;
 	}
 
@@ -121,23 +129,50 @@ struct IpAddress
 	static IpAddress getPublicAddress(Duration timeout = Duration.zero())
 	{
 		IpAddress temp;
-		sfIpAddress_getPublicAddress(temp.m_address.ptr, timeout.total!"usecs");
+		sfIpAddress_getPublicAddress(&temp, timeout.total!"usecs");
 		return temp;
 	}
 
 	///Value representing an empty/invalid address.
 	static immutable(IpAddress) None;
+	///Value representing any address (0.0.0.0)
+    static immutable(IpAddress) Any = IpAddress(0,0,0,0);
 	///The "localhost" address (for connecting a computer to itself locally)
-	static immutable(IpAddress) LocalHost;
+	static immutable(IpAddress) LocalHost = IpAddress(127,0,0,1);
 	///The "broadcast" address (for sending UDP messages to everyone on a local network)
-	static immutable(IpAddress) Broadcast;
+	static immutable(IpAddress) Broadcast = IpAddress(255,255,255,255);
+}
 
-	static this()
+
+//these have the same implementation, but use different names for readability
+private uint htonl(uint host) nothrow @nogc @safe
+{
+	version(LittleEndian)
 	{
-		LocalHost = IpAddress(127,0,0,1);
-		Broadcast = IpAddress(255,255,255,255);
+		import core.bitop;
+		return bswap(host);
+	}
+	else
+	{
+		return host;
 	}
 }
+
+private uint ntohl(uint network) nothrow @nogc @safe
+{
+	version(LittleEndian)
+	{
+		import core.bitop;
+		return bswap(network);
+	}
+	else
+	{
+		return network;
+	}
+}
+
+
+
 
 unittest
 {
@@ -147,12 +182,12 @@ unittest
 
 		writeln("Unittest for IpAdress");
 
-
 		IpAddress address1;
 
 		assert(address1 == IpAddress.None);
-
 		assert(IpAddress.LocalHost == IpAddress("127.0.0.1"));
+		assert(IpAddress.LocalHost == IpAddress(127,0,0,1));
+		assert(IpAddress(127, 0, 0, 1) == IpAddress(IpAddress(127,0,0,1).toInteger()));
 
 		IpAddress googleIP = IpAddress("google.com");
 
@@ -162,27 +197,19 @@ unittest
 
 		writeln("Your public Ip Address: ", IpAddress.getPublicAddress());
 
+		writeln("Full Ip Address: ", IpAddress(111,111,111,111));
+
 		writeln();
 	}
 }
 
 private extern(C):
-//Note: These functions rely on passing an existing array for the ipAddress.
 
 ///Create an address from a string
-void sfIpAddress_fromString(const(char)* address, size_t addressLength, char* ipAddress);
-
-///Create an address from 4 bytes
-void sfIpAddress_fromBytes(ubyte byte0, ubyte byte1, ubyte byte2, ubyte byte3, char* ipAddress);
-
-///Construct an address from a 32-bits integer
-void sfIpAddress_fromInteger(uint address, char* ipAddress);
-
-///Get an integer representation of the address
-uint sfIpAddress_toInteger(const(char)* ipAddress, size_t length);
+uint sfIpAddress_integerFromString(const(char)* address, size_t addressLength);
 
 ///Get the computer's local address
-void sfIpAddress_getLocalAddress(char* ipAddress);
+void sfIpAddress_getLocalAddress(IpAddress* ipAddress);
 
 ///Get the computer's public address
-void sfIpAddress_getPublicAddress(char* ipAddress, long timeout);
+void sfIpAddress_getPublicAddress(IpAddress* ipAddress, long timeout);

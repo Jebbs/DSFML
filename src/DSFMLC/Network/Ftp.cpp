@@ -128,11 +128,9 @@ void sfFtp_destroy(sfFtp* ftp)
 }
 
 
-sfFtpResponse* sfFtp_connect(sfFtp* ftp, const char* serverIP, size_t length, DUshort port, DLong timeout)
+sfFtpResponse* sfFtp_connect(sfFtp* ftp, sf::IpAddress* serverIP, DUshort port, DLong timeout)
 {
-    sf::IpAddress SFMLServer(std::string(serverIP, length));
-
-    return new sfFtpResponse(ftp->This.connect(SFMLServer, port, sf::microseconds(timeout)));
+    return new sfFtpResponse(ftp->This.connect(*serverIP, port, sf::microseconds(timeout)));
 }
 
 

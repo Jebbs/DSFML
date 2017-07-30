@@ -22,9 +22,9 @@ module dsfml.network.tcpsocket;
 
 import core.time;
 
-import dsfml.network.socket;
 import dsfml.network.ipaddress;
 import dsfml.network.packet;
+import dsfml.network.socket;
 
 import dsfml.system.err;
 
@@ -83,7 +83,7 @@ class TcpSocket:Socket
 	{
 		IpAddress temp;
 
-		sfTcpSocket_getRemoteAddress(sfPtr,temp.m_address.ptr);
+		sfTcpSocket_getRemoteAddress(sfPtr,&temp);
 
 		return temp;
 	}
@@ -123,7 +123,7 @@ class TcpSocket:Socket
     ///Returns: Status code.
 	Status connect(IpAddress host, ushort port, Duration timeout = Duration.zero())
 	{
-		return sfTcpSocket_connect(sfPtr, host.m_address.ptr,port, timeout.total!"usecs");
+		return sfTcpSocket_connect(sfPtr, &host, port, timeout.total!"usecs");
 	}
 
 	///Disconnect the socket from its remote peer.
@@ -324,7 +324,7 @@ ushort sfTcpSocket_getLocalPort(const(sfTcpSocket)* socket);
 
 
 //Get the address of the connected peer of a TCP socket
-void sfTcpSocket_getRemoteAddress(const(sfTcpSocket)* socket, char* ipAddress);
+void sfTcpSocket_getRemoteAddress(const(sfTcpSocket)* socket, IpAddress* ipAddress);
 
 
 //Get the port of the connected peer to which a TCP socket is connected
@@ -332,7 +332,7 @@ ushort sfTcpSocket_getRemotePort(const(sfTcpSocket)* socket);
 
 
 //Connect a TCP socket to a remote peer
-Socket.Status sfTcpSocket_connect(sfTcpSocket* socket, const(char)* hostIP, ushort port, long timeout);
+Socket.Status sfTcpSocket_connect(sfTcpSocket* socket, IpAddress* host, ushort port, long timeout);
 
 
 //Disconnect a TCP socket from its remote peer

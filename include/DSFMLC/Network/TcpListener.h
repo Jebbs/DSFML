@@ -34,6 +34,7 @@ All Libraries used by SFML
 // Headers
 #include <DSFMLC/Network/Export.h>
 #include <DSFMLC/Network/Types.h>
+#include <SFML/Network/IpAddress.hpp>
 
 
 
@@ -58,7 +59,7 @@ DSFML_NETWORK_API DUshort sfTcpListener_getLocalPort(const sfTcpListener* listen
 
 
 //Start listening for connections
-DSFML_NETWORK_API DInt sfTcpListener_listen(sfTcpListener* listener, DUshort port);
+DSFML_NETWORK_API DInt sfTcpListener_listen(sfTcpListener* listener, DUshort port, const sf::IpAddress* address);
 
 
 //Accept a new connection
