@@ -241,11 +241,11 @@ final abstract class Keyboard
 		F15,
 		///The Pause key
 		Pause,
-		
+
 		///Keep last -- the total number of keyboard keys
 		KeyCount
 	}
-	
+
 	///Check if a key is pressed.
 	///
 	///Params:
@@ -256,7 +256,7 @@ final abstract class Keyboard
 	{
 		return (sfKeyboard_isKeyPressed(key));
 	}
-	
+
 }
 
 //known bugs:
@@ -266,13 +266,13 @@ unittest
 	version(DSFML_Unittest_Window)
 	{
 		import std.stdio;
-		
+
 		writeln("Unit test for Keyboard realtime input");
-		
+
 		bool running = true;
-		
+
 		writeln("Press any key for real time input. Press esc to exit.");
-		
+
 		string[int] keys;
 		//in its own scope for code folding
 		{
@@ -379,8 +379,8 @@ unittest
 			keys[99] =	"F15";
 			keys[100] =	"Pause";
 		}
-		
-		//must check for each possible key 
+
+		//must check for each possible key
 		while(running)
 		{
 			for(int i =-1;i<101;++i)
@@ -401,6 +401,9 @@ unittest
 					}
 				}
 			}
+
+			running = false;
+
 		}
 	}
 }

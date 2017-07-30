@@ -91,7 +91,7 @@ struct Event
 	}
 
 	/**
-	 *Mouse buttons events parameters (MouseButtonPressed, MouseButtonReleased) 
+	 *Mouse buttons events parameters (MouseButtonPressed, MouseButtonReleased)
 	 */
 	struct MouseButtonEvent
 	{
@@ -104,7 +104,7 @@ struct Event
 	}
 
 	/**
-	 *Mouse move event parameters (MouseMoved) 
+	 *Mouse move event parameters (MouseMoved)
 	 */
 	struct MouseMoveEvent
 	{
@@ -115,7 +115,7 @@ struct Event
 	}
 
 	/**
-	 *Mouse wheel events parameters (MouseWheelMoved) 
+	 *Mouse wheel events parameters (MouseWheelMoved)
 	 */
 	struct MouseWheelEvent
 	{
@@ -126,7 +126,7 @@ struct Event
 		///Y position of the mouse pointer, relative to the top of the owner window
 		int y;
 	}
-	
+
 	/**
 	 *Mouse wheel scroll events parameters (MouseWheelScrolled)
 	 */
@@ -161,10 +161,10 @@ struct Event
 		/// UTF-32 unicode value of the character
 		dchar unicode;
 	}
+
 	/**
 	 *Sensor event parameters
 	 */
-	
 	struct SensorEvent
 	{
 		///Type of the sensor
@@ -176,7 +176,6 @@ struct Event
 	/**
 	 *Touch Event parameters
 	 */
-	
 	struct TouchEvent
 	{
 		///Index of the finger in case of multi-touch events.
@@ -233,14 +232,14 @@ struct Event
 		TouchEnded,
 		///A sensor value changed (data in event.sensor)
 		SensorChanged,
-		
+
 		///Keep last -- the total number of event types
 		Count
 	}
-	
+
 	///Type of the event
 	EventType type;
-	
+
 	union
 	{
 		///Size event parameters (Event::Resized)
@@ -267,7 +266,7 @@ struct Event
 		TouchEvent touch;
 		///Sensor event Parameters
 		SensorEvent sensor;
-		
+
 	}
 }
 
@@ -419,6 +418,7 @@ unittest
 
 		dstring savedText = "";
 
+		auto clock = new Clock();
 		auto window = new RenderWindow(VideoMode(800,600),"Event Unit Test Window");
 
 		while(window.isOpen())
@@ -521,11 +521,18 @@ unittest
 							text5.setString("Currently in key press mode.");
 							outputText.setString = "Key pressed:";
 						}
-	
+
 					}
 				}
 
 			}
+
+			if(clock.getElapsedTime().total!"seconds" > 1)
+			{
+				window.close();
+			}
+
+
 			window.clear();
 
 			window.draw(text1);

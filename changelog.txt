@@ -4,6 +4,9 @@ DSFML 2.4
 General
 =======
 
+Removed user imput from unit tests and included them in Travis CI and Appveyor
+scripts.
+
 Added Supported Compilers:
 - DMD 2.074.1, 2.075.0
 - LDC 1.2.0, 1.3.0
