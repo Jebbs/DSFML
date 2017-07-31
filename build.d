@@ -157,12 +157,12 @@ void initialize()
                           "videomode", "window", "windowhandle"];
 
     fileList["graphics"] = ["blendmode", "circleshape", "color", "convexshape",
-                            "drawable", "font", "glyph", "image", "package",
-                            "primitivetype", "rect", "rectangleshape",
-                            "renderstates", "rendertarget", "rendertexture",
-                            "renderwindow", "shader", "shape", "sprite",
-                            "text", "texture", "transform", "transformable",
-                            "vertex", "vertexarray", "view"];
+                            "drawable", "font", "glsl", "glyph", "image",
+                            "package", "primitivetype", "rect",
+                            "rectangleshape", "renderstates", "rendertarget",
+                            "rendertexture", "renderwindow", "shader", "shape",
+                            "sprite", "text", "texture", "transform",
+                            "transformable", "vertex", "vertexarray", "view"];
 
     archSwitch = "";
 

@@ -60,7 +60,7 @@ struct Transform
 	{
 		m_matrix = [a00, a01, a02, a10, a11, a12, a20, a21, a22];
 	}
-	
+
 	this(float[9] newMatrix)
 	{
 		m_matrix = newMatrix.dup;
@@ -68,9 +68,9 @@ struct Transform
 
 	/**
 	 * Return the inverse of the transform.
-	 * 
+	 *
 	 * If the inverse cannot be computed, an identity transform is returned.
-	 * 
+	 *
 	 * Returns: A new transform which is the inverse of self.
 	 */
 	Transform getInverse() const
@@ -82,17 +82,17 @@ struct Transform
 
 	/**
 	 * Return the transform as a 4x4 matrix.
-	 * 
+	 *
 	 * This function returns a pointer to an array of 16 floats containing the transform elements as a 4x4 matrix, which is directly compatible with OpenGL functions.
-	 * 
+	 *
 	 * Returns: A 4x4 matrix.
 	 */
-	const(float)[] getMatrix()
+	const(float)[] getMatrix() const
 	{
 		static float[16] temp;
-		
+
 		sfTransform_getMatrix(m_matrix.ptr, temp.ptr);
-		
+
 		return temp.dup;
 	}
 
