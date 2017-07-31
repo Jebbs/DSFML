@@ -32,7 +32,7 @@ import std.traits;
  *The template parameter T is the type of the coordinates. It can be any type that supports arithmetic operations (+, -, /, *) and comparisons (==, !=), for example int or float.
  */
 struct Vector3(T)
-	if(isNumeric!(T))
+	if(isNumeric!(T) || is(T == bool))
 {
 	///X coordinate of the vector.
 	T x;
@@ -40,7 +40,7 @@ struct Vector3(T)
 	T y;
 	///Z coordinate of the vector.
 	T z;
-	
+
 	///Construct the vector from its coordinates
 	///
 	///Params:
@@ -49,11 +49,11 @@ struct Vector3(T)
 	///		Z = Z coordinate.
 	this(T X,T Y,T Z)
 	{
-		
+
 		x = X;
-		y = Y;	
+		y = Y;
 		z = Z;
-		
+
 	}
 
 	///Construct the vector from another type of vector
@@ -67,13 +67,12 @@ struct Vector3(T)
 		z = cast(T)(otherVector.z);
 	}
 
-	
 	Vector3!(T) opUnary(string s)() const
 	if(s == "-")
 	{
 		return Vector3!(T)(-x,-y,-z);
 	}
-	
+
 	// Add/Subtract between two vector3's
 	Vector3!(T) opBinary(string op,E)(Vector3!(E) otherVector) const
 	if(isNumeric!(E) && ((op == "+") || (op == "-")))
@@ -86,11 +85,9 @@ struct Vector3(T)
 		{
 			return Vector3!(T)(cast(T)(x-otherVector.x),cast(T)(y-otherVector.y),cast(T)(z - otherVector.z));
 		}
-		
+
 	}
-	
-	
-	
+
 	// Multiply/Divide a Vector3 with a numaric value
 	Vector3!(T) opBinary(string op,E)(E num) const
 	if(isNumeric!(E) && ((op == "*") || (op == "/")))
@@ -104,9 +101,7 @@ struct Vector3(T)
 			return Vector3!(T)(cast(T)(x/num),cast(T)(y/num),cast(T)(z/num));
 		}
 	}
-	
-	
-	
+
 	// Assign Add/Subtract with another vector3
 	ref Vector3!(T) opOpAssign(string op, E)(Vector3!(E) otherVector)
 	if(isNumeric!(E) && ((op == "+") || (op == "-")))
@@ -126,7 +121,7 @@ struct Vector3(T)
 			return this;
 		}
 	}
-	
+
 	//Assign Multiply/Divide a Vector3 with a numaric value
 	ref Vector3!(T) opOpAssign(string op,E)(E num)
 	if(isNumeric!(E) && ((op == "*") || (op == "/")))
@@ -155,7 +150,7 @@ struct Vector3(T)
 		z = cast(T)(otherVector.z);
 		return this;
 	}
-	
+
 	/* Omitted for the same reason as Vector3's normalize.
 * I very much would like to include it though!
 Vector3!(T) normalize()
@@ -188,40 +183,37 @@ unittest
 	version(DSFML_Unittest_System)
 	{
 		import std.stdio;
-	
+
 		writeln("Unit test for Vector3");
-	
+
 		auto floatVector3 = Vector3f(100,100,100);
-	
+
 		assert((floatVector3/2) == Vector3f(50,50,50));
-	
+
 		assert((floatVector3*2) == Vector3f(200,200,200));
-	
+
 		assert((floatVector3 + Vector3f(50, 0,100)) == Vector3f(150, 100,200));
 
 		assert((floatVector3 - Vector3f(50,0,300)) == Vector3f(50,100,-200));
-	
+
 		floatVector3/=2;
-	
+
 		assert(floatVector3 == Vector3f(50,50,50));
-	
+
 		floatVector3*=2;
-	
+
 		assert(floatVector3 == Vector3f(100,100,100));
-	
+
 		floatVector3+= Vector3f(50,0,100);
-	
+
 		assert(floatVector3 == Vector3f(150,100,200));
-	
+
 		floatVector3-=Vector3f(50,100,50);
-	
+
 		assert(floatVector3 == Vector3f(100,0,150));
-	
-	
+
 		writeln("Vector3 tests passed");
 		writeln();
 	}
 
 }
-
-

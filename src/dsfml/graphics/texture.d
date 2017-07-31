@@ -318,18 +318,167 @@ class Texture
 		return (sfTexture_isSmooth(sfPtr));// == sfTrue)?true:false;
 	}
 
+
+	/**
+	 * Update the whole texture from an array of pixels.
+	 *
+	 * The pixel array is assumed to have the same size as
+     * the area rectangle, and to contain 32-bits RGBA pixels.
+	 *
+	 * No additional check is performed on the size of the pixel
+     * array, passing invalid arguments will lead to an undefined
+     * behavior.
+	 *
+	 * This function does nothing if pixels is empty or if the
+     * texture was not previously created.
+	 *
+	 * Params:
+	 * 		pixels	= Array of pixels to copy to the texture.
+	 */
+	void update(const(ubyte)[] pixels)
+	{
+		Vector2u size = getSize();
+
+		sfTexture_updateFromPixels(sfPtr,pixels.ptr,size.x, size.y, 0,0);
+	}
+
+	/**
+	 * Update part of the texture from an array of pixels.
+	 *
+	 * The size of the pixel array must match the width and height arguments,
+	 * and it must contain 32-bits RGBA pixels.
+	 *
+	 * No additional check is performed on the size of the pixel array or the
+	 * bounds of the area to update, passing invalid arguments will lead to an
+	 * undefined behaviour.
+	 *
+	 * This function does nothing if pixels is empty or if the texture was not
+	 * previously created.
+	 *
+	 * Params:
+	 * 		pixels	= Array of pixels to copy to the texture.
+	 * 		width	= Width of the pixel region contained in pixels
+	 * 		height	= Height of the pixel region contained in pixels
+	 * 		x		= X offset in the texture where to copy the source pixels
+	 * 		y		= Y offset in the texture where to copy the source pixels
+	 */
+	void update(const(ubyte)[] pixels, uint width, uint height, uint x, uint y)
+	{
+		sfTexture_updateFromPixels(sfPtr,pixels.ptr,width, height, x,y);
+	}
+
 	/**
 	 * Update the texture from an image.
 	 *
-	 * Although the source image can be smaller than the texture, this function is usually used for updating the whole texture. The other overload, which has (x, y) additional arguments, is more convenient for updating a sub-area of the texture.
+	 * Although the source image can be smaller than the texture, this function
+	 * is usually used for updating the whole texture. The other overload, which
+	 * has (x, y) additional arguments, is more convenient for updating a
+	 * sub-area of the texture.
 	 *
-	 * No additional check is performed on the size of the image, passing an image bigger than the texture will lead to an undefined behaviour.
+	 * No additional check is performed on the size of the image, passing an
+	 * image bigger than the texture will lead to an undefined behaviour.
 	 *
 	 * This function does nothing if the texture was not previously created.
 	 *
 	 * Params:
 	 * 		image	= Image to copy to the texture.
 	 */
+	void update(const(Image) image)
+	{
+		sfTexture_updateFromImage(sfPtr, image.sfPtr, 0, 0);
+	}
+
+	/**
+	 * Update the texture from an image.
+	 *
+	 * No additional check is performed on the size of the image, passing an
+	 * invalid combination of image size and offset will lead to an undefined
+	 * behavior.
+	 *
+	 * This function does nothing if the texture was not previously created.
+	 *
+	 * Params:
+	 * 		image = Image to copy to the texture.
+	 *		y     = Y offset in the texture where to copy the source image.
+	 *		x     = X offset in the texture where to copy the source image.
+	 */
+	void update(const(Image) image, uint x, uint y)
+	{
+		sfTexture_updateFromImage(sfPtr, image.sfPtr, x, y);
+	}
+
+	/**
+	 * Update the texture from the contents of a window
+     *
+     * Although the source window can be smaller than the texture,
+     * this function is usually used for updating the whole texture.
+     * The other overload, which has (x, y) additional arguments,
+     * is more convenient for updating a sub-area of the texture.
+     *
+     * No additional check is performed on the size of the window,
+     * passing a window bigger than the texture will lead to an
+     * undefined behavior.
+     *
+     * This function does nothing if either the texture or the window
+     * was not previously created.
+	 *
+     * Params:
+     *		window = Window to copy to the texture
+	 */
+	void update(T)(const(T) window)
+		if(is(T == Window) || is(T == RenderWindow))
+	{
+		update(window, 0, 0);
+	}
+
+	/**
+	 * Update a part of the texture from the contents of a window
+     *
+     * No additional check is performed on the size of the window,
+     * passing an invalid combination of window size and offset
+     * will lead to an undefined behavior.
+     *
+     * This function does nothing if either the texture or the window
+     * was not previously created.
+     *
+	 * Params:
+     *		window = Window to copy to the texture
+     *		x      = X offset in the texture where to copy the source window
+     *		y      = Y offset in the texture where to copy the source window
+     *
+	 */
+	void update(T)(const(T) window, uint x, uint y)
+		if(is(T == Window) || is(T == RenderWindow))
+	{
+		static if(is(T == RenderWindow))
+		{
+			sfTexture_updateFromRenderWindow(sfPtr, T.sfPtr, x, y);
+		}
+		else
+		{
+			sfTexture_updateFromWindow(sfPtr, RenderWindow.windowPointer(T),
+										x, y);
+		}
+
+	}
+
+	/**
+	 * Update the texture from an image.
+	 *
+	 * Although the source image can be smaller than the texture, this function
+	 * is usually used for updating the whole texture. The other overload, which
+	 * has (x, y) additional arguments, is more convenient for updating a
+	 * sub-area of the texture.
+	 *
+	 * No additional check is performed on the size of the image, passing an
+	 * image bigger than the texture will lead to an undefined behaviour.
+	 *
+	 * This function does nothing if the texture was not previously created.
+	 *
+	 * Params:
+	 * 		image	= Image to copy to the texture.
+	 */
+	deprecated("Use update function.")
 	void updateFromImage(Image image, uint x, uint y)
 	{
 		sfTexture_updateFromImage(sfPtr, image.sfPtr, x, y);
@@ -351,6 +500,7 @@ class Texture
 	 * 		x		= X offset in the texture where to copy the source pixels
 	 * 		y		= Y offset in the texture where to copy the source pixels
 	 */
+	deprecated("Use update function.")
 	void updateFromPixels(const(ubyte)[] pixels, uint width, uint height, uint x, uint y)
 	{
 		sfTexture_updateFromPixels(sfPtr,pixels.ptr,width, height, x,y);
@@ -369,6 +519,7 @@ class Texture
 	 * 		x		= X offset in the texture where to copy the source window
 	 * 		y		= Y offset in the texture where to copy the source window
 	 */
+	deprecated("Use update function.")
 	void updateFromWindow(Window window, uint x, uint y)
 	{
 		sfTexture_updateFromWindow(sfPtr, RenderWindow.windowPointer(window), x, y);
@@ -387,6 +538,7 @@ class Texture
 	 * 		x		= X offset in the texture where to copy the source window
 	 * 		y		= Y offset in the texture where to copy the source window
 	 */
+	deprecated("Use update function.")
 	void updateFromWindow(RenderWindow window, uint x, uint y)
 	{
 		sfTexture_updateFromRenderWindow(sfPtr, window.sfPtr, x, y);

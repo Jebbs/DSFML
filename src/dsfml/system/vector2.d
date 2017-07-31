@@ -32,22 +32,22 @@ import std.traits;
  *The template parameter T is the type of the coordinates. It can be any type that supports arithmetic operations (+, -, /, *) and comparisons (==, !=), for example int or float.
  */
 struct Vector2(T)
-	if(isNumeric!(T))
+	if(isNumeric!(T) || is(T == bool))
 {
 	///X coordinate of the vector
 	T x;
 	///Y coordinate of the vector
 	T y;
-	
+
 	///Construct the vector from its coordinates
 	///
 	///Params:
 	///		X = X coordinate.
 	///		Y = Y coordinate.
 	this(T X,T Y)
-	{	
+	{
 		x = X;
-		y = Y;	
+		y = Y;
 	}
 
 	///Construct the vector from another type of vector
@@ -60,10 +60,10 @@ struct Vector2(T)
 		y = cast(T)(otherVector.y);
 	}
 
-	
+
 	//I think it could be a useful function, but
 	//since it isn't part of the API I will leave it out for now.
-	
+
 	/*
 //Returns a copy of the normalized vector instead of changing current one.
 Vector2!(T) normalized()
@@ -84,13 +84,13 @@ return Vector2!(T)(0,0);
 
 
 */
-	
+
 	Vector2!(T) opUnary(string s)() const
 	if (s == "-")
 	{
 		return Vector2!(T)(-x, -y);
 	}
-	
+
 	// Add/Subtract between two vector2's
 	Vector2!(T) opBinary(string op, E)(Vector2!(E) otherVector) const
 	if(isNumeric!(E) && ((op == "+") || (op == "-")))
@@ -104,9 +104,7 @@ return Vector2!(T)(0,0);
 			return Vector2!(T)(cast(T)(x-otherVector.x),cast(T)(y-otherVector.y));
 		}
 	}
-	
-	
-	
+
 	// Multiply/Divide a vector with a numaric value
 	Vector2!(T) opBinary (string op, E)(E num) const
 	if(isNumeric!(E) && ((op == "*") || (op == "/")))
@@ -120,8 +118,7 @@ return Vector2!(T)(0,0);
 			return Vector2!(T)(cast(T)(x/num),cast(T)(y/num));
 		}
 	}
-	
-	
+
 	// Assign Add/Subtract with another vector2
 	ref Vector2!(T) opOpAssign(string op, E)(Vector2!(E) otherVector)
 	if(isNumeric!(E) && ((op == "+") || (op == "-")))
@@ -139,7 +136,7 @@ return Vector2!(T)(0,0);
 			return this;
 		}
 	}
-	
+
 	//Assign Multiply/Divide with a numaric value
 	ref Vector2!(T) opOpAssign(string op,E)(E num)
 	if(isNumeric!(E) && ((op == "*") || (op == "/")))
@@ -165,14 +162,14 @@ return Vector2!(T)(0,0);
 		y = cast(T)(otherVector.y);
 		return this;
 	}
-	
+
 	//Compare operator
 	bool opEquals(E)(const Vector2!(E) otherVector) const
 	if(isNumeric!(E))
 	{
 		return ((x == otherVector.x) && (y == otherVector.y));
 	}
-	
+
 	//figured it would be useful for testing, debugging, etc
 	string toString() const
 	{
@@ -219,10 +216,8 @@ unittest
 
 		assert(floatVector2 == Vector2f(100,0));
 
-	
 		writeln("Vector2 tests passed");
 		writeln();
 
 	}
 }
-
