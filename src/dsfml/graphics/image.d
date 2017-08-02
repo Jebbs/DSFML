@@ -419,7 +419,7 @@ void sfImage_getSize(const sfImage* image, uint* width, uint* height);
 void sfImage_createMaskFromColor(sfImage* image, ubyte r, ubyte b, ubyte g, ubyte a, ubyte alpha);
 
 /// \brief Copy pixels from an image onto another
-void sfImage_copyImage(sfImage* image, const(sfImage)* source, uint destX, uint destY, int sourceRectTop, int sourceRectLeft, int sourceRectWidth, int sourceRectHeight, bool applyAlpha);
+void sfImage_copyImage(sfImage* image, const(sfImage)* source, uint destX, uint destY, int sourceRectLeft, int sourceRectTop, int sourceRectWidth, int sourceRectHeight, bool applyAlpha);
 
 /// \brief Change the color of a pixel in an image
 void sfImage_setPixel(sfImage* image, uint x, uint y, ubyte r, ubyte b, ubyte g, ubyte a);
