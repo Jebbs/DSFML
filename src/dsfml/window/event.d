@@ -46,7 +46,7 @@ struct Event
 	struct JoystickButtonEvent
 	{
 		///Index of the joystick (in range [0 .. Joystick::Count - 1])
-		uint joystickId; 
+		uint joystickId;
 		///Index of the button that has been pressed (in range [0 .. Joystick::ButtonCount - 1])
 		uint button;
 	}
@@ -91,7 +91,7 @@ struct Event
 	}
 
 	/**
-	 *Mouse buttons events parameters (MouseButtonPressed, MouseButtonReleased) 
+	 *Mouse buttons events parameters (MouseButtonPressed, MouseButtonReleased)
 	 */
 	struct MouseButtonEvent
 	{
@@ -104,7 +104,7 @@ struct Event
 	}
 
 	/**
-	 *Mouse move event parameters (MouseMoved) 
+	 *Mouse move event parameters (MouseMoved)
 	 */
 	struct MouseMoveEvent
 	{
@@ -115,8 +115,9 @@ struct Event
 	}
 
 	/**
-	 *Mouse wheel events parameters (MouseWheelMoved) 
+	 *Mouse wheel events parameters (MouseWheelMoved)
 	 */
+	deprecated("This event is deprecated and potentially inaccurate. Use MouseWheelScrollEvent instead.")
 	struct MouseWheelEvent
 	{
 		///Number of ticks the wheel has moved (positive is up, negative is down)
@@ -126,7 +127,7 @@ struct Event
 		///Y position of the mouse pointer, relative to the top of the owner window
 		int y;
 	}
-	
+
 	/**
 	 *Mouse wheel scroll events parameters (MouseWheelScrolled)
 	 */
@@ -161,10 +162,10 @@ struct Event
 		/// UTF-32 unicode value of the character
 		dchar unicode;
 	}
+
 	/**
 	 *Sensor event parameters
 	 */
-	
 	struct SensorEvent
 	{
 		///Type of the sensor
@@ -173,10 +174,10 @@ struct Event
 		float y;
 		float z;
 	}
+
 	/**
 	 *Touch Event parameters
 	 */
-	
 	struct TouchEvent
 	{
 		///Index of the finger in case of multi-touch events.
@@ -233,14 +234,14 @@ struct Event
 		TouchEnded,
 		///A sensor value changed (data in event.sensor)
 		SensorChanged,
-		
+
 		///Keep last -- the total number of event types
 		Count
 	}
-	
+
 	///Type of the event
 	EventType type;
-	
+
 	union
 	{
 		///Size event parameters (Event::Resized)
@@ -267,7 +268,6 @@ struct Event
 		TouchEvent touch;
 		///Sensor event Parameters
 		SensorEvent sensor;
-		
 	}
 }
 

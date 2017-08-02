@@ -134,6 +134,158 @@ void sfShader_destroy(sfShader* shader)
 }
 
 
+
+
+void sfShader_bind(const sfShader* shader)
+{
+    sf::Shader::bind(shader ? &shader->This : 0);
+}
+
+
+DBool sfShader_isAvailable(void)
+{
+    return sf::Shader::isAvailable() ? DTrue : DFalse;
+}
+
+
+void sfShader_setFloatUniform(sfShader* shader, const char* name, size_t length, float x)
+{
+    shader->This.setUniform(std::string(name, length), x);
+}
+
+
+void sfShader_setVec2Uniform(sfShader* shader, const char* name, size_t length, const sf::Glsl::Vec2* vec2)
+{
+    shader->This.setUniform(std::string(name, length), *vec2);
+}
+
+
+void sfShader_setVec3Uniform(sfShader* shader, const char* name, size_t length, const sf::Glsl::Vec3* vec3)
+{
+    shader->This.setUniform(std::string(name, length), *vec3);
+}
+
+
+void sfShader_setVec4Uniform(sfShader* shader, const char* name, size_t length, const sf::Glsl::Vec4* vec4)
+{
+    shader->This.setUniform(std::string(name, length), *vec4);
+}
+
+
+void sfShader_setIntUniform(sfShader* shader, const char* name, size_t length, int x)
+{
+    shader->This.setUniform(std::string(name, length), x);
+}
+
+
+void sfShader_setIvec2Uniform(sfShader* shader, const char* name, size_t length, const sf::Glsl::Ivec2* ivec2)
+{
+    shader->This.setUniform(std::string(name, length), *ivec2);
+}
+
+
+void sfShader_setIvec3Uniform(sfShader* shader, const char* name, size_t length, const sf::Glsl::Ivec3* ivec3)
+{
+    shader->This.setUniform(std::string(name, length), *ivec3);
+}
+
+
+void sfShader_setIvec4Uniform(sfShader* shader, const char* name, size_t length, const sf::Glsl::Ivec4* ivec4)
+{
+    shader->This.setUniform(std::string(name, length), *ivec4);
+}
+
+
+void sfShader_setBoolUniform(sfShader* shader, const char* name, size_t length, DBool x)
+{
+    shader->This.setUniform(std::string(name, length), static_cast<bool>(x));
+}
+
+
+void sfShader_setBvec2Uniform(sfShader* shader, const char* name, size_t length, DBool x, DBool y)
+{
+    shader->This.setUniform(std::string(name, length),
+                   sf::Glsl::Bvec2(static_cast<bool>(x), static_cast<bool>(y)));
+}
+
+
+void sfShader_setBvec3Uniform(sfShader* shader, const char* name, size_t length, DBool x, DBool y, DBool z)
+{
+    shader->This.setUniform(std::string(name, length),
+                    sf::Glsl::Bvec3(static_cast<bool>(x), static_cast<bool>(y),
+                                    static_cast<bool>(z)));
+}
+
+
+void sfShader_setBvec4Uniform(sfShader* shader, const char* name, size_t length, DBool x, DBool y, DBool z, DBool w)
+{
+    shader->This.setUniform(std::string(name, length),
+                   sf::Glsl::Bvec4(static_cast<bool>(x), static_cast<bool>(y),
+                                   static_cast<bool>(z), static_cast<bool>(w)));
+}
+
+
+void sfShader_setMat3Uniform(sfShader* shader, const char* name, size_t length, const sf::Glsl::Mat3* mat3)
+{
+    shader->This.setUniform(std::string(name, length),*mat3);
+}
+
+
+void sfShader_setMat4Uniform(sfShader* shader, const char* name, size_t length, const sf::Glsl::Mat4* mat4)
+{
+    shader->This.setUniform(std::string(name, length),*mat4);
+}
+
+
+void sfShader_setTextureUniform(sfShader* shader, const char* name, size_t length, const sfTexture* texture)
+{
+    shader->This.setUniform(std::string(name, length), *texture->This);
+}
+
+
+void sfShader_setCurrentTextureUniform(sfShader* shader, const char* name, size_t length)
+{
+    shader->This.setUniform(std::string(name, length), sf::Shader::CurrentTextureType());
+}
+
+
+void sfShader_setFloatArrayUniform(sfShader* shader, const char* name, size_t nlength, const float* array, size_t alength)
+{
+    shader->This.setUniformArray(std::string(name, nlength), array, alength);
+}
+
+
+void sfShader_setVec2ArrayUniform(sfShader* shader, const char* name, size_t nlength, const sf::Glsl::Vec2* array, size_t alength)
+{
+    shader->This.setUniformArray(std::string(name, nlength), array, alength);
+}
+
+
+void sfShader_setVec3ArrayUniform(sfShader* shader, const char* name, size_t nlength, const sf::Glsl::Vec3* array, size_t alength)
+{
+    shader->This.setUniformArray(std::string(name, nlength), array, alength);
+}
+
+
+void sfShader_setVec4ArrayUniform(sfShader* shader, const char* name, size_t nlength, const sf::Glsl::Vec4* array, size_t alength)
+{
+    shader->This.setUniformArray(std::string(name, nlength), array, alength);
+}
+
+
+void sfShader_setMat3ArrayUniform(sfShader* shader, const char* name, size_t nlength, const sf::Glsl::Mat3* array, size_t alength)
+{
+    shader->This.setUniformArray(std::string(name, nlength), array, alength);
+}
+
+
+void sfShader_setMat4ArrayUniform(sfShader* shader, const char* name, size_t nlength, const sf::Glsl::Mat4* array, size_t alength)
+{
+    shader->This.setUniformArray(std::string(name, nlength), array, alength);
+}
+
+/******************Deprecated******************/
+
 void sfShader_setFloatParameter(sfShader* shader, const char* name, size_t length , float x)
 {
     shader->This.setParameter(std::string(name, length), x);
@@ -179,16 +331,4 @@ void sfShader_setTextureParameter(sfShader* shader, const char* name, size_t len
 void sfShader_setCurrentTextureParameter(sfShader* shader, const char* name, size_t length)
 {
     shader->This.setParameter(std::string(name, length), sf::Shader::CurrentTextureType());
-}
-
-
-void sfShader_bind(const sfShader* shader)
-{
-    sf::Shader::bind(shader ? &shader->This : 0);
-}
-
-
-DBool sfShader_isAvailable(void)
-{
-    return sf::Shader::isAvailable() ? DTrue : DFalse;
 }

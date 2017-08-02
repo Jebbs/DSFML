@@ -467,10 +467,11 @@ class Window
 		setMousePosition(pos);
 	}
 
-	//Circumvents the package restriction allowing Texture to get the internal pointer
-	protected static void* getWindowPointer(Window window)
+	//Circumvents the package restriction allowing Texture to get the internal
+	//pointer of a regular window (for texture.update)
+	protected static void* getWindowPointer(const(Window) window)
 	{
-		return window.sfPtr;
+		return cast(void*)window.sfPtr;
 	}
 
 

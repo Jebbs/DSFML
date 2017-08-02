@@ -472,6 +472,30 @@ class RenderWindow : Window, RenderTarget
 	}
 
 	/**
+	 *
+     * Copy the current contents of the window to an image
+     *
+     * Deprecated:
+     * Use a sf::Texture and its sf::Texture::update(const Window&)
+     * function and copy its contents into an sf::Image instead.
+     *
+     * This is a slow operation, whose main purpose is to make
+     * screenshots of the application. If you want to update an
+     * image with the contents of the window and then use it for
+     * drawing, you should rather use a sf::Texture and its
+     * update(Window&) function.
+     * You can also draw things directly to a texture with the
+     * sf::RenderTexture class.
+     *
+     * Returns: An Image containing the captured contents.
+	 */
+	deprecated("Use a Texture, its update function, and copy its contents into an Image instead.")
+	Image capture()
+	{
+		return new Image(sfRenderWindow_capture(sfPtr));
+	}
+
+	/**
 	 * Display on screen what has been rendered to the window so far.
 	 *
 	 * This function is typically called after all OpenGL rendering has been done for the current frame, in order to show it on screen.
@@ -607,19 +631,10 @@ class RenderWindow : Window, RenderTarget
 		sfMouse_setPositionRenderWindow(pos.x, pos.y, sfPtr);
 	}
 
-	//Provides the static windowPointer method a way to get the pointer
-	//Window.getWindowPointer is protected, so the static method cannot call it directly
-	private void* getWindowPtr(Window window)
+	//let's Texture have a way to get the sfPtr of a regular window.
+	package static void* windowPointer(const(Window) window)
 	{
 		return getWindowPointer(window);
-	}
-
-	//let's Texture have a way to get the sfPtr of a regular window.
-	package static void* windowPointer(Window window)
-	{
-		scope RenderWindow temp = new RenderWindow();
-
-		return temp.getWindowPtr(window);
 	}
 
 }
