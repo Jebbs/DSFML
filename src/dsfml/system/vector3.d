@@ -1,52 +1,63 @@
 /*
-DSFML - The Simple and Fast Multimedia Library for D
+ * DSFML - The Simple and Fast Multimedia Library for D
+ *
+ * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ *
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from the
+ * use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not claim
+ * that you wrote the original software. If you use this software in a product,
+ * an acknowledgment in the product documentation would be appreciated but is
+ * not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution
+ */
 
-Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose, including commercial applications,
-and to alter it and redistribute it freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
-If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source distribution
-*/
-
-///A module containing a numeric 3D vector type.
+/// A module containing a numeric 3D vector type.
 module dsfml.system.vector3;
 
 import std.traits;
 
 /**
- *Utility template struct for manipulating 3-dimensional vectors
+ * Utility template struct for manipulating 3-dimensional vectors
  *
- *Vector3 is a simple class that defines a mathematical vector with three coordinates (x, y and z).
+ * Vector3 is a simple class that defines a mathematical vector with three
+ * coordinates (x, y and z).
  *
- *It can be used to represent anything that has three dimensions: a size, a point, a velocity, etc.
+ * It can be used to represent anything that has three dimensions: a size, a
+ * point, a velocity, etc.
  *
- *The template parameter T is the type of the coordinates. It can be any type that supports arithmetic operations (+, -, /, *) and comparisons (==, !=), for example int or float.
+ * The template parameter T is the type of the coordinates. It can be any type
+ * that supports arithmetic operations (+, -, /, *) and comparisons (==, !=),
+ * for example int or float.
  */
 struct Vector3(T)
 	if(isNumeric!(T) || is(T == bool))
 {
-	///X coordinate of the vector.
+	/// X coordinate of the vector.
 	T x;
-	///Y coordinate of the vector.
+	/// Y coordinate of the vector.
 	T y;
-	///Z coordinate of the vector.
+	/// Z coordinate of the vector.
 	T z;
 
-	///Construct the vector from its coordinates
-	///
-	///Params:
-	///		X = X coordinate.
-	///		Y = Y coordinate.
-	///		Z = Z coordinate.
+	/**
+	 * Construct the vector from its coordinates
+	 *
+	 * Params:
+	 * 		X = X coordinate
+	 * 		Y = Y coordinate
+	 * 		Z = Z coordinate
+	 */
 	this(T X,T Y,T Z)
 	{
 
@@ -56,10 +67,12 @@ struct Vector3(T)
 
 	}
 
-	///Construct the vector from another type of vector
-	///
-	///Params:
-	///	otherVector = Vector to convert.
+	/**
+	 * Construct the vector from another type of vector
+	 *
+	 * Params:
+	 * 	otherVector = Vector to convert.
+	 */
 	this(E)(Vector3!(E) otherVector)
 	{
 		x = cast(T)(otherVector.x);
@@ -67,13 +80,14 @@ struct Vector3(T)
 		z = cast(T)(otherVector.z);
 	}
 
+	/// Invert the members of the vector.
 	Vector3!(T) opUnary(string s)() const
 	if(s == "-")
 	{
 		return Vector3!(T)(-x,-y,-z);
 	}
 
-	// Add/Subtract between two vector3's
+	/// Add/Subtract between two vector3's.
 	Vector3!(T) opBinary(string op,E)(Vector3!(E) otherVector) const
 	if(isNumeric!(E) && ((op == "+") || (op == "-")))
 	{
@@ -88,7 +102,7 @@ struct Vector3(T)
 
 	}
 
-	// Multiply/Divide a Vector3 with a numaric value
+	/// Multiply/Divide a Vector3 with a numaric value.
 	Vector3!(T) opBinary(string op,E)(E num) const
 	if(isNumeric!(E) && ((op == "*") || (op == "/")))
 	{
@@ -102,7 +116,7 @@ struct Vector3(T)
 		}
 	}
 
-	// Assign Add/Subtract with another vector3
+	/// Assign Add/Subtract with another vector3.
 	ref Vector3!(T) opOpAssign(string op, E)(Vector3!(E) otherVector)
 	if(isNumeric!(E) && ((op == "+") || (op == "-")))
 	{
@@ -122,7 +136,7 @@ struct Vector3(T)
 		}
 	}
 
-	//Assign Multiply/Divide a Vector3 with a numaric value
+	// Assign Multiply/Divide a Vector3 with a numaric value.
 	ref Vector3!(T) opOpAssign(string op,E)(E num)
 	if(isNumeric!(E) && ((op == "*") || (op == "/")))
 	{
@@ -142,7 +156,7 @@ struct Vector3(T)
 		}
 	}
 
-	//assign operator
+	/// Assign the value of another vector whose type can be converted to T.
 	ref Vector3!(T) opAssign(E)(Vector3!(E) otherVector)
 	{
 		x = cast(T)(otherVector.x);
@@ -151,23 +165,15 @@ struct Vector3(T)
 		return this;
 	}
 
-	/* Omitted for the same reason as Vector3's normalize.
-* I very much would like to include it though!
-Vector3!(T) normalize()
-{
-double length = cbrt(cast(float)((x * x) + (y*y) + (z*z)));
-if(length != 0)
-{
-return Vector3!(T)( cast(T)(x/length), cast(T)(y/length),cast(T)(y/length));
-}
-else
-{
-return Vector3!(T)(0,0,0);
-}
-}
+	/// Compare two vectors for equality.
+	bool opEquals(E)(const Vector3!(E) otherVector) const
+	if(isNumeric!(E))
+	{
+		return ((x == otherVector.x) && (y == otherVector.y)
+				&& (z == otherVector.z));
+	}
 
-//Likewise with the other normalize method.
-*/
+	/// Output the string representation of the Vector3.
 	string toString() const
 	{
 		import std.conv;
@@ -175,7 +181,9 @@ return Vector3!(T)(0,0,0);
 	}
 }
 
+/// Definition of a Vector3 of integers.
 alias Vector3!(int) Vector3i;
+/// Definition of a Vector3 of floats.
 alias Vector3!(float) Vector3f;
 
 unittest
