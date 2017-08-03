@@ -167,13 +167,10 @@ class UdpSocket:Socket
 	{
 		import dsfml.system.string;
 
-		Status status;
-
-		void* temp = sfUdpSocket_receive(sfPtr, data.length, &sizeReceived, &address, &port, &status);
+		Status status = sfUdpSocket_receive(sfPtr, data.ptr, data.length,
+											&sizeReceived, &address, &port);
 
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
-
-		data[0..sizeReceived] = temp[0..sizeReceived].dup;
 
 		return status;
 	}
@@ -288,7 +285,7 @@ void sfUdpSocket_unbind(sfUdpSocket* socket);
 Socket.Status sfUdpSocket_send(sfUdpSocket* socket, const(void)* data, size_t size, IpAddress* receiver, ushort port);
 
 //Receive raw data from a remote peer with a UDP socket
-void* sfUdpSocket_receive(sfUdpSocket* socket, size_t maxSize, size_t* sizeReceived, IpAddress* sender, ushort* port, Socket.Status* status);
+Socket.Status sfUdpSocket_receive(sfUdpSocket* socket, void* data, size_t maxSize, size_t* sizeReceived, IpAddress* sender, ushort* port);
 
 //Send a formatted packet of data to a remote peer with a UDP socket
 Socket.Status sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, IpAddress* receiver, ushort port);

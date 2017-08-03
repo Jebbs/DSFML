@@ -75,7 +75,7 @@ DSFML_NETWORK_API DInt sfUdpSocket_send(sfUdpSocket* socket, const void* data, s
 
 
 //Receive raw data from a remote peer with a UDP socket
-DSFML_NETWORK_API void* sfUdpSocket_receive(sfUdpSocket* socket, size_t maxSize, size_t* sizeReceived, sf::IpAddress* sender, DUshort* port, DInt* status);
+DSFML_NETWORK_API DInt sfUdpSocket_receive(sfUdpSocket* socket, void* data, size_t maxSize, size_t* sizeReceived, sf::IpAddress* sender, DUshort* port);
 
 
 //Send a formatted packet of data to a remote peer with a UDP socket

@@ -190,15 +190,7 @@ class TcpSocket:Socket
     ///Returns: Status code.
 	Status receive(void[] data , out size_t sizeReceived)
 	{
-		//This is terrible and will be fixed in 2.2
-
-		Status status;
-
-		void* temp = sfTcpSocket_receive(sfPtr, data.length, &sizeReceived, &status);
-
-		data[0..sizeReceived] = temp[0..sizeReceived].dup;
-
-		return status;
+		return sfTcpSocket_receive(sfPtr, data.ptr, data.length, &sizeReceived);
 	}
 
 	//Receive a formatted packet of data from the remote peer.
@@ -344,7 +336,7 @@ Socket.Status sfTcpSocket_send(sfTcpSocket* socket, const void* data, size_t siz
 
 
 //Receive raw data from the remote peer of a TCP socket
-void* sfTcpSocket_receive(sfTcpSocket* socket, size_t maxSize, size_t* sizeReceived, Socket.Status* status);
+Socket.Status sfTcpSocket_receive(sfTcpSocket* socket, void* data, size_t maxSize, size_t* sizeReceived);
 
 
 //Send a formatted packet of data to the remote peer of a TCP socket

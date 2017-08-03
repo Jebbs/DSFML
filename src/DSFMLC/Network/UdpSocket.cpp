@@ -36,20 +36,6 @@ All Libraries used by SFML
 #include <SFML/Network/IpAddress.hpp>
 #include <string.h>
 
-//annonymous namespace for storing the received raw data
-namespace
-{
-    char* receivedData;
-}
-
-void sfUdpSocket_destroyInternalData(void)
-{
-     if(receivedData)
-    {
-        delete receivedData;
-        receivedData = 0;
-    }
-}
 
 sfUdpSocket* sfUdpSocket_create(void)
 {
@@ -75,12 +61,10 @@ DBool sfUdpSocket_isBlocking(const sfUdpSocket* socket)
 }
 
 
-
 DUshort sfUdpSocket_getLocalPort(const sfUdpSocket* socket)
 {
     return socket->This.getLocalPort();
 }
-
 
 
 DInt sfUdpSocket_bind(sfUdpSocket* socket, DUshort port, sf::IpAddress* ipAddress)
@@ -101,19 +85,11 @@ DInt sfUdpSocket_send(sfUdpSocket* socket, const void* data, size_t size, sf::Ip
 }
 
 
-
-void* sfUdpSocket_receive(sfUdpSocket* socket, size_t maxSize, size_t* sizeReceived, sf::IpAddress* sender, DUshort* port, DInt* status)
+DInt sfUdpSocket_receive(sfUdpSocket* socket, void* data, size_t maxSize, size_t* sizeReceived, sf::IpAddress* sender, DUshort* port)
 {
-    //TODO: use an existing array in the D side, and fill it here (for 2.4)
-
-    sfUdpSocket_destroyInternalData();
-    receivedData = new char[maxSize];
-
-    *status = static_cast<DInt>(socket->This.receive(receivedData, maxSize, *sizeReceived, *sender, *port));
-
-    return static_cast<void*>(receivedData);
+    return static_cast<DInt>(socket->This.receive(data, maxSize, *sizeReceived,
+                                                  *sender, *port));
 }
-
 
 
 DInt sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, sf::IpAddress* receiver, DUshort port)
@@ -122,12 +98,9 @@ DInt sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, sf::IpAddress
 }
 
 
-
 DInt sfUdpSocket_receivePacket(sfUdpSocket* socket, sfPacket* packet, sf::IpAddress* sender, DUshort* port)
 {
     DInt status = static_cast<DInt>(socket->This.receive(packet->This, *sender, *port));
 
     return status;
 }
-
-
