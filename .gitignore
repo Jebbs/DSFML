@@ -15,4 +15,7 @@ unittest/unittest
 unittest/unittest.exe
 unittest/Text.png
 unittest/log.txt
+unittest/*.dll
+unittest/*.so
+unittest/*.dylib
 dub.selections.json
