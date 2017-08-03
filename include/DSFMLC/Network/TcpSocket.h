@@ -83,7 +83,7 @@ DSFML_NETWORK_API DInt sfTcpSocket_send(sfTcpSocket* socket, const void* data, s
 
 
 //Receive raw data from the remote peer of a TCP socket
-DSFML_NETWORK_API void* sfTcpSocket_receive(sfTcpSocket* socket, size_t maxSize, size_t* sizeReceived, DInt* status);
+DSFML_NETWORK_API DInt sfTcpSocket_receive(sfTcpSocket* socket, void* data, size_t maxSize, size_t* sizeReceived);
 
 
 //Send a formatted packet of data to the remote peer of a TCP socket
