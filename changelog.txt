@@ -49,10 +49,17 @@ The listen function can now accept a specific IpAddress to listen to, and
 defaults to IpAddress.Any.
 
 
+TcpSocket
+--------
+Fixed an internal issue with receiving raw data.
+
+
 UdpSocket
 ----------
 The bind function can now accept a specific IpAddress to be bound to, and
 defaults to IpAddress.Any.
+
+Fixed an internal issue with receiving raw data.
 
 
 Window
