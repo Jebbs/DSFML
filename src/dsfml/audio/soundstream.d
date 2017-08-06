@@ -1,22 +1,28 @@
 /*
-DSFML - The Simple and Fast Multimedia Library for D
+ * DSFML - The Simple and Fast Multimedia Library for D
+ *
+ * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ *
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from the
+ * use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not claim
+ * that you wrote the original software. If you use this software in a product,
+ * an acknowledgment in the product documentation would be appreciated but is
+ * not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution
+ */
 
-Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose, including commercial applications,
-and to alter it and redistribute it freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
-If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source distribution
-*/
-
+/// A module containing the SoundSource class.
 module dsfml.audio.soundstream;
 
 
@@ -30,39 +36,54 @@ import dsfml.system.vector3;
 import dsfml.system.err;
 
 
-/++
- + Abstract base class for streamed audio sources.
- +
- + Unlike audio buffers (see SoundBuffer), audio streams are never completely loaded in memory.
- +
- + Instead, the audio data is acquired continuously while the stream is playing. This behaviour allows to play a sound with no loading delay, and keeps the memory consumption very low.
- +
- + Sound sources that need to be streamed are usually big files (compressed audio musics that would eat hundreds of MB in memory) or files that would take a lot of time to be received (sounds played over the network).
- +
- + SoundStream is a base class that doesn't care about the stream source, which is left to the derived class. SFML provides a built-in specialization for big files (see Music). No network stream source is provided, but you can write your own by combining this class with the network module.
- +
- + A derived class has to override two virtual functions:
- + 		- onGetData fills a new chunk of audio data to be played.
- + 		- onSeek changes the current playing position in the source
- +
- + It is important to note that each SoundStream is played in its own separate thread, so that the streaming loop doesn't block the rest of the program. In particular, the OnGetData and OnSeek virtual functions may sometimes be called from this separate thread. It is important to keep this in mind, because you may have to take care of synchronization issues if you share data between threads.
- +
- + See_Also: http://sfml-dev.org/documentation/2.0/classsf_1_1SoundStream.php#details
- + Authors: Laurent Gomila, Jeremy DeHaan
- +/
-class SoundStream:SoundSource
+/**
+ * Abstract base class for streamed audio sources.
+ *
+ * Unlike audio buffers (see SoundBuffer), audio streams are never completely
+ * loaded in memory.
+ *
+ * Instead, the audio data is acquired continuously while the stream is playing.
+ * This behaviour allows to play a sound with no loading delay, and keeps the
+ * memory consumption very low.
+ *
+ * Sound sources that need to be streamed are usually big files (compressed
+ * audio musics that would eat hundreds of MB in memory) or files that would
+ * take a lot of time to be received (sounds played over the network).
+ *
+ * SoundStream is a base class that doesn't care about the stream source, which
+ * is left to the derived class. SFML provides a built-in specialization for big
+ * files (see Music). No network stream source is provided, but you can write
+ * your own by combining this class with the network module.
+ *
+ * A derived class has to override two virtual functions:
+ * 		- onGetData fills a new chunk of audio data to be played.
+ * 		- onSeek changes the current playing position in the source
+ *
+ * It is important to note that each SoundStream is played in its own separate
+ * thread, so that the streaming loop doesn't block the rest of the program. In
+ * particular, the OnGetData and OnSeek virtual functions may sometimes be
+ * called from this separate thread. It is important to keep this in mind,
+ * because you may have to take care of synchronization issues if you share data
+ * between threads.
+ *
+ * See_Also:
+ *  $(LINK https://www.sfml-dev.org/documentation/2.4.2/classsf_1_1SoundStream.php)
+ *
+ * Authors: Laurent Gomila, Jeremy DeHaan
+ */
+class SoundStream : SoundSource
 {
-
 	package sfSoundStream* sfPtr;
-
 	private SoundStreamCallBacks callBacks;
 
+	/// Internal constructor required to set up callbacks.
 	protected this()
 	{
 	    callBacks = new SoundStreamCallBacks(this);
 		sfPtr = sfSoundStream_construct(callBacks);
 	}
 
+	/// Destructor.
 	~this()
 	{
 		import dsfml.system.config;
@@ -70,6 +91,19 @@ class SoundStream:SoundSource
 		sfSoundStream_destroy(sfPtr);
 	}
 
+	/**
+	 * Define the audio stream parameters.
+	 *
+	 * This function must be called by derived classes as soon as they know the
+	 * audio settings of the stream to play. Any attempt to manipulate the
+	 * stream (play(), ...) before calling this function will fail. It can be
+	 * called multiple times if the settings of the audio stream change, but
+	 * only when the stream is stopped.
+	 *
+	 * Params:
+	 *	channelCount = Number of channels of the stream
+	 *	sampleRate   = Sample rate, in samples per second
+	 */
 	protected void initialize(uint channelCount, uint sampleRate)
 	{
 		import dsfml.system.string;
@@ -80,7 +114,14 @@ class SoundStream:SoundSource
 	}
 
 
-
+	/**
+     * The pitch of the sound.
+     *
+     * The pitch represents the perceived fundamental frequency of a sound; thus
+     * you can make a sound more acute or grave by changing its pitch. A side
+     * effect of changing the pitch is to modify the playing speed of the sound
+     * as well. The default value for the pitch is 1.
+     */
 	@property
 	{
 		void pitch(float newPitch)
@@ -95,10 +136,11 @@ class SoundStream:SoundSource
 	}
 
 	/**
-	 * The volume of the sound.
-	 *
-	 * The volume is a vlue between 0 (mute) and 100 (full volume). The default value for the volume is 100.
-	 */
+     * The volume of the sound.
+     *
+     * The volume is a vlue between 0 (mute) and 100 (full volume). The default
+     * value for the volume is 100.
+     */
 	@property
 	{
 		void volume(float newVolume)
@@ -113,10 +155,11 @@ class SoundStream:SoundSource
 	}
 
 	/**
-	 * The 3D position of the sound in the audio scene.
-	 *
-	 * Only sounds with one channel (mono sounds) can be spatialized. The default position of a sound is (0, 0, 0).
-	 */
+     * The 3D position of the sound in the audio scene.
+     *
+     * Only sounds with one channel (mono sounds) can be spatialized. The
+     * default position of a sound is (0, 0, 0).
+     */
 	@property
 	{
 		void position(Vector3f newPosition)
@@ -135,7 +178,8 @@ class SoundStream:SoundSource
 	/**
 	* Whether or not the stream should loop after reaching the end.
 	*
-	* If set, the stream will restart from the beginning after reaching the end and so on, until it is stopped or looping is set to false.
+	* If set, the stream will restart from the beginning after reaching the end
+	* and so on, until it is stopped or looping is set to false.
 	*
 	* Default looping state for streams is false.
 	*/
@@ -155,7 +199,8 @@ class SoundStream:SoundSource
 	/**
 	* The current playing position (from the beginning) of the stream.
 	*
-	* The playing position can be changed when the stream is either paused or playing.
+	* The playing position can be changed when the stream is either paused or
+	* playing.
 	*/
 	@property
 	{
@@ -172,9 +217,14 @@ class SoundStream:SoundSource
 	}
 
 	/**
-	 * Make the sound's position relative to the listener (true) or absolute (false).
+	 * Make the sound's position relative to the listener (true) or absolute
+	 * (false).
 	 *
-	 * Making a sound relative to the listener will ensure that it will always be played the same way regardless the position of the listener.  This can be useful for non-spatialized sounds, sounds that are produced by the listener, or sounds attached to it. The default value is false (position is absolute).
+	 * Making a sound relative to the listener will ensure that it will always
+	 * be played the same way regardless the position of the listener.  This can
+	 * be useful for non-spatialized sounds, sounds that are produced by the
+	 * listener, or sounds attached to it. The default value is false (position
+	 * is absolute).
 	 */
 	@property
 	{
@@ -190,10 +240,14 @@ class SoundStream:SoundSource
 	}
 
 	/**
-	 * The minimum distance of the sound.
-	 *
-	 * The "minimum distance" of a sound is the maximum distance at which it is heard at its maximum volume. Further than the minimum distance, it will start to fade out according to its attenuation factor. A value of 0 ("inside the head of the listener") is an invalid value and is forbidden. The default value of the minimum distance is 1.
-	 */
+     * The minimum distance of the sound.
+     *
+     * The "minimum distance" of a sound is the maximum distance at which it is
+     * heard at its maximum volume. Further than the minimum distance, it will
+     * start to fade out according to its attenuation factor. A value of 0
+     * ("inside the head of the listener") is an invalid value and is forbidden.
+     * The default value of the minimum distance is 1.
+     */
 	@property
 	{
 		void minDistance(float distance)
@@ -208,12 +262,17 @@ class SoundStream:SoundSource
 	}
 
 	/**
-	 * The attenuation factor of the sound.
-	 *
-	 * The attenuation is a multiplicative factor which makes the sound more or less loud according to its distance from the listener. An attenuation of 0 will produce a non-attenuated sound, i.e. its volume will always be the same whether it is heard from near or from far.
-	 *
-	 * On the other hand, an attenuation value such as 100 will make the sound fade out very quickly as it gets further from the listener. The default value of the attenuation is 1.
-	 */
+     * The attenuation factor of the sound.
+     *
+     * The attenuation is a multiplicative factor which makes the sound more or
+     * less loud according to its distance from the listener. An attenuation of
+     * 0 will produce a non-attenuated sound, i.e. its volume will always be the
+     * same whether it is heard from near or from far.
+     *
+     * On the other hand, an attenuation value such as 100 will make the sound
+     * fade out very quickly as it gets further from the listener. The default
+     * value of the attenuation is 1.
+     */
 	@property
 	{
 		void attenuation(float newAttenuation)
@@ -232,8 +291,6 @@ class SoundStream:SoundSource
 	* The number of channels of the stream.
 	*
 	* 1 channel means mono sound, 2 means stereo, etc.
-	*
-	* Returns: Number of channels
 	*/
 	@property
 	{
@@ -246,9 +303,8 @@ class SoundStream:SoundSource
 	/**
 	* The stream sample rate of the stream
 	*
-	* The sample rate is the number of audio samples played per second. The higher, the better the quality.
-	*
-	* Returns: Sample rate, in number of samples per second.
+	* The sample rate is the number of audio samples played per second. The
+	* higher, the better the quality.
 	*/
 	@property
 	{
@@ -258,6 +314,7 @@ class SoundStream:SoundSource
 		}
 	}
 
+	/// The current status of the stream (stopped, paused, playing)
 	@property
 	{
 		Status status()
@@ -266,6 +323,14 @@ class SoundStream:SoundSource
 		}
 	}
 
+	/**
+	 * Start or resume playing the audio stream.
+	 *
+	* This function starts the stream if it was stopped, resumes it if it was
+	* paused, and restarts it from the beginning if it was already playing. This
+	* function uses its own thread so that it doesn't block the rest of the
+	* program while the stream is played.
+	 */
 	void play()
 	{
 		import dsfml.system.string;
@@ -275,19 +340,54 @@ class SoundStream:SoundSource
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
+	/**
+	 * Pause the audio stream.
+	 *
+	 * This function pauses the stream if it was playing, otherwise (stream
+	 * already paused or stopped) it has no effect.
+	 */
 	void pause()
 	{
 		sfSoundStream_pause(sfPtr);
 	}
 
+	/**
+	 * Stop playing the audio stream.
+	 *
+	 * This function stops the stream if it was playing or paused, and does
+	 * nothing if it was already stopped. It also resets the playing position
+	 * (unlike pause()).
+	 */
 	void stop()
 	{
 		sfSoundStream_stop(sfPtr);
 	}
 
-	abstract bool onGetData(ref const(short)[] samples);
+	/**
+	 * Request a new chunk of audio samples from the stream source.
+	 *
+	 * This function must be overridden by derived classes to provide the audio
+	 * samples to play. It is called continuously by the streaming loop, in a
+	 * separate thread. The source can choose to stop the streaming loop at any
+	 * time, by returning false to the caller. If you return true (i.e. continue
+	 * streaming) it is important that the returned array of samples is not
+	 * empty; this would stop the stream due to an internal limitation.
+	 *
+	 * Params:
+	 *	samples = Array of samples to fill
+	 */
+	protected abstract bool onGetData(ref const(short)[] samples);
 
-	abstract void onSeek(Duration timeOffset);
+	/**
+	 * Change the current playing position in the stream source.
+	 *
+	 * This function must be overridden by derived classes to allow random
+	 * seeking into the stream source.
+	 *
+	 * Params:
+	 *	timeOffset = New playing position, relative to the start of the stream
+	 */
+	protected abstract void onSeek(Duration timeOffset);
 
 
 }
