@@ -354,7 +354,6 @@ class Window
 	void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
-
 		auto convertedTitle = stringConvert!(char,dchar)(title);
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));

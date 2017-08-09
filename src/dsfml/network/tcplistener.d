@@ -89,7 +89,6 @@ class TcpListener:Socket
 	Status accept(TcpSocket socket)
 	{
 		import dsfml.system.string;
-
 		Status toReturn = sfTcpListener_accept(sfPtr, socket.sfPtr);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 		return toReturn;
