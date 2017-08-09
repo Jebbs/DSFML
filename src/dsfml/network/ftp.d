@@ -291,9 +291,8 @@ class Ftp
 		package this(sfFtpDirectoryResponse* FtpDirectoryResponce)
 		{
 			import dsfml.system.string;
-
+      
 			Directory = dsfml.system.string.toString(sfFtpDirectoryResponse_getDirectory(FtpDirectoryResponce));
-
 			super(sfFtpDirectoryResponse_getStatus(FtpDirectoryResponce), sfFtpDirectoryResponse_getMessage(FtpDirectoryResponce));
 
 			sfFtpDirectoryResponse_destroy(FtpDirectoryResponce);

@@ -61,7 +61,7 @@ class SoundRecorder
 		sfPtr = sfSoundRecorder_construct(callBacks);
 
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
-
+    
 		//Fix for some strange bug that I can't seem to track down.
 		//This bug causes the array in SoundBufferRecorder to segfault if
 		//its length reaches 1024, but creating an array of this size before capturing happens
@@ -90,7 +90,6 @@ class SoundRecorder
 	{
 		import dsfml.system.string;
 		sfSoundRecorder_start(sfPtr, theSampleRate);
-
 		err.write(.toString(sfErr_getOutput()));
 	}
 

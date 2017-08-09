@@ -34,6 +34,8 @@ import dsfml.graphics.primitivetype;
 import dsfml.system.vector2;
 import std.typecons:Rebindable;
 
+import std.typecons:Rebindable;
+
 /++
  + Drawable representation of a texture, with its own transformations, color, etc.
  +
