@@ -1,333 +1,347 @@
 /*
-DSFML - The Simple and Fast Multimedia Library for D
+ * DSFML - The Simple and Fast Multimedia Library for D
+ *
+ * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ *
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from the
+ * use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not claim
+ * that you wrote the original software. If you use this software in a product,
+ * an acknowledgment in the product documentation would be appreciated but is
+ * not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution
+ */
 
-Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose, including commercial applications,
-and to alter it and redistribute it freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
-If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source distribution
-*/
-
-///A module contianing the Packet class.
+/// A module contianing the Packet class.
 module dsfml.network.packet;
 
 import std.traits;
 import std.range;
 
 /**
- *Utility class to build blocks of data to transfer over the network.
+ * Utility class to build blocks of data to transfer over the network.
  *
- *Packets provide a safe and easy way to serialize data, in order to send it over the network using sockets (sf::TcpSocket, sf::UdpSocket).
+ * Packets provide a safe and easy way to serialize data, in order to send it
+ * over the network using sockets (TcpSocket, UdpSocket).
  */
 class Packet
 {
-	
-	private
-	{
-		ubyte[] m_data;    /// Data stored in the packet
-		size_t  m_readPos; /// Current reading position in the packet
-		bool    m_isValid; /// Reading state of the packet
-	}
-	
-	///Default constructor
-	this()
-	{
-		m_readPos = 0;
-		m_isValid = true;
-	}
-	
-	///Destructor
-	~this()
-	{
-		import dsfml.system.config;
-		mixin(destructorOutput);
-	}
+    private
+    {
+        ubyte[] m_data;    /// Data stored in the packet
+        size_t  m_readPos; /// Current reading position in the packet
+        bool    m_isValid; /// Reading state of the packet
+    }
 
-	///Get a slice of the data contained in the packet.
-	///
-	///Returns: Slice containing the data.
-	const(void)[] getData() const
-	{
-		return m_data;
-	}
+    /// Default constructor.
+    this()
+    {
+        m_readPos = 0;
+        m_isValid = true;
+    }
 
-	///Append data to the end of the packet.
-	///Params:
-	///		data = Pointer to the sequence of bytes to append.
-	void append(const(void)[] data)
-	{
-		if(data != null && data.length > 0)
-		{
-			m_data ~= cast(ubyte[])data;
-		}
-	}
+    /// Destructor.
+    ~this()
+    {
+        import dsfml.system.config;
+        mixin(destructorOutput);
+    }
 
-	///Clear the packet.
-	///
-	///After calling Clear, the packet is empty.
-	void clear()
-	{
-		m_data.length = 0;
-		m_readPos = 0;
-		m_isValid = true;
-	}
+    /**
+     * Get a slice of the data contained in the packet.
+     *
+     * Returns: Slice containing the data.
+     */
+    const(void)[] getData() const
+    {
+        return m_data;
+    }
 
-	///Tell if the reading position has reached the end of the packet.
-	///
-	///This function is useful to know if there is some data left to be read, without actually reading it.
-	///
-	///Returns: True if all data was read, false otherwise.
-	bool endOfPacket() const
-	{
-		return m_readPos >= m_data.length;
-	}
-	
-	
-	///Reads a primitive data type or string from the packet.
-	///The value in the packet at the current read position is set to value.
-	///
-	///Returns: True if last data extraction from packet was successful.
-	bool read(T)(out T value)
-	if(isScalarType!T)
-	{
-		import std.bitmanip;
-		
-		if (checkSize(T.sizeof))
-		{
-			value = std.bitmanip.peek!T(m_data, m_readPos);
-			m_readPos += T.sizeof;
-		}
+    /**
+     * Append data to the end of the packet.
+     *
+     * Params:
+     *	data = Pointer to the sequence of bytes to append
+     */
+    void append(const(void)[] data)
+    {
+        if(data != null && data.length > 0)
+        {
+            m_data ~= cast(ubyte[])data;
+        }
+    }
 
-		return m_isValid;
-	}
-	
-	///Ditto
-	bool read(T)(out T value) 
-	if(isSomeString!T)
-	{
-		import std.conv;
-		
-		//Get the element type of the string
-		static if(isNarrowString!T)
-		{
-			alias ET = Unqual!(ElementEncodingType!T);
-		}
-		else
-		{
-			alias ET = Unqual!(ElementType!T);
-		}
+    /**
+     * Clear the packet.
+     *
+     * After calling Clear, the packet is empty.
+     */
+    void clear()
+    {
+        m_data.length = 0;
+        m_readPos = 0;
+        m_isValid = true;
+    }
 
-		//get string length
-		uint length;
-		read(length);
-		ET[] temp = new ET[](length);
-		
-		//read each dchar of the string and put it in. 
-		for(int i = 0; i < length && m_isValid; ++i)
-		{
-			read!ET(temp[i]);
-		}
-		
-		value = temp.to!T();
-		
-		return m_isValid;
-	}
-	
-	
-	///Writes a scalar data type or string to the packet.
-	void write(T)(T value)
-	if(isScalarType!T)
-	{
-		import std.bitmanip;
-		
-		size_t index = m_data.length;
-		m_data.reserve(value.sizeof);
-		m_data.length += value.sizeof;
-		
-		std.bitmanip.write!T(m_data, value, index);
-	}
-	
-	///Ditto
-	void write(T)(T value)
-	if(isSomeString!T)
-	{
-		//write length of string.
-		write(cast(uint) value.length);
-		//write append the string data
-		for(int i = 0; i < value.length; ++i)
-		{
-			write(value[i]);
-		}
-	}
+    /**
+     * Tell if the reading position has reached the end of the packet.
+     *
+     * This function is useful to know if there is some data left to be read,
+     * without actually reading it.
+     *
+     * Returns: True if all data was read, false otherwise.
+     */
+    bool endOfPacket() const
+    {
+        return m_readPos >= m_data.length;
+    }
 
-	///Called before the packet is sent over the network.
-	///
-	///This function can be defined by derived classes to transform the data before it is sent; this can be used for compression, encryption, etc.
-	///The function must return an array of the modified data, as well as the number of bytes pointed. The default implementation provides the packet's data without transforming it.
-	///
-	///Returns:  Array of bytes to send
-	const(void)[] onSend()
-	{
-		return getData();
-	}
+    /**
+     * Reads a primitive data type or string from the packet.
+     *
+     * The value in the packet at the current read position is set to value.
+     *
+     * Returns: True if last data extraction from packet was successful.
+     */
+    bool read(T)(out T value)
+    if(isScalarType!T)
+    {
+        import std.bitmanip;
 
-	///Called after the packet is received over the network.
-	///
-	///This function can be defined by derived classes to transform the data after it is received; this can be used for uncompression, decryption, etc.
-	///The function receives an array of the received data, and must fill the packet with the transformed bytes. The default implementation fills the packet directly without transforming the data.
-	///
-	///Params:
-	///		data = Array of the received bytes. 
-	void onRecieve(const(void)[] data)
-	{
-		append(data);
-	}
+        if (checkSize(T.sizeof))
+        {
+            value = std.bitmanip.peek!T(m_data, m_readPos);
+            m_readPos += T.sizeof;
+        }
 
-	version(unittest)
-	{
-		shared static this()
-		{
-			//XInitThreads();
-		}
+        return m_isValid;
+    }
 
+    /// ditto
+    bool read(T)(out T value)
+    if(isSomeString!T)
+    {
+        import std.conv;
 
-	}
-	
-	private bool checkSize(size_t size)
-	{
-		m_isValid = m_isValid && (m_readPos + size <= m_data.length);
+        //Get the element type of the string
+        static if(isNarrowString!T)
+            alias ET = Unqual!(ElementEncodingType!T);
+        else
+            alias ET = Unqual!(ElementType!T);
 
-		return m_isValid;
-	}
-	
+        //get string length
+        uint length;
+        read(length);
+        ET[] temp = new ET[](length);
+
+        //read each dchar of the string and put it in.
+        for(int i = 0; i < length && m_isValid; ++i)
+        {
+            read!ET(temp[i]);
+        }
+
+        value = temp.to!T();
+
+        return m_isValid;
+    }
+
+    /// Writes a scalar data type or string to the packet.
+    void write(T)(T value)
+    if(isScalarType!T)
+    {
+        import std.bitmanip;
+
+        size_t index = m_data.length;
+        m_data.reserve(value.sizeof);
+        m_data.length += value.sizeof;
+
+        std.bitmanip.write!T(m_data, value, index);
+    }
+
+    /// ditto
+    void write(T)(T value)
+    if(isSomeString!T)
+    {
+        //write length of string.
+        write(cast(uint) value.length);
+        //write append the string data
+        for(int i = 0; i < value.length; ++i)
+        {
+            write(value[i]);
+        }
+    }
+
+    /**
+     * Called before the packet is sent over the network.
+     *
+     * This function can be defined by derived classes to transform the data
+     * before it is sent; this can be used for compression, encryption, etc.
+     *
+     * The function must return an array of the modified data, as well as the
+     * number of bytes pointed. The default implementation provides the packet's
+     * data without transforming it.
+     *
+     * Returns:  Array of bytes to send.
+     */
+    const(void)[] onSend()
+    {
+        return getData();
+    }
+
+    /**
+     * Called after the packet is received over the network.
+     *
+     * This function can be defined by derived classes to transform the data
+     * after it is received; this can be used for uncompression, decryption,
+     * etc.
+     *
+     * The function receives an array of the received data, and must fill the
+     * packet with the transformed bytes. The default implementation fills the
+     * packet directly without transforming the data.
+     *
+     * Params:
+     * 		data = Array of the received bytes
+     */
+    void onRecieve(const(void)[] data)
+    {
+        append(data);
+    }
+
+    private bool checkSize(size_t size)
+    {
+        m_isValid = m_isValid && (m_readPos + size <= m_data.length);
+
+        return m_isValid;
+    }
 }
 
-/**
+/*
  *Utility class used internally to interact with DSFML-C to transfer Packet's data.
  */
 package class SfPacket
 {
-	package sfPacket* sfPtr;
-	
-	///Default constructor
-	this()
-	{
-		sfPtr = sfPacket_create();
-	}
-	
-	///Destructor
-	~this()
-	{
-		import dsfml.system.config;
-		mixin(destructorOutput);
-		sfPacket_destroy(sfPtr);
-	}
-	
-	
-	///Get a slice of the data contained in the packet.
-	///
-	///Returns: Slice containing the data.
-	const(void)[] getData() const
-	{
-		return sfPacket_getData(sfPtr)[0 .. sfPacket_getDataSize(sfPtr)];
-	}
+    package sfPacket* sfPtr;
 
-	///Append data to the end of the packet.
-	///Params:
-	///		data = Pointer to the sequence of bytes to append.
-	void append(const(void)[] data)
-	{
-		sfPacket_append(sfPtr, data.ptr, void.sizeof * data.length);
-	}
+    //Default constructor
+    this()
+    {
+        sfPtr = sfPacket_create();
+    }
+
+    //Destructor
+    ~this()
+    {
+        import dsfml.system.config;
+        mixin(destructorOutput);
+        sfPacket_destroy(sfPtr);
+    }
+
+
+    //Get a slice of the data contained in the packet.
+    //
+    //Returns: Slice containing the data.
+    const(void)[] getData() const
+    {
+        return sfPacket_getData(sfPtr)[0 .. sfPacket_getDataSize(sfPtr)];
+    }
+
+    //Append data to the end of the packet.
+    //Params:
+    //		data = Pointer to the sequence of bytes to append.
+    void append(const(void)[] data)
+    {
+        sfPacket_append(sfPtr, data.ptr, void.sizeof * data.length);
+    }
 }
 
 
 unittest
 {
-	//TODO: Expand to use more of the mehtods found in Packet
-	version(DSFML_Unittest_Network)
-	{
-		import std.stdio;
+    //TODO: Expand to use more of the mehtods found in Packet
+    version(DSFML_Unittest_Network)
+    {
+        import std.stdio;
 
-		import dsfml.network.socket;
-		import dsfml.network.tcpsocket;
-		import dsfml.network.tcplistener;
-		import dsfml.network.ipaddress;
-		
-		import core.time;
+        import dsfml.network.socket;
+        import dsfml.network.tcpsocket;
+        import dsfml.network.tcplistener;
+        import dsfml.network.ipaddress;
 
-		writeln("Unittest for Packet");
+        import core.time;
 
-		//packet to send data
-		auto sendPacket = new Packet();
-		//Packet to receive data
-		auto receivePacket = new Packet();
+        writeln("Unittest for Packet");
 
-		//Let's greet the server!
-		sendPacket.write("Hello, I'm a client!");
-		sendPacket.write(42);
-		sendPacket.write(cast(double) 3.141592);
-		sendPacket.write(false);
-		
-		receivePacket.onRecieve(sendPacket.onSend());
+        //packet to send data
+        auto sendPacket = new Packet();
+        //Packet to receive data
+        auto receivePacket = new Packet();
 
-		//What did we get from the client?
-		string message;
-		int sentInt;
-		double sentDouble;
-		bool sentBool;
-		assert(receivePacket.read!string(message));
-		assert(message == "Hello, I'm a client!");
-		
-		assert(receivePacket.read(sentInt));
-		assert(sentInt == 42);
-		
-		assert(receivePacket.read(sentDouble));
-		assert(sentDouble == 3.141592);
-		
-		assert(receivePacket.read(sentBool));
-		assert(!sentBool);
-		writeln("Gotten from client: ", message, ", ", sentInt, ", ", sentDouble, ", ", sentBool);
+        //Let's greet the server!
+        sendPacket.write("Hello, I'm a client!");
+        sendPacket.write(42);
+        sendPacket.write(cast(double) 3.141592);
+        sendPacket.write(false);
 
-		//clear the packets to send/get new information
-		sendPacket.clear();
-		receivePacket.clear();
+        receivePacket.onRecieve(sendPacket.onSend());
 
-		//Respond back to the client
-		sendPacket.write("Hello, I'm your server.");
-		sendPacket.write(420UL);
-		sendPacket.write(cast(float) 2.7182818);
-		sendPacket.write(true);
+        //What did we get from the client?
+        string message;
+        int sentInt;
+        double sentDouble;
+        bool sentBool;
+        assert(receivePacket.read!string(message));
+        assert(message == "Hello, I'm a client!");
 
-		receivePacket.onRecieve(sendPacket.onSend());
+        assert(receivePacket.read(sentInt));
+        assert(sentInt == 42);
 
-		ulong sentULong;
-		float sentFloat;
-		assert(receivePacket.read!string(message));
-		assert(message == "Hello, I'm your server.");
-		
-		assert(receivePacket.read(sentULong));
-		assert(sentULong == 420UL);
-		
-		assert(receivePacket.read(sentFloat));
-		assert(sentFloat == 2.7182818f);
-		
-		assert(receivePacket.read(sentBool));
-		assert(sentBool);
-		writeln("Gotten from server: ", message, ", ", sentULong, ", ", sentFloat, ", ", sentBool);
+        assert(receivePacket.read(sentDouble));
+        assert(sentDouble == 3.141592);
 
-		writeln("Done!");
-		writeln();
-	}
+        assert(receivePacket.read(sentBool));
+        assert(!sentBool);
+        writeln("Gotten from client: ", message, ", ", sentInt, ", ", sentDouble, ", ", sentBool);
+
+        //clear the packets to send/get new information
+        sendPacket.clear();
+        receivePacket.clear();
+
+        //Respond back to the client
+        sendPacket.write("Hello, I'm your server.");
+        sendPacket.write(420UL);
+        sendPacket.write(cast(float) 2.7182818);
+        sendPacket.write(true);
+
+        receivePacket.onRecieve(sendPacket.onSend());
+
+        ulong sentULong;
+        float sentFloat;
+        assert(receivePacket.read!string(message));
+        assert(message == "Hello, I'm your server.");
+
+        assert(receivePacket.read(sentULong));
+        assert(sentULong == 420UL);
+
+        assert(receivePacket.read(sentFloat));
+        assert(sentFloat == 2.7182818f);
+
+        assert(receivePacket.read(sentBool));
+        assert(sentBool);
+        writeln("Gotten from server: ", message, ", ", sentULong, ", ", sentFloat, ", ", sentBool);
+
+        writeln("Done!");
+        writeln();
+    }
 }
 
 package extern(C):
