@@ -222,7 +222,7 @@ class TcpSocket:Socket
      *
      * Returns: True if the socket is blocking, false otherwise.
      */
-    bool isBlocking()
+    bool isBlocking() const
     {
         return (sfTcpSocket_isBlocking(sfPtr));
     }
