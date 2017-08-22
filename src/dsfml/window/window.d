@@ -1,22 +1,77 @@
 /*
-DSFML - The Simple and Fast Multimedia Library for D
+ * DSFML - The Simple and Fast Multimedia Library for D
+ *
+ * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ *
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from the
+ * use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not claim
+ * that you wrote the original software. If you use this software in a product,
+ * an acknowledgment in the product documentation would be appreciated but is
+ * not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution
+ */
 
-Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose, including commercial applications,
-and to alter it and redistribute it freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
-If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source distribution
-*/
-
+/**
+ * $(U Window) is the main class of the Window module. It defines an OS window
+ * that is able to receive an OpenGL rendering.
+ *
+ * A $(U Window) can create its own new window, or be embedded into an already
+ * existing control using the create(handle) function. This can be useful for
+ * embedding an OpenGL rendering area into a view which is part of a bigger GUI
+ * with existing windows, controls, etc. It can also serve as embedding an
+ * OpenGL rendering area into a window created by another (probably richer) GUI
+ * library like Qt or wxWidgets.
+ *
+ * The $(U Window) class provides a simple interface for manipulating the
+ * window: move, resize, show/hide, control mouse cursor, etc. It also provides
+ * event handling through its `pollEvent()` and `waitEvent()` functions.
+ *
+ * Note that OpenGL experts can pass their own parameters (antialiasing level
+ * bits for the depth and stencil buffers, etc.) to the OpenGL context attached
+ * to the window, with the $(CONTEXTSETTINGS_LINK) structure which is passed as
+ * an optional argument when creating the window.
+ *
+ * Example:
+ * ---
+ * // Declare and create a new window
+ * auto window = new Window(VideoMode(800, 600), "DSFML window");
+ *
+ * // Limit the framerate to 60 frames per second (this step is optional)
+ * window.setFramerateLimit(60);
+ *
+ * // The main loop - ends as soon as the window is closed
+ * while (window.isOpen())
+ * {
+ *    // Event processing
+ *    Event event;
+ *    while (window.pollEvent(event))
+ *    {
+ *        // Request for closing the window
+ *        if (event.type == Event.EventType.Closed)
+ *            window.close();
+ *    }
+ *
+ *    // Activate the window for OpenGL rendering
+ *    window.setActive();
+ *
+ *    // OpenGL drawing commands go here...
+ *
+ *    // End the current frame and display its contents on screen
+ *    window.display();
+ * }
+ * ---
+ */
 module dsfml.window.window;
 
 import dsfml.window.event;
@@ -27,21 +82,11 @@ import dsfml.system.vector2;
 import dsfml.system.err;
 
 /**
- *Window that serves as a target for OpenGL rendering.
- *
- *Window is the main class of the Window module.
- *
- *It defines an OS window that is able to receive an OpenGL rendering.
- *
- *A Window can create its own new window, or be embedded into an already existing control using the create(handle) function. This can be useful for embedding an OpenGL rendering area into a view which is part of a bigger GUI with existing windows, controls, etc. It can also serve as embedding an OpenGL rendering area into a window created by another (probably richer) GUI library like Qt or wxWidgets.
- *
- *The Window class provides a simple interface for manipulating the window: move, resize, show/hide, control mouse cursor, etc. It also provides event handling through its pollEvent() and waitEvent() functions.
- *
- *Note that OpenGL experts can pass their own parameters (antialiasing level, bits for the depth and stencil buffers, etc.) to the OpenGL context attached to the window, with the ContextSettings structure which is passed as an optional argument when creating the window.
+ * Window that serves as a target for OpenGL rendering.
  */
 class Window
 {
-	//Choices for window style
+	/// Choices for window style
 	enum Style
 	{
 		None = 0,
@@ -54,9 +99,11 @@ class Window
 
 	package sfWindow* sfPtr;
 
+	//let's RenderWindow inherit from Window without trying to delete the null
+	//pointer
 	private bool m_needsToDelete = true;
 
-	//Default constructor
+	/// Default constructor.
 	this()
 	{
 		sfPtr = sfWindow_construct();
@@ -77,21 +124,25 @@ class Window
 		m_needsToDelete = false;
 	}
 
-	//TODO: Reduce to one constructor with a template parameter for the string types. Use sfWindow_createUnicode in case it has unicode in the title.
-
-	//in order to envoke this constructor when using string literals, be sure to use the d suffix, i.e. "素晴らしい ！"d
-
-	///Construct a new window.
-	///
-	///This constructor creates the window with the size and pixel depth defined in mode. An optional style can be passed to customize the look and behaviour of the window (borders, title bar, resizable, closable, ...). If style contains Style::Fullscreen, then mode must be a valid video mode.
-	///
-	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	///
-	///Params:
-	///   	mode = Video mode to use (defines the width, height and depth of the rendering area of the window).
-	///  	title = Title of the window.
-	///   	style = Window style.
-	///    	settings = Additional settings for the underlying OpenGL context.
+	/**
+	 * Construct a new window.
+	 *
+	 * This constructor creates the window with the size and pixel depth defined
+	 * in mode. An optional style can be passed to customize the look and
+	 * behaviour of the window (borders, title bar, resizable, closable, ...).
+	 * If style contains Style::Fullscreen, then mode must be a valid video
+	 * mode.
+	 *
+	 * The fourth parameter is an optional structure specifying advanced OpenGL
+	 * context settings such as antialiasing, depth-buffer bits, etc.
+	 *
+	 * Params:
+	 *    	mode = Video mode to use (defines the width, height and depth of the
+	 *			   rendering area of the window)
+	 *   	title = Title of the window
+	 *    	style = Window style
+	 *     	settings = Additional settings for the underlying OpenGL context
+	 */
 	this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 		if (is(T == dchar)||is(T == wchar)||is(T == char))
 	{
@@ -99,21 +150,26 @@ class Window
 		create(mode, title, style, settings);
 	}
 
-	///Construct the window from an existing control.
-	///
-	///Use this constructor if you want to create an OpenGL rendering area into an already existing control.
-	///
-	///The second parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
-	///
-	///Params:
-    ///		handle = Platform-specific handle of the control.
-    ///		settings = Additional settings for the underlying OpenGL context.
+	/**
+	 * Construct the window from an existing control.
+	 *
+	 * Use this constructor if you want to create an OpenGL rendering area into
+	 * an already existing control.
+	 *
+	 * The second parameter is an optional structure specifying advanced OpenGL
+	 * context settings such as antialiasing, depth-buffer bits, etc.
+	 *
+	 * Params:
+     * 		handle = Platform-specific handle of the control
+     * 		settings = Additional settings for the underlying OpenGL context
+	 */
 	this(WindowHandle handle, ContextSettings settings = ContextSettings.init)
 	{
 		this();
 		create(handle, settings);
 	}
 
+	/// Destructor.
 	~this()
 	{
 		import dsfml.system.config;
@@ -126,9 +182,12 @@ class Window
 		}
 	}
 
-	///Get's or set's the window's position.
-	///
-	///This function only works for top-level windows (i.e. it will be ignored for windows created from the handle of a child window/control).
+	/**
+	 * Get's or set's the window's position.
+	 *
+	 * This function only works for top-level windows (i.e. it will be ignored
+	 * for windows created from the handle of a child window/control).
+	 */
 	@property
 	{
 		Vector2i position(Vector2i newPosition)
@@ -161,14 +220,21 @@ class Window
 		}
 	}
 
-	///Activate or deactivate the window as the current target for OpenGL rendering.
-	///
-	///A window is active only on the current thread, if you want to make it active on another thread you have to deactivate it on the previous thread first if it was active. Only one window can be active on a thread at a time, thus the window previously active (if any) automatically gets deactivated.
-	///
-	///Params:
-    ///		active = True to activate, false to deactivate.
-    ///
-	///Returns: True if operation was successful, false otherwise.
+	/**
+	 * Activate or deactivate the window as the current target for OpenGL
+	 * rendering.
+	 *
+	 * A window is active only on the current thread, if you want to make it
+	 * active on another thread you have to deactivate it on the previous thread
+	 * first if it was active. Only one window can be active on a thread at a
+	 * time, thus the window previously active (if any) automatically gets
+	 * deactivated.
+	 *
+	 * Params:
+     * 		active = True to activate, false to deactivate
+     *
+	 * Returns: True if operation was successful, false otherwise.
+	 */
 	bool setActive(bool active)
 	{
 		import dsfml.system.string;
@@ -183,72 +249,92 @@ class Window
 		sfWindow_requestFocus(sfPtr);
 	}
 
-	///Check whether the window has the input focus
-	///
-	///Returns: True if the window has focus, false otherwise
+	/**
+	 * Check whether the window has the input focus
+	 *
+	 * Returns: True if the window has focus, false otherwise
+	 */
 	bool hasFocus() const
 	{
 		return sfWindow_hasFocus(sfPtr);
 	}
 
-	///Limit the framerate to a maximum fixed frequency.
-	///
-	///If a limit is set, the window will use a small delay after each call to display() to ensure that the current frame lasted long enough to match the framerate limit. SFML will try to match the given limit as much as it can, but since it internally uses sf::sleep, whose precision depends on the underlying OS, the results may be a little unprecise as well (for example, you can get 65 FPS when requesting 60).
-	///
-	///Params:
-    ///		limit = Framerate limit, in frames per seconds (use 0 to disable limit).
+	/**
+	 * Limit the framerate to a maximum fixed frequency.
+	 *
+	 * If a limit is set, the window will use a small delay after each call to
+	 * display() to ensure that the current frame lasted long enough to match
+	 * the framerate limit. SFML will try to match the given limit as much as it
+	 * can, but since it internally uses dsfml.system.sleep, whose precision
+	 * depends on the underlying OS, the results may be a little unprecise as
+	 * well (for example, you can get 65 FPS when requesting 60).
+	 *
+	 * Params:
+     * 		limit = Framerate limit, in frames per seconds (use 0 to disable limit).
+	 */
 	void setFramerateLimit(uint limit)
 	{
 		sfWindow_setFramerateLimit(sfPtr, limit);
 	}
 
-	///Change the window's icon.
-	///
-	///pixels must be an array of width x height pixels in 32-bits RGBA format.
-	///
-	///The OS default icon is used by default.
-	///
-	///Params:
-	///    width = Icon's width, in pixels.
-	///    height = Icon's height, in pixels.
-	///    pixels = Pointer to the array of pixels in memory.
+	/**
+	 * Change the window's icon.
+	 *
+	 * pixels must be an array of width x height pixels in 32-bits RGBA format.
+	 *
+	 * The OS default icon is used by default.
+	 *
+	 * Params:
+	 *     width = Icon's width, in pixels
+	 *     height = Icon's height, in pixels
+	 *     pixels = Pointer to the array of pixels in memory
+	 */
 	void setIcon(uint width, uint height, const(ubyte[]) pixels)
 	{
 		sfWindow_setIcon(sfPtr,width, height, pixels.ptr);
 	}
 
-	///Change the joystick threshold.
-	///
-	///The joystick threshold is the value below which no JoystickMoved event will be generated.
-	///
-	///The threshold value is 0.1 by default.
-	///
-	///Params:
-	///    threshold = New threshold, in the range [0, 100].
+	/**
+	 * Change the joystick threshold.
+	 *
+	 * The joystick threshold is the value below which no JoystickMoved event
+	 * will be generated.
+	 *
+	 * The threshold value is 0.1 by default.
+	 *
+	 * Params:
+	 *     threshold = New threshold, in the range [0, 100].
+	 */
 	void setJoystickThreshhold(float threshhold)
 	{
 		sfWindow_setJoystickThreshold(sfPtr, threshhold);
 	}
 
-	///Enable or disable automatic key-repeat.
-	///
-	///If key repeat is enabled, you will receive repeated KeyPressed events while keeping a key pressed. If it is disabled, you will only get a single event when the key is pressed.
-	///
-	///Key repeat is enabled by default.
-	///
-	///Params:
-	///    enabled = True to enable, false to disable.
+	/**
+	 * Enable or disable automatic key-repeat.
+	 *
+	 * If key repeat is enabled, you will receive repeated KeyPressed events
+	 * while keeping a key pressed. If it is disabled, you will only get a
+	 * single event when the key is pressed.
+	 *
+	 * Key repeat is enabled by default.
+	 *
+	 * Params:
+	 *     enabled = True to enable, false to disable.
+	 */
 	void setKeyRepeatEnabled(bool enabled)
 	{
 		enabled ? sfWindow_setKeyRepeatEnabled(sfPtr,true):sfWindow_setKeyRepeatEnabled(sfPtr,false);
 	}
 
-	///Show or hide the mouse cursor.
-	///
-	///The mouse cursor is visible by default.
-	///
-	///Params:
-    ///		visible = True to show the mouse cursor, false to hide it.
+	/**
+	 * Show or hide the mouse cursor.
+	 *
+	 * The mouse cursor is visible by default.
+	 *
+	 * Params:
+     * 		visible = True to show the mouse cursor, false to hide it.
+	 */
 	void setMouseCursorVisible(bool visible)
 	{
 		visible ? sfWindow_setMouseCursorVisible(sfPtr,true): sfWindow_setMouseCursorVisible(sfPtr,false);
@@ -256,10 +342,12 @@ class Window
 
 	//Cannot use templates here as template member functions cannot be virtual.
 
-	///Change the title of the window.
-	///
-	///Params:
-    ///		title = New title.
+	/**
+	 * Change the title of the window.
+	 *
+	 * Params:
+     * 		title = New title
+	 */
 	void setTitle(const(char)[] newTitle)
 	{
 		import dsfml.system.string;
@@ -267,54 +355,61 @@ class Window
 		auto convertedTitle = stringConvert!(char, dchar)(newTitle);
 		sfWindow_setUnicodeTitle(sfPtr, convertedTitle.ptr, convertedTitle.length);
 	}
-	///Change the title of the window.
-	///
-	///Params:
-    ///		title = New title.
+
+	/// ditto
 	void setTitle(const(wchar)[] newTitle)
 	{
 		import dsfml.system.string;
 		auto convertedTitle = stringConvert!(wchar, dchar)(newTitle);
 		sfWindow_setUnicodeTitle(sfPtr, convertedTitle.ptr, convertedTitle.length);
 	}
-	///Change the title of the window.
-	///
-	///Params:
-    ///		title = New title.
+
+	/// ditto
 	void setTitle(const(dchar)[] newTitle)
 	{
 		sfWindow_setUnicodeTitle(sfPtr, newTitle.ptr, newTitle.length);
 	}
 
-	///Show or hide the window.
-	///
-	///The window is shown by default.
-	///
-	///Params:
-	///    visible = True to show the window, false to hide it.
+	/**
+	 * Show or hide the window.
+	 *
+	 * The window is shown by default.
+	 *
+	 * Params:
+	 *     visible = True to show the window, false to hide it
+	 */
 	void setVisible(bool visible)
 	{
 		sfWindow_setVisible(sfPtr,visible);
 	}
 
-	///Enable or disable vertical synchronization.
-	///
-	///Activating vertical synchronization will limit the number of frames displayed to the refresh rate of the monitor. This can avoid some visual artifacts, and limit the framerate to a good value (but not constant across different computers).
-	///
-	///Vertical synchronization is disabled by default.
-	///
-	///Params:
-	///    enabled = True to enable v-sync, false to deactivate it.
+	/**
+	 * Enable or disable vertical synchronization.
+	 *
+	 * Activating vertical synchronization will limit the number of frames
+	 * displayed to the refresh rate of the monitor. This can avoid some visual
+	 * artifacts, and limit the framerate to a good value (but not constant
+	 * across different computers).
+	 *
+	 * Vertical synchronization is disabled by default.
+	 *
+	 * Params:
+	 *     enabled = True to enable v-sync, false to deactivate it
+	 */
 	void setVerticalSyncEnabled(bool enabled)
 	{
 		enabled ? sfWindow_setVerticalSyncEnabled(sfPtr, true): sfWindow_setVerticalSyncEnabled(sfPtr, false);
 	}
 
-	///Get the settings of the OpenGL context of the window.
-	///
-	///Note that these settings may be different from what was passed to the constructor or the create() function, if one or more settings were not supported. In this case, SFML chose the closest match.
-	///
-	///Returns: Structure containing the OpenGL context settings.
+	/**
+	 * Get the settings of the OpenGL context of the window.
+	 *
+	 * Note that these settings may be different from what was passed to the
+	 * constructor or the create() function, if one or more settings were not
+	 * supported. In this case, SFML chose the closest match.
+	 *
+	 * Returns: Structure containing the OpenGL context settings.
+	 */
 	ContextSettings getSettings() const
 	{
 		ContextSettings temp;
@@ -322,11 +417,17 @@ class Window
 		return temp;
 	}
 
-	///Get the OS-specific handle of the window.
-	///
-	///The type of the returned handle is sf::WindowHandle, which is a typedef to the handle type defined by the OS. You shouldn't need to use this function, unless you have very specific stuff to implement that SFML doesn't support, or implement a temporary workaround until a bug is fixed.
-	///
-	///Returns: System handle of the window.
+	/**
+	 * Get the OS-specific handle of the window.
+	 *
+	 * The type of the returned handle is sf::WindowHandle, which is a typedef
+	 * to the handle type defined by the OS. You shouldn't need to use this
+	 * function, unless you have very specific stuff to implement that SFML
+	 * doesn't support, or implement a temporary workaround until a bug is
+	 * fixed.
+	 *
+	 * Returns: System handle of the window.
+	 */
 	WindowHandle getSystemHandle() const
 	{
 		return sfWindow_getSystemHandle(sfPtr);
@@ -336,9 +437,14 @@ class Window
 	//void onCreate
 	//void onResize
 
-	///Close the window and destroy all the attached resources.
-	///
-	///After calling this function, the Window instance remains valid and you can call create() to recreate the window. All other functions such as pollEvent() or display() will still work (i.e. you don't have to test isOpen() every time), and will have no effect on closed windows.
+	/**
+	 * Close the window and destroy all the attached resources.
+	 *
+	 * After calling this function, the Window instance remains valid and you
+	 * can call create() to recreate the window. All other functions such as
+	 * pollEvent() or display() will still work (i.e. you don't have to test
+	 * isOpen() every time), and will have no effect on closed windows.
+	 */
 	void close()
 	{
 		sfWindow_close(sfPtr);
@@ -346,11 +452,15 @@ class Window
 
 	//Cannot use templates here as template member functions cannot be virtual.
 
-	///Create (or recreate) the window.
-	///
-	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
-	///
-	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+	/**
+	 * Create (or recreate) the window.
+	 *
+	 * If the window was already created, it closes it first. If style contains
+	 * Style.Fullscreen, then mode must be a valid video mode.
+	 *
+	 * The fourth parameter is an optional structure specifying advanced OpenGL
+	 * context settings such as antialiasing, depth-buffer bits, etc.
+	 */
 	void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
@@ -359,11 +469,8 @@ class Window
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
-	///Create (or recreate) the window.
-	///
-	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
-	///
-	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+
+	/// ditto
 	void create(VideoMode mode, const(wchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
@@ -371,11 +478,8 @@ class Window
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
-	///Create (or recreate) the window.
-	///
-	///If the window was already created, it closes it first. If style contains Style::Fullscreen, then mode must be a valid video mode.
-	///
-	///The fourth parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+
+	/// ditto
 	void create(VideoMode mode, const(dchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
@@ -383,11 +487,7 @@ class Window
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
-	///Create (or recreate) the window from an existing control.
-	///
-	///Use this function if you want to create an OpenGL rendering area into an already existing control. If the window was already created, it closes it first.
-	///
-	///The second parameter is an optional structure specifying advanced OpenGL context settings such as antialiasing, depth-buffer bits, etc.
+	/// ditto
 	void create(WindowHandle handle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;
@@ -395,51 +495,71 @@ class Window
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
-	///Display on screen what has been rendered to the window so far.
-	///
-	///This function is typically called after all OpenGL rendering has been done for the current frame, in order to show it on screen.
+	/**
+	 * Display on screen what has been rendered to the window so far.
+	 *
+	 * This function is typically called after all OpenGL rendering has been
+	 * done for the current frame, in order to show it on screen.
+	 */
 	void display()
 	{
 		sfWindow_display(sfPtr);
 	}
 
-	///Tell whether or not the window is open.
-	///
-	///This function returns whether or not the window exists. Note that a hidden window (setVisible(false)) is open (therefore this function would return true).
-	///
-	///Returns: True if the window is open, false if it has been closed.
+	/**
+	 * Tell whether or not the window is open.
+	 *
+	 * This function returns whether or not the window exists. Note that a
+	 * hidden window (setVisible(false)) is open (therefore this function would
+	 * return true).
+	 *
+	 * Returns: True if the window is open, false if it has been closed.
+	 */
 	bool isOpen()
 	{
 		return (sfWindow_isOpen(sfPtr));
 	}
 
-	///Pop the event on top of the event queue, if any, and return it.
-	///
-	///This function is not blocking: if there's no pending event then it will return false and leave event unmodified. Note that more than one event may be present in the event queue, thus you should always call this function in a loop to make sure that you process every pending event.
-	///
-	///Params:
-    ///		event = Event to be returned.
-    ///
-	///Returns: True if an event was returned, or false if the event queue was empty.
+	/**
+	 * Pop the event on top of the event queue, if any, and return it.
+	 *
+	 * This function is not blocking: if there's no pending event then it will
+	 * return false and leave event unmodified. Note that more than one event
+	 * may be present in the event queue, thus you should always call this
+	 * function in a loop to make sure that you process every pending event.
+	 *
+	 * Params:
+     * 		event = Event to be returned.
+     *
+	 * Returns: True if an event was returned, or false if the event queue was
+	 * 			empty.
+	 */
 	bool pollEvent(ref Event event)
 	{
 		return (sfWindow_pollEvent(sfPtr, &event));
 	}
 
-	///Wait for an event and return it.
-	///
-	///This function is blocking: if there's no pending event then it will wait until an event is received. After this function returns (and no error occured), the event object is always valid and filled properly. This function is typically used when you have a thread that is dedicated to events handling: you want to make this thread sleep as long as no new event is received.
-	///
-	///Params:
-    ///		event = Event to be returned.
-    ///
-	///Returns: False if any error occured.
+	/**
+	 * Wait for an event and return it.
+	 *
+	 * This function is blocking: if there's no pending event then it will wait
+	 * until an event is received. After this function returns (and no error
+	 * occured), the event object is always valid and filled properly. This
+	 * function is typically used when you have a thread that is dedicated to
+	 * events handling: you want to make this thread sleep as long as no new
+	 * event is received.
+	 *
+	 * Params:
+     * 		event = Event to be returned
+     *
+	 * Returns: False if any error occured.
+	 */
 	bool waitEvent(ref Event event)
 	{
 		return (sfWindow_waitEvent(sfPtr, &event));
 	}
 
-	//TODO: Clean this shit up. The names are so bad. :(
+	//TODO: Clean this up. The names are so bad. :(
 
 	//Gives a way for RenderWindow to send its mouse position
 	protected Vector2i getMousePosition()const
@@ -449,7 +569,8 @@ class Window
 		return temp;
 	}
 
-	//A method for the Mouse class to use in order to get the mouse position relative to the window
+	//A method for the Mouse class to use in order to get the mouse position
+	//relative to the window
 	package Vector2i mouse_getPosition()const
 	{
 		return getMousePosition();
@@ -473,8 +594,6 @@ class Window
 	{
 		return cast(void*)window.sfPtr;
 	}
-
-
 }
 
 unittest
@@ -640,6 +759,3 @@ private extern(C):
 	void sfMouse_setPosition(int x, int y, const(sfWindow)* relativeTo);
 
 	const(char)* sfErr_getOutput();
-
-
-

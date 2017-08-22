@@ -25,7 +25,7 @@
 /// A module containing configuration settings.
 module dsfml.system.config;
 
-//Check to confirm compiler is at least v2.064
+//Check to confirm compiler is at least v2.067
 static if (__VERSION__ < 2067L)
 {
 	static assert(0, "Please upgrade your compiler to v2.067 or later");

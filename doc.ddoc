@@ -1,0 +1,98 @@
+DDOC_DESCRIPTION = <div class="ddoc_description">
+  <p class="para">
+    $0
+  </p>
+</div>$(LF)
+
+
+DDOC_HEADER_ANCHOR = <div></div>
+DDOC_ANCHOR = <a href="#$1" id="$1"></a>
+
+
+
+DDOC_DECL = <div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <div class="dlang">
+        <p class="para">
+          $(B $0)
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+
+DDOC_DECL_DD = <div class="ddoc_decl_dd">
+  $0
+</div>
+
+
+DDOC_AUTHORS = <div class="ddoc_authors">
+  <h4>Authors:</h4>
+  <p class="para">
+    $0
+  </p>
+</div>$(LF)
+
+DDOC_SEE_ALSO = <div class="ddoc_see_also">
+  <h4>See Also:</h4>
+  <p class="para">
+    $0
+  </p>
+</div>$(LF)
+
+
+DDOC_PSYMBOL = $0
+
+DEPRECATED = $(RED $0)
+
+DDOC_PARAM = $0
+
+LIST = </br>&nbsp;&#8226; $0
+
+PARA = <p class="para">$0</p>
+
+TABLE = <table class="para">$0</table>$(LF)
+
+
+INPUTSOUNDFILE_LINK = <a href="../audio/inputsoundfile.html" title="Provide read access to sound files.">InputSoundFile</a>
+LISTENER_LINK = <a href="../audio/listener.html" title="The audio listener is the point in the scene from where all the sounds are heard.">Listener</a>
+MUSIC_LINK = <a href="../audio/music.html" title="Streamed music played from an audio file.">Music</a>
+OUTPUTSOUNDFILE_LINK = <a href="../audio/outputsoundfile.html" title="Provide write access to sound files.">OutputSoundFile</a>
+SOUND_LINK = <a href="../audio/sound.html" title="Regular sound that can be played in the audio environment.">Sound</a>
+SOUNDBUFFER_LINK = <a href="../audio/soundbuffer.html" title="Storage for audio samples defining a sound.">SoundBuffer</a>
+SOUNDBUFFERRECORDER_LINK = <a href="../audio/soundbufferrecorder.html" title="Specialized SoundRecorder which stores the captured audio data into a sound buffer.">SoundBufferRecorder</a>
+SOUNDRECORDER_LINK = <a href="../audio/soundrecorder.html" title="Abstract base class for capturing sound data.">SoundRecorder</a>
+SOUNDSOURCE_LINK = <a href="../audio/soundsource.html" title="Base class defining a sound's properties.">SoundSource</a>
+SOUNDSTREAM_LINK = <a href="../audio/soundstream.html" title="Abstract base class for streamed audio sources.">SoundStream</a>
+
+FTP_LINK = <a href="../network/ftp.html" title="An FTP client.">Ftp</a>
+HTTP_LINK = <a href="../network/http.html" title="A HTTP client.">Http</a>
+IPADDRESS_LINK = <a href="../network/ipaddress.html" title="Encapsulate an IPv4 network address.">IpAddress</a>
+PACKET_LINK = <a href="../network/packet.html" title="Utility class to build blocks of data to transfer over the network.">Packet</a>
+SOCKET_LINK = <a href="../network/socket.html" title="Base interface for all the socket types.">Socket</a>
+SOCKETSELECTOR_LINK = <a href="../network/socketselector.html" title="Multiplexer that allows to read from multiple sockets.">SocketSelector</a>
+TCPLISTENER_LINK = <a href="../network/tcplistener.html" title="Socket that listens to new TCP connections.">TcpListener</a>
+TCPSOCKET_LINK = <a href="../network/tcpsocket.html" title="Specialized socket using the TCP protocol.">TcpSocket</a>
+UDPSOCKET_LINK = <a href="../network/udpsocket.html" title="Specialized socket using the UDP protocol.">UdpSocket</a>
+
+CLOCK_LINK = <a href="../system/clock.html" title="Utility class that measures the elapsed time.">Clock</a>
+ERR_LINK = <a href="../system/err.html" title="Standard std.stdio.File instance used by DSFML to output warnings and errors.">err</a>
+INPUTSTREAM_LINK = <a href="../system/inputstream.html" title="Interface for custom file input streams.">InputStream</a>
+LOCK_LINK = <a href="../system/lock.html" title="Automatic wrapper for locking and unlocking mutexes.">Lock</a>
+MUTEX_LINK = <a href="../system/mutex.html" title="Blocks concurrent access to shared resources from multiple threads.">Mutex</a>
+THREAD_LINK = <a href="../system/thread.html" title="Utility class to manipulate threads.">Thread</a>
+VECTOR2_LINK = <a href="../system/vector2.html" title="Utility template struct for manipulating 2-dimensional vectors.">Vector2</a>
+VECTOR3_LINK = <a href="../system/vector3.html" title="Utility template struct for manipulating 3-dimensional vectors.">Vector3</a>
+
+CONTEXT_LINK = <a href="../window/context.html" title="Class holding a valid drawing context.">Context</a>
+CONTEXTSETTINGS_LINK = <a href="../window/contextsettings.html" title="Structure defining the settings of the OpenGL context attached to a window.">ContextSettings</a>
+EVENT_LINK = <a href="../window/event.html" title="Defines a system event and its parameters.">Event</a>
+JOYSTICK_LINK = <a href="../window/joystick.html" title="Give access to the real-time state of the joysticks.">Joystick</a>
+KEYBOARD_LINK = <a href="../window/keyboard.html" title="">Keyboard</a>
+MOUSE_LINK = <a href="../window/mouse.html" title="Give access to the real-time state of the mouse.">Mouse</a>
+SENSOR_LINK = <a href="../window/sensor.html" title="Give access to the real-time state of the sensors.">Sensor</a>
+TOUCH_LINK = <a href="../window/touch.html" title="Give access to the real-time state of the touches.">Touch</a>
+VIDEOMODE_LINK = <a href="../window/videomode.html" title="VideoMode defines a video mode (width, height, bpp).">VideoMode</a>
+WINDOW_LINK = <a href="../window/window.html" title="Window that serves as a target for OpenGL rendering.">Window</a>
+WINDOWHANDLE_LINK = <a href="../window/windowhandle.html" title="Define a low-level window handle type, specific to each platform.">WindowHandle</a>

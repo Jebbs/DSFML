@@ -22,7 +22,106 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the SoundRecorder class.
+/**
+ *
+ * $(U SoundRecorder) provides a simple interface to access the audio recording
+ * capabilities of the computer (the microphone).
+ *
+ * As an abstract base class, it only cares about capturing sound samples, the
+ * task of making something useful with them is left to the derived class. Note
+ * that DSFML provides a built-in specialization for saving the captured data to
+ * a sound buffer (see $(SOUNDBUFFERRECORDER_LINK)).
+ *
+ * A derived class has only one virtual function to override:
+ * $(LIST onProcessSamples provides the new chunks of audio samples while the capture
+ * happens)
+ *
+ * Moreover, two additionnal virtual functions can be overriden as well if
+ * necessary:
+ * $(LIST onStart is called before the capture happens, to perform custom
+ * initializations)
+ * $(LIST onStop is called after the capture ends, to perform custom cleanup)
+ *
+ * A derived class can also control the frequency of the onProcessSamples calls,
+ * with the setProcessingInterval protected function. The default interval is
+ * chosen so that recording thread doesn't consume too much CPU, but it can be
+ * changed to a smaller value if you need to process the recorded data in real
+ * time, for example.
+ *
+ * The audio capture feature may not be supported or activated on every
+ * platform, thus it is recommended to check its availability with the
+ * isAvailable() function. If it returns false, then any attempt to use an audio
+ * recorder will fail.
+ *
+ * If you have multiple sound input devices connected to your  computer (for
+ * example: microphone, external soundcard, webcam mic, ...) you can get a list
+ * of all available devices through the getAvailableDevices() function. You can
+ * then select a device by calling setDevice() with the appropriate device.
+ * Otherwise the default capturing device will be used.
+ *
+ * By default the recording is in 16-bit mono. Using the setChannelCount method
+ * you can change the number of channels used by the audio capture device to
+ * record. Note that you have to decide whether you want to record in mono or
+ * stereo before starting the recording.
+ *
+ * It is important to note that the audio capture happens in a separate thread,
+ * so that it doesn't block the rest of the program. In particular, the
+ * onProcessSamples and onStop virtual functions (but not onStart) will be
+ * called from this separate thread. It is important to keep this in mind,
+ * because you may have to take care of synchronization issues if you share data
+ * between threads.
+ *
+ * Example:
+ * ---
+ * class CustomRecorder : SoundRecorder
+ * {
+ *     ~this()
+ *     {
+ *         // Make sure to stop the recording thread
+ *         stop();
+ *     }
+ *
+ *     override bool onStart() // optional
+ *     {
+ *         // Initialize whatever has to be done before the capture starts
+ *         ...
+ *
+ *         // Return true to start playing
+ *         return true;
+ *     }
+ *
+ *     bool onProcessSamples(const(short)[] samples)
+ *     {
+ *         // Do something with the new chunk of samples (store them, send them, ...)
+ *         ...
+ *
+ *         // Return true to continue playing
+ *         return true;
+ *     }
+ *
+ *     override void onStop() // optional
+ *     {
+ *         // Clean up whatever has to be done after the capture ends
+ *         ...
+ *     }
+ * }
+ *
+ * // Usage
+ * if (CustomRecorder.isAvailable())
+ * {
+ *     auto recorder = new CustomRecorder();
+ *
+ *     if (!recorder.start())
+ *         return -1;
+ *
+ *     ...
+ *     recorder.stop();
+ * }
+ * ---
+ *
+ * See_Also:
+ * $(SOUNDBUFFERRECORDER_LINK)
+ */
 module dsfml.audio.soundrecorder;
 
 import core.thread;
@@ -33,41 +132,6 @@ import dsfml.system.err;
 
 /**
  * Abstract base class for capturing sound data.
- *
- * SoundBuffer provides a simple interface to access the audio recording
- * capabilities of the computer (the microphone).
- *
- * As an abstract base class, it only cares about capturing sound samples, the
- * task of making something useful with them is left to the derived class. Note
- * that DSFML provides a built-in specialization for saving the captured data to
- * a sound buffer (see SoundBufferRecorder).
- *
- * A derived class has only one virtual function to override:
- * onProcessSamples provides the new chunks of audio samples while the capture
- * happens
- *
- * Moreover, two additionnal virtual functions can be overriden as well if
- * necessary:
- * onStart is called before the capture happens, to perform custom
- * initializations
- * onStop is called after the capture ends, to perform custom cleanup
- *
- * The audio capture feature may not be supported or activated on every
- * platform, thus it is recommended to check its availability with the
- * isAvailable() function. If it returns false, then any attempt to use an audio
- * recorder will fail.
- *
- * It is important to note that the audio capture happens in a separate thread,
- * so that it doesn't block the rest of the program. In particular, the
- * onProcessSamples and onStop virtual functions (but not onStart) will be
- * called from this separate thread. It is important to keep this in mind,
- * because you may have to take care of synchronization issues if you share data
- * between threads.
- *
- * See_Also:
- *  $(LINK https://www.sfml-dev.org/documentation/2.4.2/classsf_1_1SoundRecorder.php)
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
  */
 class SoundRecorder
 {
@@ -127,15 +191,15 @@ class SoundRecorder
         sfSoundRecorder_stop(sfPtr);
     }
 
-    /**
-     * Get the sample rate in samples per second.
-     *
-     * The sample rate defines the number of audio samples captured per second.
-     * The higher, the better the quality (for example, 44100 samples/sec is CD
-     * quality).
-     */
     @property
     {
+        /**
+         * Get the sample rate in samples per second.
+         *
+         * The sample rate defines the number of audio samples captured per second.
+         * The higher, the better the quality (for example, 44100 samples/sec is CD
+         * quality).
+         */
         uint sampleRate()
         {
             return sfSoundRecorder_getSampleRate(sfPtr);
@@ -150,6 +214,7 @@ class SoundRecorder
     string getDevice() const {
         return .toString(sfSoundRecorder_getDevice(sfPtr));
     }
+
     /**
      * Set the audio capture device.
      *

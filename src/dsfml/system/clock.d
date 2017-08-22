@@ -22,20 +22,35 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Clock class.
-module dsfml.system.clock;
-
-public import core.time;
-
 /**
- * Utility class that measures the elapsed time.
- *
  * Clock is a lightweight class for measuring time.
  *
  * Its provides the most precise time that the underlying OS can achieve
  * (generally microseconds or nanoseconds). It also ensures monotonicity, which
  * means that the returned time can never go backward, even if the system time
  * is changed.
+ *
+ * Example:
+ * ---
+ * auto clock = Clock();
+ * ...
+ * Duration duration1 = clock.getElapsedTime();
+ * ...
+ * Duration duration2 = clock.restart();
+ * ---
+ *
+ * The Duration value ($(I core.time.Duration)) returned by the clock can then
+ * be converted to a number of seconds, milliseconds or even microseconds.
+ *
+ * See_Also:
+ * $(LINK2 https://dlang.org/library/core/time/duration.html, Duration)
+ */
+module dsfml.system.clock;
+
+public import core.time;
+
+/**
+ * Utility class that measures the elapsed time.
  */
 class Clock
 {

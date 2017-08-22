@@ -22,7 +22,83 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module contianing the Packet class.
+/**
+ * Packets provide a safe and easy way to serialize data, in order to send it
+ * over the network using sockets (sf::TcpSocket, sf::UdpSocket).
+ *
+ * Packets solve 2 fundamental problems that arise when transferring data over
+ * the network:
+ * $(LIST data is interpreted correctly according to the endianness)
+ * $(LIST the bounds of the packet are preserved (one send == one receive))
+ *
+ * The $(U Packet) class provides both input and output modes.
+ *
+ * Example:
+ * ---
+ * int x = 24;
+ * string s = "hello";
+ * double d = 5.89;
+ *
+ * // Group the variables to send into a packet
+ * auto packet = new Packet();
+ * packet.write(x);
+ * packet.write(s);
+ * packet.write(d);
+ *
+ * // Send it over the network (socket is a valid TcpSocket)
+ * socket.send(packet);
+ *
+ * ////////////////////////////////////////////////////////////////
+ *
+ * // Receive the packet at the other end
+ * auto packet = new Packet();
+ * socket.receive(packet);
+ *
+ * // Extract the variables contained in the packet
+ * int x;
+ *  s;
+ * double d;
+ * if (packet.read(x) && packet.read(s) && packet.read(d))
+ * {
+ *     // Data extracted successfully...
+ * }
+ * ---
+ *
+ * $(PARA Packets also provide an extra feature that allows to apply custom
+ * transformations to the data before it is sent, and after it is received. This
+ * is typically used to handle automatic compression or encryption of the data.
+ * This is achieved by inheriting from sf::Packet, and overriding the onSend and
+ * onReceive functions.)
+ *
+ * Example:
+ * ---
+ * class ZipPacket : Packet
+ * {
+ *     override const(void)[] onSend()
+ *     {
+ *         const(void)[] srcData = getData();
+ *
+ *         return MySuperZipFunction(srcData);
+ *     }
+ *
+ *     override void onReceive(const(void)[] data)
+ *     {
+ *         const(void)[] dstData = MySuperUnzipFunction(data);
+ *
+ *         append(dstData);
+ *     }
+ * }
+ *
+ * // Use like regular packets:
+ * auto packet = new ZipPacket();
+ * packet.write(x);
+ * packet.write(s);
+ * packet.write(d);
+ * ---
+ *
+ * See_Also:
+ * $(TCPSOCKET_LINK), $(UDPSOCKET_LINK)
+ */
 module dsfml.network.packet;
 
 import std.traits;
@@ -30,9 +106,6 @@ import std.range;
 
 /**
  * Utility class to build blocks of data to transfer over the network.
- *
- * Packets provide a safe and easy way to serialize data, in order to send it
- * over the network using sockets (TcpSocket, UdpSocket).
  */
 class Packet
 {
@@ -187,9 +260,9 @@ class Packet
      * This function can be defined by derived classes to transform the data
      * before it is sent; this can be used for compression, encryption, etc.
      *
-     * The function must return an array of the modified data, as well as the
-     * number of bytes pointed. The default implementation provides the packet's
-     * data without transforming it.
+     * The function must return an array of the modified data, with a length of
+     * the number of bytes to send. The default implementation provides the
+     * packet's data without transforming it.
      *
      * Returns:  Array of bytes to send.
      */
@@ -226,7 +299,8 @@ class Packet
 }
 
 /*
- *Utility class used internally to interact with DSFML-C to transfer Packet's data.
+ * Utility class used internally to interact with DSFML-C to transfer Packet's
+ * data.
  */
 package class SfPacket
 {

@@ -22,19 +22,64 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-///A module containing the Http class.
+/**
+ * The Http class is a very simple HTTP client that allows you to communicate
+ * with a web server. You can retrieve web pages, send data to an interactive
+ * resource, download a remote file, etc. The HTTPS protocol is not supported.
+ *
+ * The HTTP client is split into 3 classes:
+ * $(LIST Http.Request)
+ * $(LIST Http.Response)
+ * $(LIST Http)
+ *
+ * Http.Request builds the request that will be sent to the server. A request is
+ * made of:
+ * $(LIST a method (what you want to do))
+ * $(LIST a target URI (usually the name of the web page or file))
+ * $(LIST one or more header fields (options that you can pass to the server))
+ * $(LIST an optional body (for POST requests))
+ *
+ * Http.Response parses the response from the web server and provides getters to
+ * read them. The response contains:
+ * $(LIST a status code)
+ * $(LIST header fields (that may be answers to the ones that you requested))
+ * $(LIST a body, which contains the contents of the requested resource)
+ *
+ * $(U Http) provides a simple function, sendRequest, to send a Http.Request and
+ * return the corresponding Http.Response from the server.
+ *
+ * Usage example:
+ * ---
+ * // Create a new HTTP client
+ * auto http = new Http();
+ *
+ * // We'll work on http://www.sfml-dev.org
+ * http.setHost("http://www.sfml-dev.org");
+ *
+ * // Prepare a request to get the 'features.php' page
+ * auto request = new Http.Request("features.php");
+ *
+ * // Send the request
+ * auto response = http.sendRequest(request);
+ *
+ * // Check the status code and display the result
+ * auto status = response.getStatus();
+ * if (status == Http.Response.Status.Ok)
+ * {
+ *     writeln(response.getBody());
+ * }
+ * else
+ * {
+ *     writeln("Error ", status);
+ * }
+ * ---
+ */
 module dsfml.network.http;
 
 import core.time;
 
 /**
  * A HTTP client.
- *
- * The Http class is a very simple HTTP client that allows you to communicate
- * with a web server.
- *
- * You can retrieve web pages, send data to an interactive resource, download a
- * remote file, etc.
  */
 class Http
 {

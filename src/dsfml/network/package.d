@@ -22,7 +22,10 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// Socket-based communication, utilities and higher-level network protocols (HTTP, FTP).
+/**
+ * Socket-based communication, utilities and higher-level network protocols
+ * (HTTP, FTP).
+ */
 module dsfml.network;
 
 public

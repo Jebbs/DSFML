@@ -22,18 +22,7 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the UdpSocket Class.
-module dsfml.network.udpsocket;
-
-import dsfml.network.ipaddress;
-import dsfml.network.packet;
-import dsfml.network.socket;
-
-import dsfml.system.err;
-
 /**
- * Specialized socket using the UDP protocol.
- *
  * A UDP socket is a connectionless socket.
  *
  * Instead of connecting once to a remote host, like TCP sockets, it can send to
@@ -69,6 +58,59 @@ import dsfml.system.err;
  * the socket is destroyed. However, you can unbind the socket explicitely with
  * the Unbind function if necessary, to stop receiving messages or make the port
  * available for other sockets.
+ *
+ * Example:
+ * ---
+ * // ----- The client -----
+ *
+ * // Create a socket and bind it to the port 55001
+ * auto socket = UdpSocket();
+ * socket.bind(55001);
+ *
+ * // Send a message to 192.168.1.50 on port 55002
+ * string message = "Hi, I am " ~ IpAddress.getLocalAddress().toString();
+ * socket.send(message, "192.168.1.50", 55002);
+ *
+ * // Receive an answer (most likely from 192.168.1.50, but could be anyone else)
+ * char[1024] buffer;
+ * size_t received = 0;
+ * IpAddress sender;
+ * ushort port;
+ * socket.receive(buffer, received, sender, port);
+ * writeln( sender.toString(), " said: ", buffer[0 .. received]);
+ *
+ * // ----- The server -----
+ *
+ * // Create a socket and bind it to the port 55002
+ * auto socket = new UdpSocket();
+ * socket.bind(55002);
+ *
+ * // Receive a message from anyone
+ * char[1024] buffer;
+ * size_t received = 0;
+ * IpAddress sender;
+ * ushort port;
+ * socket.receive(buffer, received, sender, port);
+ * writeln(sender.toString(), " said: ", buffer[0 .. received]);
+ *
+ * // Send an answer
+ * message = "Welcome " ~ sender.toString();
+ * socket.send(message, sender, port);
+ * ---
+ *
+ * See_Also:
+ * $(SOCKET_LINK), $(TCPSOCKET_LINK), $(PACKET_LINK)
+ */
+module dsfml.network.udpsocket;
+
+import dsfml.network.ipaddress;
+import dsfml.network.packet;
+import dsfml.network.socket;
+
+import dsfml.system.err;
+
+/**
+ * Specialized socket using the UDP protocol.
  */
 class UdpSocket:Socket
 {

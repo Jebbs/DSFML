@@ -22,20 +22,7 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the TcpSocket class.
-module dsfml.network.tcpsocket;
-
-import core.time;
-
-import dsfml.network.ipaddress;
-import dsfml.network.packet;
-import dsfml.network.socket;
-
-import dsfml.system.err;
-
 /**
- * Specialized socket using the TCP protocol.
- *
  * TCP is a connected protocol, which means that a TCP socket can only
  * communicate with the host it is connected to.
  *
@@ -64,6 +51,62 @@ import dsfml.system.err;
  * The socket is automatically disconnected when it is destroyed, but if you
  * want to explicitely close the connection while the socket instance is still
  * alive, you can call disconnect.
+ *
+ * Example:
+ * ---
+ * // ----- The client -----
+ *
+ * // Create a socket and connect it to 192.168.1.50 on port 55001
+ * auto socket = new TcpSocket();
+ * socket.connect("192.168.1.50", 55001);
+ *
+ * // Send a message to the connected host
+ * string message = "Hi, I am a client";
+ * socket.send(message);
+ *
+ * // Receive an answer from the server
+ * char[1024] buffer;
+ * size_t received = 0;
+ * socket.receive(buffer, received);
+ * writeln("The server said: ", buffer[0 .. received]);
+ *
+ * // ----- The server -----
+ *
+ * // Create a listener to wait for incoming connections on port 55001
+ * auto listener = TcpListener();
+ * listener.listen(55001);
+ *
+ * // Wait for a connection
+ * auto socket = new TcpSocket();
+ * listener.accept(socket);
+ * writeln("New client connected: ", socket.getRemoteAddress());
+ *
+ * // Receive a message from the client
+ * char[1024] buffer;
+ * size_t received = 0;
+ * socket.receive(buffer, received);
+ * writeln("The client said: ", buffer[0 .. received]);
+ *
+ * // Send an answer
+ * string message = "Welcome, client";
+ * socket.send(message);
+ * ---
+ *
+ * See_Also:
+ * $(SOCKET_LINK), $(UDPSOCKET_LINK), $(PACKET_LINK)
+ */
+module dsfml.network.tcpsocket;
+
+import core.time;
+
+import dsfml.network.ipaddress;
+import dsfml.network.packet;
+import dsfml.network.socket;
+
+import dsfml.system.err;
+
+/**
+ * Specialized socket using the TCP protocol.
  */
 class TcpSocket:Socket
 {

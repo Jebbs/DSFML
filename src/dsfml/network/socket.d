@@ -22,11 +22,34 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module contianing the Socket abstract class
+/**
+ * This class mainly defines internal stuff to be used by derived classes.
+ *
+ * The only public features that it defines, and which is therefore common to
+ * all the socket classes, is the blocking state. All sockets can be set as
+ * blocking or non-blocking.
+ *
+ * In blocking mode, socket functions will hang until the operation completes,
+ * which means that the entire program (well, in fact the current thread if you
+ * use multiple ones) will be stuck waiting for your socket operation to
+ * complete.
+ *
+ * In non-blocking mode, all the socket functions will return immediately. If
+ * the socket is not ready to complete the requested operation, the function
+ * simply returns the proper status code (Socket.Status.NotReady).
+ *
+ * The default mode, which is blocking, is the one that is generally used, in
+ * combination with threads or selectors. The non-blocking mode is rather used
+ * in real-time applications that run an endless loop that can poll the socket
+ * often enough, and cannot afford blocking this loop.
+ *
+ * See_Also:
+ * $(TCPLISTENER_LINK), $(TCPSOCKET_LINK), $(UDPSOCKET_LINK)
+ */
 module dsfml.network.socket;
 
-/// Base class for all the socket types.
-abstract class Socket
+/// Base interface for all the socket types.
+interface Socket
 {
     //TODO: Add methods to this so that they can be overridden by the socket classes?
 
@@ -45,5 +68,29 @@ abstract class Socket
 
     /// Special value that tells the system to pick any available port.
     enum AnyPort = 0;
+
+    /**
+     * Set the blocking state of the socket.
+     *
+     * In blocking mode, calls will not return until they have completed their
+     * task. For example, a call to Receive in blocking mode won't return until
+     * some data was actually received.
+     *
+     * In non-blocking mode, calls will always return immediately, using the
+     * return code to signal whether there was data available or not.
+     *
+     * By default, all sockets are blocking.
+     *
+     * Params:
+     * blocking = true to set the socket as blocking, false for non-blocking
+     */
+    void setBlocking(bool blocking);
+
+    /**
+     * Tell whether the socket is in blocking or non-blocking mode.
+     *
+     * Returns: true if the socket is blocking, false otherwise.
+     */
+    bool isBlocking() const;
 }
 
