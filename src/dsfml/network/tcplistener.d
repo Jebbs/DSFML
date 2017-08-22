@@ -172,7 +172,7 @@ class TcpListener:Socket
      *
      * Returns: true if the socket is blocking, false otherwise.
      */
-    bool isBlocking()
+    bool isBlocking() const
     {
         return (sfTcpListener_isBlocking(sfPtr));
     }

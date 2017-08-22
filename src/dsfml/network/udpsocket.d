@@ -190,7 +190,7 @@ class UdpSocket:Socket
      *
      * Returns: True if the socket is blocking, false otherwise.
      */
-    bool isBlocking()
+    bool isBlocking() const
     {
         return (sfUdpSocket_isBlocking(sfPtr));
     }
