@@ -1,21 +1,27 @@
 /*
-DSFML - The Simple and Fast Multimedia Library for D
+ * DSFML - The Simple and Fast Multimedia Library for D
+ *
+ * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ *
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from the
+ * use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not claim
+ * that you wrote the original software. If you use this software in a product,
+ * an acknowledgment in the product documentation would be appreciated but is
+ * not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution
+ */
 
-Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose, including commercial applications,
-and to alter it and redistribute it freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
-If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source distribution
-*/
 module build;
 
 import std.stdio;
@@ -298,7 +304,7 @@ void initializeDMD()
 
     singleFileSwitches = archSwitch ~ " -c -O -release -inline -Isrc";
     libCompilerSwitches = archSwitch ~ " -lib  -Isrc";
-    //docCompilerSwitches = "-c -o- -op -D -Dd"~quoteString(docDirectory);
+    docCompilerSwitches = " -c -o- -op -D -Dd../../doc -I../../src";
     //interfaceCompilerSwitches = " -c -o- -op -H -Hd"~quoteString(interfaceDirectory);
 
     unittestCompilerSwitches =
@@ -724,6 +730,65 @@ bool buildUnittests()
         return true;
 }
 
+bool buildDocumentation()
+{
+    if(!exists("doc/"))
+    {
+        mkdir("doc/");
+    }
+
+    chdir("src/dsfml/");
+
+    foreach(theModule;modules)
+    {
+        if(selectedModule != "" && theModule != selectedModule)
+        {
+            continue;
+        }
+
+        size_t numberOfFiles = fileList[theModule].length ;
+        int currentFile = 1;
+        foreach (string name; fileList[theModule])
+        {
+            if (name == "package.d")
+                continue;
+            string docFile = "../../doc/"~theModule~"/"~name~".html";
+            string dFile = theModule~"/"~name~".d";
+
+            version(DigitalMars)
+            {
+                string buildCommand = compiler~dFile~" ../../doc.ddoc"~docCompilerSwitches;
+            }
+            else version(GNU)
+            {
+                string buildCommand = compiler~dFile~singleFileSwitches;
+            }
+            else version(LDC)
+            {
+                string buildCommand = compiler~dFile~singleFileSwitches;
+            }
+
+
+
+            if(needToBuild(docFile, dFile))
+            {
+                auto status = executeShell(buildCommand);
+                if(status.status !=0)
+                {
+                    writeln(status.output);
+                    return false;
+                }
+                progressOutput(currentFile, numberOfFiles, dFile);
+            }
+
+            currentFile++;
+        }
+    }
+
+    chdir("../..");
+    return true;
+}
+
 /**
  * Display the progress as a percentage given the current file is next.
  *
@@ -808,7 +873,8 @@ int main(string[] args)
         "lib", "Build static libraries.", &buildingLibs,
         "m32", "Force 32 bit building.", &force32Build,
         "m64", "Force 64 bit building.", &force64Build,
-        "unittest", "Build DSFML unit test executable", &buildingUnittests
+        "unittest", "Build DSFML unit test executable.", &buildingUnittests,
+        "doc", "Build DSFML documentation.", &buildingDoc
         );
     }
     catch(GetOptException e)
@@ -860,6 +926,11 @@ int main(string[] args)
     if(buildingUnittests)
     {
         if(!buildUnittests())
+            return -1;
+    }
+    if(buildingDoc)
+    {
+        if(!buildDocumentation)
             return -1;
     }
 

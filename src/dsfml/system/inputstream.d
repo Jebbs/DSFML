@@ -22,20 +22,60 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the InputStream interface.
-module dsfml.system.inputstream;
-
 /**
-* Abstract class for custom file input streams.
-*
 * This class allows users to define their own file input sources from which
 * DSFML can load resources.
 *
-* SFML resource classes like sf::Texture and sf::SoundBuffer provide
-* loadFromFile and loadFromMemory functions, which read data from conventional
-* sources. However, if you have data coming from a different source (over a
-* network, embedded, encrypted, compressed, etc) you can derive your own class
-* from InputStream and load DSFML resources with their loadFromStream function.
+* DSFML resource classes like $(TEXTURE_LINK) and $(SOUNDBUFFER_LINK) provide
+* `loadFromFile` and `loadFromMemory` functions, which read data from
+* conventional sources. However, if you have data coming from a different source
+* (over a network, embedded, encrypted, compressed, etc) you can derive your own
+* class from $(U InputStream) and load DSFML resources with their
+* `loadFromStream` function.
+*
+* Usage example:
+* ---
+* // custom stream class that reads from inside a zip file
+* class ZipStream : InputStream
+* {
+* public:
+*
+*     ZipStream(string archive);
+*
+*     bool open(string filename);
+*
+*     long read(void[] data);
+*
+*     long seek(long position);
+*
+*     long tell();
+*
+*     long getSize();
+*
+* private:
+*
+*     ...
+* };
+*
+* // now you can load textures...
+* auto texture = new Texture();
+* auto stream = new ZipStream("resources.zip");
+* stream.open("images/img.png");
+* texture.loadFromStream(stream);
+*
+* // musics...
+* auto music = new Music();
+* auto stream = new ZipStream("resources.zip");
+* stream.open("musics/msc.ogg");
+* music.openFromStream(stream);
+*
+* // etc.
+* ---
+*/
+module dsfml.system.inputstream;
+
+/**
+* Interface for custom file input streams.
 */
 interface InputStream
 {
@@ -82,7 +122,8 @@ unittest
 		import dsfml.graphics.texture;
 		import std.stdio;
 
-		//File Stream ported from Laurent's example here: http://www.sfml-dev.org/tutorials/2.0/system-stream.php
+		//File Stream ported from Laurent's example here:
+		//http://www.sfml-dev.org/tutorials/2.0/system-stream.php
 
 		class FileStream:InputStream
 		{
@@ -189,13 +230,6 @@ unittest
 
 		writeln("Texture loaded!");
 
-
 		writeln();
-
 	}
 }
-
-
-
-
-

@@ -22,7 +22,44 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the InputSoundFile class.
+/**
+ * $(U InputSoundFile) decodes audio samples from a sound file. It is used
+ * internally by higher-level classes such as $(SOUNDBUFFER_LINK) and
+ * $(MUSIC_LINK), but can also be useful if you want to process or analyze audio
+ * files without playing them, or if you want to implement your own version of
+ * $(MUSIC_LINK) with more specific features.
+ *
+ * Example:
+ * ---
+ * // Open a sound file
+ * auto file = new InputSoundFile();
+ * if (!file.openFromFile("music.ogg"))
+ * {
+ *      //error
+ * }
+ *
+ * // Print the sound attributes
+ * writeln("duration: ", file.getDuration().total!"seconds");
+ * writeln("channels: ", file.getChannelCount());
+ * writeln("sample rate: ", file.getSampleRate());
+ * writeln("sample count: ", file.getSampleCount());
+ *
+ * // Read and process batches of samples until the end of file is reached
+ * short samples[1024];
+ * long count;
+ * do
+ * {
+ *     count = file.read(samples, 1024);
+ *
+ *     // process, analyze, play, convert, or whatever
+ *     // you want to do with the samples...
+ * }
+ * while (count > 0);
+ * ---
+ *
+ * See_Also:
+ * $(OUTPUTSOUNDFILE_LINK)
+ */
 module dsfml.audio.inputsoundfile;
 
 import std.string;
@@ -33,18 +70,6 @@ public import core.time;
 
 /**
  * Provide read access to sound files.
- *
- * This class decodes audio samples from a sound file.
- *
- * It is used internally by higher-level classes such as SoundBuffer and Music,
- * but can also be useful if you want to process or analyze audio files without
- * playing them, or if you want to implement your own version of Music with more
- * specific features.
- *
- * See_Also:
- * 	$(LINK https://www.sfml-dev.org/documentation/2.4.2/classsf_1_1InputSoundFile.php)
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
  */
 class InputSoundFile
 {
@@ -76,7 +101,7 @@ class InputSoundFile
      * Params:
      *	filename = Path of the sound file to load
      *
-     * Returns: True if the file was successfully opened.
+     * Returns: true if the file was successfully opened.
      */
     bool openFromFile(const(char)[] filename)
     {
@@ -95,7 +120,7 @@ class InputSoundFile
      * Params:
      *	data = file data in memory
      *
-     * Returns: True if the file was successfully opened.
+     * Returns: true if the file was successfully opened.
      */
     bool openFromMemory(const(void)[] data)
     {
@@ -114,7 +139,7 @@ class InputSoundFile
      * Params:
      *	stream = Source stream to read from
      *
-     * Returns: True if the file was successfully opened.
+     * Returns: true if the file was successfully opened.
      */
     bool openFromStream(InputStream stream)
     {
@@ -191,20 +216,35 @@ class InputSoundFile
         seek(timeOffset.total!"usecs");
     }
 
+    /**
+     * Get the total number of audio samples in the file
+     *
+     * Returns: Number of samples.
+     */
     long getSampleCount()
     {
         return sfInputSoundFile_getSampleCount(m_soundFile);
     }
+
+    /**
+     * Get the sample rate of the sound
+     *
+     * Returns: Sample rate, in samples per second.
+     */
     uint getSampleRate()
     {
         return sfInputSoundFile_getSampleRate(m_soundFile);
     }
+
+    /**
+     * Get the number of channels used by the sound
+     *
+     * Returns: Number of channels (1 = mono, 2 = stereo).
+     */
     uint getChannelCount()
     {
         return sfInputSoundFile_getChannelCount(m_soundFile);
     }
-
-
 }
 
 private

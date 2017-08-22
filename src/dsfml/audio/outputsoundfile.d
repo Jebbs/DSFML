@@ -22,7 +22,35 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the OutputSoundFile class.
+/**
+  * This class encodes audio samples to a sound file.
+ *
+ * It is used internally by higher-level classes such as SoundBuffer, but can
+ * also be useful if you want to create audio files from custom data sources,
+ * like generated audio samples.
+ *
+ * Example:
+ * ---
+ * // Create a sound file, ogg/vorbis format, 44100 Hz, stereo
+ * auto file = new OutputSoundFile();
+ * if (!file.openFromFile("music.ogg", 44100, 2))
+ * {
+ *     //error
+ * }
+ *
+ * while (...)
+ * {
+ *     // Read or generate audio samples from your custom source
+ *     short[] samples = ...;
+ *
+ *     // Write them to the file
+ *     file.write(samples);
+ * }
+ * ---
+ *
+ * See_Also:
+ * $(INPUTSOUNDFILE_LINK)
+ */
 module dsfml.audio.outputsoundfile;
 
 import std.string;
@@ -30,17 +58,6 @@ import dsfml.system.err;
 
 /**
  * Provide write access to sound files.
- *
- * This class encodes audio samples to a sound file.
- *
- * It is used internally by higher-level classes such as SoundBuffer, but can
- * also be useful if you want to create audio files from custom data sources,
- * like generated audio samples.
- *
- * See_Also:
- * 	$(LINK https://www.sfml-dev.org/documentation/2.4.2/classsf_1_1OutputSoundFile.php)
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
  */
 class OutputSoundFile
 {

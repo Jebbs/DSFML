@@ -22,28 +22,8 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the SoundBuffer class.
-module dsfml.audio.soundbuffer;
-
-public import core.time;
-
-import dsfml.audio.inputsoundfile;
-import dsfml.audio.sound;
-
-import dsfml.system.inputstream;
-
-import std.stdio;
-
-import std.string;
-
-import std.algorithm;
-import std.array;
-
-import dsfml.system.err;
-
 /**
- * Storage for audio samples defining a sound.
- *
+ * A sound buffer holds the data of a sound, which is an array of audio samples.
  * A sample is a 16 bits signed integer that defines the amplitude of the sound
  * at a given time. The sound is then restituted by playing these samples at a
  * high rate (for example, 44100 samples per second is the standard rate used
@@ -72,10 +52,56 @@ import dsfml.system.err;
  * destructed while it is used by a Sound (i.e. never write a function that uses
  * a local SoundBuffer instance for loading a sound).
  *
- * See_Also:
- * $(LINK https://www.sfml-dev.org/documentation/2.4.2/classsf_1_1SoundBuffer.php)
+ *Example:
+ * ---
+ * // Declare a new sound buffer
+ * auto buffer = SoundBuffer();
  *
- * Authors: Laurent Gomila, Jeremy DeHaan
+ * // Load it from a file
+ * if (!buffer.loadFromFile("sound.wav"))
+ * {
+ *     // error...
+ * }
+ *
+ * // Create a sound source and bind it to the buffer
+ * auto sound1 = new Sound();
+ * sound1.setBuffer(buffer);
+ *
+ * // Play the sound
+ * sound1.play();
+ *
+ * // Create another sound source bound to the same buffer
+ * auto sound2 = new Sound();
+ * sound2.setBuffer(buffer);
+ *
+ * // Play it with a higher pitch -- the first sound remains unchanged
+ * sound2.pitch = 2;
+ * sound2.play();
+ * ---
+ *
+ * See_Also:
+ * $(SOUND_LINK), $(SOUNDBUFFERRECORDER_LINK)
+ */
+module dsfml.audio.soundbuffer;
+
+public import core.time;
+
+import dsfml.audio.inputsoundfile;
+import dsfml.audio.sound;
+
+import dsfml.system.inputstream;
+
+import std.stdio;
+
+import std.string;
+
+import std.algorithm;
+import std.array;
+
+import dsfml.system.err;
+
+/**
+ * Storage for audio samples defining a sound.
  */
 class SoundBuffer
 {
@@ -97,15 +123,12 @@ class SoundBuffer
         sfSoundBuffer_destroy(sfPtr);
     }
 
-    //TODO: copy constructor?
-    //So many possible properties....
-
     /**
      * Get the array of audio samples stored in the buffer.
      *
      * The format of the returned samples is 16 bits signed integer (short).
      *
-     *  Returns: Read-only pointer to the array of sound samples
+     *  Returns: Read-only array of sound samples.
      */
     const(short[]) getSamples() const
     {
@@ -122,7 +145,7 @@ class SoundBuffer
      * The sample rate is the number of samples played per second. The higher,
      * the better the quality (for example, 44100 samples/s is CD quality).
      *
-     * Returns: Sample rate (number of samples per second)
+     * Returns: Sample rate (number of samples per second).
      */
     uint getSampleRate() const
     {
@@ -135,7 +158,7 @@ class SoundBuffer
      * If the sound is mono then the number of channels will be 1, 2 for stereo,
      * etc.
      *
-     * Returns: Number of channels
+     * Returns: Number of channels.
      */
     uint getChannelCount() const
     {
@@ -145,7 +168,7 @@ class SoundBuffer
     /**
      * Get the total duration of the sound.
      *
-     * Returns: Sound duration
+     * Returns: Sound duration.
      */
     Duration getDuration() const
     {
@@ -162,7 +185,7 @@ class SoundBuffer
      * Params:
      * 		filename =	Path of the sound file to load
      *
-     * Returns: True if loading succeeded, false if it failed
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromFile(const(char)[] filename)
     {
@@ -187,7 +210,7 @@ class SoundBuffer
      * Params:
      * 		data =	The array of data
      *
-     * Returns: True if loading succeeded, false if it failed
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromMemory(const(void)[] data)
     {
@@ -212,7 +235,7 @@ class SoundBuffer
      * Params:
      * 		stream =	Source stream to read from
      *
-     * Returns: True if loading succeeded, false if it failed
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromStream(InputStream stream)
     {
@@ -239,7 +262,7 @@ class SoundBuffer
      * 		channelCount = Number of channels (1 = mono, 2 = stereo, ...)
      * 		sampleRate   = Sample rate (number of samples to play per second)
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromSamples(const(short[]) samples, uint channelCount, uint sampleRate)
     {
@@ -263,7 +286,7 @@ class SoundBuffer
      * Params:
      * 		filename =	Path of the sound file to write
      *
-     * Returns: True if saving succeeded, false if it failed
+     * Returns: true if saving succeeded, false if it failed.
      */
     bool saveToFile(const(char)[] filename)
     {

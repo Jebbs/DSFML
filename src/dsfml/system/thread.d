@@ -22,21 +22,52 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the DSFML Thread class
+/**
+ * Threads provide a way to run multiple parts of the code in parallel. When you
+ * launch a new thread, the execution is split and both the new thread and the
+ * caller run in parallel.
+ *
+ * To use a $(U Thread), you construct it directly with the function to execute
+ * as the entry point of the thread. $(U Thread) has multiple template
+ * constructors, which means that you can use several types of entry points:
+ * $(LIST functions with no arguments)
+ * $(LIST delegates with no arguments)
+ *
+ * The thread ends when its function is terminated. If the owner $(U Thread)
+ * instance is destroyed before the thread is finished, the destructor will wait
+ * (see `wait()`).
+ *
+ * Example:
+ * ---
+ * // example 1: function
+ * void threadFunc()
+ * {
+ *   ...
+ * }
+ *
+ * auto thread = new Thread(&threadFunc);
+ * thread.launch();
+ *
+ * // example 2: delegate
+ * class Task
+ * {
+ *    void run()
+ *    {
+ *       ...
+ *    }
+ * }
+ *
+ * auto task = new Task();
+ * auto thread = new Thread(&task.run);
+ * thread.launch();
+ * ---
+ */
 module dsfml.system.thread;
 
 import core = core.thread;
 
 /**
  * Utility class to manipulate threads.
- *
- * Threads provide a way to run multiple parts of the code in parallel.
- *
- * When you launch a new thread, the execution is split and both the new thread
- * and the caller run in parallel.
- *
- * To use a Thread, you construct it directly with the function to execute as
- * the entry point of the thread.
  */
 class Thread
 {
@@ -46,8 +77,8 @@ class Thread
 	 * Construct the thread from a functor with no argument
 	 *
 	 * Params:
-	 * 		fn  = The function to use as the entry point of the thread.
-	 * 		sz  = The size of the stack.
+	 * 		fn  = The function to use as the entry point of the thread
+	 * 		sz  = The size of the stack
 	 */
 	this(void function() fn, size_t sz = 0)
 	{
@@ -58,8 +89,8 @@ class Thread
 	 * Construct the thread from a delegate with no argument
 	 *
 	 * Params:
-	 * 		dg  = The delegate to use as the entry point of the thread.
-	 * 		sz  = The size of the stack.
+	 * 		dg  = The delegate to use as the entry point of the thread
+	 * 		sz  = The size of the stack
 	 */
 	this(void delegate() dg, size_t sz = 0)
 	{
@@ -142,6 +173,3 @@ unittest
 	}
 
 }
-
-
-//version(linux) package extern(C) void linux_XInitThreads();

@@ -22,19 +22,34 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Error File output.
+/**
+ * By default, $(U err) outputs to the same location as `stderr`, which is the
+ * console if there's one available.
+ *
+ * It is a standard std.stdio.File instance, so it supports all the functions as
+ * defined by this structure (write, writeln, open, lock, etc.)
+ *
+ * $(U err) can be redirected to write to another output, independantly of
+ * `stderr`, by using the `open` function. Note that unlike SFML's `err()`,
+ * DSFML's `err` cannot be redirected to 'nothing' at this time.
+ *
+ * Example:
+ * ---
+ * // Redirect to a file
+ * auto file = File("dsfml-log.txt", "w");
+ * auto previous = err;
+ * err = file;
+ *
+ * // Restore the original output
+ * err = previous;
+ * ---
+ */
 module dsfml.system.err;
 
 import std.stdio;
 
 /**
 * Standard std.stdio.File instance used by DSFML to output warnings and errors.
-*
-* By default, err outputs to the same location as stderr, which is the console
-* if there's one available.
-*
-* err can be redirected to write to another output, independantly of stderr, by
-* using the open function.
 */
 File err;
 

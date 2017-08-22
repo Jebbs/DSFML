@@ -22,7 +22,46 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the TcpListener class.
+/**
+ * A listener socket is a special type of socket that listens to a given port
+ * and waits for connections on that port. This is all it can do.
+ *
+ * When a new connection is received, you must call `accept` and the listener
+ * returns a new instance of TcpSocket that is properly initialized and can
+ * be used to communicate with the new client.
+ *
+ * Listener sockets are specific to the TCP protocol, UDP sockets are
+ * connectionless and can therefore communicate directly. As a consequence, a
+ * listener socket will always return the new connections as TcpSocket
+ * instances.
+ *
+ * A listener is automatically closed on destruction, like all other types of
+ * socket. However if you want to stop listening before the socket is destroyed,
+ * you can call its close() function.
+ *
+ * Example:
+ * ---
+ * // Create a listener socket and make it wait for new
+ * // connections on port 55001
+ * auto listener = new TcpListener();
+ * listener.listen(55001);
+ *
+ * // Endless loop that waits for new connections
+ * while (running)
+ * {
+ *     auto client = new TcpSocket();
+ *     if (listener.accept(client) == Socket.Status.Done)
+ *     {
+ *         // A new client just connected!
+ *         writeln("New connection received from ", client.getRemoteAddress());
+ *         doSomethingWith(client);
+ *     }
+ * }
+ * ---
+ *
+ * See_Also:
+ * $(TCPSOCKET_LINK), $(SOCKET_LINK)
+ */
 module dsfml.network.tcplistener;
 
 
@@ -33,24 +72,6 @@ import dsfml.system.err;
 
 /**
  * Socket that listens to new TCP connections.
- *
- * A listener socket is a special type of socket that listens to a given port
- * and waits for connections on that port.
- *
- * This is all it can do.
- *
- * When a new connection is received, you must call accept and the listener
- * returns a new instance of TcpSocket that is properly initialized and can be
- * used to communicate with the new client.
- *
- * Listener sockets are specific to the TCP protocol, UDP sockets are
- * connectionless and can therefore communicate directly. As a consequence, a
- * listener socket will always return the new connections as TcpSocket
- * instances.
- *
- * A listener is automatically closed on destruction, like all other types of
- * socket. However if you want to stop listening before the socket is destroyed,
- * you can call its close() function.
  */
 class TcpListener:Socket
 {
@@ -149,7 +170,7 @@ class TcpListener:Socket
      * return immediately, using the return code to signal whether there was
      * data available or not. By default, all sockets are blocking.
      *
-     * Returns: True if the socket is blocking, false otherwise.
+     * Returns: true if the socket is blocking, false otherwise.
      */
     bool isBlocking()
     {

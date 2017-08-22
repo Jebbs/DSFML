@@ -22,6 +22,46 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
+/**
+ * Musics are sounds that are streamed rather than completely loaded in memory.
+ *
+ * This is especially useful for compressed musics that usually take hundreds of
+ * MB when they are uncompressed: by streaming it instead of loading it
+ * entirely, you avoid saturating the memory and have almost no loading delay.
+ *
+ * Apart from that, a $(U Music) has almost the same features as the
+ * SoundBuffer/Sound pair: you can play/pause/stop it, request its parameters
+ * (channels, sample rate), change the way it is played (pitch, volume, 3D
+ * position, ...), etc.
+ *
+ * As a sound stream, a music is played in its own thread in order not to block
+ * the rest of the program. This means that you can leave the music alone after
+ * calling play(), it will manage itself very well.
+ *
+ * Example:
+ * ---
+ * // Declare a new music
+ * auto music = new Music();
+ *
+ * // Open it from an audio file
+ * if (!music.openFromFile("music.ogg"))
+ * {
+ *     // error...
+ * }
+ *
+ * // Change some parameters
+ * music.position = Vector3f(0, 1, 10); // change its 3D position
+ * music.pitch = 2;           // increase the pitch
+ * music.volume = 50;         // reduce the volume
+ * music.loop = true;         // make it loop
+ *
+ * // Play it
+ * music.play();
+ * ---
+ *
+ * See_Also:
+ * $(SOUND_LINK), $(SOUNDSTREAM_LINK)
+ */
 module dsfml.audio.music;
 
 public import core.time;
@@ -34,26 +74,6 @@ import dsfml.audio.soundstream;
 
 /**
  * Streamed music played from an audio file.
- *
- * Musics are sounds that are streamed rather than completely loaded in memory.
- *
- * This is especially useful for compressed musics that usually take hundreds of
- * MB when they are uncompressed: by streaming it instead of loading it
- * entirely, you avoid saturating the memory and have almost no loading delay.
- *
- * Apart from that, a Music has almost the same features as the
- * SoundBuffer/Sound pair: you can play/pause/stop it, request its parameters
- * (channels, sample rate), change the way it is played (pitch, volume, 3D
- * position, ...), etc.
- *
- * As a sound stream, a music is played in its own thread in order not to block
- * the rest of the program. This means that you can leave the music alone after
- * calling play(), it will manage itself very well.
- *
- * See_Also:
- *	$(LINK https://www.sfml-dev.org/documentation/2.4.2/classsf_1_1Music.php)
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
  */
 class Music : SoundStream
 {

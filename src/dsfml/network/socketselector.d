@@ -22,7 +22,92 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module contianing the SocketSelector class
+/**
+ * Socket selectors provide a way to wait until some data is available on a set
+ * of sockets, instead of just one. This is convenient when you have multiple
+ * sockets that may possibly receive data, but you don't know which one will be
+ * ready first. In particular, it avoids to use a thread for each socket; with
+ * selectors, a single thread can handle all the sockets.
+ *
+ * All types of sockets can be used in a selector:
+ * $(LIST TcpListener)
+ * $(LIST TcpSocket)
+ * $(LIST UdpSocket)
+ *
+ * A selector doesn't store its own copies of the sockets, it simply keeps a
+ * reference to the original sockets that you pass to the "add" function.
+ * Therefore, you can't use the selector as a socket container, you must store
+ * them outside and make sure that they are alive as long as they are used in
+ * the selector (i.e., they cannot be collected by the GC).
+ *
+ * Using a selector is simple:
+ * $(LIST populate the selector with all the sockets that you want to observe)
+ * $(LIST make it wait until there is data available on any of the sockets)
+ * $(LIST test each socket to find out which ones are ready)
+ *
+ * Example:
+ * ---
+ * // Create a socket to listen to new connections
+ * auto listener = new TcpListener();
+ * listener.listen(55001);
+ *
+ * // Create a list to store the future clients
+ * TcpSocket[] clients;
+ *
+ * // Create a selector
+ * auto selector = new SocketSelector();
+ *
+ * // Add the listener to the selector
+ * selector.add(listener);
+ *
+ * // Endless loop that waits for new connections
+ * while (running)
+ * {
+ *     // Make the selector wait for data on any socket
+ *     if (selector.wait())
+ *     {
+ *         // Test the listener
+ *         if (selector.isReady(listener))
+ *         {
+ *             // The listener is ready: there is a pending connection
+ *             auto client = new TcpSocket();
+ *             if (listener.accept(client) == Socket.Status.Done)
+ *             {
+ *                 // Add the new client to the clients list
+ *                 clients~=client;
+ *
+ *                 // Add the new client to the selector so that we will
+ *                 // be notified when he sends something
+ *                 selector.add(client);
+ *             }
+ *             else
+ *             {
+ *                 // Error, we won't get a new connection
+ *             }
+ *         }
+ *         else
+ *         {
+ *             // The listener socket is not ready, test all other sockets (the clients)
+ *             foreach(client; clients)
+ *             {
+ *                 if (selector.isReady(client))
+ *                 {
+ *                     // The client has sent some data, we can receive it
+ *                     auto packet = new Packet();
+ *                     if (client.receive(packet) == Socket.Status.Done)
+ *                     {
+ *                         ...
+ *                     }
+ *                 }
+ *             }
+ *         }
+ *     }
+ * }
+ * ---
+ *
+ * See_Also:
+ * $(SOCKET_LINK)
+ */
 module dsfml.network.socketselector;
 
 import dsfml.network.tcplistener;
@@ -33,15 +118,6 @@ import core.time;
 
 /**
  * Multiplexer that allows to read from multiple sockets.
- *
- * Socket selectors provide a way to wait until some data is available on a set
- * of sockets, instead of just one.
- *
- * This is convenient when you have multiple sockets that may possibly receive
- * data, but you don't know which one will be ready first.
- *
- * In particular, it avoids to use a thread for each socket; with selectors, a
- * single thread can handle all the sockets.
  */
 class SocketSelector
 {
@@ -131,29 +207,13 @@ class SocketSelector
         return (sfSocketSelector_isTcpListenerReady(sfPtr, listener.sfPtr));
     }
 
-    /**
-     * Test a socket to know if it is ready to receive data.
-     *
-     * This function must be used after a call to Wait, to know which sockets
-     * are ready to receive data. If a socket is ready, a call to receive will
-     * never block because we know that there is data available to read. Note
-     * that if this function returns true for a TcpListener, this means that it
-     * is ready to accept a new connection.
-     */
+    /// ditto
     bool isReady(TcpSocket socket)
     {
         return (sfSocketSelector_isTcpSocketReady(sfPtr, socket.sfPtr));
     }
 
-    /**
-     * Test a socket to know if it is ready to receive data.
-     *
-     * This function must be used after a call to Wait, to know which sockets
-     * are ready to receive data. If a socket is ready, a call to receive will
-     * never block because we know that there is data available to read. Note
-     * that if this function returns true for a TcpListener, this means that it
-     * is ready to accept a new connection.
-     */
+    /// ditto
     bool isReady(UdpSocket socket)
     {
         return (sfSocketSelector_isUdpSocketReady(sfPtr, socket.sfPtr));
@@ -165,7 +225,7 @@ class SocketSelector
      * This function doesn't destroy the socket, it simply removes the reference
      * that the selector has to it.
      *
-     * Parameters
+     * Params:
      *  socket = Reference to the socket to remove
      */
     void remove(TcpListener socket)
@@ -173,13 +233,29 @@ class SocketSelector
         sfSocketSelector_removeTcpListener(sfPtr, socket.sfPtr);
     }
 
-    /// ditto
+    /**
+     * Remove a socket from the selector.
+     *
+     * This function doesn't destroy the socket, it simply removes the reference
+     * that the selector has to it.
+     *
+     * Params:
+     *  socket = Reference to the socket to remove
+     */
     void remove(TcpSocket socket)
     {
         sfSocketSelector_removeTcpSocket(sfPtr, socket.sfPtr);
     }
 
-    /// ditto
+    /**
+     * Remove a socket from the selector.
+     *
+     * This function doesn't destroy the socket, it simply removes the reference
+     * that the selector has to it.
+     *
+     * Params:
+     *  socket = Reference to the socket to remove
+     */
     void remove(UdpSocket socket)
     {
         sfSocketSelector_removeUdpSocket(sfPtr, socket.sfPtr);
@@ -196,7 +272,7 @@ class SocketSelector
      * Parameters
      * 		timeout = Maximum time to wait, (use Time::Zero for infinity)
      *
-     * Returns: True if there are sockets ready, false otherwise.
+     * Returns: true if there are sockets ready, false otherwise.
      */
     bool wait(Duration timeout = Duration.zero())
     {

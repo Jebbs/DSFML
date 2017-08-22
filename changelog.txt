@@ -4,6 +4,8 @@ DSFML 2.4
 General
 =======
 
+Compiler Support
+----------------
 Added Supported Compilers:
 - DMD 2.074.1, 2.075.0
 - LDC 1.2.0, 1.3.0
@@ -13,6 +15,22 @@ Dropped Supported Compilers:
 - LDC 1.0.0 (Not correctly configured on Travic CI for OSX)
 - LDC 0.17.x (New versions of this compiler are not built for Windows)
 - LDC 0.16.1 (Droped support for DMD version 2.067)
+
+
+Documentation
+-------------
+Added documentation to functions that had none.
+
+Moved detailed class description to the module, which causes it to be displayed
+towards the top of the generated documentation.
+
+Added code examples.
+
+Documentation for property functions is no longer displayed twice when there
+exists a getter and setter.
+
+Added links to related modules.
+
 
 System
 ======
@@ -41,6 +59,12 @@ Updated the IpAddress from bytes and from uint constructors to run at compile
 time.
 
 Added the IpAddress.Any constant, which represents any Ip Address.
+
+Socket
+------
+Changed socket to be an interface as opposed to an abstract class. This allows
+setBlocking and isBlocking to be declared here as they are common between all
+sockets that inherit from the Socket interface.
 
 
 TcpListener

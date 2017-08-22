@@ -22,18 +22,53 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the IpAddress struct.
+/**
+ * $(U IpAddress) is a utility class for manipulating network addresses. It
+ * provides a set a implicit constructors and conversion functions to easily
+ * build or transform an IP address from/to various representations.
+ *
+ *
+ * Note that $(U IpAddress) currently doesn't support IPv6 nor other types of
+ * network addresses.
+ * Example:
+ * ---
+ * // an invalid address
+ * IpAddress a0;
+ *
+ * // an invalid address (same as a0)
+ * IpAddress a1 = IpAddress.None;
+ *
+ * // the local host address
+ * IpAddress a2 = IpAddress("127.0.0.1");
+ *
+ * // the broadcast address
+ * IpAddress a3 = IpAddress.Broadcast;
+ *
+ * // a local address
+ * IpAddress a4 = IpAddress(192, 168, 1, 56);
+ *
+ * // a local address created from a network name
+ * IpAddress a5 = IpAddress("my_computer");
+ *
+ * // a distant address
+ * IpAddress a6 = IpAddress("89.54.1.169");
+ *
+ * // a distant address created from a network name
+ * IpAddress a7("www.google.com");
+ *
+ * // my address on the local network
+ * IpAddress a8 = IpAddress.getLocalAddress();
+ *
+ * // my address on the internet
+ * IpAddress a9 = IpAddress.getPublicAddress();
+ * ---
+ */
 module dsfml.network.ipaddress;
 
 public import core.time;
 
 /**
  * Encapsulate an IPv4 network address.
- *
- * IpAddress is a utility class for manipulating network addresses.
- *
- * It provides a set a implicit constructors and conversion functions to easily
- * build or transform an IP address from/to various representations.
  */
 struct IpAddress
 {

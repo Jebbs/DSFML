@@ -22,23 +22,48 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing a numeric 2D vector type.
+/**
+ * $(U Vector2) is a simple structure that defines a mathematical vector with
+ * two coordinates (x and y).  It can be used to represent anything that has two
+ * dimensions: a size, a point, a velocity, etc.
+ *
+ * The template parameter T is the type of the coordinates. It can be any type
+ * that supports arithmetic operations (+, -, /, *) and comparisons (==, !=),
+ * for example int or float.
+ *
+ * You generally don't have to care about the templated form (Vector2!(T),
+ * the most common specializations have special aliases:
+ * $(LIST Vector2!(float) is Vector2f)
+ * $(LIST Vector2!(int) is Vector2i)
+ * $(LIST Vector2!(uint) is Vector2u)
+ *
+ * The $(U Vector2) class has a small and simple interface, its x and y members
+ * can be accessed directly (there are no accessors like `setX()`, `getX()`) and
+ * it contains no mathematical function like dot product, cross product, length,
+ * etc.
+ *
+ * Example:
+ * ---
+ * auto v1 = Vector2f(16.5f, 24.f);
+ * v1.x = 18.2f;
+ * float y = v1.y;
+ *
+ * auto v2 = v1 * 5.f;
+ * Vector2f v3;
+ * v3 = v1 + v2;
+ *
+ * bool different = (v2 != v3);
+ * ---
+ *
+ * See_Also:
+ * $(VECTOR3_LINK)
+ */
 module dsfml.system.vector2;
 
 import std.traits;
 
 /**
- * Utility template struct for manipulating 2-dimensional vectors
- *
- * Vector2 is a simple class that defines a mathematical vector with two
- * coordinates (x and y).
- *
- * It can be used to represent anything that has two dimensions: a size, a
- * point, a velocity, etc.
- *
- * The template parameter T is the type of the coordinates. It can be any type
- * that supports arithmetic operations (+, -, /, *) and comparisons (==, !=),
- * for example int or float.
+ * Utility template struct for manipulating 2-dimensional vectors.
  */
 struct Vector2(T)
 	if(isNumeric!(T) || is(T == bool))

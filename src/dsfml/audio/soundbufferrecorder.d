@@ -22,17 +22,7 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the SoundBufferRecorder class.
-module dsfml.audio.soundbufferrecorder;
-
-import dsfml.audio.soundrecorder;
-import dsfml.audio.soundbuffer;
-
-
 /**
- * Specialized SoundRecorder which stores the captured audio data into a sound
- * buffer.
- *
  * SoundBufferRecorder allows to access a recorded sound through a SoundBuffer,
  * so that it can be played, saved to a file, etc.
  *
@@ -42,10 +32,36 @@ import dsfml.audio.soundbuffer;
  * As usual, don't forget to call the isAvailable() function before using this
  * class (see SoundRecorder for more details about this).
  *
- * See_Also:
- *	$(LINK https://www.sfml-dev.org/documentation/2.4.2/classsf_1_1SoundBufferRecorder.php)
+ * Example:
+ * ---
+ * if (SoundBufferRecorder.isAvailable())
+ * {
+ *     // Record some audio data
+ *     auto recorder = SoundBufferRecorder();
+ *     recorder.start();
+ *     ...
+ *     recorder.stop();
  *
- * Authors: Laurent Gomila, Jeremy DeHaan
+ *     // Get the buffer containing the captured audio data
+ *     auto buffer = recorder.getBuffer();
+ *
+ *     // Save it to a file (for example...)
+ *     buffer.saveToFile("my_record.ogg");
+ * }
+ * ---
+ *
+ * See_Also:
+ * $(SOUNDRECORDER_LINK)
+ */
+module dsfml.audio.soundbufferrecorder;
+
+import dsfml.audio.soundrecorder;
+import dsfml.audio.soundbuffer;
+
+
+/**
+ * Specialized SoundRecorder which stores the captured audio data into a sound
+ * buffer.
  */
 class SoundBufferRecorder : SoundRecorder
 {
