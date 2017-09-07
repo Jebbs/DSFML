@@ -22,7 +22,38 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Shape class.
+/**
+ * $(U Shape) is a drawable class that allows to define and display a custom
+ * convex shape on a render target.
+ *
+ * It's only an abstract base, it needs to be specialized for concrete types of
+ * shapes (circle, rectangle, convex polygon, star, ...).
+ *
+ * In addition to the attributes provided by the specialized shape classes, a
+ * shape always has the following attributes:
+ * $(UL
+ * $(LI a texture)
+ * $(LI a texture rectangle)
+ * $(LI a fill color)
+ * $(LI an outline color)
+ * $(LI an outline thickness))
+ *
+ * Each feature is optional, and can be disabled easily:
+ * $(UL
+ * $(LI the texture can be null)
+ * $(LI the fill/outline colors can be Color.Transparent)
+ * $(LI the outline thickness can be zero))
+ *
+ * You can write your own derived shape class, there are only two abstract
+ * functions to override:
+ * $(UL
+ * $(LI `getPointCount` must return the number of points of the shape)
+ * $(LI `getPoint` must return the points of the shape)
+ *
+ * See_Also:
+ * $(RECTANGLESHAPE_LINK), $(CIRCLESHAPE_LINK), $(CONVEXSHAPE_LINK),
+ * $(TRANSFORMABLE_LINK)
+ */
 module dsfml.graphics.shape;
 
 import dsfml.system.vector2;
@@ -41,33 +72,6 @@ import std.typecons : Rebindable;
 
 /**
  * Base class for textured shapes with outline.
- *
- * Shape is a drawable class that allows to define and display a custom convex
- * shape on a render target.
- *
- * It's only an abstract base, it needs to be specialized for concrete types of
- * shapes (circle, rectangle, convex polygon, star, ...).
- *
- * In addition to the attributes provided by the specialized shape classes, a
- * shape always has the following attributes:
- * - a texture
- * - a texture rectangle
- * - a fill color
- * - an outline color
- * - an outline thickness
- *
- * Each feature is optional, and can be disabled easily:
- * - the texture can be null
- * - the fill/outline colors can be sf::Color::Transparent
- * - the outline thickness can be zero
- *
- * You can write your own derived shape class, there are only two virtual \
- * functions to override:
- * - getPointCount must return the number of points of the shape
- * - getPoint must return the points of the shape
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- * See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Shape.php#details
  */
 class Shape : Drawable, Transformable
 {
@@ -81,116 +85,121 @@ class Shape : Drawable, Transformable
 
     private
     {
-        Rebindable!(const(Texture)) m_texture; /// Texture of the shape
-        IntRect m_textureRect; /// Rectangle defining the area of the source texture to display
-        Color m_fillColor; /// Fill color
-        Color m_outlineColor; /// Outline color
-        float m_outlineThickness = 0; /// Thickness of the shape's outline
-        VertexArray m_vertices; /// Vertex array containing the fill geometry
-        VertexArray m_outlineVertices; /// Vertex array containing the outline geometry
-        FloatRect m_insideBounds; /// Bounding rectangle of the inside (fill)
-        FloatRect m_bounds; /// Bounding rectangle of the whole shape (outline + fill)
+        // Texture of the shape
+        Rebindable!(const(Texture)) m_texture;
+        // Rectangle defining the area of the source texture to display
+        IntRect m_textureRect;
+        // Fill color
+        Color m_fillColor;
+        // Outline color
+        Color m_outlineColor;
+        // Thickness of the shape's outline
+        float m_outlineThickness = 0;
+        // Vertex array containing the fill geometry
+        VertexArray m_vertices;
+        // Vertex array containing the outline geometry
+        VertexArray m_outlineVertices;
+        // Bounding rectangle of the inside (fill)
+        FloatRect m_insideBounds;
+        // Bounding rectangle of the whole shape (outline + fill)
+        FloatRect m_bounds;
     }
 
-    /**
-     * The sub-rectangle of the texture that the shape will display.
-     *
-     * The texture rect is useful when you don't want to display the whole
-     * texture, but rather a part of it. By default, the texture rect covers
-     * the entire texture.
-     */
     @property
     {
-        //Set Texture Rect
+        /**
+         * The sub-rectangle of the texture that the shape will display.
+         *
+         * The texture rect is useful when you don't want to display the whole
+         * texture, but rather a part of it. By default, the texture rect covers
+         * the entire texture.
+         */
         IntRect textureRect(IntRect rect)
         {
             m_textureRect = rect;
             updateTexCoords();
             return rect;
         }
-        //get texture Rect
+        /// ditto
         IntRect textureRect() const
         {
             return m_textureRect;
         }
     }
 
-    /**
-     * The fill color of the shape.
-     *
-     * This color is modulated (multiplied) with the shape's texture if any. It
-     * can be used to colorize the shape, or change its global opacity. You can
-     * use Color.Transparent to make the inside of the shape transparent, and
-     * have the outline alone. By default, the shape's fill color is opaque
-     * white.
-     */
     @property
     {
-        //set Fill color
+        /**
+         * The fill color of the shape.
+         *
+         * This color is modulated (multiplied) with the shape's texture if any.
+         * It can be used to colorize the shape, or change its global opacity.
+         * You can use `Color.Transparent` to make the inside of the shape
+         * transparent, and have the outline alone. By default, the shape's fill
+         * color is opaque white.
+         */
         Color fillColor(Color color)
         {
             m_fillColor = color;
             updateFillColors();
             return color;
         }
-        //get fill color
+        /// ditto
         Color fillColor() const
         {
             return m_fillColor;
         }
     }
 
-    /**
-     * The outline color of the shape.
-     *
-     * By default, the shape's outline color is opaque white.
-     */
     @property
     {
-        //set outline color
+        /**
+         * The outline color of the shape.
+         *
+         * By default, the shape's outline color is opaque white.
+         */
         Color outlineColor(Color color)
         {
             m_outlineColor = color;
             updateOutlineColors();
             return color;
         }
-        //get outline color
+        /// ditto
         Color outlineColor() const
         {
             return m_outlineColor;
         }
     }
 
-    /**
-     * The thickness of the shape's outline.
-     *
-     * Note that negative values are allowed (so that the outline expands
-     * towards the center of the shape), and using zero disables the outline. By
-     * default, the outline thickness is 0.
-     */
     @property
     {
-        //set ouline thickness
+        /**
+         * The thickness of the shape's outline.
+         *
+         * Note that negative values are allowed (so that the outline expands
+         * towards the center of the shape), and using zero disables the
+         * outline. By default, the outline thickness is 0.
+         */
         float outlineThickness(float thickness)
         {
             m_outlineThickness = thickness;
             update();
             return thickness;
         }
-        //get outline thickness
+        /// ditto
         float outlineThickness() const
         {
             return m_outlineThickness;
         }
     }
 
-    /**
-     * Get the total number of points in the shape.
-     *
-     * Returns: Number of points in the shape.
-     */
     @property
     {
+        /**
+         * Get the total number of points in the shape.
+         *
+         * Returns: Number of points in the shape.
+         */
         abstract uint pointCount();
     }
 
@@ -303,7 +312,7 @@ class Shape : Drawable, Transformable
      * Recompute the internal geometry of the shape.
      *
      * This function must be called by the derived class everytime the shape's
-     * points change (ie. the result of either getPointCount or getPoint is
+     * points change (ie. the result of either `getPointCount` or `getPoint` is
      * different).
      */
     protected void update()

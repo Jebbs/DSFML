@@ -80,7 +80,7 @@ final abstract class Touch
     * Params:
     *	finger = Finger index
     *
-    * Returns: True if finger is currently touching the screen, false otherwise.
+    * Returns: true if finger is currently touching the screen, false otherwise.
     */
     static bool isDown (uint finger)
     {

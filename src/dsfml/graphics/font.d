@@ -22,7 +22,73 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Font class.
+/**
+ *
+ * Fonts can be loaded from a file, from memory or from a custom stream, and
+ * supports the most common types of fonts. See the `loadFromFile` function for
+ * the complete list of supported formats.
+ *
+ * Once it is loaded, a $(U Font) instance provides three types of information
+ * about the font:
+ * $(UL
+ * $(LI Global metrics, such as the line spacing)
+ * $(LI Per-glyph metrics, such as bounding box or kerning)
+ * $(LI Pixel representation of glyphs))
+ *
+ * Fonts alone are not very useful: they hold the font data but cannot make
+ * anything useful of it. To do so you need to use the $(TEXT_LINK) class, which
+ * is able to properly output text with several options such as character size,
+ * style, color, position, rotation, etc.
+ * This separation allows more flexibility and better performances: indeed a
+ & $(U Font) is a heavy resource, and any operation on it is slow (often too
+ * slow for real-time applications). On the other side, a $(TEXT_LINK) is a
+ * lightweight object which can combine the glyphs data and metrics of a
+ * $(U Font) to display any text on a render target.
+ * Note that it is also possible to bind several $(TEXT_LINK) instances to the
+ * same $(U Font).
+ *
+ * It is important to note that the $(TEXT_LINK) instance doesn't copy the font
+ * that it uses, it only keeps a reference to it. Thus, a $(U Font) must not be
+ * destructed while it is used by a $(TEXT_LINK).
+ *
+ * Example:
+ * ---
+ * // Declare a new font
+ * auto font = new Font();
+ *
+ * // Load it from a file
+ * if (!font.loadFromFile("arial.ttf"))
+ * {
+ *     // error...
+ * }
+ *
+ * // Create a text which uses our font
+ * auto text1 = new Text();
+ * text1.setFont(font);
+ * text1.setCharacterSize(30);
+ * text1.setStyle(Text.Style.Regular);
+ *
+ * // Create another text using the same font, but with different parameters
+ * auto text2 = new Text();
+ * text2.setFont(font);
+ * text2.setCharacterSize(50);
+ * text2.setStyle(Text.Style.Italic);
+ * ---
+ *
+ * $(PARA Apart from loading font files, and passing them to instances of
+ * $(TEXT_LINK), you should normally not have to deal directly with this class.
+ * However, it may be useful to access the font metrics or rasterized glyphs for
+ * advanced usage.
+ *
+ * Note that if the font is a bitmap font, it is not scalable, thus not all
+ * requested sizes will be available to use. This needs to be taken into
+ * consideration when using $(TEXT_LINK).
+ * If you need to display text of a certain size, make sure the corresponding
+ * bitmap font that supports that size is used.)
+ *
+ * See_Also:
+ * $(TEXT_LINK)
+ */
 module dsfml.graphics.font;
 
 import dsfml.graphics.texture;
@@ -32,21 +98,6 @@ import dsfml.system.err;
 
 /**
  * Class for loading and manipulating character fonts.
- *
- * Fonts can be loaded from a file, from memory or from a custom stream, and
- * supports the most common types of fonts.
- *
- * See the loadFromFile function for the complete list of supported formats.
- *
- * Once it is loaded, a Font instance provides three types of information about
- * the font:
- * - Global metrics, such as the line spacing
- * - Per-glyph metrics, such as bounding box or kerning
- * - Pixel representation of glyphs
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also: http://sfml-dev.org/documentation/2.0/classsf_1_1Font.php#details
  */
 class Font
 {
@@ -54,11 +105,12 @@ class Font
     /// Holds various information about a font.
     struct Info
     {
+        /// The font family.
         const(char)[] family;
     }
 
     package sfFont* sfPtr;
-
+    private Info m_info;
     private Texture fontTexture;
     //keeps an instance of the C++ stream stored if used
     private fontStream m_stream;
@@ -103,7 +155,7 @@ class Font
      * Params:
      * 		filename	= Path of the font file to load
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromFile(const(char)[] filename)
     {
@@ -131,7 +183,7 @@ class Font
      * Params:
      * 		data	= data holding the font file
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromMemory(const(void)[] data)
     {
@@ -158,7 +210,7 @@ class Font
      * Params:
      * 		stream	= Source stream to read from
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromStream(InputStream stream)
     {
@@ -176,9 +228,9 @@ class Font
         return ret;
     }
 
-    Info getInfo()
+    ref const(Info) getInfo()
     {
-        return Info();
+        return m_info;
     }
 
     /**

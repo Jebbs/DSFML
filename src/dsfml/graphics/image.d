@@ -22,7 +22,49 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Image class.
+/**
+ * $(U Image) is an abstraction to manipulate images as bidimensional arrays of
+ * pixels. The class provides functions to load, read, write and save pixels, as
+ * well as many other useful functions.
+ *
+ * $(U Image) can handle a unique internal representation of pixels, which is
+ * RGBA 32 bits. This means that a pixel must be composed of 8 bits red, green,
+ * blue and alpha channels – just like a $(COLOR_LINK). All the functions that
+ * return an array of pixels follow this rule, and all parameters that you pass
+ * to $(U Image) functions (such as `loadFromPixels`) must use this
+ * representation as well.
+ *
+ * An $(U Image) can be copied, but it is a heavy resource and if possible you
+ * should always use `const` references to pass or return them to avoid useless
+ * copies.
+ *
+ * Example:
+ * ---
+ * // Load an image file from a file
+ * auto background = new Image();
+ * if (!background.loadFromFile("background.jpg"))
+ *     return -1;
+ *
+ * // Create a 20x20 image filled with black color
+ * auto image = new Image();
+ * image.create(20, 20, Color.Black);
+ *
+ * // Copy image1 on image2 at position (10, 10)
+ * image.copy(background, 10, 10);
+ *
+ * // Make the top-left pixel transparent
+ * auto color = image.getPixel(0, 0);
+ * color.a = 0;
+ * image.setPixel(0, 0, color);
+ *
+ * // Save the image to a file
+ * if (!image.saveToFile("result.png"))
+ *     return -1;
+ * ---
+ *
+ * See_Also:
+ * $(TEXTURE_LINK)
+ */
 module dsfml.graphics.image;
 
 import dsfml.system.vector2;
@@ -36,25 +78,6 @@ import dsfml.system.err;
 
 /**
  * Class for loading, manipulating and saving images.
- *
- * Image is an abstraction to manipulate images as bidimensional arrays of
- * pixels.
- *
- * The class provides functions to load, read, write and save pixels, as well as
- * many other useful functions.
- *
- * Image can handle a unique internal representation of pixels, which is RGBA 32
- * bits. This means that a pixel must be composed of 8 bits red, green, blue and
- * alpha channels – just like a Color. All the functions that return an array of
- * pixels follow this rule, and all parameters that you pass to Image functions
- * (such as loadFromPixels) must use this representation as well.
- *
- * A Image can be copied, but it is a heavy resource and if possible you should
- * always use [const] references to pass or return them to avoid useless copies.
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Image.php#details
  */
 class Image
 {
@@ -107,7 +130,7 @@ class Image
      * 		pixels	= Array of pixels to copy to the image
      *
      */
-    void create(uint width, uint height, const ref ubyte[] pixels)
+    void create(uint width, uint height, const(ubyte)[] pixels)
     {
         sfImage_createFromPixels(sfPtr, width, height,pixels.ptr);
     }
@@ -122,7 +145,7 @@ class Image
      * Params:
      * 		filename	= Path of the image file to load
      *
-     * Returns: True if loading succeeded, false if it failed
+     * Returns: true if loading succeeded, false if it failed
      */
     bool loadFromFile(const(char)[] fileName)
     {
@@ -148,7 +171,7 @@ class Image
      * Params:
      * 		data	= Data file in memory to load
      *
-     * Returns: True if loading succeeded, false if it failed
+     * Returns: true if loading succeeded, false if it failed
      */
     bool loadFromMemory(const(void)[] data)
     {
@@ -173,7 +196,7 @@ class Image
      * Params:
      * 		stream	= Source stream to read from
      *
-     * Returns: True if loading succeeded, false if it failed
+     * Returns: true if loading succeeded, false if it failed
      */
     bool loadFromStream(InputStream stream)
     {
@@ -212,9 +235,9 @@ class Image
      *
      * The returned value points to an array of RGBA pixels made of 8 bits
      * integers components. The size of the array is:
-     * width * height * 4 (getSize().x * getSize().y * 4).
+     * `width * height * 4 (getSize().x * getSize().y * 4)`.
      *
-     * Warning: the returned pointer may become invalid if you modify the image,
+     * Warning: the returned slice may become invalid if you modify the image,
      * so you should never store it for too long.
      *
      * Returns: Read-only array of pixels that make up the image.
@@ -282,7 +305,7 @@ class Image
      * 	sourceRect	= Sub-rectangle of the source image to copy
      * 	applyAlpha	= Should the copy take the source transparency into account?
      */
-    void copyImage(const ref Image source, uint destX, uint destY, IntRect sourceRect = IntRect(0,0,0,0), bool applyAlpha = false)
+    void copyImage(const(Image) source, uint destX, uint destY, IntRect sourceRect = IntRect(0,0,0,0), bool applyAlpha = false)
     {
         sfImage_copyImage(sfPtr, source.sfPtr, destX, destY,sourceRect.left, sourceRect.top, sourceRect.width, sourceRect.height, applyAlpha);//:sfImage_copyImage(sfPtr, source.sfPtr, destX, destY, temp, sfFalse);
     }
@@ -302,8 +325,8 @@ class Image
         sfImage_createMaskFromColor(sfPtr,maskColor.r,maskColor.b, maskColor.g, maskColor.a, alpha);
     }
 
-    @property
-    Image dup() const
+    /// Create a copy of the Image.
+    @property Image dup() const
     {
         return new Image(sfImage_copy(sfPtr));
     }
@@ -331,7 +354,7 @@ class Image
      * Params:
      * 		filename	= Path of the file to save
      *
-     * Returns: True if saving was successful
+     * Returns: true if saving was successful
      */
     bool saveToFile(const(char)[] fileName)
     {

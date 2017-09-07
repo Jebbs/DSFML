@@ -22,21 +22,10 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-module dsfml.graphics.transform;
-
-import dsfml.system.vector2;
-import dsfml.graphics.rect;
-public import std.math;
-
-
 /**
- * Define a 3x3 transform matrix.
- *
- * A Transform specifies how to translate, rotate, scale, shear, project,
- * whatever things.
- *
- * In mathematical terms, it defines how to transform a coordinate system into
- * another.
+ * A $(U Transform) specifies how to translate, rotate, scale, shear, project,
+ * whatever things. In mathematical terms, it defines how to transform a
+ * coordinate system into another.
  *
  * For example, if you apply a rotation transform to a sprite, the result will
  * be a rotated sprite. And anything that is transformed by this rotation
@@ -46,10 +35,36 @@ public import std.math;
  * computation that requires to transform points between the local and global
  * coordinate systems of an entity (like collision detection).
  *
- * Authors: Laurent Gomila, Jeremy DeHaan
+ * Example:
+ * ---
+ * // define a translation transform
+ * Transform translation;
+ * translation.translate(20, 50);
+ *
+ * // define a rotation transform
+ * Transform rotation;
+ * rotation.rotate(45);
+ *
+ * // combine them
+ * Transform transform = translation * rotation;
+ *
+ * // use the result to transform stuff...
+ * Vector2f point = transform.transformPoint(Vector2f(10, 20));
+ * FloatRect rect = transform.transformRect(FloatRect(0, 0, 10, 100));
+ * ---
  *
  * See_Also:
- * http://www.sfml-dev.org/documentation/2.0/classsf_1_1Transform.php#details
+ * $(TRANSFORMABLE_LINK), $(RENDERSTATES_LINK)
+ */
+module dsfml.graphics.transform;
+
+import dsfml.system.vector2;
+import dsfml.graphics.rect;
+public import std.math;
+
+
+/**
+ * Define a 3x3 transform matrix.
  */
 struct Transform
 {
@@ -260,6 +275,20 @@ struct Transform
 		return "";//text(InternalsfTransform.matrix);
 	}
 
+	/**
+	 * Overload of binary operator `*` to combine two transforms.
+	 *
+	 * This call is equivalent to:
+	 * ---
+	 * Transform combined = transform;
+	 * combined.combine(rhs);
+	 * ---
+	 *
+	 * Params:
+	 * rhs = the second transform to be combined with the first
+	 *
+	 * Returns: New combined transform.
+	 */
 	Transform opBinary(string op)(Transform rhs)
 		if(op == "*")
 	{
@@ -268,6 +297,16 @@ struct Transform
 		return temp;
 	}
 
+	/**
+	 * Overload of assignment operator `*=` to combine two transforms.
+	 *
+	 * This call is equivalent to calling `transform.combine(rhs)`.
+	 *
+	 * Params:
+	 * rhs = the second transform to be combined with the first
+	 *
+	 * Returns: The combined transform.
+	 */
 	ref Transform opOpAssign(string op)(Transform rhs)
 		if(op == "*")
 	{
@@ -276,7 +315,17 @@ struct Transform
 		return this;
 	}
 
-	Transform opBinary(string op)(Vector2f vector)
+	/**
+	* Overload of binary operator * to transform a point
+	*
+	* This call is equivalent to calling `transform.transformPoint(vector)`.
+	*
+	* Params:
+	* vector = the point to transform
+	*
+	* Returns: New transformed point.
+	*/
+	Vextor2f opBinary(string op)(Vector2f vector)
 		if(op == "*")
 	{
 		return transformPoint(vector);

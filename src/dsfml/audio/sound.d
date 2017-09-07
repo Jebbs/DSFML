@@ -26,9 +26,10 @@
  * Sound is the class used to play sounds.
  *
  * It provides:
- * $(LIST Control (play, pause, stop))
- * $(LIST Ability to modify output parameters in real-time (pitch, volume, ...))
- * $(LIST 3D spatial features (position, attenuation, ...))
+ * $(UL
+ * $(LI Control (play, pause, stop))
+ * $(LI Ability to modify output parameters in real-time (pitch, volume, ...))
+ * $(LI 3D spatial features (position, attenuation, ...)))
  *
  * Sound is perfect for playing short sounds that can fit in memory and require
  * no latency, like foot steps or gun shots. For longer sounds, like background

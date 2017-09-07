@@ -22,7 +22,23 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the RenderTarget interface.
+/**
+ * $(U RenderTarget) defines the common behaviour of all the 2D render targets
+ * usable in the graphics module. It makes it possible to draw 2D entities like
+ * sprites, shapes, text without using any OpenGL command directly.
+ *
+ * A $(U RenderTarget) is also able to use views which are a kind of 2D cameras.
+ * With views you can globally scroll, rotate or zoom everything that is drawn,
+ * without having to transform every single entity.
+ *
+ * On top of that, render targets are still able to render direct OpenGL stuff.
+ * It is even possible to mix together OpenGL calls and regular DSFML drawing
+ * commands. When doing so, make sure that OpenGL states are not messed up by
+ * calling the `pushGLStates`/`popGLStates` functions.
+ *
+ * See_Also:
+ * $(RENDERWINDOW_LINK), $(RENDERTEXTURE_LINK), $(VIEW_LINK)
+ */
 module dsfml.graphics.rendertarget;
 
 import dsfml.graphics.renderwindow;
@@ -39,44 +55,26 @@ import dsfml.graphics.rect;
 import dsfml.system.vector2;
 
 /**
- * Base class for all render targets (window, texture, ...)
- *
- * RenderTarget defines the common behaviour of all the 2D render targets usable
- * in the graphics module.
- *
- * It makes it possible to draw 2D entities like sprites, shapes, text without
- * using any OpenGL command directly.
- *
- * A RenderTarget is also able to use views which are a kind of 2D cameras.
- * With views you can globally scroll, rotate or zoom everything that is drawn,
- * without having to transform every single entity.
- *
- * On top of that, render targets are still able to render direct OpenGL stuff.
- * It is even possible to mix together OpenGL calls and regular SFML drawing
- * commands. When doing so, make sure that OpenGL states are not messed up by
- * calling the pushGLStates/popGLStates functions.
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also: http://sfml-dev.org/documentation/2.0/classsf_1_1RenderTarget.php#details
+ * Base interface for all render targets (window, texture, ...).
  */
 interface RenderTarget
 {
-	/**
-	 * The current active view.
-	 *
-	 * The view is like a 2D camera, it controls which part of the 2D scene is
-	 * visible, and how it is viewed in the render-target. The new view will
-	 * affect everything that is drawn, until another view is set.
-	 *
-	 * The render target keeps its own copy of the view object, so it is not
-	 * necessary to keep the original one alive after calling this function. To
-	 * restore the original view of the target, you can pass the result of
-	 * getDefaultView() to this function.
-	 */
 	@property
 	{
+		/**
+	 	 * The current active view.
+	 	 *
+	 	 * The view is like a 2D camera, it controls which part of the 2D scene is
+	 	 * visible, and how it is viewed in the render-target. The new view will
+	 	 * affect everything that is drawn, until another view is set.
+	 	 *
+	 	 * The render target keeps its own copy of the view object, so it is not
+	 	 * necessary to keep the original one alive after calling this function. To
+	 	 * restore the original view of the target, you can pass the result of
+	 	 * getDefaultView() to this function.
+	 	 */
 		View view(View newView);
+		/// ditto
 		View view() const;
 	}
 
@@ -189,7 +187,7 @@ interface RenderTarget
 	 *
 	 * Params:
 	 * 		point	= Pixel to convert
-	 * 		view	= The view to use for converting the point
+	 * 		theView	= The view to use for converting the point
 	 *
 	 * Returns: The converted point, in "world" coordinates.
 	 */
@@ -215,7 +213,7 @@ interface RenderTarget
 	 * Params:
 	 * 		point	= Point to convert
 	 *
-	 * The converted point, in "world" coordinates
+	 * Returns: The converted point, in "world" coordinates.
 	 */
 	final Vector2i mapCoordsToPixel(Vector2f point) inout
 	{
@@ -240,7 +238,7 @@ interface RenderTarget
 	 *
 	 * Params:
 	 * 		point	= Point to convert
-	 * 		view	= The view to use for converting the point
+	 * 		theView	= The view to use for converting the point
 	 *
 	 * Returns: The converted point, in target coordinates (pixels)
 	 */
@@ -266,32 +264,33 @@ interface RenderTarget
 	void popGLStates();
 
 	/**
-	 * Save the current OpenGL render states and matrices.
-	 *
-	 * This function can be used when you mix SFML drawing and direct OpenGL
-	 * rendering. Combined with PopGLStates, it ensures that:
-	 * - SFML's internal states are not messed up by your OpenGL code
-	 * - your OpenGL states are not modified by a call to an SFML function
-	 *
-	 * More specifically, it must be used around the code that calls Draw
-	 * functions.
-	 *
-	 * Note that this function is quite expensive: it saves all the possible
-	 * OpenGL states and matrices, even the ones you don't care about. Therefore
-	 * it should be used wisely. It is provided for convenience, but the best
-	 * results will be achieved if you handle OpenGL states yourself (because
-	 * you know which states have really changed, and need to be saved and
-	 * restored). Take a look at the ResetGLStates function if you do so.
-	 */
+     * Save the current OpenGL render states and matrices.
+     *
+     * This function can be used when you mix SFML drawing and direct OpenGL
+     * rendering. Combined with PopGLStates, it ensures that:
+     * $(UL
+     * $(LI SFML's internal states are not messed up by your OpenGL code)
+     * $(LI your OpenGL states are not modified by a call to an SFML function))
+     *
+     * $(PARA More specifically, it must be used around the code that calls
+     * `draw` functions.)
+     *
+     * $(PARA Note that this function is quite expensive: it saves all the
+     * possible OpenGL states and matrices, even the ones you don't care about.
+     * Therefore it should be used wisely. It is provided for convenience, but
+     * the best results will be achieved if you handle OpenGL states yourself
+     * (because you know which states have really changed, and need to be saved
+     * and restored). Take a look at the `resetGLStates` function if you do so.)
+     */
 	void pushGLStates();
 
 	/**
 	 * Reset the internal OpenGL states so that the target is ready for drawing.
 	 *
 	 * This function can be used when you mix SFML drawing and direct OpenGL
-	 * rendering, if you choose not to use pushGLStates/popGLStates. It makes
-	 * sure that all OpenGL states needed by SFML are set, so that subsequent
-	 * draw() calls will work as expected.
+	 * rendering, if you choose not to use `pushGLStates`/`popGLStates`. It
+	 * makes sure that all OpenGL states needed by SFML are set, so that
+	 * subsequent `draw()` calls will work as expected.
 	 */
 	void resetGLStates();
 }

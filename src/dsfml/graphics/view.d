@@ -22,19 +22,10 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-module dsfml.graphics.view;
-
-import dsfml.graphics.rect;
-import dsfml.system.vector2;
-import dsfml.graphics.transform;
-
 /**
- * 2D camera that defines what region is shown on screen
- *
- * View defines a camera in the 2D scene.
- *
- * This is a very powerful concept: you can scroll, rotate or zoom the entire
- * scene without altering the way that your drawable objects are drawn.
+ * $(U View) defines a camera in the 2D scene. This is a very powerful concept:
+ * you can scroll, rotate or zoom the entire scene without altering the way that
+ * your drawable objects are drawn.
  *
  * A view is composed of a source rectangle, which defines what part of the 2D
  * scene is shown, and a target viewport, which defines where the contents of
@@ -50,10 +41,47 @@ import dsfml.graphics.transform;
  * objects drawn in this render target will be affected by the view until you
  * use another view.
  *
- * Authors: Laurent Gomila, Jeremy DeHaan
+ * example:
+ * ---
+ * auto window = RenderWindow();
+ * auto view = View();
+ *
+ * // Initialize the view to a rectangle located at (100, 100) and with a size of 400x200
+ * view.reset(FloatRect(100, 100, 400, 200));
+ *
+ * // Rotate it by 45 degrees
+ * view.rotate(45);
+ *
+ * // Set its target viewport to be half of the window
+ * view.setViewport(FloatRect(0.f, 0.f, 0.5f, 1.f));
+ *
+ * // Apply it
+ * window.view = view;
+ *
+ * // Render stuff
+ * window.draw(someSprite);
+ *
+ * // Set the default view back
+ * window.view = window.getDefaultView();
+ *
+ * // Render stuff not affected by the view
+ * window.draw(someText);
+ * ---
+ *
+ * $(PARA See also the note on coordinates and undistorted rendering in
+ * $(TRANSFORMABLE_LINK).)
  *
  * See_Also:
- *	http://www.sfml-dev.org/documentation/2.0/classsf_1_1View.php#details
+ * $(RENDERWINDOW_LINK), $(RENDERTEXTURE_LINK)
+ */
+module dsfml.graphics.view;
+
+import dsfml.graphics.rect;
+import dsfml.system.vector2;
+import dsfml.graphics.transform;
+
+/**
+ * 2D camera that defines what region is shown on screen.
  */
 struct View
 {
@@ -166,7 +194,7 @@ struct View
          * displayed, expressed as a factor (between 0 and 1) of the size of the
          * RenderTarget to which the view is applied. For example, a view which
          * takes the left side of the target would be defined with
-         * View.setViewport(FloatRect(0, 0, 0.5, 1)). By default, a view has a
+         * `View.setViewport(FloatRect(0, 0, 0.5, 1))`. By default, a view has a
          * viewport which covers the entire target.
           */
         FloatRect viewport(FloatRect newTarget)
@@ -219,9 +247,9 @@ struct View
      * Resizing the view simulates a zoom, as the zone displayed on screen grows
      * or shrinks. factor is a multiplier:
      * $(UL
-     * $(LI 1 keeps the size unchanged.)
-     * $(LI > 1 makes the view bigger (objects appear smaller).)
-     * $(LI < 1 makes the view smaller (objects appear bigger).))
+     * $(LI `1` keeps the size unchanged.)
+     * $(LI `> 1` makes the view bigger (objects appear smaller).)
+     * $(LI `< 1` makes the view smaller (objects appear bigger).))
      *
      * Params:
      * 		factor	= Zoom factor to apply

@@ -38,8 +38,9 @@
  * you can write your own by combining this class with the network module.
  *
  * A derived class has to override two virtual functions:
- * $(LIST onGetData fills a new chunk of audio data to be played)
- * $(LIST onSeek changes the current playing position in the source)
+ * $(UL
+ * $(LI onGetData fills a new chunk of audio data to be played)
+ * $(LI onSeek changes the current playing position in the source))
  *
  * It is important to note that each $(U SoundStream) is played in its own
  * separate thread, so that the streaming loop doesn't block the rest of the

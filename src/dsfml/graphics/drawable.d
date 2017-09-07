@@ -22,28 +22,66 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Drawable interface.
-module dsfml.graphics.drawable;
-
-import dsfml.graphics.rendertarget;
-import dsfml.graphics.renderstates;
-
 /**
- * Abstract base interface for objects that can be drawn to a render target.
- *
  * Drawable is a very simple base interface that allows objects of derived
  * classes to be drawn to a RenderTarget.
  *
  * All you have to do in your derived class is to override the draw virtual
  * function.
  *
- * Note that inheriting from Drawable is not mandatory, but it allows this nice
- * syntax "window.draw(object)" rather than "object.draw(window)", which is more
- * consistent with other SFML classes.
+ * Note that inheriting from $(DRAWABLE_LINK) is not mandatory, but it allows
+ * this nice syntax "window.draw(object)" rather than "object.draw(window)",
+ * which is more consistent with other DSFML classes.
  *
- * See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Drawable.php#details
+ * Example:
+ * ---
+ * class MyDrawable : Drawable
+ * {
+ * public:
  *
- * Authors: Laurent Gomila, Jeremy DeHaan
+ *     this()
+ *     {
+ *         m_sprite = Sprite();
+ *         m_texture = Texture();
+ *         m_vertices = VertexArray();
+ *
+ *         // additional setup
+ *     }
+ *    ...
+ *
+ * private:
+ *
+ *     virtual void draw(RenderTarget target, RenderStates states) const
+ *     {
+ *         // You can draw other high-level objects
+ *         target.draw(m_sprite, states);
+ *
+ *         // ... or use the low-level API
+ *         states.texture = m_texture;
+ *         target.draw(m_vertices, states);
+ *
+ *         // ... or draw with OpenGL directly
+ *         glBegin(GL_QUADS);
+ *         ...
+ *         glEnd();
+ *     }
+ *
+ *     Sprite m_sprite;
+ *     Texture m_texture;
+ *     VertexArray m_vertices;
+ * }
+ * ---
+ *
+ * See_Also:
+ * $(RENDERTARGET_LINK)
+ */
+module dsfml.graphics.drawable;
+
+import dsfml.graphics.rendertarget;
+import dsfml.graphics.renderstates;
+
+/**
+ * Interface for objects that can be drawn to a render target.
  */
 interface Drawable
 {

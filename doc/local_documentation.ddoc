@@ -26,18 +26,16 @@ DDOC_DECL_DD = <div class="ddoc_decl_dd">
   $0
 </div>
 
-
-DDOC_AUTHORS = <div class="ddoc_authors">
-  <h4>Authors:</h4>
+DDOC_SEE_ALSO = <div class="ddoc_see_also">
+  <h4>See Also:</h4>
   <p class="para">
     $0
   </p>
 </div>$(LF)
 
-DDOC_SEE_ALSO = <div class="ddoc_see_also">
-  <h4>See Also:</h4>
+DDOC_DEPRECATED = <div class="ddoc_deprecated">
   <p class="para">
-    $0
+    $(B Deprecated:) $0
   </p>
 </div>$(LF)
 
@@ -49,6 +47,8 @@ DEPRECATED = $(RED $0)
 DDOC_PARAM = $0
 
 LIST = </br>&nbsp;&#8226; $0
+
+UL = <ul class="para">$0</ul>
 
 PARA = <p class="para">$0</p>
 
@@ -65,6 +65,33 @@ SOUNDBUFFERRECORDER_LINK = <a href="../audio/soundbufferrecorder.html" title="Sp
 SOUNDRECORDER_LINK = <a href="../audio/soundrecorder.html" title="Abstract base class for capturing sound data.">SoundRecorder</a>
 SOUNDSOURCE_LINK = <a href="../audio/soundsource.html" title="Base class defining a sound's properties.">SoundSource</a>
 SOUNDSTREAM_LINK = <a href="../audio/soundstream.html" title="Abstract base class for streamed audio sources.">SoundStream</a>
+
+BLENDMODE_LINK = <a href="../graphics/blendmode.html" title="Blending modes for drawing.">BlendMode</a>
+CIRCLESHAPE_LINK = <a href="../graphics/circleshape.html" title="Specialized shape representing a circle.">CircleShape</a>
+COLOR_LINK = <a href="../graphics/color.html" title="Color is a utility struct for manipulating 32-bits RGBA colors.">Color</a>
+CONVEXSHAPE_LINK = <a href="../graphics/convexshape.html" title="Specialized shape representing a convex polygon.">ConvexShape</a>
+DRAWABLE_LINK = <a href="../graphics/drawable.html" title="Interface for objects that can be drawn to a render target.">Drawable</a>
+FONT_LINK = <a href="../graphics/font.html" title="Class for loading and manipulating character fonts.">Font</a>
+GLSL_LINK = <a href="../graphics/glsl.html" title="The module containing GLSL types.">Glsl</a>
+GLYPH_LINK = <a href="../graphics/glyph.html" title="Structure describing a glyph.">Glyph</a>
+IMAGE_LINK = <a href="../graphics/image.html" title="Class for loading, manipulating and saving images.">Image</a>
+PRIMITIVETYPE_LINK = <a href="../graphics/primitivetype.html" title="Types of primitives that a VertexArray can render.">PrimitiveType</a>
+RECT_LINK = <a href="../graphics/rect.html" title="Utility class for manipulating 2D axis aligned rectangles.">Rect</a>
+RECTANGLESHAPE_LINK = <a href="../graphics/rectangleshape.html" title="Specialized shape representing a rectangle.">RectangleShape</a>
+RENDERSTATES_LINK = <a href="../graphics/renderstates.html" title="Define the states used for drawing to a RenderTarget.">RenderStates</a>
+RENDERTARGET_LINK = <a href="../graphics/rendertarget.html" title="Base interface for all render targets (window, texture, ...).">RenderTarget</a>
+RENDERTEXTURE_LINK = <a href="../graphics/rendertexture.html" title="Target for off-screen 2D rendering into a texture.">RenderTexture</a>
+RENDERWINDOW_LINK = <a href="../graphics/renderwindow.html" title="Window that can serve as a target for 2D drawing.">RenderWindow</a>
+SHADER_LINK = <a href="../graphics/shader.html" title="Shader class (vertex and fragment).">Shader</a>
+SHAPE_LINK = <a href="../graphics/shape.html" title="Base class for textured shapes with outline.">Shape</a>
+SPRITE_LINK = <a href="../graphics/sprite.html" title="Drawable representation of a texture, with its own transformations, color, etc.">Sprite</a>
+TEXT_LINK = <a href="../graphics/text.html" title="Graphical text that can be drawn to a render target.">Text</a>
+TEXTURE_LINK = <a href="../graphics/texture.html" title="Image living on the graphics card that can be used for drawing.">Texture</a>
+TRANSFORM_LINK = <a href="../graphics/transform.html" title="Define a 3x3 transform matrix.">Transform</a>
+TRANSFORMABLE_LINK = <a href="../graphics/transformable.html" title="Decomposed transform defined by a position, a rotation, and a scale.">Transformable</a>
+VERTEX_LINK = <a href="../graphics/vertex.html" title="Define a point with color and texture coordinates.">Vertex</a>
+VERTEXARRAY_LINK = <a href="../graphics/vertexarray.html" title="Define a set of one or more 2D primitives.">VertexArray</a>
+VIEW_LINK = <a href="../graphics/view.html" title="2D camera that defines what region is shown on screen.">View</a>
 
 FTP_LINK = <a href="../network/ftp.html" title="An FTP client.">Ftp</a>
 HTTP_LINK = <a href="../network/http.html" title="A HTTP client.">Http</a>

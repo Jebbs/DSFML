@@ -178,7 +178,7 @@ class TcpSocket:Socket
      * default, all sockets are blocking.
      *
      * Params:
-     *  blocking = True to set the socket as blocking, false for non-blocking
+     *  blocking = true to set the socket as blocking, false for non-blocking
      */
     void setBlocking(bool blocking)
     {
@@ -220,7 +220,7 @@ class TcpSocket:Socket
     /**
      * Tell whether the socket is in blocking or non-blocking mode.
      *
-     * Returns: True if the socket is blocking, false otherwise.
+     * Returns: true if the socket is blocking, false otherwise.
      */
     bool isBlocking() const
     {

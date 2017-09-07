@@ -22,23 +22,14 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the RenderStates struct.
-module dsfml.graphics.renderstates;
-
-import dsfml.graphics.blendmode;
-import dsfml.graphics.transform;
-import dsfml.graphics.texture;
-import dsfml.graphics.shader;
-import std.typecons:Rebindable;
-
 /**
- * Define the states used for drawing to a RenderTarget.
- *
  * There are four global states that can be applied to the drawn objects:
- * - the blend mode: how pixels of the object are blended with the background
- * - the transform: how the object is positioned/rotated/scaled
- * - the texture: what image is mapped to the object
- * - the shader: what custom effect is applied to the object
+ * $(UL
+ * $(LI the blend mode: how pixels of the object are blended with the
+ * background)
+ * $(LI the transform: how the object is positioned/rotated/scaled)
+ * $(LI the texture: what image is mapped to the object)
+ * $(LI the shader: what custom effect is applied to the object))
  *
  * High-level objects such as sprites or text force some of these states when
  * they are drawn. For example, a sprite will set its own texture, so that you
@@ -52,19 +43,36 @@ import std.typecons:Rebindable;
  * Most objects, especially high-level drawables, can be drawn directly without
  * defining render states explicitely – the default set of states is ok in most
  * cases.
+ * ---
+ * window.draw(sprite);
+ * ---
  *
- * If you want to use a single specific render state, for example a shader, you
- * can pass it directly to the Draw function: RenderStates has an implicit
- * one-argument constructor for each state.
+ * $(PARA If you want to use a single specific render state, for example a
+ * shader, you can pass it directly to the Draw function: $(U RenderStates) has
+ * an implicit one-argument constructor for each state.)
+ * ---
+ * window.draw(sprite, shader);
+ * ---
  *
- * When you're inside the Draw function of a drawable object (inherited from
- * Drawable), you can either pass the render states unmodified, or change some
- * of them. For example, a transformable object will combine the current
- * transform with its own transform. A sprite will set its texture. Etc.
+ * $(PARA When you're inside the `draw` function of a drawable object (inherited
+ * from $(DRAWABLE_LINK), you can either pass the render states unmodified, or
+ * change some of them. For example, a transformable object will combine the
+ * current transform with its own transform. A sprite will set its texture.
+ * Etc.)
  *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1RenderStates.php#details
+ * See_Also:
+ * $(RENDERTARGET_LINK), $(DRAWABLE_LINK)
+ */
+module dsfml.graphics.renderstates;
+
+import dsfml.graphics.blendmode;
+import dsfml.graphics.transform;
+import dsfml.graphics.texture;
+import dsfml.graphics.shader;
+import std.typecons:Rebindable;
+
+/**
+ * Define the states used for drawing to a RenderTarget.
  */
 struct RenderStates
 {
@@ -154,28 +162,30 @@ struct RenderStates
         m_shader = theShader;
     }
 
-    /// The shader to apply while rendering.
     @property
     {
+        /// The shader to apply while rendering.
         const(Shader) shader(const(Shader) theShader)
         {
             m_shader = theShader;
             return theShader;
         }
+        /// ditto
         const(Shader) shader()
         {
             return m_shader;
         }
     }
 
-    /// The texture to apply while rendering.
     @property
     {
+        /// The texture to apply while rendering.
         const(Texture) texture(const(Texture) theTexture)
         {
             m_texture = theTexture;
             return theTexture;
         }
+        /// ditto
         const(Texture) texture()
         {
             return m_texture;

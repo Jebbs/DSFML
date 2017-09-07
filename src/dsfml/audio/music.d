@@ -36,7 +36,7 @@
  *
  * As a sound stream, a music is played in its own thread in order not to block
  * the rest of the program. This means that you can leave the music alone after
- * calling play(), it will manage itself very well.
+ * calling `play()`, it will manage itself very well.
  *
  * Example:
  * ---
@@ -115,7 +115,7 @@ class Music : SoundStream
      * Params:
      * 		filename =	Path of the music file to open
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool openFromFile(string filename)
     {
@@ -147,7 +147,7 @@ class Music : SoundStream
      * Params:
      * 		data =	The array of data
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool openFromMemory(const(void)[] data)
     {
@@ -177,7 +177,7 @@ class Music : SoundStream
      * Params:
      * 		stream =	Source stream to read from
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool openFromStream(InputStream stream)
     {
@@ -214,7 +214,7 @@ class Music : SoundStream
          * Params:
          * 		samples =	Array of samples to fill
          *
-         * Returns: True to continue playback, false to stop.
+         * Returns: true to continue playback, false to stop.
          */
         override bool onGetData(ref const(short)[] samples)
         {
@@ -234,7 +234,6 @@ class Music : SoundStream
          * Params:
          * 		timeOffset =   New playing position, from the start of the music
          *
-         * Implements SoundStream.
          */
         override void onSeek(Duration timeOffset)
         {

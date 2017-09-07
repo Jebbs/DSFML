@@ -22,16 +22,14 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the list of usable primitives for drawing.
+/// The module containing the list of usable primitives for drawing.
 module dsfml.graphics.primitivetype;
 
 /**
- * Types of primitives that a VertexArray can render.
+ * Types of primitives that a $(VERTEXARRAY_LINK VertexArray) can render.
  *
- * Points and lines have no area, therefore their thickness will always be 1 pixel, regarldess the current transform and view.
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- * See_Also: http://www.sfml-dev.org/documentation/2.0/group__graphics.php#ga5ee56ac1339984909610713096283b1b
+ * Points and lines have no area, therefore their thickness will always be 1
+ * pixel, regarldess the current transform and view.
  */
 enum PrimitiveType
 {
@@ -43,9 +41,15 @@ enum PrimitiveType
     LineStrip,
     /// List of individual triangles.
     Triangles,
-    /// List of connected triangles; a point uses the two previous points to form a triangle.
+    /**
+     * List of connected triangles; a point uses the two previous points to form
+     * a triangle.
+     */
     TriangleStrip,
-    /// List of connected triangles; a point uses the common center and the previous point to form a triangle.
+    /**
+     * List of connected triangles; a point uses the common center and the
+     * previous point to form a triangle.
+     */
     TriangleFan,
     /// List of individual quads.
     Quads,

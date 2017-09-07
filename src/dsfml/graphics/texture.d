@@ -22,7 +22,98 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Texture class.
+/**
+ * $(U Texture) stores pixels that can be drawn, with a sprite for example. A
+ * texture lives in the graphics card memory, therefore it is very fast to draw
+ * a texture to a render target, or copy a render target to a texture (the
+ * graphics card can access both directly).
+ *
+ * Being stored in the graphics card memory has some drawbacks. A texture cannot
+ * be manipulated as freely as a $(IMAGE_LINK), you need to prepare the pixels
+ * first and then upload them to the texture in a single operation (see
+ * `Texture.update`).
+ *
+ * $(U Texture) makes it easy to convert from/to Image, but keep in mind that
+ * these calls require transfers between the graphics card and the central
+ * memory, therefore they are slow operations.
+ *
+ * A texture can be loaded from an image, but also directly from a
+ * file/memory/stream. The necessary shortcuts are defined so that you don't
+ * need an image first for the most common cases. However, if you want to
+ * perform some modifications on the pixels before creating the final texture,
+ * you can load your file to a $(IMAGE_LINK), do whatever you need with the
+ * pixels, and then call `Texture.loadFromImage`.
+ *
+ * Since they live in the graphics card memory, the pixels of a texture cannot
+ * be accessed without a slow copy first. And they cannot be accessed
+ * individually. Therefore, if you need to read the texture's pixels (like for
+ * pixel-perfect collisions), it is recommended to store the collision
+ * information separately, for example in an array of booleans.
+ *
+ * Like $(IMAGE_LINK), $(U Texture) can handle a unique internal representation
+ * of pixels, which is RGBA 32 bits. This means that a pixel must be composed of
+ * 8 bits red, green, blue and alpha channels – just like a $(COLOR_LINK).
+ *
+ * Example:
+ * ---
+ * // This example shows the most common use of Texture:
+ * // drawing a sprite
+ *
+ * // Load a texture from a file
+ * auto texture = new Texture();
+ * if (!texture.loadFromFile("texture.png"))
+ *     return -1;
+ *
+ * // Assign it to a sprite
+ * auto sprite = new Sprite();
+ * sprite.setTexture(texture);
+ *
+ * // Draw the textured sprite
+ * window.draw(sprite);
+ * ---
+ *
+ * ---
+ * // This example shows another common use of Texture:
+ * // streaming real-time data, like video frames
+ *
+ * // Create an empty texture
+ * auto texture = new Texture();
+ * if (!texture.create(640, 480))
+ *     return -1;
+ *
+ * // Create a sprite that will display the texture
+ * auto sprite = new Sprite(texture);
+ *
+ * while (...) // the main loop
+ * {
+ *     ...
+ *
+ *     // update the texture
+ *
+ *     // get a fresh chunk of pixels (the next frame of a movie, for example)
+ *     ubyte[] pixels = ...;
+ *     texture.update(pixels);
+ *
+ *     // draw it
+ *     window.draw(sprite);
+ *
+ *     ...
+ * }
+ *
+ * ---
+ *
+ * $(PARA Like $(SHADER_LINK) that can be used as a raw OpenGL shader,
+ * $(U Texture) can also be used directly as a raw texture for custom OpenGL
+ * geometry.)
+ * ---
+ * Texture.bind(texture);
+ * ... render OpenGL geometry ...
+ * Texture.bind(null);
+ * ---
+ *
+ * See_Also:
+ * $(SPRITE_LINK), $(IMAGE_LINK), $(RENDERTEXTURE_LINK)
+ */
 module dsfml.graphics.texture;
 
 
@@ -38,41 +129,6 @@ import dsfml.system.err;
 
 /**
  * Image living on the graphics card that can be used for drawing.
- *
- * Texture stores pixels that can be drawn, with a sprite for example.
- *
- * A texture lives in the graphics card memory, therefore it is very fast to
- * draw a texture to a render target, or copy a render target to a texture (the
- * graphics card can access both directly).
- *
- * Being stored in the graphics card memory has some drawbacks. A texture cannot
- * be manipulated as freely as a Image, you need to prepare the pixels first and
- * then upload them to the texture in a single operation (see Texture.update).
- *
- * Texture makes it easy to convert from/to Image, but keep in mind that these
- * calls require transfers between the graphics card and the central memory,
- * therefore they are slow operations.
- *
- * A texture can be loaded from an image, but also directly from a
- * file/memory/stream. The necessary shortcuts are defined so that you don't
- * need an image first for the most common cases. However, if you want to
- * perform some modifications on the pixels before creating the final texture,
- * you can load your file to a Image, do whatever you need with the pixels, and
- * then call Texture.loadFromImage.
- *
- * Since they live in the graphics card memory, the pixels of a texture cannot
- * be accessed without a slow copy first. And they cannot be accessed
- * individually. Therefore, if you need to read the texture's pixels (like for
- * pixel-perfect collisions), it is recommended to store the collision
- * information separately, for example in an array of booleans.
- *
- * Like Image, Texture can handle a unique internal representation of pixels,
- * which is RGBA 32 bits. This means that a pixel must be composed of 8 bits
- * red, green, blue and alpha channels – just like a Color.
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1Texture.php#details
  */
 class Texture
 {
@@ -118,7 +174,7 @@ class Texture
      * 		filename	= Path of the image file to load
      * 		area		= Area of the image to load
      *
-     * Returns: True if loading was successful, false otherwise.
+     * Returns: true if loading was successful, false otherwise.
      */
     bool loadFromFile(const(char)[] filename, IntRect area = IntRect() )
     {
@@ -151,7 +207,7 @@ class Texture
      * 		size	= Size of the data to load, in bytes.
      * 		area	= Area of the image to load
      *
-     * Returns: True if loading was successful, false otherwise.
+     * Returns: true if loading was successful, false otherwise.
      */
     bool loadFromMemory(const(void)[] data, IntRect area = IntRect())
     {
@@ -184,7 +240,7 @@ class Texture
      * 		stream	= Source stream to read from
      * 		area	= Area of the image to load
      *
-     * Returns: True if loading was successful, false otherwise.
+     * Returns: true if loading was successful, false otherwise.
      */
     bool loadFromStream(InputStream stream, IntRect area = IntRect())
     {
@@ -216,7 +272,7 @@ class Texture
      * 		image	= Image to load into the texture
      * 		area	= Area of the image to load
      *
-     * Returns: True if loading was successful, false otherwise.
+     * Returns: true if loading was successful, false otherwise.
      */
     bool loadFromImage(Image image, IntRect area = IntRect())
     {
@@ -266,7 +322,7 @@ class Texture
      * is disabled by default.
      *
      * Params:
-     * 		smooth	= True to enable smoothing, false to disable it
+     * 		smooth	= true to enable smoothing, false to disable it
      */
     void setSmooth(bool smooth)
     {
@@ -289,7 +345,7 @@ class Texture
      * (such as 256x128). Repeating is disabled by default.
      *
      * Params:
-     * 		repeated	= True to repeat the texture, false to disable repeating
+     * 		repeated	= true to repeat the texture, false to disable repeating
      */
     void setRepeated(bool repeated)
     {
@@ -320,7 +376,7 @@ class Texture
      * 		width	= Width of the texture
      * 		height	= Height of the texture
      *
-     * Returns: True if creation was successful, false otherwise.
+     * Returns: true if creation was successful, false otherwise.
      */
     bool create(uint width, uint height)
     {
@@ -353,11 +409,8 @@ class Texture
     /**
      * Creates a new texture from the same data (this means copying the entire
      * set of pixels).
-     *
-     * Returns: New texture data.
      */
-    @property
-    Texture dup() const
+    @property Texture dup() const
     {
         return new Texture(sfTexture_copy(sfPtr));
     }
@@ -365,21 +418,21 @@ class Texture
     /**
      * Tell whether the texture is repeated or not.
      *
-     * Returns: True if repeat mode is enabled, false if it is disabled.
+     * Returns: true if repeat mode is enabled, false if it is disabled.
      */
     bool isRepeated() const
     {
-        return (sfTexture_isRepeated(sfPtr));// == sfTrue)?true:false;
+        return (sfTexture_isRepeated(sfPtr));
     }
 
     /**
      * Tell whether the smooth filter is enabled or not.
      *
-     * Returns: True if something is enabled, false if it is disabled.
+     * Returns: true if something is enabled, false if it is disabled.
      */
     bool isSmooth() const
     {
-        return (sfTexture_isSmooth(sfPtr));// == sfTrue)?true:false;
+        return (sfTexture_isSmooth(sfPtr));
     }
 
 

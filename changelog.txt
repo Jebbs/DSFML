@@ -31,6 +31,12 @@ exists a getter and setter.
 
 Added links to related modules.
 
+Removed the authors section in the documentation as it doesn't add anything of
+substance.
+
+Added ddoc files for locally generated documentation and documentation meant for
+the dsfml.org website.
+
 
 System
 ======
@@ -97,9 +103,14 @@ MouseWheelEvent was marked as deprecated (Use MouseWheelScrollEvent instead).
 Graphics
 ========
 
+Color
+-----
+Added the color * color and color*= color operators, which SFML calls
+modulation.
+
 GLSL
 ----
-Added glsl.d, which has all the things needed for GLSL functions.
+Added glsl.d, which has all the types related to working with GLSL functions.
 
 
 PrimitiveType

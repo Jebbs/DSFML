@@ -22,7 +22,53 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Rect template struct.
+/**
+ * A rectangle is defined by its top-left corner and its size. It is a very
+ * simple class defined for convenience, so its member variables (`left`, `top`,
+ * `width`, and `height`) are public and can be accessed directly, just like the
+ * vector classes ($(VECTOR2_LINK) and $(VECTOR3_LINK)).
+ *
+ * To keep things simple, $(U Rect) doesn't define functions to emulate the
+ * properties that are not directly members (such as right, bottom, center,
+ * etc.), it rather only provides intersection functions.
+ *
+ * Rect uses the usual rules for its boundaries:
+ * $(UL
+ * $(LI The let and top edges are included in the rectangle's area)
+ * $(LI The right (left + width) and bottom (top + height) edges are excluded
+ * from the rectangle's area))
+ *
+ * This means that `IntRect(0, 0, 1, 1)` and `IntRect(1, 1, 1, 1)` don't
+ * intersect.
+ *
+ * $(U Rect) is a template and may be used with any numeric type, but for simplicity
+ * the instanciations used by SFML are aliased:
+ * $(UL
+ * $(LI Rect!(int) is IntRect)
+ * $(LI Rect!(float) is FloatRect))
+ *
+ * This is so you don't have to care about the template syntax.
+ *
+ * Example:
+ * ---
+ * // Define a rectangle, located at (0, 0) with a size of 20x5
+ * auto r1 = IntRect(0, 0, 20, 5);
+ *
+ * // Define another rectangle, located at (4, 2) with a size of 18x10
+ * auto position = Vector2i(4, 2);
+ * auto size = Vector2i(18, 10);
+ * auto r2 = IntRect(position, size);
+ *
+ * // Test intersections with the point (3, 1)
+ * bool b1 = r1.contains(3, 1); // true
+ * bool b2 = r2.contains(3, 1); // false
+ *
+ * // Test the intersection between r1 and r2
+ * IntRect result;
+ * bool b3 = r1.intersects(r2, result); // true
+ * // result == IntRect(4, 2, 16, 3)
+ * ---
+ */
 module dsfml.graphics.rect;
 
 import std.traits;
@@ -31,35 +77,6 @@ import dsfml.system.vector2;
 
 /**
  * Utility class for manipulating 2D axis aligned rectangles.
- *
- * A rectangle is defined by its top-left corner and its size.
- *
- * It is a very simple class defined for convenience, so its member variables
- * (left, top, width and height) are public and can be accessed directly, just
- * like the vector classes (Vector2 and Vector3).
- *
- * To keep things simple, Rect doesn't define functions to emulate the
- * properties that are not directly members (such as right, bottom, center,
- * etc.), it rather only provides intersection functions.
- *
- * Rect uses the usual rules for its boundaries:
- * - The let and top edges are included in the rectangle's area
- * - The right (left + width) and bottom (top + height) edges are excluded from
- * 	 the rectangle's area
- *
- * This means that IntRect(0, 0, 1, 1) and IntRect(1, 1, 1, 1) don't intersect.
- *
- * Rect is a template and may be used with any numeric type, but for simplicity
- * the instanciations used by SFML are typedefed:
- * - Rect!(int) is IntRect
- * - Rect!(float) is FloatRect
- *
- * So that you don't have to care about the template syntax.
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also:
- *	http://www.sfml-dev.org/documentation/2.0/classsf_1_1Rect.php#details
  */
 struct Rect(T)
     if(isNumeric!(T))
@@ -118,7 +135,7 @@ struct Rect(T)
      * 		x	= X coordinate of the point to test
      * 		y	= Y coordinate of the point to test
      *
-     * Returns: True if the point is inside, false otherwise.
+     * Returns: true if the point is inside, false otherwise.
      */
     bool contains(E)(E X, E Y) const
         if(isNumeric!(E))
@@ -146,7 +163,7 @@ struct Rect(T)
      * Params:
      * 		point	= Point to test
      *
-     * Returns: True if the point is inside, false otherwise.
+     * Returns: true if the point is inside, false otherwise.
      */
     bool contains(E)(Vector2!(E) point) const
         if(isNumeric!(E))
@@ -174,7 +191,7 @@ struct Rect(T)
      * Params:
      * 		rectangle	= Rectangle to test
      *
-     * Returns: True if rectangles overlap, false otherwise.
+     * Returns: true if rectangles overlap, false otherwise.
      */
     bool intersects(E)(Rect!(E) rectangle) const
     if(isNumeric!(E))
@@ -194,7 +211,7 @@ struct Rect(T)
      * 		rectangle		= Rectangle to test
      * 		intersection	= Rectangle to be filled with the intersection
      *
-     * Returns: True if rectangles overlap, false otherwise.
+     * Returns: true if rectangles overlap, false otherwise.
      */
     bool intersects(E,O)(Rect!(E) rectangle, out Rect!(O) intersection) const
         if(isNumeric!(E) && isNumeric!(O))

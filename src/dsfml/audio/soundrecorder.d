@@ -33,14 +33,15 @@
  * a sound buffer (see $(SOUNDBUFFERRECORDER_LINK)).
  *
  * A derived class has only one virtual function to override:
- * $(LIST onProcessSamples provides the new chunks of audio samples while the capture
- * happens)
+ * $(UL $LI onProcessSamples provides the new chunks of audio samples while the
+ * capture happens))
  *
  * Moreover, two additionnal virtual functions can be overriden as well if
  * necessary:
- * $(LIST onStart is called before the capture happens, to perform custom
+ * $(UL
+ * $(LI onStart is called before the capture happens, to perform custom
  * initializations)
- * $(LIST onStop is called after the capture ends, to perform custom cleanup)
+ * $(LI onStop is called after the capture ends, to perform custom cleanup))
  *
  * A derived class can also control the frequency of the onProcessSamples calls,
  * with the setProcessingInterval protected function. The default interval is
@@ -50,14 +51,14 @@
  *
  * The audio capture feature may not be supported or activated on every
  * platform, thus it is recommended to check its availability with the
- * isAvailable() function. If it returns false, then any attempt to use an audio
- * recorder will fail.
+ * `isAvailable()` function. If it returns false, then any attempt to use an
+ * audio recorder will fail.
  *
  * If you have multiple sound input devices connected to your  computer (for
  * example: microphone, external soundcard, webcam mic, ...) you can get a list
- * of all available devices through the getAvailableDevices() function. You can
- * then select a device by calling setDevice() with the appropriate device.
- * Otherwise the default capturing device will be used.
+ * of all available devices through the `getAvailableDevices()` function. You
+ * can then select a device by calling `setDevice()` with the appropriate
+ * device. Otherwise the default capturing device will be used.
  *
  * By default the recording is in 16-bit mono. Using the setChannelCount method
  * you can change the number of channels used by the audio capture device to
@@ -66,7 +67,7 @@
  *
  * It is important to note that the audio capture happens in a separate thread,
  * so that it doesn't block the rest of the program. In particular, the
- * onProcessSamples and onStop virtual functions (but not onStart) will be
+ * `onProcessSamples` and `onStop` virtual functions (but not `onStart`) will be
  * called from this separate thread. It is important to keep this in mind,
  * because you may have to take care of synchronization issues if you share data
  * between threads.
@@ -225,7 +226,7 @@ class SoundRecorder
      * Params:
      *  name = The name of the audio capture device
      *
-     * Returns: True, if it was able to set the requested device.
+     * Returns: true, if it was able to set the requested device.
      *
      *See also
      *   getAvailableDevices, getDefaultDevice
@@ -289,7 +290,7 @@ class SoundRecorder
      * features. If it returns false, then any attempt to use SoundRecorder or
      * one of its derived classes will fail.
      *
-     * Returns: True if audio capture is supported, false otherwise.
+     * Returns: true if audio capture is supported, false otherwise.
      */
     static bool isAvailable()
     {
@@ -326,7 +327,7 @@ class SoundRecorder
          * this function can be ignored; the default implementation does
          * nothing.
          *
-         * Returns: True to the start the capture, or false to abort it.
+         * Returns: true to the start the capture, or false to abort it.
          */
         bool onStart()
         {
@@ -343,7 +344,7 @@ class SoundRecorder
          * Params:
          * 		samples =	Array of the new chunk of recorded samples
          *
-         * Returns: True to continue the capture, or false to stop it.
+         * Returns: true to continue the capture, or false to stop it.
          */
         abstract bool onProcessSamples(const(short)[] samples);
 

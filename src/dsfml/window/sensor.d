@@ -103,7 +103,7 @@ final abstract class Sensor
     * Params:
     *	sensor = Sensor to check
     *
-    * Returns: True if the sensor is available, false otherwise.
+    * Returns: true if the sensor is available, false otherwise.
     */
     static bool isAvailable (Type sensor)
     {
@@ -121,7 +121,7 @@ final abstract class Sensor
     *
     * Params:
     *   sensor = Sensor to enable
-    *   enabled = True to enable, false to disable
+    *   enabled = true to enable, false to disable
     */
     static void setEnabled (Type sensor, bool enabled)
     {

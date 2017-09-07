@@ -231,9 +231,9 @@ class Window
 	 * deactivated.
 	 *
 	 * Params:
-     * 		active = True to activate, false to deactivate
+     * 		active = true to activate, false to deactivate
      *
-	 * Returns: True if operation was successful, false otherwise.
+	 * Returns: true if operation was successful, false otherwise.
 	 */
 	bool setActive(bool active)
 	{
@@ -252,7 +252,7 @@ class Window
 	/**
 	 * Check whether the window has the input focus
 	 *
-	 * Returns: True if the window has focus, false otherwise
+	 * Returns: true if the window has focus, false otherwise
 	 */
 	bool hasFocus() const
 	{
@@ -305,6 +305,25 @@ class Window
 	 * Params:
 	 *     threshold = New threshold, in the range [0, 100].
 	 */
+	void setJoystickThreshold(float threshold)
+	{
+		sfWindow_setJoystickThreshold(sfPtr, threshold);
+	}
+
+	/**
+	 * Change the joystick threshold.
+	 *
+	 * The joystick threshold is the value below which no JoystickMoved event
+	 * will be generated.
+	 *
+	 * The threshold value is 0.1 by default.
+	 *
+	 * Params:
+	 *     threshold = New threshold, in the range [0, 100].
+	 *
+	 * Deprecated: Use set `setJoystickThreshold` instead.
+	 */
+	deprecated("Use setJoystickThreshold instead.")
 	void setJoystickThreshhold(float threshhold)
 	{
 		sfWindow_setJoystickThreshold(sfPtr, threshhold);
@@ -320,7 +339,7 @@ class Window
 	 * Key repeat is enabled by default.
 	 *
 	 * Params:
-	 *     enabled = True to enable, false to disable.
+	 *     enabled = true to enable, false to disable.
 	 */
 	void setKeyRepeatEnabled(bool enabled)
 	{
@@ -333,7 +352,7 @@ class Window
 	 * The mouse cursor is visible by default.
 	 *
 	 * Params:
-     * 		visible = True to show the mouse cursor, false to hide it.
+     * 		visible = true to show the mouse cursor, false to hide it.
 	 */
 	void setMouseCursorVisible(bool visible)
 	{
@@ -376,7 +395,7 @@ class Window
 	 * The window is shown by default.
 	 *
 	 * Params:
-	 *     visible = True to show the window, false to hide it
+	 *     visible = true to show the window, false to hide it
 	 */
 	void setVisible(bool visible)
 	{
@@ -394,7 +413,7 @@ class Window
 	 * Vertical synchronization is disabled by default.
 	 *
 	 * Params:
-	 *     enabled = True to enable v-sync, false to deactivate it
+	 *     enabled = true to enable v-sync, false to deactivate it
 	 */
 	void setVerticalSyncEnabled(bool enabled)
 	{
@@ -513,7 +532,7 @@ class Window
 	 * hidden window (setVisible(false)) is open (therefore this function would
 	 * return true).
 	 *
-	 * Returns: True if the window is open, false if it has been closed.
+	 * Returns: true if the window is open, false if it has been closed.
 	 */
 	bool isOpen()
 	{
@@ -531,7 +550,7 @@ class Window
 	 * Params:
      * 		event = Event to be returned.
      *
-	 * Returns: True if an event was returned, or false if the event queue was
+	 * Returns: true if an event was returned, or false if the event queue was
 	 * 			empty.
 	 */
 	bool pollEvent(ref Event event)

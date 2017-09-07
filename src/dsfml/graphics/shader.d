@@ -22,7 +22,126 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Shader class.
+/**
+ * Shaders are programs written using a specific language, executed directly by
+ * the graphics card and allowing one to apply real-time operations to the
+ * rendered entities.
+ *
+ * There are three kinds of shaders:
+ * $(UL
+ * $(LI Vertex shaders, that process vertices)
+ * $(LI Geometry shaders, that process primitives)
+ * $(LI Fragment (pixel) shaders, that process pixels))
+ *
+ * A $(U Shader) can be composed of either a vertex shader alone, a geometry
+ * shader alone, a fragment shader alone, or any combination of them. (see the
+ * variants of the load functions).
+ *
+ * Shaders are written in GLSL, which is a C-like language dedicated to OpenGL
+ * shaders. You'll probably need to learn its basics before writing your own
+ * shaders for DSFML.
+ *
+ * Like any D/C/C++ program, a GLSL shader has its own variables called uniforms
+ * that you can set from your D application. $(U Shader) handles different types
+ * of uniforms:
+ * $(UL
+ * $(LI scalars: float, int, bool)
+ * $(LI vectors (2, 3 or 4 components))
+ * $(LI matrices (3x3 or 4x4))
+ * $(LI samplers (textures)))
+ *
+ * Some SFML-specific types can be converted:
+*  $(UL
+ * $(LI $(COLOR_LINK) as a 4D vector (`vec4`))
+ * $(LI $(TRANSFORM_LINK) as matrices (`mat3` or `mat4`)))
+ *
+ * Every uniform variable in a shader can be set through one of the
+ * `setUniform()` or `setUniformArray()` overloads. For example, if you have a
+ * shader with the following uniforms:
+ * ---
+ * uniform float offset;
+ * uniform vec3 point;
+ * uniform vec4 color;
+ * uniform mat4 matrix;
+ * uniform sampler2D overlay;
+ * uniform sampler2D current;
+ * ---
+ *
+ * $(PARA You can set their values from D code as follows, using the types
+ * defined in the `dsfml.graphics.glsl` module:
+ * ---
+ * shader.setUniform("offset", 2.f);
+ * shader.setUniform("point", Vector3f(0.5f, 0.8f, 0.3f));
+ * shader.setUniform("color", Vec4(color));
+ * shader.setUniform("matrix", Mat4(transform));
+ * shader.setUniform("overlay", texture);
+ * shader.setUniform("current", Shader.CurrentTexture);
+ * ---
+ *
+ * $(PARA The old `setParameter()` overloads are deprecated and will be removed
+ * in a future version. You should use their `setUniform()` equivalents instead.
+ *
+ * It is also worth noting that DSFML supports index overloads for
+ * setting uniforms:)
+ * ---
+ * shader["offset"] = 2.f;
+ * shader["point"] = Vector3f(0.5f, 0.8f, 0.3f);
+ * shader["color"] = Vec4(color);
+ * shader["matrix"] = Mat4(transform);
+ * shader["overlay"] = texture;
+ * shader["current"] = Shader.CurrentTexture;
+ * ---
+ *
+ * $(PARA The special `Shader.CurrentTexture` argument maps the given
+ * `sampler2D` uniform to the current texture of the object being drawn (which
+ * cannot be known in advance).
+ *
+ * To apply a shader to a drawable, you must pass it as part of an additional
+ * parameter to the `Window.draw()` function:)
+ * ---
+ * RenderStates states;
+ * states.shader = shader;
+ * window.draw(sprite, states);
+ * ---
+ *
+ * $(PARA In the code above we pass a reference to the shader, because it may be
+ * null (which means "no shader").
+ *
+ * Shaders can be used on any drawable, but some combinations are not
+ * interesting. For example, using a vertex shader on a $(SPRITE_LINK) is
+ * limited because there are only 4 vertices, the sprite would have to be
+ * subdivided in order to apply wave effects.
+ * Another bad example is a fragment shader with $(TEXT_LINK): the texture of
+ * the text is not the actual text that you see on screen, it is a big texture
+ * containing all the characters of the font in an arbitrary order; thus,
+ * texture lookups on pixels other than the current one may not give you the
+ * expected result.
+ *
+ * Shaders can also be used to apply global post-effects to the current contents
+ * of the target. This can be done in two different ways:)
+ * $(UL
+ * $(LI draw everything to a $(RENDERTEXTURE_LINK), then draw it to the main
+ *        target using the shader)
+ * $(LI draw everything directly to the main target, then use `Texture.update`
+ *        to copy its contents to a texture and draw it to the main target using
+ *        the shader))
+ *
+ * $(PARA The first technique is more optimized because it doesn't involve
+ * retrieving the target's pixels to system memory, but the second one doesn't
+ * impact the rendering process and can be easily inserted anywhere without
+ * impacting all the code.
+ *
+ * Like $(TEXTURE_LINK) that can be used as a raw OpenGL texture, $(U Shader)
+ * can also be used directly as a raw shader for custom OpenGL geometry.)
+ * ---
+ * Shader.bind(shader);
+ * ... render OpenGL geometry ...
+ * Shader.bind(null);
+ * ---
+ *
+ * See_Also:
+ * $(GLSL_LINK)
+ */
 module dsfml.graphics.shader;
 
 import dsfml.graphics.texture;
@@ -38,35 +157,6 @@ import dsfml.system.err;
 
 /**
  * Shader class (vertex and fragment).
- *
- * Shaders are programs written using a specific language, executed directly by
- * the graphics card and allowing one to apply real-time operations to the
- * rendered entities.
- *
- * There are two kinds of shaders:
- * - Vertex shaders, that process vertices
- * - Fragment (pixel) shaders, that process pixels
- *
- * A DSFML Shader can be composed of either a vertex shader alone, a fragment
- * shader alone, or both combined (see the variants of the load functions).
- *
- * Shaders are written in GLSL, which is a C-like language dedicated to OpenGL
- * shaders. You'll probably need to learn its basics before writing your own
- * shaders for SFML.
- *
- * Like any D/C/C++ program, a shader has its own variables that you can set
- * from your D application. DSFML's Shader handles 5 different types of
- * variables:
- * - floats
- * - vectors (2, 3, or 4 components)
- * - colors
- * - textures
- * - transforms (matrices)
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also:
- * http://www.sfml-dev.org/documentation/2.0/classsf_1_1Shader.php#details
  */
 class Shader
 {
@@ -79,9 +169,12 @@ class Shader
 
     package sfShader* sfPtr;
 
-    /// Special type/value that can be passed to setParameter, and that represents the texture of the object being drawn.
+    /**
+     * Special type/value that can be passed to setParameter, and that
+     * represents the texture of the object being drawn.
+     */
     struct CurrentTextureType {}
-    ///
+    /// ditto
     static CurrentTextureType CurrentTexture;
 
     /// Default constructor.
@@ -117,7 +210,7 @@ class Shader
      * 		filename	= Path of the vertex or fragment shader file to load
      * 		type		= Type of shader (vertex or fragment)
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromFile(const(char)[] filename, Type type)
     {
@@ -156,7 +249,7 @@ class Shader
      * 		vertexShaderFilename	= Path of the vertex shader file to load
      * 		fragmentShaderFilename	= Path of the fragment shader file to load
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromFile(const(char)[] vertexShaderFilename, const(char)[] fragmentShaderFilename)
     {
@@ -185,7 +278,7 @@ class Shader
      * 		shader	= String containing the source code of the shader
      * 		type	= Type of shader (vertex or fragment)
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromMemory(const(char)[] shader, Type type)
     {
@@ -222,7 +315,7 @@ class Shader
      * 	fragmentShader = String containing the source code of the fragment
                          shader
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromMemory(const(char)[] vertexShader, const(char)[] fragmentShader)
     {
@@ -250,7 +343,7 @@ class Shader
      * 		stream	= Source stream to read from
      * 		type	= Type of shader (vertex or fragment)
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromStream(InputStream stream, Type type)
     {
@@ -287,7 +380,7 @@ class Shader
      * 	vertexShaderStream	 = Source stream to read the vertex shader from
      * 	fragmentShaderStream = Source stream to read the fragment shader from
      *
-     * Returns: True if loading succeeded, false if it failed.
+     * Returns: true if loading succeeded, false if it failed.
      */
     bool loadFromStream(InputStream vertexShaderStream, InputStream fragmentShaderStream)
     {
@@ -939,7 +1032,7 @@ class Shader
      * This function should always be called before using the shader features.
      * If it returns false, then any attempt to use DSFML Shader will fail.
      *
-     * Returns: True if shaders are supported, false otherwise
+     * Returns: true if shaders are supported, false otherwise
      */
     static bool isAvailable()
     {

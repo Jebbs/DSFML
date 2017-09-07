@@ -22,7 +22,30 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the CircleShape class.
+/**
+ * This class inherits all the functions of Transformable (position, rotation,
+ * scale, bounds, ...) as well as the functions of Shape (outline, color,
+ * texture, ...).
+ *
+ * Example:
+ * ---
+ * auto circle = new CircleShape();
+ * circle.radius = 150;
+ * circle.outlineColor = Color.Red;
+ * circle.outlineThickness = 5;
+ * circle.position = Vector2f(10, 20);
+ * ...
+ * window.draw(circle);
+ * ---
+ *
+ *$(PARA Since the graphics card can't draw perfect circles, we have to fake
+ * them with multiple triangles connected to each other. The "points count"
+ * property of $(U CircleShape) defines how many of these triangles to use, and
+ * therefore defines the quality of the circle.)
+ *
+ * See_Also:
+ * $(SHAPE_LINK), $(RECTANGLESHAPE_LINK), $(CONVEXSHAPE_LINK)
+ */
 module dsfml.graphics.circleshape;
 
 import dsfml.graphics.shape;
@@ -31,19 +54,6 @@ import dsfml.system.vector2;
 
 /**
  * Specialized shape representing a circle.
- *
- * This class inherits all the functions of Transformable (position, rotation,
- * scale, bounds, ...) as well as the functions of Shape (outline, color,
- * texture, ...).
- *
- * Since the graphics card can't draw perfect circles, we have to fake them with
- * multiple triangles connected to each other. The "points count" property of
- * CircleShape defines how many of these triangles to use, and therefore defines
- * the quality of the circle.
- *
- * See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1CircleShape.php#details
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
  */
 class CircleShape : Shape
 {
@@ -77,29 +87,31 @@ class CircleShape : Shape
         mixin(destructorOutput);
     }
 
-    /// The number of points of the circle.
     @property
     {
+        /// The number of points of the circle.
         uint pointCount(uint newPointCount)
         {
             m_pointCount = newPointCount;
             return newPointCount;
         }
+        /// ditto
         override uint pointCount()
         {
             return m_pointCount;
         }
     }
 
-    /// The radius of the circle.
     @property
     {
+        /// The radius of the circle.
         float radius(float newRadius)
         {
             m_radius = newRadius;
             update();
             return newRadius;
         }
+        /// ditto
         float radius()
         {
             return m_radius;

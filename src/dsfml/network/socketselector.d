@@ -30,9 +30,10 @@
  * selectors, a single thread can handle all the sockets.
  *
  * All types of sockets can be used in a selector:
- * $(LIST TcpListener)
- * $(LIST TcpSocket)
- * $(LIST UdpSocket)
+ * $(UL
+ * $(LI $(TCPLISTENER_LINK))
+ * $(LI $(TCPSOCKET_LINK))
+ * $(LI $(UDPSOCKET_LINK)))
  *
  * A selector doesn't store its own copies of the sockets, it simply keeps a
  * reference to the original sockets that you pass to the "add" function.
@@ -41,9 +42,10 @@
  * the selector (i.e., they cannot be collected by the GC).
  *
  * Using a selector is simple:
- * $(LIST populate the selector with all the sockets that you want to observe)
- * $(LIST make it wait until there is data available on any of the sockets)
- * $(LIST test each socket to find out which ones are ready)
+ * $(UL
+ * $(LI populate the selector with all the sockets that you want to observe)
+ * $(LI make it wait until there is data available on any of the sockets)
+ * $(LI test each socket to find out which ones are ready))
  *
  * Example:
  * ---

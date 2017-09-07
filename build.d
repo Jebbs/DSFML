@@ -67,6 +67,7 @@ bool buildStop;
 bool buildingLibs;
 bool buildingInterfaceFiles;
 bool buildingDoc;
+bool buildingWebsiteDocs;
 bool showingHelp;
 bool force32Build;
 bool force64Build;
@@ -739,6 +740,19 @@ bool buildDocumentation()
 
     chdir("src/dsfml/");
 
+    string docExtension;
+    string ddoc;
+    if(buildingWebsiteDocs)
+    {
+        docExtension = ".php";
+        ddoc = " ../../doc/website_documentation.ddoc";
+    }
+    else
+    {
+        docExtension = ".html";
+        ddoc = " ../../doc/local_documentation.ddoc";
+    }
+
     foreach(theModule;modules)
     {
         if(selectedModule != "" && theModule != selectedModule)
@@ -752,12 +766,14 @@ bool buildDocumentation()
         {
             if (name == "package.d")
                 continue;
-            string docFile = "../../doc/"~theModule~"/"~name~".html";
+            string docFile = "../../doc/"~theModule~"/"~name~docExtension;
+            string outputFile = name~docExtension;
             string dFile = theModule~"/"~name~".d";
 
             version(DigitalMars)
             {
-                string buildCommand = compiler~dFile~" ../../doc.ddoc"~docCompilerSwitches;
+                string buildCommand = compiler~dFile~ddoc~docCompilerSwitches~
+                                      " -of"~outputFile;
             }
             else version(GNU)
             {
@@ -768,17 +784,19 @@ bool buildDocumentation()
                 string buildCommand = compiler~dFile~singleFileSwitches;
             }
 
-
-
             if(needToBuild(docFile, dFile))
             {
+                progressOutput(currentFile, numberOfFiles, dFile);
+                //writeln(buildCommand);
                 auto status = executeShell(buildCommand);
                 if(status.status !=0)
                 {
                     writeln(status.output);
                     return false;
                 }
-                progressOutput(currentFile, numberOfFiles, dFile);
+
+                rename("../../doc/"~theModule~"/"~name~".html",
+                       "../../doc/"~theModule~"/"~name~docExtension);
             }
 
             currentFile++;
@@ -786,6 +804,7 @@ bool buildDocumentation()
     }
 
     chdir("../..");
+
     return true;
 }
 
@@ -874,7 +893,8 @@ int main(string[] args)
         "m32", "Force 32 bit building.", &force32Build,
         "m64", "Force 64 bit building.", &force64Build,
         "unittest", "Build DSFML unit test executable.", &buildingUnittests,
-        "doc", "Build DSFML documentation.", &buildingDoc
+        "doc", "Build DSFML documentation.", &buildingDoc,
+        "webdoc", "Build the DSFML website documentation.", &buildingWebsiteDocs
         );
     }
     catch(GetOptException e)
@@ -892,11 +912,16 @@ int main(string[] args)
     }
 
     //default to building libs
-    if(!buildingLibs && !buildingDoc && !buildingInterfaceFiles && !buildingUnittests && !buildingAll)
+    if(!buildingLibs && !buildingDoc && !buildingInterfaceFiles &&
+       !buildingWebsiteDocs && !buildingUnittests && !buildingAll)
     {
         buildingLibs = true;
     }
 
+    //make sure buildingDoc is set to true if we're building documentation for
+    //the website
+    if(buildingWebsiteDocs)
+        buildingDoc = true;
     /*
         writeln("lib ", buildingLibs);
         writeln("doc ", buildingDoc);

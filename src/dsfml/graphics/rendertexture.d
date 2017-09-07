@@ -22,7 +22,67 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the RenderTexture class.
+/**
+ * $(U RenderTexture) is the little brother of $(RENDERWINDOW_LINK). It
+ * implements the same 2D drawing and OpenGL-related functions (see their base
+ * class $(RENDERTARGET_LINK) for more details), the difference is that the
+ * result is stored in an off-screen texture rather than being show in a window.
+ *
+ * Rendering to a texture can be useful in a variety of situations:
+ * $(UL
+ * $(LI precomputing a complex static texture (like a level's background from
+ *   multiple tiles))
+ * $(LI applying post-effects to the whole scene with shaders)
+ * $(LI creating a sprite from a 3D object rendered with OpenGL)
+ * $(LI etc.))
+ *
+ * Example:
+ * ---
+ * // Create a new render-window
+ * auto window = new RenderWindow(VideoMode(800, 600), "DSFML window");
+ *
+ * // Create a new render-texture
+ * auto texture = new RenderTexture();
+ * if (!texture.create(500, 500))
+ *     return -1;
+ *
+ * // The main loop
+ * while (window.isOpen())
+ * {
+ *    // Event processing
+ *    // ...
+ *
+ *    // Clear the whole texture with red color
+ *    texture.clear(Color.Red);
+ *
+ *    // Draw stuff to the texture
+ *    texture.draw(sprite);
+ *    texture.draw(shape);
+ *    texture.draw(text);
+ *
+ *    // We're done drawing to the texture
+ *    texture.display();
+ *
+ *    // Now we start rendering to the window, clear it first
+ *    window.clear();
+ *
+ *    // Draw the texture
+ *    auto sprite = new Sprite(texture.getTexture());
+ *    window.draw(sprite);
+ *
+ *    // End the current frame and display its contents on screen
+ *    window.display();
+ * }
+ * ---
+ *
+ * $(PARA Like $(RENDERWINDOW_LINK), $(U RenderTexture) is still able to render
+ * direct OpenGL stuff. It is even possible to mix together OpenGL calls and
+ * regular DSFML drawing commands. If you need a depth buffer for 3D rendering,
+ * don't forget to request it when calling `RenderTexture.create`.)
+ *
+ * See_Also:
+ * $(RENDERTARGET_LINK), $(RENDERWINDOW_LINK), $(VIEW_LINK), $(TEXTURE_LINK)
+ */
 module dsfml.graphics.rendertexture;
 
 import dsfml.graphics.rendertarget;
@@ -46,24 +106,6 @@ import dsfml.system.err;
 
 /**
  * Target for off-screen 2D rendering into a texture.
- *
- * RenderTexture is the little brother of RenderWindow.
- *
- * It implements the same 2D drawing and OpenGL-related functions (see their
- * base class RenderTarget for more details), the difference is that the result
- * is stored in an off-screen texture rather than being show in a window.
- *
- * Rendering to a texture can be useful in a variety of situations:
- * - precomputing a complex static texture (like a level's background from
- *   multiple tiles)
- * - applying post-effects to the whole scene with shaders
- * - creating a sprite from a 3D object rendered with OpenGL
- * - etc.
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also:
- * 	http://www.sfml-dev.org/documentation/2.0/classsf_1_1RenderTexture.php#details
  */
 class RenderTexture : RenderTarget
 {
@@ -138,7 +180,7 @@ class RenderTexture : RenderTarget
      * The render target keeps its own copy of the view object, so it is not
      * necessary to keep the original one alive after calling this function. To
      * restore the original view of the target, you can pass the result of
-     * getDefaultView() to this function.
+     * `getDefaultView()` to this function.
      */
     @property
     {
@@ -233,11 +275,11 @@ class RenderTexture : RenderTarget
      * doing direct OpenGL stuff).
      *
      * Only one context can be current in a thread, so if you want to draw
-     * OpenGL geometry to another render target (like a RenderWindow) don't
-     * forget to activate it again.
+     * OpenGL geometry to another render target (like a $(RENDERWINDOW_LINK))
+     * don't forget to activate it again.
      *
      * Params:
-     * 		active	= True to activate, false to deactivate
+     * 		active	= true to activate, false to deactivate
      */
     void setActive(bool active = true)
     {
@@ -338,10 +380,10 @@ class RenderTexture : RenderTarget
     /**
      * Reset the internal OpenGL states so that the target is ready for drawing.
      *
-     * This function can be used when you mix SFML drawing and direct OpenGL
+     * This function can be used when you mix DSFML drawing and direct OpenGL
      * rendering, if you choose not to use pushGLStates/popGLStates. It makes
-     * sure that all OpenGL states needed by SFML are set, so that subsequent
-     * draw() calls will work as expected.
+     * sure that all OpenGL states needed by DSFML are set, so that subsequent
+     * `draw()` calls will work as expected.
      */
     void resetGLStates()
     {

@@ -28,8 +28,9 @@
  *
  * Packets solve 2 fundamental problems that arise when transferring data over
  * the network:
- * $(LIST data is interpreted correctly according to the endianness)
- * $(LIST the bounds of the packet are preserved (one send == one receive))
+ * $(UL
+ * $(LI data is interpreted correctly according to the endianness)
+ * $(LI the bounds of the packet are preserved (one send == one receive)))
  *
  * The $(U Packet) class provides both input and output modes.
  *
@@ -172,7 +173,7 @@ class Packet
      * This function is useful to know if there is some data left to be read,
      * without actually reading it.
      *
-     * Returns: True if all data was read, false otherwise.
+     * Returns: true if all data was read, false otherwise.
      */
     bool endOfPacket() const
     {
@@ -184,7 +185,7 @@ class Packet
      *
      * The value in the packet at the current read position is set to value.
      *
-     * Returns: True if last data extraction from packet was successful.
+     * Returns: true if last data extraction from packet was successful.
      */
     bool read(T)(out T value)
     if(isScalarType!T)
