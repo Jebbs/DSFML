@@ -22,6 +22,43 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
+/**
+ * A vertex is an improved point. It has a position and other extra attributes
+ * that will be used for drawing: in DSFML, vertices also have a color and a
+ * pair of texture coordinates.
+ *
+ * The vertex is the building block of drawing. Everything which is visible on
+ * screen is made of vertices. They are grouped as 2D primitives (triangles,
+ * quads, ...), and these primitives are grouped to create even more complex 2D
+ * entities such as sprites, texts, etc.
+ *
+ * If you use the graphical entities of DSFML (sprite, text, shape) you won't
+ * have to deal with vertices directly. But if you want to define your own 2D
+ * entities, such as tiled maps or particle systems, using vertices will allow
+ * you to get maximum performances.
+ *
+ * Example:
+ * ---
+ * // define a 100x100 square, red, with a 10x10 texture mapped on it
+ * sf::Vertex vertices[] =
+ * [
+ *     Vertex(Vector2f(  0,   0), Color::Red, Vector2f( 0,  0)),
+ *     Vertex(Vector2f(  0, 100), Color::Red, Vector2f( 0, 10)),
+ *     Vertex(Vector2f(100, 100), Color::Red, Vector2f(10, 10)),
+ *     Vertex(Vector2f(100,   0), Color::Red, Vector2f(10,  0))
+ * ];
+ *
+ * // draw it
+ * window.draw(vertices, 4, PrimitiveType.Quads);
+ * ---
+ *
+ * Note: although texture coordinates are supposed to be an integer amount of
+ * pixels, their type is float because of some buggy graphics drivers that are
+ * not able to process integer coordinates correctly.
+ *
+ * See_Also
+ * $(VERTEXARRAY_LINK)
+ */
 module dsfml.graphics.vertex;
 
 import dsfml.graphics.color;
@@ -29,26 +66,6 @@ import dsfml.system.vector2;
 
 /**
  * Define a point with color and texture coordinates.
- *
- * A vertex is an improved point.
- *
- * It has a position and other extra attributes that will be used for drawing:
- * in DSFML, vertices also have a color and a pair of texture coordinates.
- *
- * The vertex is the building block of drawing. Everything which is visible on
- * screen is made of vertices. They are grouped as 2D primitives (triangles,
- * quads, ...), and these primitives are grouped to create even more complex 2D
- * entities such as sprites, texts, etc.
- *
- * If you use the graphical entities of SFML (sprite, text, shape) you won't
- * have to deal with vertices directly. But if you want to define your own 2D
- * entities, such as tiled maps or particle systems, using vertices will allow
- * you to get maximum performances.
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also:
- * 	http://www.sfml-dev.org/documentation/2.0/classsf_1_1Vertex.php#details
  */
 struct Vertex
 {

@@ -22,16 +22,65 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-///A module containing the BlendMode struct.
+/**
+ * $(U BlendMode) is a class that represents a blend mode. A blend mode
+ * determines how the colors of an object you draw are mixed with the colors
+ * that are already in the buffer.
+ *
+ * The class is composed of 6 components, each of which has its
+ * own public member variable:
+ * $(UL
+ * $(LI Color Source Factor (colorSrcFactor))
+ * $(LI Color Destination Factor (colorDstFactor))
+ * $(LI Color Blend Equation (colorEquation))
+ * $(LI Alpha Source Factor (alphaSrcFactor))
+ * $(LI Alpha Destination Factor (alphaDstFactor))
+ * $(LI Alpha Blend Equation (alphaEquation)))
+ *
+ * The source factor specifies how the pixel you are drawing contributes to the
+ * final color. The destination factor specifies how the pixel already drawn in
+ * the buffer contributes to the final color.
+ *
+ * The color channels RGB (red, green, blue; simply referred to as color) and A
+ * (alpha; the transparency) can be treated separately. This separation can be
+ * useful for specific blend modes, but most often you won't need it and will
+ * simply treat the color as a single unit.
+ *
+ * The blend factors and equations correspond to their OpenGL equivalents. In
+ * general, the color of the resulting pixel is calculated according to the
+ * following formula ($(I src) is the color of the source pixel, $(I dst) the
+ * color of the destination pixel, the other variables correspond to the
+ * public members, with the equations being `+` or `-` operators):
+ *
+ * ---
+ * dst.rgb = colorSrcFactor * src.rgb (colorEquation) colorDstFactor * dst.rgb
+ * dst.a   = alphaSrcFactor * src.a   (alphaEquation) alphaDstFactor * dst.a
+ * ---
+ *
+ * $(PARA All factors and colors are represented as floating point numbers
+ * between 0 and 1. Where necessary, the result is clamped to fit in that range.
+ *
+ * The most common blending modes are defined as constants inside of
+ * $(U BlendMode):)
+ *
+ * ---
+ * auto alphaBlending          = BlendMode.Alpha;
+ * auto additiveBlending       = BlendMode.Add;
+ * auto multiplicativeBlending = BlendMode.Multiply;
+ * auto noBlending             = BlendMode.None;
+ * ---
+ *
+ * $(Para In DSFML, a blend mode can be specified every time you draw a Drawable
+ * object to a render target. It is part of the RenderStates compound
+ * that is passed to the member function RenderTarget::draw().)
+ *
+ * See_Also:
+ * $(RENDERSTATES_LINK), $(RENDERTARGET_LINK)
+ */
 module dsfml.graphics.blendmode;
 
 /**
  * Blending modes for drawing.
- *
- *See_Also:
- * $(LINK https://www.sfml-dev.org/documentation/2.4.2/structsf_1_1BlendMode.php)
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
  */
 struct BlendMode
 {
@@ -39,7 +88,7 @@ struct BlendMode
      * Enumeration of the blending factors.
      *
      * The factors are mapped directly to their OpenGL equivalents,
-     * specified by glBlendFunc() or glBlendFuncSeparate().
+     * specified by `glBlendFunc()` or `glBlendFuncSeparate()`.
      */
     enum Factor
     {

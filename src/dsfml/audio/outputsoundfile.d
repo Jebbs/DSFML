@@ -87,7 +87,7 @@ class OutputSoundFile
      *	sampleCount  = Sample rate of the sound
      *	channelCount = Number of channels in the sound
      *
-     * Returns: True if the file was successfully opened.
+     * Returns: true if the file was successfully opened.
      */
     bool openFromFile(const(char)[] filename, uint sampleRate, uint channelCount)
     {

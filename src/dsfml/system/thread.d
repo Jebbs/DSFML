@@ -30,8 +30,9 @@
  * To use a $(U Thread), you construct it directly with the function to execute
  * as the entry point of the thread. $(U Thread) has multiple template
  * constructors, which means that you can use several types of entry points:
- * $(LIST functions with no arguments)
- * $(LIST delegates with no arguments)
+ * $(UL
+ * $(LI functions with no arguments)
+ * $(LI delegates with no arguments))
  *
  * The thread ends when its function is terminated. If the owner $(U Thread)
  * instance is destroyed before the thread is finished, the destructor will wait

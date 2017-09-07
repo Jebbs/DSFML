@@ -28,10 +28,11 @@
  * (list files, upload, download, create, remove, ...).
  *
  * Using the FTP client consists of 4 parts:
- * $(LIST Connecting to the FTP server)
- * $(LIST Logging in (either as a registered user or anonymously))
- * $(LIST Sending commands to the server)
- * $(LIST Disconnecting (this part can be done implicitly by the destructor))
+ * $(UL
+ * $(LI Connecting to the FTP server)
+ * $(LI Logging in (either as a registered user or anonymously))
+ * $(LI Sending commands to the server)
+ * $(LI Disconnecting (this part can be done implicitly by the destructor)))
  *
  * Every command returns a FTP response, which contains the status code as well
  * as a message from the server. Some commands such as getWorkingDirectory() and
@@ -573,7 +574,7 @@ class Ftp
          * This function is defined for convenience, it is equivalent to testing
          * if the status code is < 400.
          *
-         * Returns: True if the status is a success, false if it is a failure.
+         * Returns: true if the status is a success, false if it is a failure.
          */
         bool isOk() const
         {

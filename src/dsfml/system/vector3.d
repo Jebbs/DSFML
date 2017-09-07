@@ -33,8 +33,9 @@
  *
 * You generally don't have to care about the templated form (Vector2!(T),
  * the most common specializations have special aliases:
- * $(LIST Vector3!(float) is Vector2f)
- * $(LIST Vector3!(int) is Vector2i)
+ * $(UL
+ * $(LI Vector3!(float) is Vector2f)
+ * $(LI Vector3!(int) is Vector2i))
  *
  * Example:
  * ---

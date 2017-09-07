@@ -113,7 +113,7 @@ class TcpListener:Socket
      * data available or not. By default, all sockets are blocking.
      *
      * Params:
-     *  blocking = True to set the socket as blocking, false for non-blocking
+     *  blocking = true to set the socket as blocking, false for non-blocking
      */
     void setBlocking(bool blocking)
     {

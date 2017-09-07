@@ -158,7 +158,7 @@ final abstract class Mouse
      * Params:
      * 		button = Button to check
      *
-     * Returns: True if the button is pressed, false otherwise.
+     * Returns: true if the button is pressed, false otherwise.
      */
     static bool isButtonPressed(Button button)
     {

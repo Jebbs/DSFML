@@ -1,0 +1,206 @@
+DDOC = <!DOCTYPE HTML>
+  <html>
+    <head>
+      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+      <link rel="manifest" href="/manifest.json">
+      <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+      <meta name="theme-color" content="#ffffff">
+      <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+      <link rel="stylesheet" type="text/css" href="/styles.css">
+      <title>DSFML - $(TITLE)</title>
+    </head>
+    <body>
+      <div class="main">
+        <?php include '../../header.php'?>
+        <div class="inner" class="content">
+          <article class="module">
+            <h1 class="module_name">$(TITLE)</h1>
+            <section id="module_content">$(BODY)</section>
+          </article>
+        </div>
+        <?php include '../../footer.php'?>
+      </div>
+        <script>
+        var elements = document.getElementsByClassName("ddoc_decl");
+        for (var i = 0; i < elements.length; ++i) {
+        elements[i].innerHTML = elements[i].innerHTML.replace(/;/g,'');
+        }
+        var elements = document.getElementsByClassName("deprecated_decl");
+        for (var i = 0; i < elements.length; ++i) {
+        elements[i].innerHTML = elements[i].innerHTML.replace(/deprecated/g,'<span class="dep_kwd">deprecated</span>');
+        }
+        </script>
+    </body>
+  </html>
+
+DDOC_DESCRIPTION = <div class="ddoc_description">
+  <p class="para">
+    $0
+  </p>
+</div>$(LF)
+
+DDOC_MEMBER_HEADER =
+
+
+D_CODE =
+<section class="code_listing">
+  <div class="code_sample">
+    <div class="dlang">
+      <ol class="code_lines">
+        <li>
+          <pre><code class="prettyprint">$0</code></pre>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+DDOC_ANCHOR = <a class="decl_anchor" href="#$1" id="$1">
+
+DDOC_DECL = <div class="ddoc_decl">
+  <section class="section">
+    <div class="declaration">
+      <div class="dlang">
+        <code class="prettyprint">$0</a></code>
+      </div>
+    </div>
+  </section>
+</div>
+
+DDOC_DECL_DD = <div class="ddoc_decl_dd">
+  $0
+</div>
+
+D_INLINECODE = <code class="prettyprint">$0</code>
+DDOC_BACKQUOTED = $(D_INLINECODE $0)
+D_COMMENT = $0
+D_STRING = $0
+D_KEYWORD = $0
+
+DDOC_PARAMS = <div class="ddoc_params">
+  <h4>Parameters:</h4>
+  <table cellspacing="0" cellpadding="0" border="1" class="graybox">
+    <tbody>
+      $0
+    </tbody>
+  </table>
+</div>$(LF)
+
+DDOC_PARAM_ID = <td scope="ddoc_param_id">
+  <code class="prettyprint">$0</code>
+</td>$(LF)
+
+DDOC_PARAM_DESC = <td>
+  <div class="ddoc_param_desc">
+    <p class="param_desc">
+      $0
+    </p>
+  </div>
+</td>
+
+
+DDOC_SEE_ALSO = <div class="ddoc_see_also">
+  <h4>See Also:</h4>
+  <p class="para">
+    $0
+  </p>
+</div>$(LF)
+
+DDOC_RETURNS = <div class="ddoc_returns">
+  <h4>Returns:</h4>
+  <p class="para">
+    $0
+  </p>
+</div>$(LF)
+
+
+DDOC_DEPRECATED = <div class="ddoc_deprecated">
+  <p class="para">
+    $(B Deprecated:) $0
+  </p>
+</div>$(LF)
+
+DDOC_PSYMBOL = $0
+
+DEPRECATED = <div class="deprecated_decl">$0</div>
+
+DDOC_PARAM = $0
+
+UL = <ul class="lists">$0</ul>
+
+PARA = <p class="para">$0</p>
+
+DDOC_KEYWORD = <code class="prettyprint">$0</code>
+
+TABLE = <table class="para">$0</table>$(LF)
+
+INPUTSOUNDFILE_LINK = <a class="dsfml_link" href="../audio/inputsoundfile.php" title="Provide read access to sound files.">InputSoundFile</a>
+LISTENER_LINK = <a class="dsfml_link" href="../audio/listener.php" title="The audio listener is the point in the scene from where all the sounds are heard.">Listener</a>
+MUSIC_LINK = <a class="dsfml_link" href="../audio/music.php" title="Streamed music played from an audio file.">Music</a>
+OUTPUTSOUNDFILE_LINK = <a class="dsfml_link" href="../audio/outputsoundfile.php" title="Provide write access to sound files.">OutputSoundFile</a>
+SOUND_LINK = <a class="dsfml_link" href="../audio/sound.php" title="Regular sound that can be played in the audio environment.">Sound</a>
+SOUNDBUFFER_LINK = <a class="dsfml_link" href="../audio/soundbuffer.php" title="Storage for audio samples defining a sound.">SoundBuffer</a>
+SOUNDBUFFERRECORDER_LINK = <a class="dsfml_link" href="../audio/soundbufferrecorder.php" title="Specialized SoundRecorder which stores the captured audio data into a sound buffer.">SoundBufferRecorder</a>
+SOUNDRECORDER_LINK = <a class="dsfml_link" href="../audio/soundrecorder.php" title="Abstract base class for capturing sound data.">SoundRecorder</a>
+SOUNDSOURCE_LINK = <a class="dsfml_link" href="../audio/soundsource.php" title="Base class defining a sound's properties.">SoundSource</a>
+SOUNDSTREAM_LINK = <a class="dsfml_link" href="../audio/soundstream.php" title="Abstract base class for streamed audio sources.">SoundStream</a>
+
+BLENDMODE_LINK = <a class="dsfml_link" href="../graphics/blendmode.php" title="Blending modes for drawing.">BlendMode</a>
+CIRCLESHAPE_LINK = <a class="dsfml_link" href="../graphics/circleshape.php" title="Specialized shape representing a circle.">CircleShape</a>
+COLOR_LINK = <a class="dsfml_link" href="../graphics/color.php" title="Color is a utility struct for manipulating 32-bits RGBA colors.">Color</a>
+CONVEXSHAPE_LINK = <a class="dsfml_link" href="../graphics/convexshape.php" title="Specialized shape representing a convex polygon.">ConvexShape</a>
+DRAWABLE_LINK = <a class="dsfml_link" href="../graphics/drawable.php" title="Interface for objects that can be drawn to a render target.">Drawable</a>
+FONT_LINK = <a class="dsfml_link" href="../graphics/font.php" title="Class for loading and manipulating character fonts.">Font</a>
+GLSL_LINK = <a class="dsfml_link" href="../graphics/glsl.php" title="The module containing GLSL types.">Glsl</a>
+GLYPH_LINK = <a class="dsfml_link" href="../graphics/glyph.php" title="Structure describing a glyph.">Glyph</a>
+IMAGE_LINK = <a class="dsfml_link" href="../graphics/image.php" title="Class for loading, manipulating and saving images.">Image</a>
+PRIMITIVETYPE_LINK = <a class="dsfml_link" href="../graphics/primitivetype.php" title="Types of primitives that a VertexArray can render.">PrimitiveType</a>
+RECT_LINK = <a class="dsfml_link" href="../graphics/rect.php" title="Utility class for manipulating 2D axis aligned rectangles.">Rect</a>
+RECTANGLESHAPE_LINK = <a class="dsfml_link" href="../graphics/rectangleshape.php" title="Specialized shape representing a rectangle.">RectangleShape</a>
+RENDERSTATES_LINK = <a class="dsfml_link" href="../graphics/renderstates.php" title="Define the states used for drawing to a RenderTarget.">RenderStates</a>
+RENDERTARGET_LINK = <a class="dsfml_link" href="../graphics/rendertarget.php" title="Base interface for all render targets (window, texture, ...).">RenderTarget</a>
+RENDERTEXTURE_LINK = <a class="dsfml_link" href="../graphics/rendertexture.php" title="Target for off-screen 2D rendering into a texture.">RenderTexture</a>
+RENDERWINDOW_LINK = <a class="dsfml_link" href="../graphics/renderwindow.php" title="Window that can serve as a target for 2D drawing.">RenderWindow</a>
+SHADER_LINK = <a class="dsfml_link" href="../graphics/shader.php" title="Shader class (vertex and fragment).">Shader</a>
+SHAPE_LINK = <a class="dsfml_link" href="../graphics/shape.php" title="Base class for textured shapes with outline.">Shape</a>
+SPRITE_LINK = <a class="dsfml_link" href="../graphics/sprite.php" title="Drawable representation of a texture, with its own transformations, color, etc.">Sprite</a>
+TEXT_LINK = <a class="dsfml_link" href="../graphics/text.php" title="Graphical text that can be drawn to a render target.">Text</a>
+TEXTURE_LINK = <a class="dsfml_link" href="../graphics/texture.php" title="Image living on the graphics card that can be used for drawing.">Texture</a>
+TRANSFORM_LINK = <a class="dsfml_link" href="../graphics/transform.php" title="Define a 3x3 transform matrix.">Transform</a>
+TRANSFORMABLE_LINK = <a class="dsfml_link" href="../graphics/transformable.php" title="Decomposed transform defined by a position, a rotation, and a scale.">Transformable</a>
+VERTEX_LINK = <a class="dsfml_link" href="../graphics/vertex.php" title="Define a point with color and texture coordinates.">Vertex</a>
+VERTEXARRAY_LINK = <a class="dsfml_link" href="../graphics/vertexarray.php" title="Define a set of one or more 2D primitives.">VertexArray</a>
+VIEW_LINK = <a class="dsfml_link" href="../graphics/view.php" title="2D camera that defines what region is shown on screen.">View</a>
+
+FTP_LINK = <a class="dsfml_link" href="../network/ftp.php" title="An FTP client.">Ftp</a>
+HTTP_LINK = <a class="dsfml_link" href="../network/http.php" title="A HTTP client.">Http</a>
+IPADDRESS_LINK = <a class="dsfml_link" href="../network/ipaddress.php" title="Encapsulate an IPv4 network address.">IpAddress</a>
+PACKET_LINK = <a class="dsfml_link" href="../network/packet.php" title="Utility class to build blocks of data to transfer over the network.">Packet</a>
+SOCKET_LINK = <a class="dsfml_link" href="../network/socket.php" title="Base interface for all the socket types.">Socket</a>
+SOCKETSELECTOR_LINK = <a class="dsfml_link" href="../network/socketselector.php" title="Multiplexer that allows to read from multiple sockets.">SocketSelector</a>
+TCPLISTENER_LINK = <a class="dsfml_link" href="../network/tcplistener.php" title="Socket that listens to new TCP connections.">TcpListener</a>
+TCPSOCKET_LINK = <a class="dsfml_link" href="../network/tcpsocket.php" title="Specialized socket using the TCP protocol.">TcpSocket</a>
+UDPSOCKET_LINK = <a class="dsfml_link" href="../network/udpsocket.php" title="Specialized socket using the UDP protocol.">UdpSocket</a>
+
+CLOCK_LINK = <a class="dsfml_link" href="../system/clock.php" title="Utility class that measures the elapsed time.">Clock</a>
+ERR_LINK = <a class="dsfml_link" href="../system/err.php" title="Standard std.stdio.File instance used by DSFML to output warnings and errors.">err</a>
+INPUTSTREAM_LINK = <a class="dsfml_link" href="../system/inputstream.php" title="Interface for custom file input streams.">InputStream</a>
+LOCK_LINK = <a class="dsfml_link" href="../system/lock.php" title="Automatic wrapper for locking and unlocking mutexes.">Lock</a>
+MUTEX_LINK = <a class="dsfml_link" href="../system/mutex.php" title="Blocks concurrent access to shared resources from multiple threads.">Mutex</a>
+THREAD_LINK = <a class="dsfml_link" href="../system/thread.php" title="Utility class to manipulate threads.">Thread</a>
+VECTOR2_LINK = <a class="dsfml_link" href="../system/vector2.php" title="Utility template struct for manipulating 2-dimensional vectors.">Vector2</a>
+VECTOR3_LINK = <a class="dsfml_link" href="../system/vector3.php" title="Utility template struct for manipulating 3-dimensional vectors.">Vector3</a>
+
+CONTEXT_LINK = <a class="dsfml_link" href="../window/context.php" title="Class holding a valid drawing context.">Context</a>
+CONTEXTSETTINGS_LINK = <a class="dsfml_link" href="../window/contextsettings.php" title="Structure defining the settings of the OpenGL context attached to a window.">ContextSettings</a>
+EVENT_LINK = <a class="dsfml_link" href="../window/event.php" title="Defines a system event and its parameters.">Event</a>
+JOYSTICK_LINK = <a class="dsfml_link" href="../window/joystick.php" title="Give access to the real-time state of the joysticks.">Joystick</a>
+KEYBOARD_LINK = <a class="dsfml_link" href="../window/keyboard.php" title="">Keyboard</a>
+MOUSE_LINK = <a class="dsfml_link" href="../window/mouse.php" title="Give access to the real-time state of the mouse.">Mouse</a>
+SENSOR_LINK = <a class="dsfml_link" href="../window/sensor.php" title="Give access to the real-time state of the sensors.">Sensor</a>
+TOUCH_LINK = <a class="dsfml_link" href="../window/touch.php" title="Give access to the real-time state of the touches.">Touch</a>
+VIDEOMODE_LINK = <a class="dsfml_link" href="../window/videomode.php" title="VideoMode defines a video mode (width, height, bpp).">VideoMode</a>
+WINDOW_LINK = <a class="dsfml_link" href="../window/window.php" title="Window that serves as a target for OpenGL rendering.">Window</a>
+WINDOWHANDLE_LINK = <a class="dsfml_link" href="../window/windowhandle.php" title="Define a low-level window handle type, specific to each platform.">WindowHandle</a>

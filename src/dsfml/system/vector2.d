@@ -33,9 +33,10 @@
  *
  * You generally don't have to care about the templated form (Vector2!(T),
  * the most common specializations have special aliases:
- * $(LIST Vector2!(float) is Vector2f)
- * $(LIST Vector2!(int) is Vector2i)
- * $(LIST Vector2!(uint) is Vector2u)
+ * $(UL
+ * $(LI Vector2!(float) is Vector2f)
+ * $(LI Vector2!(int) is Vector2i)
+ * $(LI Vector2!(uint) is Vector2u))
  *
  * The $(U Vector2) class has a small and simple interface, its x and y members
  * can be accessed directly (there are no accessors like `setX()`, `getX()`) and

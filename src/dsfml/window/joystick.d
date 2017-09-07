@@ -38,9 +38,10 @@
  * your window is out of focus and no event is triggered.
  *
  * DSFML supports:
- * $(LIST 8 joysticks (Joystick.Count))
- * $(LIST 32 buttons per joystick (Joystick.ButtonCount))
- * $(LIST 8 axes per joystick (Joystick.AxisCount))
+ * $(UL
+ * $(LI 8 joysticks (Joystick.Count))
+ * $(LI 32 buttons per joystick (Joystick.ButtonCount))
+ * $(LI 8 axes per joystick (Joystick.AxisCount)))
  *
  * Unlike the keyboard or mouse, the state of joysticks is sometimes not
  * directly available (depending on the OS), therefore an `update()` function
@@ -207,7 +208,7 @@ final abstract class Joystick
      * 		joystick = 	Index of the joystick
      * 		axis = Axis to check
      *
-     * Returns: True if the joystick supports the axis, false otherwise.
+     * Returns: true if the joystick supports the axis, false otherwise.
      */
     static bool hasAxis(uint joystick, Axis axis)
     {
@@ -223,7 +224,7 @@ final abstract class Joystick
      * 		joystick = 	Index of the joystick
      * 		button = Button to check
      *
-     * Returns: True if the button is pressed, false otherwise.
+     * Returns: true if the button is pressed, false otherwise.
      */
     static bool isButtonPressed(uint joystick, uint button)
     {
@@ -236,7 +237,7 @@ final abstract class Joystick
      * Params:
      * 		joystick = 	Index of the joystick
      *
-     * Returns: True if the joystick is connected, false otherwise.
+     * Returns: true if the joystick is connected, false otherwise.
      */
     static bool isConnected(uint joystick)
     {

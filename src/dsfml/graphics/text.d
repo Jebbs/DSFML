@@ -22,7 +22,52 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Text class.
+/**
+ * $(U Text) is a drawable class that allows one to easily display some text
+ * with a custom style and color on a render target.
+ *
+ * It inherits all the functions from $(TRANSFORMABLE_LINK): position, rotation,
+ * scale, origin. It also adds text-specific properties such as the font to use,
+ * the character size, the font style (bold, italic, underlined), the global
+ * color and the text to display of course. It also provides convenience
+ * functions to calculate the graphical size of the text, or to get the global
+ * position of a given character.
+ *
+ * $(U Text) works in combination with the $(FONT_LINK) class, which loads and
+ * provides the glyphs (visual characters) of a given font.
+ *
+ * The separation of $(FONT_LINK) and $(U Text) allows more flexibility and
+ * better performances: indeed a $(FONT_LINK) is a heavy resource, and any
+ * operation on it is slow (often too slow for real-time applications). On the
+ * other side, a $(U Text) is a lightweight object which can combine the glyphs
+ * data and metrics of a $(FONT_LINK) to display any text on a render target.
+ *
+ * It is important to note that the $(U Text) instance doesn't copy the font
+ * that it uses, it only keeps a reference to it. Thus, a $(FONT_LINK) must not
+ * be destructed while it is used by a $(U Text).
+ *
+ * See also the note on coordinates and undistorted rendering in
+ * $(TRANSFORMABLE_LINK).
+ *
+ * example:
+ * ---
+ * // Declare and load a font
+ * auto font = new Font();
+ * font.loadFromFile("arial.ttf");
+ *
+ * // Create a text
+ * auto text = new Text("hello", font);
+ * text.setCharacterSize(30);
+ * text.setStyle(Text.Style.Bold);
+ * text.setColor(Color.Red);
+ *
+ * // Draw it
+ * window.draw(text);
+ * ---
+ *
+ * See_Also:
+ * $(FONT_LINK), $(TRANSFORMABLE_LINK)
+ */
 module dsfml.graphics.text;
 
 import dsfml.graphics.font;
@@ -44,44 +89,20 @@ import std.typecons: Rebindable;
 
 /**
  * Graphical text that can be drawn to a render target.
- *
- * Text is a drawable class that allows to easily display some text with custom
- * style and color on a render target.
- *
- * It inherits all the functions from Transformable: position, rotation, scale,
- * origin. It also adds text-specific properties such as the font to use, the
- * character size, the font style (bold, italic, underlined), the global color
- * and the text to display of course. It also provides convenience functions to
- * calculate the graphical size of the text, or to get the global position of a
- * given character.
- *
- * Text works in combination with the Font class, which loads and provides the
- * glyphs (visual characters) of a given font.
- *
- * The separation of Font and Text allows more flexibility and better
- * performances: indeed a Font is a heavy resource, and any operation on it is
- * slow (often too slow for real-time applications). On the other side, a Text
- * is a lightweight object which can combine the glyphs data and metrics of a
- * Font to display any text on a render target.
- *
- * It is important to note that the Text instance doesn't copy the font that it
- * uses, it only keeps a reference to it. Thus, a Font must not be destructed
- * while it is used by a Text (i.e. never write a function that uses a local
- * Font instance for creating a text).
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also: http://sfml-dev.org/documentation/2.0/classsf_1_1Text.php#details
  */
 class Text : Drawable, Transformable
 {
     /// Enumeration of the string drawing styles.
     enum Style
     {
-        Regular = 0, /// Regular characters, no style
-        Bold = 1 << 0, /// Bold characters
-        Italic = 1 << 1, /// Italic characters
-        Underlined = 1 << 2 /// Underlined characters
+        /// Regular characters, no style
+        Regular = 0,
+        /// Bold characters
+        Bold = 1 << 0,
+        /// Italic characters
+        Italic = 1 << 1,
+        /// Underlined characters
+        Underlined = 1 << 2
     }
 
     mixin NormalTransformable;
@@ -344,18 +365,10 @@ class Text : Drawable, Transformable
                 lastTextureUsed = m_font.getTexture(m_characterSize);
             }
 
-            //writeln("Update Geometry");
             updateGeometry();
 
-            //writeln("Setting renderstates tecture");
             renderStates.texture =  m_font.getTexture(m_characterSize);
 
-            if(renderStates.texture is null)
-            {
-                //writeln("Texture don't exist!");
-            }
-
-            //writeln("Trying to draw!");
             renderTarget.draw(m_vertices, renderStates);
         }
     }

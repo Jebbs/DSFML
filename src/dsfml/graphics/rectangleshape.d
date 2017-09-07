@@ -22,7 +22,24 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the RectangleShape class.
+/**
+ * This class inherits all the functions of $(TRANSFORMABLE_LINK) (position,
+ * rotation, scale, bounds, ...) as well as the functions of $(SHAPE_LINK)
+ * (outline, color, texture, ...).
+ *
+ * Example:
+ * ---
+ * auto rectangle = new RectangleShape();
+ * rectangle.size = Vector2f(100, 50);
+ * rectangle.outlineColor = Color.Red;
+ * rectangle.outlineThickness = 5;
+ * rectangle.position = Vector2f(10, 20);
+ * ...
+ * window.draw(rectangle);
+ * ---
+ * See_Also:
+ * $(SHAPE_LINK), $(CIRCLESHAPE_LINK), $(CONVEXSHAPE_LINK)
+ */
 module dsfml.graphics.rectangleshape;
 
 import dsfml.graphics.shape;
@@ -30,15 +47,6 @@ import dsfml.system.vector2;
 
 /**
  * Specialized shape representing a rectangle.
- *
- * This class inherits all the functions of Transformable (position, rotation,
- * scale, bounds, ...) as well as the functions of Shape (outline, color,
- * texture, ...).
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also:
- *	http://www.sfml-dev.org/documentation/2.0/classsf_1_1RectangleShape.php#details
  */
 class RectangleShape:Shape
 {
@@ -71,15 +79,16 @@ class RectangleShape:Shape
         }
     }
 
-    /// The size of the rectangle.
     @property
     {
+        /// The size of the rectangle.
         Vector2f size(Vector2f theSize)
         {
             m_size = theSize;
             update();
             return theSize;
         }
+        /// ditto
         Vector2f size()
         {
             return m_size;

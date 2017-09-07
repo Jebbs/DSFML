@@ -104,7 +104,7 @@ class SoundBufferRecorder : SoundRecorder
         /**
          * Start capturing audio data.
          *
-         * Returns: True to start the capture, or false to abort it
+         * Returns: true to start the capture, or false to abort it
          */
         override bool onStart()
         {
@@ -120,7 +120,7 @@ class SoundBufferRecorder : SoundRecorder
          * Params:
          *	samples =	Array of the new chunk of recorded samples
          *
-         * Returns: True to continue the capture, or false to stop it
+         * Returns: true to continue the capture, or false to stop it
          */
         override bool onProcessSamples(const(short)[] samples)
         {

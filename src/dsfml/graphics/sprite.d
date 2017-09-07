@@ -22,7 +22,54 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Sprite class.
+/**
+ * $(U Sprite) is a drawable class that allows to easily display a texture (or a
+ * part of it) on a render target.
+ *
+ * It inherits all the functions from $(TRANSFORMABLE_LINK): position, rotation,
+ * scale, origin. It also adds sprite-specific properties such as the texture to
+ * use, the part of it to display, and some convenience functions to change the
+ * overall color of the sprite, or to get its bounding rectangle.
+ *
+ * $(U Sprite) works in combination with the $(TEXTURE_LINK) class, which loads
+ * and provides the pixel data of a given texture.
+ *
+ * The separation of $(U Sprite) and $(TEXTURE_LINK) allows more flexibility and
+ * better performances: indeed a $(TEXTURE_LINK) is a heavy resource, and any
+ * operation on it is slow (often too slow for real-time applications). On the
+ * other side, a $(U Sprite) is a lightweight object which can use the pixel
+ * data of a $(TEXTURE_LINK) and draw it with its own
+ * transformation/color/blending attributes.
+ *
+ * It is important to note that the $(U Sprite) instance doesn't copy the
+ * texture that it uses, it only keeps a reference to it. Thus, a
+ * $(TEXTURE_LINK) must not be destroyed while it is used by a $(U Sprite)
+ * (i.e. never write a function that uses a local Texture instance for creating
+ * a sprite).
+ *
+ * See also the note on coordinates and undistorted rendering in
+ * $(TRANSFORMABLE_LINK).
+ *
+ * example:
+ * ---
+ * // Declare and load a texture
+ * auto texture = new Texture();
+ * texture.loadFromFile("texture.png");
+ *
+ * // Create a sprite
+ * auto sprite = new Sprite();
+ * sprite.setTexture(texture);
+ * sprite.textureRect = IntRect(10, 10, 50, 30);
+ * sprite.color = Color(255, 255, 255, 200);
+ * sprite.position = Vector2f(100, 25);
+ *
+ * // Draw it
+ * window.draw(sprite);
+ * ---
+ *
+ * See_Also:
+ * $(TEXTURE_LINK), $(TRANSFORMABLE_LINK)
+ */
 module dsfml.graphics.sprite;
 
 import dsfml.graphics.drawable;
@@ -43,32 +90,6 @@ import std.typecons:Rebindable;
 /**
  * Drawable representation of a texture, with its own transformations, color,
  * etc.
- *
- * Sprite is a drawable class that allows to easily display a texture (or a part
- * of it) on a render target.
- *
- * It inherits all the functions from Transformable: position, rotation, scale,
- * origin. It also adds sprite-specific properties such as the texture to use,
- * the part of it to display, and some convenience functions to change the
- * overall color of the sprite, or to get its bounding rectangle.
- *
- * Sprite works in combination with the Texture class, which loads and provides
- * the pixel data of a given texture.
- *
- * The separation of Sprite and Texture allows more flexibility and better
- * performances: indeed a Texture is a heavy resource, and any operation on it
- * is slow (often too slow for real-time applications). On the other side, a
- * Sprite is a lightweight object which can use the pixel data of a Texture and
- * draw it with its own transformation/color/blending attributes.
- *
- * It is important to note that the Sprite instance doesn't copy the texture
- * that it uses, it only keeps a reference to it. Thus, a Texture must not be
- * destroyed while it is used by a Sprite (i.e. never write a function that uses
- * a local Texture instance for creating a sprite).
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also: http://sfml-dev.org/documentation/2.0/classsf_1_1Sprite.php#details
  */
 class Sprite : Drawable, Transformable
 {
@@ -113,15 +134,15 @@ class Sprite : Drawable, Transformable
         mixin(destructorOutput);
     }
 
-    /**
-     * The sub-rectangle of the texture that the sprite will display.
-     *
-     * The texture rect is useful when you don't want to display the whole
-     * texture, but rather a part of it. By default, the texture rect covers
-     * the entire texture.
-     */
     @property
     {
+        /**
+         * The sub-rectangle of the texture that the sprite will display.
+         *
+         * The texture rect is useful when you don't want to display the whole
+         * texture, but rather a part of it. By default, the texture rect covers
+         * the entire texture.
+         */
         IntRect textureRect(IntRect rect)
         {
             if (rect != m_textureRect)
@@ -132,21 +153,22 @@ class Sprite : Drawable, Transformable
             }
             return rect;
         }
+        /// ditto
         IntRect textureRect()
         {
             return m_textureRect;
         }
     }
 
-    /**
-     * The global color of the sprite.
-     *
-     * This color is modulated (multiplied) with the sprite's texture. It can be
-     * used to colorize the sprite, or change its global opacity. By default,
-     * the sprite's color is opaque white.
-     */
     @property
     {
+        /**
+         * The global color of the sprite.
+         *
+         * This color is modulated (multiplied) with the sprite's texture. It can be
+         * used to colorize the sprite, or change its global opacity. By default,
+         * the sprite's color is opaque white.
+         */
         Color color(Color newColor)
         {
             // Update the vertices' color
@@ -156,6 +178,7 @@ class Sprite : Drawable, Transformable
             m_vertices[3].color = newColor;
             return newColor;
         }
+        /// ditto
         Color color()
         {
             return m_vertices[0].color;

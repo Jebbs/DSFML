@@ -149,7 +149,7 @@ struct VideoMode
 	 * The validity of video modes is only relevant when using fullscreen
 	 * windows; otherwise any video mode can be used with no restriction.
 	 *
-	 * Returns: True if the video mode is valid for fullscreen mode.
+	 * Returns: true if the video mode is valid for fullscreen mode.
 	 */
 	bool isValid() const
 	{

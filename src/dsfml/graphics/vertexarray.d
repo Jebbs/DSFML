@@ -22,6 +22,27 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
+/**
+ * $(U VertexArray) is a very simple wrapper around a dynamic array of vertices
+ *and a primitives type.
+ *
+ * It inherits $(DRAWABLE_LINK), but unlike other drawables it is not
+ * transformable.
+ *
+ * Example:
+ * ---
+ * VertexArray lines(PrimitiveType.LineStrip, 4);
+ * lines[0].position = Vector2f(10, 0);
+ * lines[1].position = Vector2f(20, 0);
+ * lines[2].position = Vector2f(30, 5);
+ * lines[3].position = Vector2f(40, 2);
+ *
+ * window.draw(lines);
+ * ---
+ *
+ * See_Also:
+ * $(VERTEX_LINK)
+ */
 module dsfml.graphics.vertexarray;
 
 import dsfml.graphics.vertex;
@@ -35,16 +56,6 @@ import dsfml.system.vector2;
 
 /**
  * Define a set of one or more 2D primitives.
- *
- * VertexArray is a very simple wrapper around a dynamic array of vertices and a
- * primitives type.
- *
- * It inherits Drawable, but unlike other drawables it is not transformable.
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also:
- *  http://www.sfml-dev.org/documentation/2.0/classsf_1_1VertexArray.php#details
  */
 class VertexArray : Drawable
 {

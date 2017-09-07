@@ -28,22 +28,25 @@
  * resource, download a remote file, etc. The HTTPS protocol is not supported.
  *
  * The HTTP client is split into 3 classes:
- * $(LIST Http.Request)
- * $(LIST Http.Response)
- * $(LIST Http)
+ * $(UL
+ * $(LI Http.Request)
+ * $(LI Http.Response)
+ * $(LI Http))
  *
  * Http.Request builds the request that will be sent to the server. A request is
  * made of:
- * $(LIST a method (what you want to do))
- * $(LIST a target URI (usually the name of the web page or file))
- * $(LIST one or more header fields (options that you can pass to the server))
- * $(LIST an optional body (for POST requests))
+ * $(UL
+ * $(LI a method (what you want to do))
+ * $(LI a target URI (usually the name of the web page or file))
+ * $(LI one or more header fields (options that you can pass to the server))
+ * $(LI an optional body (for POST requests)))
  *
  * Http.Response parses the response from the web server and provides getters to
  * read them. The response contains:
- * $(LIST a status code)
- * $(LIST header fields (that may be answers to the ones that you requested))
- * $(LIST a body, which contains the contents of the requested resource)
+ * $(UL
+ * $(LI a status code)
+ * $(LI header fields (that may be answers to the ones that you requested))
+ * $(LI a body, which contains the contents of the requested resource))
  *
  * $(U Http) provides a simple function, sendRequest, to send a Http.Request and
  * return the corresponding Http.Response from the server.

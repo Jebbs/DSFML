@@ -22,15 +22,7 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the ConvexShape class.
-module dsfml.graphics.convexshape;
-
-import dsfml.system.vector2;
-import dsfml.graphics.shape;
-
 /**
- * Specialized shape representing a convex polygon.
- *
  * This class inherits all the functions of Transformable (position, rotation,
  * scale, bounds, ...) as well as the functions of Shape (outline, color,
  * texture, ...).
@@ -39,9 +31,30 @@ import dsfml.graphics.shape;
  * otherwise it may not be drawn correctly. Moreover, the points must be defined
  * in order; using a random order would result in an incorrect shape.
  *
- * See_Also: http://www.sfml-dev.org/documentation/2.0/classsf_1_1ConvexShape.php#a4f4686f57622bfbbe419ac1420b1432a
+ * Example:
+ * ---
+ * auto polygon = new ConvexShape();
+ * polygon.pointCount = 3;
+ * polygon.setPoint(0, Vector2f(0, 0));
+ * polygon.setPoint(1, Vector2f(0, 10));
+ * polygon.setPoint(2, Vector2f(25, 5));
+ * polygon.outlineColor = Color.Red;
+ * polygon.outlineThickness = 5;
+ * polygon.position = Vector2f(10, 20);
+ * ...
+ * window.draw(polygon);
+ * ---
  *
- * Authors: Laurent Gomila, Jeremy DeHaan
+ * See_Also:
+ * $(SHAPE_LINK), $(RECTANGLESHAPE_LINK), $(CIRCLESHAPE_LINK)
+ */
+module dsfml.graphics.convexshape;
+
+import dsfml.system.vector2;
+import dsfml.graphics.shape;
+
+/**
+ * Specialized shape representing a convex polygon.
  */
 class ConvexShape : Shape
 {
@@ -65,15 +78,16 @@ class ConvexShape : Shape
         mixin(destructorOutput);
     }
 
-    /// The number of points on the polygon
     @property
     {
+        /// The number of points on the polygon
         uint pointCount(uint newPointCount)
         {
             m_points.length = newPointCount;
             update();
             return newPointCount;
         }
+        /// ditto
         override uint pointCount()
         {
             import std.algorithm;
@@ -135,10 +149,10 @@ unittest
     {
         import std.stdio;
         import dsfml.graphics;
-        
+
         writeln("Unit test for ConvexShape");
         auto window = new RenderWindow(VideoMode(800,600), "ConvexShape unittest");
-        
+
         auto convexShape = new ConvexShape();
 
         convexShape.addPoint(Vector2f(0,20));
@@ -149,32 +163,32 @@ unittest
         convexShape.addPoint(Vector2f(0,30));
 
         convexShape.fillColor = Color.Blue;
-        
+
         convexShape.outlineColor = Color.Green;
-        
+
         auto clock = new Clock();
-        
-        
+
+
         while(window.isOpen())
         {
             Event event;
-            
+
             while(window.pollEvent(event))
             {
                 //no events gonna do stuffs!
             }
-            
+
             //draws the shape for a while before closing the window
             if(clock.getElapsedTime().total!"seconds" > 1)
             {
                 window.close();
             }
-            
+
             window.clear();
             window.draw(convexShape);
             window.display();
         }
-        
+
         writeln();
     }
 }

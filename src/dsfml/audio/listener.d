@@ -26,7 +26,7 @@
  * The audio listener defines the global properties of the audio environment, it
  * defines where and how sounds and musics are heard.
  *
- * If $(LINK2 ../graphics/view.html, View) is the eyes of the user, then
+ * If $(VIEW_LINK) is the eyes of the user, then
  * $(U Listener) is his ears (by the way, they are often linked together – same
  * position, orientation, etc.).
  *
@@ -41,8 +41,10 @@
  * ---
  * // Move the listener to the position (1, 0, -5)
  * Listener.position = Vector3f(1, 0, -5);
+ *
  * // Make it face the right axis (1, 0, 0)
  * Listener.direction = Vector3f(1, 0, 0);
+ *
  * // Reduce the global volume
  * Listener.globalVolume = 50;
  * ---

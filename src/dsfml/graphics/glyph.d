@@ -22,25 +22,24 @@
  * 3. This notice may not be removed or altered from any source distribution
  */
 
-/// A module containing the Glyph struct.
+/**
+ * A glyph is the visual representation of a character.
+ *
+ * The $(U Glyph) structure provides the information needed to handle the glyph:
+ * $(UL
+ * $(LI its coordinates in the font's texture)
+ * $(LI its bounding rectangle)
+ * $(LI the offset to apply to get the starting position of the next glyph))
+ *
+ * See_Also:
+ * $(FONT_LINK)
+ */
 module dsfml.graphics.glyph;
 
 public import dsfml.graphics.rect;
 
 /**
  * Structure describing a glyph.
- *
- * A glyph is the visual representation of a character.
- *
- * The Glyph structure provides the information needed to handle the glyph:
- * - its coordinates in the font's texture
- * - its bounding rectangle
- * - the offset to apply to get the starting position of the next glyph
- *
- * Authors: Laurent Gomila, Jeremy DeHaan
- *
- * See_Also:
- *	$(LINK http://www.sfml-dev.org/documentation/2.0/classsf_1_1Glyph.php#details)
  */
 struct Glyph
 {
