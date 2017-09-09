@@ -23,9 +23,9 @@
  */
 
 /**
- * This class inherits all the functions of Transformable (position, rotation,
- * scale, bounds, ...) as well as the functions of Shape (outline, color,
- * texture, ...).
+ * This class inherits all the functions of $(TRANSFORMABLE_LINK) (position,
+ * rotation, scale, bounds, ...) as well as the functions of $(SHAPE_LINK)
+ * (outline, color, texture, ...).
  *
  * It is important to keep in mind that a convex shape must always be... convex,
  * otherwise it may not be drawn correctly. Moreover, the points must be defined
@@ -63,7 +63,8 @@ class ConvexShape : Shape
     /**
      * Default constructor.
      *
-     * Params: pointCount =	Number of points on the polygon
+     * Params:
+     * thePointCount = Number of points on the polygon
      */
     this(uint thePointCount = 0)
     {
@@ -101,7 +102,7 @@ class ConvexShape : Shape
      * The result is undefined if index is out of the valid range.
      *
      * Params:
-     * 		index =	Index of the point to get, in range [0 .. pointCount - 1]
+     * 		index =	Index of the point to get, in range [0 .. `pointCount` - 1]
      *
      * Returns: Index-th point of the shape.
      */
@@ -114,12 +115,13 @@ class ConvexShape : Shape
      * Set the position of a point.
      *
      * Don't forget that the polygon must remain convex, and the points need to
-     * stay ordered! pointCount must be changed first in order to set the total
+     * stay ordered! `pointCount` must be changed first in order to set the total
      * number of points. The result is undefined if index is out of the valid
      *range.
      *
      * Params:
-     * 		index =	Index of the point to change, in range [0 .. pointCount - 1]
+     * 		index =	Index of the point to change, in range
+                    [0 .. `pointCount` - 1]
      * 		point =	New position of the point
      */
     void setPoint(uint index, Vector2f point)

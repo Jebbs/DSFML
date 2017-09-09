@@ -55,7 +55,7 @@
  * ---
  *
  * $(PARA When you're inside the `draw` function of a drawable object (inherited
- * from $(DRAWABLE_LINK), you can either pass the render states unmodified, or
+ * from $(DRAWABLE_LINK)), you can either pass the render states unmodified, or
  * change some of them. For example, a transformable object will combine the
  * current transform with its own transform. A sprite will set its texture.
  * Etc.)
@@ -106,7 +106,7 @@ struct RenderStates
      * Construct a default set of render states with a custom transform.
      *
      * Params:
-     *	theTransform Transform to use
+     *	theTransform = Transform to use
      */
     this(Transform theTransform)
     {

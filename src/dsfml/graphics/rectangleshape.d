@@ -56,7 +56,7 @@ class RectangleShape:Shape
      * Default constructor.
      *
      * Params:
-     *  size = Size of the rectangle
+     *  theSize = Size of the rectangle
      */
     this(Vector2f theSize = Vector2f(0,0))
     {

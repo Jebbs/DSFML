@@ -154,42 +154,44 @@ class RenderTexture : RenderTarget
         err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
-    /**
-     * Enable or disable texture smoothing.
-     */
     @property
     {
+        /**
+         * Enable or disable texture smoothing.
+         */
         bool smooth(bool newSmooth)
         {
             sfRenderTexture_setSmooth(sfPtr, newSmooth);
             return newSmooth;
         }
+        /// ditto
         bool smooth()
         {
             return (sfRenderTexture_isSmooth(sfPtr));
         }
     }
 
-    /**
-     * Change the current active view.
-     *
-     * The view is like a 2D camera, it controls which part of the 2D scene is
-     * visible, and how it is viewed in the render-target. The new view will
-     * affect everything that is drawn, until another view is set.
-     *
-     * The render target keeps its own copy of the view object, so it is not
-     * necessary to keep the original one alive after calling this function. To
-     * restore the original view of the target, you can pass the result of
-     * `getDefaultView()` to this function.
-     */
     @property
     {
+        /**
+         * Change the current active view.
+         *
+         * The view is like a 2D camera, it controls which part of the 2D scene
+         * is visible, and how it is viewed in the render-target. The new view
+         * will affect everything that is drawn, until another view is set.
+         *
+         * The render target keeps its own copy of the view object, so it is not
+         * necessary to keep the original one alive after calling this function.
+         * To restore the original view of the target, you can pass the result
+         * of `getDefaultView()` to this function.
+         */
         override View view(View newView)
         {
             sfRenderTexture_setView(sfPtr, newView.center.x, newView.center.y, newView.size.x, newView.size.y, newView.rotation,
                                     newView.viewport.left, newView.viewport.top, newView.viewport.width, newView.viewport.height);
             return newView;
         }
+        /// ditto
         override View view() const
         {
             View currentView;
@@ -240,7 +242,7 @@ class RenderTexture : RenderTarget
     /**
      * Return the size of the rendering region of the target.
      *
-     * Returns: Size in pixels
+     * Returns: Size in pixels.
      */
     Vector2u getSize() const
     {
@@ -357,18 +359,19 @@ class RenderTexture : RenderTarget
      *
      * This function can be used when you mix SFML drawing and direct OpenGL
      * rendering. Combined with PopGLStates, it ensures that:
-     * - SFML's internal states are not messed up by your OpenGL code
-     * - your OpenGL states are not modified by a call to an SFML function
+     * $(UL
+     * $(LI DSFML's internal states are not messed up by your OpenGL code)
+     * $(LI your OpenGL states are not modified by a call to an SFML function))
      *
-     * More specifically, it must be used around the code that calls Draw
-     * functions.
+     * $(PARA More specifically, it must be used around the code that calls
+     * `draw` functions.
      *
      * Note that this function is quite expensive: it saves all the possible
-     * OpenGL states and matrices, even the ones you don't care about. Therefore
-     * it should be used wisely. It is provided for convenience, but the best
-     * results will be achieved if you handle OpenGL states yourself (because
-     * you know which states have really changed, and need to be saved and
-     * restored). Take a look at the ResetGLStates function if you do so.
+	 * OpenGL states and matrices, even the ones you don't care about.Therefore
+	 * it should be used wisely. It is provided for convenience, but the best
+	 * results will be achieved if you handle OpenGL states yourself (because
+	 * you know which states have really changed, and need to be saved and
+	 * restored). Take a look at the `resetGLStates` function if you do so.)
      */
     void pushGLStates()
     {

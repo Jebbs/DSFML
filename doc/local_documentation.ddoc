@@ -9,7 +9,6 @@ DDOC_HEADER_ANCHOR = <div></div>
 DDOC_ANCHOR = <a href="#$1" id="$1"></a>
 
 
-
 DDOC_DECL = <div class="ddoc_decl">
   <section class="section">
     <div class="declaration">
@@ -46,9 +45,7 @@ DEPRECATED = $(RED $0)
 
 DDOC_PARAM = $0
 
-LIST = </br>&nbsp;&#8226; $0
-
-UL = <ul class="para">$0</ul>
+UL = <ul class="para" style="margin-left:25px; list-style-type:disc;">$0</ul>
 
 PARA = <p class="para">$0</p>
 

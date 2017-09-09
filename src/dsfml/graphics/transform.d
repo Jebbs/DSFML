@@ -168,7 +168,7 @@ struct Transform
 	 * transformed rectangle is returned.
 	 *
 	 * Params:
-	 * 		rectangle	= Rectangle to transform
+	 * 		rect	= Rectangle to transform
 	 *
 	 * Returns: Transformed rectangle.
 	 */

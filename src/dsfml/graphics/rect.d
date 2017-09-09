@@ -38,16 +38,16 @@
  * $(LI The right (left + width) and bottom (top + height) edges are excluded
  * from the rectangle's area))
  *
- * This means that `IntRect(0, 0, 1, 1)` and `IntRect(1, 1, 1, 1)` don't
+ * $(PARA This means that `IntRect(0, 0, 1, 1)` and `IntRect(1, 1, 1, 1)` don't
  * intersect.
  *
- * $(U Rect) is a template and may be used with any numeric type, but for simplicity
- * the instanciations used by SFML are aliased:
+ * $(U Rect) is a template and may be used with any numeric type, but for
+ * simplicity the instanciations used by SFML are aliased:)
  * $(UL
  * $(LI Rect!(int) is IntRect)
  * $(LI Rect!(float) is FloatRect))
  *
- * This is so you don't have to care about the template syntax.
+ * $(PARA This is so you don't have to care about the template syntax.)
  *
  * Example:
  * ---

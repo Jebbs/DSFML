@@ -194,7 +194,7 @@ class Sprite : Drawable, Transformable
      * that are applied to the entity. In other words, this function returns the
      * bounds of the sprite in the global 2D world's coordinate system.
      *
-     * Returns: Global bounding rectangle of the entity
+     * Returns: Global bounding rectangle of the entity.
      */
     FloatRect getGlobalBounds()
     {
@@ -209,7 +209,7 @@ class Sprite : Drawable, Transformable
      * applied to the entity. In other words, this function returns the bounds
      * of the entity in the entity's coordinate system.
      *
-     * Returns: Local bounding rectangle of the entity
+     * Returns: Local bounding rectangle of the entity.
      */
     FloatRect getLocalBounds()
     {
@@ -225,7 +225,7 @@ class Sprite : Drawable, Transformable
      * returned pointer is const, which means that you can't modify the texture
      * when you retrieve it with this function.
      *
-     * Returns: The sprite's texture
+     * Returns: The sprite's texture.
      */
     const(Texture) getTexture()
     {
@@ -247,7 +247,7 @@ class Sprite : Drawable, Transformable
      *
      * Params:
      * 	texture	  = New texture
-     * 	resetRect = Should the texture rect be reset to the size of the new
+     * 	rectReset = Should the texture rect be reset to the size of the new
      *              texture?
      */
     void setTexture(const(Texture) texture, bool rectReset = false)

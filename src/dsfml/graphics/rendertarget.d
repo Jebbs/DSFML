@@ -64,14 +64,14 @@ interface RenderTarget
 		/**
 	 	 * The current active view.
 	 	 *
-	 	 * The view is like a 2D camera, it controls which part of the 2D scene is
-	 	 * visible, and how it is viewed in the render-target. The new view will
-	 	 * affect everything that is drawn, until another view is set.
+	 	 * The view is like a 2D camera, it controls which part of the 2D scene
+		 * is visible, and how it is viewed in the render-target. The new view
+		 * will affect everything that is drawn, until another view is set.
 	 	 *
 	 	 * The render target keeps its own copy of the view object, so it is not
-	 	 * necessary to keep the original one alive after calling this function. To
-	 	 * restore the original view of the target, you can pass the result of
-	 	 * getDefaultView() to this function.
+	 	 * necessary to keep the original one alive after calling this function.
+		 * To restore the original view of the target, you can pass the result
+		 * of `getDefaultView()` to this function.
 	 	 */
 		View view(View newView);
 		/// ditto
@@ -91,7 +91,7 @@ interface RenderTarget
 	/**
 	 * Return the size of the rendering region of the target.
 	 *
-	 * Returns: Size in pixels
+	 * Returns: Size in pixels.
 	 */
 	Vector2u getSize() const;
 
@@ -106,7 +106,7 @@ interface RenderTarget
 	 * Params:
 	 * 		view	= The view for which we want to compute the viewport
 	 *
-	 * Returns: Viewport rectangle, expressed in pixels
+	 * Returns: Viewport rectangle, expressed in pixels.
 	 */
 	final IntRect getViewport(View view) const
 	{
@@ -240,7 +240,7 @@ interface RenderTarget
 	 * 		point	= Point to convert
 	 * 		theView	= The view to use for converting the point
 	 *
-	 * Returns: The converted point, in target coordinates (pixels)
+	 * Returns: The converted point, in target coordinates (pixels).
 	 */
 	final Vector2i mapCoordsToPixel(Vector2f point, View theView) inout
 	{
@@ -258,7 +258,7 @@ interface RenderTarget
 	/**
 	 * Restore the previously saved OpenGL render states and matrices.
 	 *
-	 * See the description of pushGLStates to get a detailed description of
+	 * See the description of `pushGLStates` to get a detailed description of
 	 * these functions.
 	 */
 	void popGLStates();
@@ -269,18 +269,18 @@ interface RenderTarget
      * This function can be used when you mix SFML drawing and direct OpenGL
      * rendering. Combined with PopGLStates, it ensures that:
      * $(UL
-     * $(LI SFML's internal states are not messed up by your OpenGL code)
+     * $(LI DSFML's internal states are not messed up by your OpenGL code)
      * $(LI your OpenGL states are not modified by a call to an SFML function))
      *
      * $(PARA More specifically, it must be used around the code that calls
-     * `draw` functions.)
+     * `draw` functions.
      *
-     * $(PARA Note that this function is quite expensive: it saves all the
-     * possible OpenGL states and matrices, even the ones you don't care about.
-     * Therefore it should be used wisely. It is provided for convenience, but
-     * the best results will be achieved if you handle OpenGL states yourself
-     * (because you know which states have really changed, and need to be saved
-     * and restored). Take a look at the `resetGLStates` function if you do so.)
+     * Note that this function is quite expensive: it saves all the possible
+	 * OpenGL states and matrices, even the ones you don't care about.Therefore
+	 * it should be used wisely. It is provided for convenience, but the best
+	 * results will be achieved if you handle OpenGL states yourself (because
+	 * you know which states have really changed, and need to be saved and
+	 * restored). Take a look at the `resetGLStates` function if you do so.)
      */
 	void pushGLStates();
 

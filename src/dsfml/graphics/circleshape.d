@@ -23,9 +23,9 @@
  */
 
 /**
- * This class inherits all the functions of Transformable (position, rotation,
- * scale, bounds, ...) as well as the functions of Shape (outline, color,
- * texture, ...).
+ * This class inherits all the functions of $(TRANSFORMABLE_LINK) (position,
+ * rotation, scale, bounds, ...) as well as the functions of $(SHAPE_LINK)
+ * (outline, color, texture, ...).
  *
  * Example:
  * ---

@@ -32,7 +32,7 @@
  * $(LI data is interpreted correctly according to the endianness)
  * $(LI the bounds of the packet are preserved (one send == one receive)))
  *
- * The $(U Packet) class provides both input and output modes.
+ * $(PARA The $(U Packet) class provides both input and output modes.)
  *
  * Example:
  * ---
@@ -469,8 +469,10 @@ int     sfPacket_readInt32(sfPacket* packet);
 uint    sfPacket_readUint32(sfPacket* packet);
 float    sfPacket_readFloat(sfPacket* packet);
 double   sfPacket_readDouble(sfPacket* packet);
-///void     sfPacket_readString(sfPacket* packet, char* string);
-///void     sfPacket_readWideString(sfPacket* packet, wchar_t* string);///Remove in lieu of readUint16 and readUint32 for W and D chars in D?
+
+//Remove in lieu of readUint16 and readUint32 for W and D chars in D?
+//void     sfPacket_readString(sfPacket* packet, char* string);
+//void     sfPacket_readWideString(sfPacket* packet, wchar_t* string);
 
 ///Functions to insert data into a packet
 void sfPacket_writeBool(sfPacket* packet, bool);

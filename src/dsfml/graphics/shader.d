@@ -33,6 +33,7 @@
  * $(LI Geometry shaders, that process primitives)
  * $(LI Fragment (pixel) shaders, that process pixels))
  *
+ * $(PARA
  * A $(U Shader) can be composed of either a vertex shader alone, a geometry
  * shader alone, a fragment shader alone, or any combination of them. (see the
  * variants of the load functions).
@@ -43,21 +44,21 @@
  *
  * Like any D/C/C++ program, a GLSL shader has its own variables called uniforms
  * that you can set from your D application. $(U Shader) handles different types
- * of uniforms:
+ * of uniforms:)
  * $(UL
  * $(LI scalars: float, int, bool)
  * $(LI vectors (2, 3 or 4 components))
  * $(LI matrices (3x3 or 4x4))
  * $(LI samplers (textures)))
  *
- * Some SFML-specific types can be converted:
+ * $(PARA Some DSFML-specific types can be converted:)
 *  $(UL
  * $(LI $(COLOR_LINK) as a 4D vector (`vec4`))
  * $(LI $(TRANSFORM_LINK) as matrices (`mat3` or `mat4`)))
  *
- * Every uniform variable in a shader can be set through one of the
+ * $(PARA Every uniform variable in a shader can be set through one of the
  * `setUniform()` or `setUniformArray()` overloads. For example, if you have a
- * shader with the following uniforms:
+ * shader with the following uniforms:)
  * ---
  * uniform float offset;
  * uniform vec3 point;
@@ -68,7 +69,7 @@
  * ---
  *
  * $(PARA You can set their values from D code as follows, using the types
- * defined in the `dsfml.graphics.glsl` module:
+ * defined in the `dsfml.graphics.glsl` module:)
  * ---
  * shader.setUniform("offset", 2.f);
  * shader.setUniform("point", Vector3f(0.5f, 0.8f, 0.3f));
@@ -170,7 +171,7 @@ class Shader
     package sfShader* sfPtr;
 
     /**
-     * Special type/value that can be passed to setParameter, and that
+     * Special type/value that can be passed to `setParameter`, and that
      * represents the texture of the object being drawn.
      */
     struct CurrentTextureType {}

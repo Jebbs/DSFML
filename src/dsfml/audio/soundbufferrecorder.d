@@ -23,14 +23,14 @@
  */
 
 /**
- * SoundBufferRecorder allows to access a recorded sound through a SoundBuffer,
- * so that it can be played, saved to a file, etc.
+ * $(U SoundBufferRecorder) allows to access a recorded sound through a
+ * $(SOUNDBUFFER_LINK), so that it can be played, saved to a file, etc.
  *
- * It has the same simple interface as its base class (start(), stop()) and adds
- * a function to retrieve the recorded sound buffer (getBuffer()).
+ * It has the same simple interface as its base class (`start()`, `stop()`) and
+ * adds a function to retrieve the recorded sound buffer (`getBuffer()`).
  *
- * As usual, don't forget to call the isAvailable() function before using this
- * class (see SoundRecorder for more details about this).
+ * As usual, don't forget to call the `isAvailable()` function before using this
+ * class (see $(SOUNDRECORDER_LINK) for more details about this).
  *
  * Example:
  * ---
@@ -92,7 +92,7 @@ class SoundBufferRecorder : SoundRecorder
      * provides a read-only access to the internal sound buffer, but it can be
      * copied if you need to make any modification to it.
      *
-     * Returns: Read-only access to the sound buffer
+     * Returns: Read-only access to the sound buffer.
      */
     const(SoundBuffer) getBuffer() const
     {
@@ -104,7 +104,7 @@ class SoundBufferRecorder : SoundRecorder
         /**
          * Start capturing audio data.
          *
-         * Returns: true to start the capture, or false to abort it
+         * Returns: true to start the capture, or false to abort it.
          */
         override bool onStart()
         {
@@ -120,7 +120,7 @@ class SoundBufferRecorder : SoundRecorder
          * Params:
          *	samples =	Array of the new chunk of recorded samples
          *
-         * Returns: true to continue the capture, or false to stop it
+         * Returns: true to continue the capture, or false to stop it.
          */
         override bool onProcessSamples(const(short)[] samples)
         {
@@ -131,8 +131,6 @@ class SoundBufferRecorder : SoundRecorder
 
         /**
          * Stop capturing audio data.
-         *
-         * Reimplemented from SoundRecorder.
          */
         override void onStop()
         {

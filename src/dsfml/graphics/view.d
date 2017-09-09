@@ -41,7 +41,7 @@
  * objects drawn in this render target will be affected by the view until you
  * use another view.
  *
- * example:
+ * Example:
  * ---
  * auto window = RenderWindow();
  * auto view = View();

@@ -234,7 +234,7 @@ struct Matrix(uint C, uint R)
      * This constructor is only supported for 3x3 and 4x4 matrices.
      *
      * Params:
-     * transform = A DSFML Transform
+     * source = A DSFML Transform
      */
     this(ref const(Transform) source)
     {

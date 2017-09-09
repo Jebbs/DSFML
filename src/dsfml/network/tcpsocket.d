@@ -33,10 +33,10 @@
  * lost or duplicated).
  *
  * When a socket is connected to a remote host, you can retrieve informations
- * about this host with the getRemoteAddress and getRemotePort functions.
+ * about this host with the `getRemoteAddress` and `getRemotePort` functions.
  *
  * You can also get the local port to which the socket is bound (which is
- * automatically chosen when the socket is connected), with the getLocalPort
+ * automatically chosen when the socket is connected), with the `getLocalPort`
  * function.
  *
  * Sending and receiving data can use either the low-level or the high-level
@@ -44,9 +44,9 @@
  * cannot ensure that one call to Send will exactly match one call to Receive at
  * the other end of the socket.
  *
- * The high-level interface uses packets (see Packet), which are easier to use
- * and provide more safety regarding the data that is exchanged. You can look at
- * the Packet class to get more details about how they work.
+ * The high-level interface uses packets (see $(PACKET_LINK)), which are easier
+ * to use and provide more safety regarding the data that is exchanged. You can
+ * look at the $(PACKET_LINK) class to get more details about how they work.
  *
  * The socket is automatically disconnected when it is destroyed, but if you
  * want to explicitely close the connection while the socket instance is still
@@ -141,7 +141,7 @@ class TcpSocket:Socket
     /**
      * Get the address of the connected peer.
      *
-     * It the socket is not connected, this function returns IpAddress.None.
+     * It the socket is not connected, this function returns `IpAddress.None`.
      *
      * Returns: Address of the remote peer.
      */
@@ -170,8 +170,8 @@ class TcpSocket:Socket
      * Set the blocking state of the socket.
      *
      * In blocking mode, calls will not return until they have completed their
-     * task. For example, a call to Receive in blocking mode won't return until
-     * some data was actually received.
+     * task. For example, a call to `receive` in blocking mode won't return
+     * until some data was actually received.
      *
      * In non-blocking mode, calls will always return immediately, using the
      * return code to signal whether there was data available or not. By

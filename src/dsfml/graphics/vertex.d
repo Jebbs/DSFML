@@ -42,21 +42,21 @@
  * // define a 100x100 square, red, with a 10x10 texture mapped on it
  * sf::Vertex vertices[] =
  * [
- *     Vertex(Vector2f(  0,   0), Color::Red, Vector2f( 0,  0)),
- *     Vertex(Vector2f(  0, 100), Color::Red, Vector2f( 0, 10)),
- *     Vertex(Vector2f(100, 100), Color::Red, Vector2f(10, 10)),
- *     Vertex(Vector2f(100,   0), Color::Red, Vector2f(10,  0))
+ *     Vertex(Vector2f(  0,   0), Color.Red, Vector2f( 0,  0)),
+ *     Vertex(Vector2f(  0, 100), Color.Red, Vector2f( 0, 10)),
+ *     Vertex(Vector2f(100, 100), Color.Red, Vector2f(10, 10)),
+ *     Vertex(Vector2f(100,   0), Color.Red, Vector2f(10,  0))
  * ];
  *
  * // draw it
  * window.draw(vertices, 4, PrimitiveType.Quads);
  * ---
  *
- * Note: although texture coordinates are supposed to be an integer amount of
- * pixels, their type is float because of some buggy graphics drivers that are
- * not able to process integer coordinates correctly.
+ * $(PARA $(B Note): although texture coordinates are supposed to be an integer
+ * amount of pixels, their type is float because of some buggy graphics drivers
+ * that are not able to process integer coordinates correctly.)
  *
- * See_Also
+ * See_Also:
  * $(VERTEXARRAY_LINK)
  */
 module dsfml.graphics.vertex;

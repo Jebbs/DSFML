@@ -30,27 +30,28 @@
  * for playing CDs). In short, audio samples are like texture pixels, and a
  * SoundBuffer is similar to a Texture.
  *
- * A sound buffer can be loaded from a file (see loadFromFile() for the complete
- * list of supported formats), from memory, from a custom stream
- * (see InputStream) or directly from an array of samples. It can also be saved
- * back to a file.
+ * A sound buffer can be loaded from a file (see `loadFromFile()` for the
+ * complete list of supported formats), from memory, from a custom stream
+ * (see $(INPUTSTREAM_LINK)) or directly from an array of samples. It can also
+ * be saved back to a file.
  *
  * Sound buffers alone are not very useful: they hold the audio data but cannot
- * be played. To do so, you need to use the sf::Sound class, which provides
+ * be played. To do so, you need to use the $(SOUND_LINK) class, which provides
  * functions to play/pause/stop the sound as well as changing the way it is
  * outputted (volume, pitch, 3D position, ...).
  *
  * This separation allows more flexibility and better performances: indeed a
- * SoundBuffer is a heavy resource, and any operation on it is slow (often too
- * slow for real-time applications). On the other side, a Sound is a lightweight
- * object, which can use the audio data of a sound buffer and change the way it
- * is played without actually modifying that data. Note that it is also possible
- * to bind several Sound instances to the same SoundBuffer.
+ * $(U SoundBuffer) is a heavy resource, and any operation on it is slow (often
+ * too slow for real-time applications). On the other side, a $(SOUND_LINK) is a
+ * lightweight object, which can use the audio data of a sound buffer and change
+ * the way it is played without actually modifying that data. Note that it is
+ * also possible to bind several $(SOUND_LINK) instances to the same
+ * $(U SoundBuffer).
  *
  * It is important to note that the Sound instance doesn't copy the buffer that
- * it uses, it only keeps a reference to it. Thus, a SoundBuffer must not be
- * destructed while it is used by a Sound (i.e. never write a function that uses
- * a local SoundBuffer instance for loading a sound).
+ * it uses, it only keeps a reference to it. Thus, a $(U SoundBuffer) must not
+ * be destructed while it is used by a Sound (i.e. never write a function that
+ * uses a local $(U SoundBuffer) instance for loading a sound).
  *
  *Example:
  * ---

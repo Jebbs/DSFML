@@ -28,10 +28,9 @@
  * $(TABLE
  * $(TR $(TH Platform) $(TH Type))
  * $(TR $(TD Windows) $(TD `HWND`))
- * $(TR $(TD Linux/FreeBSD) $(TD `%Window`))
- * $(TR $(TD Mac OS X) $(TD either `NSWindow*` or `NSView*`, disguised as `void*`))
- * $(TR $(TD iOS) $(TD `UIWindow*`))
- * $(TR $(TD Android) $(TD `ANativeWindow*`)))
+ * $(TR $(TD Linux/FreeBSD) $(TD `Window`))
+ * $(TR $(TD Mac OS X)
+ * $(TD either `NSWindow*` or `NSView*`, disguised as `void*`)))
  * $(LF)
  *
  * $(PARA $(B Mac OS X Specification)

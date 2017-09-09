@@ -95,7 +95,7 @@
  *
  *     void setPosition(MyVector v)
  *     {
- *         myTransform.setPosition(v.x, v.y;
+ *         myTransform.setPosition(v.x, v.y);
  *     }
  *
  *     void draw(RenderTarget target, RenderStates states) const
@@ -108,14 +108,14 @@
  * }
  * ---
  *
- * $(PARA A note on coordinates and undistorted rendering:$(LF)
+ * $(PARA A note on coordinates and undistorted rendering:
  * By default, DSFML (or more exactly, OpenGL) may interpolate drawable objects
  * such as sprites or texts when rendering. While this allows transitions like
  * slow movements or rotations to appear smoothly, it can lead to unwanted
  * results in some cases, for example blurred or distorted objects. In order to
  * render a $(DRAWABLE_LINK) object pixel-perfectly, make sure the involved
  * coordinates allow a 1:1 mapping of pixels in the window to texels (pixels in
- * the texture). More specifically, this means:
+ * the texture). More specifically, this means:)
  * $(UL
  * $(LI The object's position, origin and scale have no fractional part)
  * $(LI The object's and the view's rotation are a multiple of 90 degrees)

@@ -35,6 +35,7 @@
  * $(LI Per-glyph metrics, such as bounding box or kerning)
  * $(LI Pixel representation of glyphs))
  *
+ * $(PARA
  * Fonts alone are not very useful: they hold the font data but cannot make
  * anything useful of it. To do so you need to use the $(TEXT_LINK) class, which
  * is able to properly output text with several options such as character size,
@@ -49,7 +50,7 @@
  *
  * It is important to note that the $(TEXT_LINK) instance doesn't copy the font
  * that it uses, it only keeps a reference to it. Thus, a $(U Font) must not be
- * destructed while it is used by a $(TEXT_LINK).
+ * destructed while it is used by a $(TEXT_LINK).)
  *
  * Example:
  * ---
@@ -176,7 +177,7 @@ class Font
      * The supported font formats are: TrueType, Type 1, CFF, OpenType, SFNT,
      * X11 PCF, Windows FNT, BDF, PFR and Type 42.
      *
-     * SFML cannot preload all the font data in this function, so the buffer
+     * DSFML cannot preload all the font data in this function, so the buffer
      * pointed by data has to remain valid until the Font object loads a new
      * font or is destroyed.
      *
@@ -239,9 +240,9 @@ class Font
      * Params:
      * 		codePoint		= Unicode code point of the character ot get
      * 		characterSize	= Reference character size
-     * 		bols			= Retrieve the bold version or the regular one?
+     * 		bold			= Retrieve the bold version or the regular one?
      *
-     * Returns: The glyph corresponding to codePoint and characterSize
+     * Returns: The glyph corresponding to codePoint and characterSize.
      */
     Glyph getGlyph(dchar codePoint, uint characterSize, bool bold) const
     {
@@ -266,7 +267,7 @@ class Font
      * 		second			= Unicode code point of the second character
      * 		characterSize	= Reference character size
      *
-     * Returns: Kerning value for first and second, in pixels
+     * Returns: Kerning value for first and second, in pixels.
      */
     float getKerning (dchar first, dchar second, uint characterSize) const
     {
@@ -282,7 +283,7 @@ class Font
      * Params:
      * 		characterSize	= Reference character size
      *
-     * Returns: Line spacing, in pixels
+     * Returns: Line spacing, in pixels.
      */
     float getLineSpacing (uint characterSize) const
     {
@@ -298,7 +299,7 @@ class Font
      * Params:
      * 		characterSize	= Reference character size
      *
-     * Returns: Underline position, in pixels
+     * Returns: Underline position, in pixels.
      */
     float getUnderlinePosition (uint characterSize) const
     {
@@ -313,7 +314,7 @@ class Font
      * Params:
      * 		characterSize	= Reference character size
      *
-     * Returns: Underline thickness, in pixels
+     * Returns: Underline thickness, in pixels.
      */
     float getUnderlineThickness (uint characterSize) const
     {
@@ -330,7 +331,7 @@ class Font
      * Params:
      * 		characterSize	= Reference character size
      *
-     * Returns: Texture containing the glyphs of the requested size
+     * Returns: Texture containing the glyphs of the requested size.
      */
     const(Texture) getTexture (uint characterSize) const
     {

@@ -147,11 +147,11 @@ class Image
      *
      * Returns: true if loading succeeded, false if it failed
      */
-    bool loadFromFile(const(char)[] fileName)
+    bool loadFromFile(const(char)[] filename)
     {
         import dsfml.system.string;
 
-        bool ret = sfImage_loadFromFile(sfPtr, fileName.ptr, fileName.length);
+        bool ret = sfImage_loadFromFile(sfPtr, filename.ptr, filename.length);
 
         if(!ret)
         {
@@ -356,10 +356,10 @@ class Image
      *
      * Returns: true if saving was successful
      */
-    bool saveToFile(const(char)[] fileName)
+    bool saveToFile(const(char)[] filename)
     {
         import dsfml.system.string;
-        bool toReturn = sfImage_saveToFile(sfPtr, fileName.ptr, fileName.length);
+        bool toReturn = sfImage_saveToFile(sfPtr, filename.ptr, filename.length);
         err.write(dsfml.system.string.toString(sfErr_getOutput()));
         return toReturn;
     }

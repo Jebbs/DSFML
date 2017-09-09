@@ -43,13 +43,14 @@
  * $(LI 32 buttons per joystick (Joystick.ButtonCount))
  * $(LI 8 axes per joystick (Joystick.AxisCount)))
  *
+ * $(PARA
  * Unlike the keyboard or mouse, the state of joysticks is sometimes not
  * directly available (depending on the OS), therefore an `update()` function
  * must be called in order to update the current state of joysticks. When you
  * have a window with event handling, this is done automatically, you don't need
  * to call anything. But if you have no window, or if you want to check
  * joysticks state before creating one, you must call `Joystick.update`
- * explicitly.
+ * explicitly.)
  *
  * Example:
  * ---

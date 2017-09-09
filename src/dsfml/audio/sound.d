@@ -31,6 +31,7 @@
  * $(LI Ability to modify output parameters in real-time (pitch, volume, ...))
  * $(LI 3D spatial features (position, attenuation, ...)))
  *
+ * $(PARA
  * Sound is perfect for playing short sounds that can fit in memory and require
  * no latency, like foot steps or gun shots. For longer sounds, like background
  * musics or long speeches, rather see Music (which is based on streaming).
@@ -40,6 +41,7 @@
  * setBuffer() function. The buffer object attached to a sound must remain alive
  * as long as the sound uses it. Note that multiple sounds can use the same
  * sound buffer at the same time.
+ *)
  *
  * Example:
  * ---
@@ -183,8 +185,8 @@ class Sound : SoundSource
         /**
          * The volume of the sound.
          *
-         * The volume is a vlue between 0 (mute) and 100 (full volume). The default
-         * value for the volume is 100.
+         * The volume is a value between 0 (mute) and 100 (full volume). The
+         * default value for the volume is 100.
          */
         void volume(float newVolume)
         {
@@ -339,7 +341,7 @@ class Sound : SoundSource
      *
      * This function stops the sound if it was playing or paused, and does
      * nothing if it was already stopped. It also resets the playing position
-     * (unlike pause()).
+     * (unlike `pause()`).
      */
     void stop()
     {

@@ -33,16 +33,17 @@
  * a sound buffer (see $(SOUNDBUFFERRECORDER_LINK)).
  *
  * A derived class has only one virtual function to override:
- * $(UL $LI onProcessSamples provides the new chunks of audio samples while the
+ * $(UL $(LI onProcessSamples provides the new chunks of audio samples while the
  * capture happens))
  *
- * Moreover, two additionnal virtual functions can be overriden as well if
- * necessary:
+ * $(PARA Moreover, two additionnal virtual functions can be overriden as well
+ * if necessary:)
  * $(UL
  * $(LI onStart is called before the capture happens, to perform custom
  * initializations)
  * $(LI onStop is called after the capture ends, to perform custom cleanup))
  *
+ * $(PARA
  * A derived class can also control the frequency of the onProcessSamples calls,
  * with the setProcessingInterval protected function. The default interval is
  * chosen so that recording thread doesn't consume too much CPU, but it can be
@@ -70,7 +71,7 @@
  * `onProcessSamples` and `onStop` virtual functions (but not `onStart`) will be
  * called from this separate thread. It is important to keep this in mind,
  * because you may have to take care of synchronization issues if you share data
- * between threads.
+ * between threads.)
  *
  * Example:
  * ---
@@ -176,7 +177,7 @@ class SoundRecorder
      * that only one capture can happen at the same time.
      *
      * Params:
-     *  sampleRate = Desired capture rate, in number of samples per second
+     *  theSampleRate = Desired capture rate, in number of samples per second
      */
     void start(uint theSampleRate = 44100)
     {
@@ -228,8 +229,8 @@ class SoundRecorder
      *
      * Returns: true, if it was able to set the requested device.
      *
-     *See also
-     *   getAvailableDevices, getDefaultDevice
+     * See_Also:
+     * `getAvailableDevices`, `getDefaultDevice`
      */
     bool setDevice (const(char)[] name)
     {

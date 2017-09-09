@@ -27,17 +27,17 @@
  * and waits for connections on that port. This is all it can do.
  *
  * When a new connection is received, you must call `accept` and the listener
- * returns a new instance of TcpSocket that is properly initialized and can
- * be used to communicate with the new client.
+ * returns a new instance of $(TCPSOCKET_LINK) that is properly initialized and
+ * can be used to communicate with the new client.
  *
  * Listener sockets are specific to the TCP protocol, UDP sockets are
  * connectionless and can therefore communicate directly. As a consequence, a
- * listener socket will always return the new connections as TcpSocket
+ * listener socket will always return the new connections as $(TCPSOCKET_LINK)
  * instances.
  *
  * A listener is automatically closed on destruction, like all other types of
  * socket. However if you want to stop listening before the socket is destroyed,
- * you can call its close() function.
+ * you can call its `close()` function.
  *
  * Example:
  * ---
@@ -107,10 +107,12 @@ class TcpListener:Socket
      * Tell whether the socket is in blocking or non-blocking mode.
      *
      * In blocking mode, calls will not return until they have completed their
-     * task. For example, a call to Receive in blocking mode won't return until
-     * some data was actually received. In non-blocking mode, calls will always
-     * return immediately, using the return code to signal whether there was
-     * data available or not. By default, all sockets are blocking.
+     * task. For example, a call to `receive` in blocking mode won't return
+     * until some data was actually received.
+     *
+     * In non-blocking mode, calls will
+     * always return immediately, using the return code to signal whether there
+     * was data available or not. By default, all sockets are blocking.
      *
      * Params:
      *  blocking = true to set the socket as blocking, false for non-blocking
@@ -162,13 +164,7 @@ class TcpListener:Socket
     }
 
     /**
-     * Set the blocking state of the socket.
-     *
-     * In blocking mode, calls will not return until they have completed their
-     * task. For example, a call to Receive in blocking mode won't return until
-     * some data was actually received. In non-blocking mode, calls will always
-     * return immediately, using the return code to signal whether there was
-     * data available or not. By default, all sockets are blocking.
+     * Tell whether the socket is in blocking or non-blocking mode.
      *
      * Returns: true if the socket is blocking, false otherwise.
      */
