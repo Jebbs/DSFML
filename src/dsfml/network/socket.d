@@ -73,11 +73,12 @@ interface Socket
      * Set the blocking state of the socket.
      *
      * In blocking mode, calls will not return until they have completed their
-     * task. For example, a call to Receive in blocking mode won't return until
-     * some data was actually received.
+     * task. For example, a call to `receive` in blocking mode won't return
+     * until some data was actually received.
      *
-     * In non-blocking mode, calls will always return immediately, using the
-     * return code to signal whether there was data available or not.
+     * In non-blocking mode, calls will
+     * always return immediately, using the return code to signal whether there
+     * was data available or not. By default, all sockets are blocking.
      *
      * By default, all sockets are blocking.
      *

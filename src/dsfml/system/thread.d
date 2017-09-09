@@ -34,9 +34,10 @@
  * $(LI functions with no arguments)
  * $(LI delegates with no arguments))
  *
+ * $(PARA
  * The thread ends when its function is terminated. If the owner $(U Thread)
  * instance is destroyed before the thread is finished, the destructor will wait
- * (see `wait()`).
+ * (see `wait()`).)
  *
  * Example:
  * ---

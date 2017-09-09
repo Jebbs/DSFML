@@ -23,7 +23,7 @@
  */
 
 /**
- * Unlike audio buffers (see $(SOUNDBUFFER_LINK), audio streams are never
+ * Unlike audio buffers (see $(SOUNDBUFFER_LINK)), audio streams are never
  * completely loaded in memory. Instead, the audio data is acquired continuously
  * while the stream is playing. This behaviour allows to play a sound with no
  * loading delay, and keeps the memory consumption very low.
@@ -39,15 +39,16 @@
  *
  * A derived class has to override two virtual functions:
  * $(UL
- * $(LI onGetData fills a new chunk of audio data to be played)
- * $(LI onSeek changes the current playing position in the source))
+ * $(LI `onGetData` fills a new chunk of audio data to be played)
+ * $(LI `onSeek` changes the current playing position in the source))
  *
+ * $(PARA
  * It is important to note that each $(U SoundStream) is played in its own
  * separate thread, so that the streaming loop doesn't block the rest of the
- * program. In particular, the OnGetData and OnSeek virtual functions may
+ * program. In particular, the `onGetData` and `onSeek` virtual functions may
  * sometimes be called from this separate thread. It is important to keep this
  * in mind, because you may have to take care of synchronization issues if you
- * share data between threads.
+ * share data between threads.)
  *
  * Example:
  * ---
@@ -132,7 +133,7 @@ class SoundStream : SoundSource
      *
      * This function must be called by derived classes as soon as they know the
      * audio settings of the stream to play. Any attempt to manipulate the
-     * stream (play(), ...) before calling this function will fail. It can be
+     * stream (`play()`, ...) before calling this function will fail. It can be
      * called multiple times if the settings of the audio stream change, but
      * only when the stream is stopped.
      *

@@ -66,9 +66,9 @@
  *
  * DSFML mutexes are recursive, which means that you can lock a mutex multiple
  * times in the same thread without creating a deadlock. In this case, the first
- * call to lock() behaves as usual, and the following ones have no effect.
- * However, you must call unlock() exactly as many times as you called lock().
- * If you don't, the mutex won't be released.
+ * call to `lock()` behaves as usual, and the following ones have no effect.
+ * However, you must call `unlock()` exactly as many times as you called
+ * `lock()`. If you don't, the mutex won't be released.
  *
  * Note that the $(U Mutex) class is added for convenience, and is nothing more
  * than a simnple wrapper around the existing core.sync.mutex.Mutex class.)

@@ -39,8 +39,8 @@
  * Duration duration2 = clock.restart();
  * ---
  *
- * The Duration value ($(I core.time.Duration)) returned by the clock can then
- * be converted to a number of seconds, milliseconds or even microseconds.
+ * $(PARA The Duration value ($(I core.time.Duration)) returned by the clock can
+ * then be converted to a number of seconds, milliseconds or even microseconds.)
  *
  * See_Also:
  * $(LINK2 https://dlang.org/library/core/time/duration.html, Duration)
@@ -73,8 +73,8 @@ class Clock
 	/**
 	 * Get the elapsed time.
 	 *
-	 * This function returns the time elapsed since the last call to restart()
-	 * (or the construction of the instance if restart() has not been called).
+	 * This function returns the time elapsed since the last call to `restart()`
+	 * (or the construction of the instance if `restart()` has not been called).
 	 *
 	 * Returns: Time elapsed.
 	 */

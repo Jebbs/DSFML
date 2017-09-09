@@ -93,11 +93,11 @@ struct IpAddress
     /**
      * Construct the address from 4 bytes.
      *
-     * Calling IpAddress(a, b, c, d) is equivalent to calling
-     * IpAddress("a.b.c.d"), but safer as it doesn't have to parse a string to
+     * Calling `IpAddress(a, b, c, d)` is equivalent to calling
+     * `IpAddress("a.b.c.d")`, but safer as it doesn't have to parse a string to
      * get the address components.
      *
-     * Parameters
+     * Params:
      * 		byte0 = First byte of the address.
      * 		byte1 = Second byte of the address.
      * 		byte2 = Third byte of the address.
@@ -114,7 +114,7 @@ struct IpAddress
      *
      * This constructor uses the internal representation of the address
      * directly. It should be used only if you got that representation from
-     * IpAddress.toInteger().
+     * `IpAddress.toInteger()`.
      *
      * Params:
      * 	address = 4 bytes of the address packed into a 32-bits integer
@@ -132,7 +132,7 @@ struct IpAddress
      * The returned number is the internal representation of the address, and
      * should be used for optimization purposes only (like sending the address
      * through a socket). The integer produced by this function can then be
-     * converted back to a IpAddress with the proper constructor.
+     * converted back to an $(U IpAddress) with the proper constructor.
      *
      * Returns: 32-bits unsigned integer representation of the address.
      */
@@ -160,8 +160,8 @@ struct IpAddress
         static char[16] m_string;
 
         ubyte* bytes = cast(ubyte*)&m_address;
-        int length = sprintf(m_string.ptr, "%d.%d.%d.%d", bytes[0], bytes[1], bytes[2], bytes[3]);
-
+        int length = sprintf(m_string.ptr, "%d.%d.%d.%d", bytes[0], bytes[1],
+                                                          bytes[2], bytes[3]);
         return m_string[0..length];
     }
 
@@ -170,7 +170,7 @@ struct IpAddress
      *
      * The local address is the address of the computer from the LAN point of
      * view, i.e. something like 192.168.1.56. It is meaningful only for
-     * communications over the local network. Unlike getPublicAddress, this
+     * communications over the local network. Unlike `getPublicAddress`, this
      * function is fast and may be used safely anywhere.
      *
      * Returns: Local IP address of the computer.
@@ -247,8 +247,6 @@ private uint ntohl(uint network) nothrow @nogc @safe
         return network;
     }
 }
-
-
 
 
 unittest

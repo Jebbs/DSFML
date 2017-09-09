@@ -33,25 +33,25 @@
  * $(LI Http.Response)
  * $(LI Http))
  *
- * Http.Request builds the request that will be sent to the server. A request is
- * made of:
+ * $(PARA Http.Request builds the request that will be sent to the server. A
+ * request is made of:)
  * $(UL
  * $(LI a method (what you want to do))
  * $(LI a target URI (usually the name of the web page or file))
  * $(LI one or more header fields (options that you can pass to the server))
  * $(LI an optional body (for POST requests)))
  *
- * Http.Response parses the response from the web server and provides getters to
- * read them. The response contains:
+ * $(PARA Http.Response parses the response from the web server and provides
+ * getters to read them. The response contains:)
  * $(UL
  * $(LI a status code)
  * $(LI header fields (that may be answers to the ones that you requested))
  * $(LI a body, which contains the contents of the requested resource))
  *
- * $(U Http) provides a simple function, sendRequest, to send a Http.Request and
- * return the corresponding Http.Response from the server.
+ * $(PARA $(U Http) provides a simple function, `sendRequest`, to send a
+ * Http.Request and return the corresponding Http.Response from the server.)
  *
- * Usage example:
+ * Example:
  * ---
  * // Create a new HTTP client
  * auto http = new Http();
@@ -82,7 +82,7 @@ module dsfml.network.http;
 import core.time;
 
 /**
- * A HTTP client.
+ * An HTTP client.
  */
 class Http
 {
@@ -97,11 +97,11 @@ class Http
     /**
      * Construct the HTTP client with the target host.
      *
-     * This is equivalent to calling setHost(host, port). The port has a default
-     * value of 0, which means that the HTTP client will use the right port
-     * according to the protocol used (80 for HTTP, 443 for HTTPS). You should
-     * leave it like this unless you really need a port other than the standard
-     * one, or use an unknown protocol.
+     * This is equivalent to calling `setHost(host, port)`. The port has a
+     * default value of 0, which means that the HTTP client will use the right
+     * port according to the protocol used (80 for HTTP, 443 for HTTPS). You
+     * should leave it like this unless you really need a port other than the
+     * standard one, or use an unknown protocol.
      *
      * Params:
      * 		host = Web server to connect to
@@ -189,7 +189,7 @@ class Http
          * Params:
          * 	uri    = Target URI
          * 	method = Method to use for the request
-         * 	body   = Content of the request's body
+         * 	requestBody   = Content of the request's body
          */
         this(string uri = "/", Method method = Method.Get, string requestBody = "")
         {
@@ -216,7 +216,7 @@ class Http
          * default.
          *
          * Params:
-         * 		body = Content of the body
+         * 		requestBody = Content of the body
          */
         void setBody(string requestBody)
         {

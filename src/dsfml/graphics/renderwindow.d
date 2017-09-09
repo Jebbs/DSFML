@@ -489,7 +489,7 @@ class RenderWindow : Window, RenderTarget
      * The mouse cursor is visible by default.
      *
      * Params:
-     * 		enabled	= true show the mouse cursor, false to hide it
+     * 		visible	= true show the mouse cursor, false to hide it
      */
     override void setMouseCursorVisible(bool visible)
     {
@@ -502,7 +502,7 @@ class RenderWindow : Window, RenderTarget
      * Change the title of the window
      *
      * Params:
-     * 		title	= New title
+     * 		newTitle = New title
      */
     override void setTitle(const(char)[] newTitle)
     {
@@ -514,7 +514,7 @@ class RenderWindow : Window, RenderTarget
      * Change the title of the window
      *
      * Params:
-     * 		title	= New title
+     * 		newTitle = New title
      */
     override void setTitle(const(wchar)[] newTitle)
     {
@@ -526,7 +526,7 @@ class RenderWindow : Window, RenderTarget
      * Change the title of the window
      *
      * Params:
-     * 		title	= New title
+     * 		newTitle = New title
      */
     override void setTitle(const(dchar)[] newTitle)
     {
@@ -784,18 +784,18 @@ class RenderWindow : Window, RenderTarget
      * This function can be used when you mix SFML drawing and direct OpenGL
      * rendering. Combined with PopGLStates, it ensures that:
      * $(UL
-     * $(LI SFML's internal states are not messed up by your OpenGL code)
+     * $(LI DSFML's internal states are not messed up by your OpenGL code)
      * $(LI your OpenGL states are not modified by a call to an SFML function))
      *
      * $(PARA More specifically, it must be used around the code that calls
-     * `draw` functions.)
+     * `draw` functions.
      *
-     * $(PARA Note that this function is quite expensive: it saves all the
-     * possible OpenGL states and matrices, even the ones you don't care about.
-     * Therefore it should be used wisely. It is provided for convenience, but
-     * the best results will be achieved if you handle OpenGL states yourself
-     * (because you know which states have really changed, and need to be saved
-     * and restored). Take a look at the `resetGLStates` function if you do so.)
+     * Note that this function is quite expensive: it saves all the possible
+	 * OpenGL states and matrices, even the ones you don't care about.Therefore
+	 * it should be used wisely. It is provided for convenience, but the best
+	 * results will be achieved if you handle OpenGL states yourself (because
+	 * you know which states have really changed, and need to be saved and
+	 * restored). Take a look at the `resetGLStates` function if you do so.)
      */
     void pushGLStates()
     {

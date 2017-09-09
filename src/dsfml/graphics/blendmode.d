@@ -37,6 +37,7 @@
  * $(LI Alpha Destination Factor (alphaDstFactor))
  * $(LI Alpha Blend Equation (alphaEquation)))
  *
+ * $(PARA
  * The source factor specifies how the pixel you are drawing contributes to the
  * final color. The destination factor specifies how the pixel already drawn in
  * the buffer contributes to the final color.
@@ -50,8 +51,7 @@
  * general, the color of the resulting pixel is calculated according to the
  * following formula ($(I src) is the color of the source pixel, $(I dst) the
  * color of the destination pixel, the other variables correspond to the
- * public members, with the equations being `+` or `-` operators):
- *
+ * public members, with the equations being `+` or `-` operators):)
  * ---
  * dst.rgb = colorSrcFactor * src.rgb (colorEquation) colorDstFactor * dst.rgb
  * dst.a   = alphaSrcFactor * src.a   (alphaEquation) alphaDstFactor * dst.a
@@ -62,7 +62,6 @@
  *
  * The most common blending modes are defined as constants inside of
  * $(U BlendMode):)
- *
  * ---
  * auto alphaBlending          = BlendMode.Alpha;
  * auto additiveBlending       = BlendMode.Add;

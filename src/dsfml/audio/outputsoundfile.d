@@ -25,9 +25,9 @@
 /**
   * This class encodes audio samples to a sound file.
  *
- * It is used internally by higher-level classes such as SoundBuffer, but can
- * also be useful if you want to create audio files from custom data sources,
- * like generated audio samples.
+ * It is used internally by higher-level classes such as $(SOUNDBUFFER_LINK),
+ * but can also be useful if you want to create audio files from custom data
+ * sources, like generated audio samples.
  *
  * Example:
  * ---
@@ -84,7 +84,7 @@ class OutputSoundFile
      *
      * Params:
      *	filename     = Path of the sound file to load
-     *	sampleCount  = Sample rate of the sound
+     *	sampleRate   = Sample rate of the sound
      *	channelCount = Number of channels in the sound
      *
      * Returns: true if the file was successfully opened.

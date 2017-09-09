@@ -38,17 +38,17 @@
  * $(LI an outline color)
  * $(LI an outline thickness))
  *
- * Each feature is optional, and can be disabled easily:
+ * $(PARA Each feature is optional, and can be disabled easily:)
  * $(UL
  * $(LI the texture can be null)
  * $(LI the fill/outline colors can be Color.Transparent)
  * $(LI the outline thickness can be zero))
  *
- * You can write your own derived shape class, there are only two abstract
- * functions to override:
+ * $(PARA You can write your own derived shape class, there are only two
+ * abstract functions to override:)
  * $(UL
  * $(LI `getPointCount` must return the number of points of the shape)
- * $(LI `getPoint` must return the points of the shape)
+ * $(LI `getPoint` must return the points of the shape))
  *
  * See_Also:
  * $(RECTANGLESHAPE_LINK), $(CIRCLESHAPE_LINK), $(CONVEXSHAPE_LINK),
@@ -196,9 +196,7 @@ class Shape : Drawable, Transformable
     @property
     {
         /**
-         * Get the total number of points in the shape.
-         *
-         * Returns: Number of points in the shape.
+         * The total number of points in the shape.
          */
         abstract uint pointCount();
     }
@@ -211,7 +209,7 @@ class Shape : Drawable, Transformable
      * that are applied to the entity. In other words, this function returns the
      * bounds of the sprite in the global 2D world's coordinate system.
      *
-     * Returns: Global bounding rectangle of the entity
+     * Returns: Global bounding rectangle of the entity.
      */
     FloatRect getGlobalBounds()
     {
@@ -226,7 +224,7 @@ class Shape : Drawable, Transformable
      * applied to the entity. In other words, this function returns the bounds
      * of the entity in the entity's coordinate system.
      *
-     * Returns: Local bounding rectangle of the entity
+     * Returns: Local bounding rectangle of the entity.
      */
     FloatRect getLocalBounds() const
     {
@@ -241,7 +239,7 @@ class Shape : Drawable, Transformable
      * Params:
      * 	index = Index of the point to get, in range [0 .. getPointCount() - 1]
      *
-     * Returns: Index-th point of the shape
+     * Returns: Index-th point of the shape.
      */
     abstract Vector2f getPoint(uint index) const;
 
@@ -252,7 +250,7 @@ class Shape : Drawable, Transformable
      * returned pointer is const, which means that you can't modify the texture
      * when you retrieve it with this function.
      *
-     * Returns: The shape's texture
+     * Returns: The shape's texture.
      */
     const(Texture) getTexture() const
     {

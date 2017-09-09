@@ -315,13 +315,11 @@ void initializeDMD()
     linkToSFMLLibs;
     //unittestCompilerSwitches ="-main -unittest -version=DSFML_Unittest_Network "~linkToSFMLLibs;
     //libCompilerSwitches = "-lib -O -release -inline -I"~quoteString(impDirectory);
-    //docCompilerSwitches = "-c -o- -op -D -Dd"~quoteString(docDirectory);
     //interfaceCompilerSwitches = " -c -o- -op -H -Hd"~quoteString(interfaceDirectory);
 }
 
 void initializeGDC()
 {
-
     //need to set up for windows and macOS later
 
     string linkToSFMLLibs = "";
@@ -335,7 +333,6 @@ void initializeGDC()
 
         makefileProgram = "make";
         makefileType = `"Unix Makefiles"`;
-
 
         linkToSFMLLibs = "-Llib -LSFML/lib ";
 
@@ -442,7 +439,6 @@ void initializeLDC()
         makefileProgram = "make";
         makefileType = `"Unix Makefiles"`;
 
-
         linkToSFMLLibs = "-L=-Llib -L=-LSFML/lib ";
 
         linkToSFMLLibs ~=
@@ -454,12 +450,11 @@ void initializeLDC()
         "-L=-lsfml-network -L=-lsfml-system ";
 
         linkToSFMLLibs ~= "-L=-lstdc++ -L=-rpath -L=. ";
-
-
     }
 
     singleFileSwitches = archSwitch ~ " -c -O -release -oq -I=src";
     libCompilerSwitches = archSwitch ~ " -lib -I=src";
+    docCompilerSwitches = " -c -o- -op -D -Dd=../../doc -I=../../src";
 
     unittestCompilerSwitches =
     "-main -unittest -d-version=DSFML_Unittest_System " ~
@@ -760,34 +755,24 @@ bool buildDocumentation()
             continue;
         }
 
-        size_t numberOfFiles = fileList[theModule].length ;
+        // skipping package.d
+        size_t numberOfFiles = fileList[theModule].length -1 ;
         int currentFile = 1;
         foreach (string name; fileList[theModule])
         {
-            if (name == "package.d")
+            if (name == "package")
                 continue;
             string docFile = "../../doc/"~theModule~"/"~name~docExtension;
             string outputFile = name~docExtension;
             string dFile = theModule~"/"~name~".d";
 
-            version(DigitalMars)
-            {
-                string buildCommand = compiler~dFile~ddoc~docCompilerSwitches~
-                                      " -of"~outputFile;
-            }
-            else version(GNU)
-            {
-                string buildCommand = compiler~dFile~singleFileSwitches;
-            }
-            else version(LDC)
-            {
-                string buildCommand = compiler~dFile~singleFileSwitches;
-            }
+
+            string buildCommand = compiler~dFile~ddoc~docCompilerSwitches;
 
             if(needToBuild(docFile, dFile))
             {
-                progressOutput(currentFile, numberOfFiles, dFile);
-                //writeln(buildCommand);
+                progressOutput(currentFile, numberOfFiles, outputFile);
+
                 auto status = executeShell(buildCommand);
                 if(status.status !=0)
                 {
@@ -795,8 +780,9 @@ bool buildDocumentation()
                     return false;
                 }
 
-                rename("../../doc/"~theModule~"/"~name~".html",
-                       "../../doc/"~theModule~"/"~name~docExtension);
+                if(extension!=".html")
+                    rename("../../doc/"~theModule~"/"~name~".html",
+                           "../../doc/"~theModule~"/"~name~docExtension);
             }
 
             currentFile++;
@@ -918,10 +904,6 @@ int main(string[] args)
         buildingLibs = true;
     }
 
-    //make sure buildingDoc is set to true if we're building documentation for
-    //the website
-    if(buildingWebsiteDocs)
-        buildingDoc = true;
     /*
         writeln("lib ", buildingLibs);
         writeln("doc ", buildingDoc);
@@ -953,9 +935,9 @@ int main(string[] args)
         if(!buildUnittests())
             return -1;
     }
-    if(buildingDoc)
+    if(buildingDoc || buildingWebsiteDocs)
     {
-        if(!buildDocumentation)
+        if(!buildDocumentation())
             return -1;
     }
 

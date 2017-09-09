@@ -23,14 +23,14 @@
  */
 
 /**
- * Drawable is a very simple base interface that allows objects of derived
+ * $(U Drawable) is a very simple base interface that allows objects of derived
  * classes to be drawn to a RenderTarget.
  *
  * All you have to do in your derived class is to override the draw virtual
  * function.
  *
  * Note that inheriting from $(DRAWABLE_LINK) is not mandatory, but it allows
- * this nice syntax "window.draw(object)" rather than "object.draw(window)",
+ * this nice syntax `window.draw(object)` rather than `object.draw(window)`,
  * which is more consistent with other DSFML classes.
  *
  * Example:
@@ -49,9 +49,7 @@
  *     }
  *    ...
  *
- * private:
- *
- *     virtual void draw(RenderTarget target, RenderStates states) const
+ *     void draw(RenderTarget target, RenderStates states) const
  *     {
  *         // You can draw other high-level objects
  *         target.draw(m_sprite, states);
@@ -66,6 +64,7 @@
  *         glEnd();
  *     }
  *
+ * private:
  *     Sprite m_sprite;
  *     Texture m_texture;
  *     VertexArray m_vertices;

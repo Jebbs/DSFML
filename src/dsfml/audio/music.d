@@ -30,9 +30,9 @@
  * entirely, you avoid saturating the memory and have almost no loading delay.
  *
  * Apart from that, a $(U Music) has almost the same features as the
- * SoundBuffer/Sound pair: you can play/pause/stop it, request its parameters
- * (channels, sample rate), change the way it is played (pitch, volume, 3D
- * position, ...), etc.
+ * $(SOUNDBUFFER_LINK)/$(SOUND_LINK) pair: you can play/pause/stop it, request
+ * its parameters (channels, sample rate), change the way it is played (pitch,
+ * volume, 3D position, ...), etc.
  *
  * As a sound stream, a music is played in its own thread in order not to block
  * the rest of the program. This means that you can leave the music alone after
@@ -49,11 +49,17 @@
  *     // error...
  * }
  *
- * // Change some parameters
- * music.position = Vector3f(0, 1, 10); // change its 3D position
- * music.pitch = 2;           // increase the pitch
- * music.volume = 50;         // reduce the volume
- * music.loop = true;         // make it loop
+ * // change its 3D position
+ * music.position = Vector3f(0, 1, 10);
+ *
+ * // increase the pitch
+ * music.pitch = 2;
+ *
+ * // reduce the volume
+ * music.volume = 50;
+ *
+ * // make it loop
+ * music.loop = true;
  *
  * // Play it
  * music.play();
@@ -107,7 +113,7 @@ class Music : SoundStream
     /**
      * Open a music from an audio file.
      *
-     * This function doesn't start playing the music (call play() to do so).
+     * This function doesn't start playing the music (call `play()` to do so).
      *
      * The supported audio formats are: WAV (PCM only), OGG/Vorbis, FLAC. The
      * supported sample sizes for FLAC and WAV are 8, 16, 24 and 32 bit.
@@ -135,7 +141,7 @@ class Music : SoundStream
     /**
      * Open a music from an audio file in memory.
      *
-     * This function doesn't start playing the music (call play() to do so).
+     * This function doesn't start playing the music (call `play()` to do so).
      *
      * The supported audio formats are: WAV (PCM only), OGG/Vorbis, FLAC. The
      * supported sample sizes for FLAC and WAV are 8, 16, 24 and 32 bit.
@@ -165,7 +171,7 @@ class Music : SoundStream
     /**
      * Open a music from an audio file in memory.
      *
-     * This function doesn't start playing the music (call play() to do so).
+     * This function doesn't start playing the music (call `play()` to do so).
      *
      * The supported audio formats are: WAV (PCM only), OGG/Vorbis, FLAC. The
      * supported sample sizes for FLAC and WAV are 8, 16, 24 and 32 bit.

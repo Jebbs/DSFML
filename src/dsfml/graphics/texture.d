@@ -356,8 +356,8 @@ class Texture
      * Bind a texture for rendering.
      *
      * This function is not part of the graphics API, it mustn't be used when
-     * drawing SFML entities. It must be used only if you mix Texture with
-     8 OpenGL code.
+     * drawing DSFML entities. It must be used only if you mix Texture with
+     * OpenGL code.
      *
      * Params:
      * 		texture	= The texture to bind. Can be null to use no texture

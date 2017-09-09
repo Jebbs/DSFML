@@ -147,7 +147,7 @@ class Text : Drawable, Transformable
      * supports that size is used.
      *
      * Params:
-     *	string        = Text assigned to the string
+     *	text          = Text assigned to the string
      *	font          = Font used to draw the string
      *	characterSize = Base size of characters, in pixels
      */

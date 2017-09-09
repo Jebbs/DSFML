@@ -35,13 +35,14 @@
  * $(LI $(TCPSOCKET_LINK))
  * $(LI $(UDPSOCKET_LINK)))
  *
+ * $(PARA
  * A selector doesn't store its own copies of the sockets, it simply keeps a
  * reference to the original sockets that you pass to the "add" function.
  * Therefore, you can't use the selector as a socket container, you must store
  * them outside and make sure that they are alive as long as they are used in
  * the selector (i.e., they cannot be collected by the GC).
  *
- * Using a selector is simple:
+ * Using a selector is simple:)
  * $(UL
  * $(LI populate the selector with all the sockets that you want to observe)
  * $(LI make it wait until there is data available on any of the sockets)

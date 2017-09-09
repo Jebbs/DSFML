@@ -24,8 +24,8 @@
 
 /**
  *
- * SoundSource is not meant to be used directly, it only serves as a common base
- * for all audio objects that can live in the audio environment.
+ * $(U SoundSource) is not meant to be used directly, it only serves as a common
+ * base for all audio objects that can live in the audio environment.
  *
  * It defines several properties for the sound: pitch, volume, position,
  * attenuation, etc. All of them can be changed at any time with no impact on
