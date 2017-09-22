@@ -47,13 +47,7 @@ DDOC_MEMBER_HEADER =
 D_CODE =
 <section class="code_listing">
   <div class="code_sample">
-    <div class="dlang">
-      <ol class="code_lines">
-        <li>
-          <pre><code class="prettyprint">$0</code></pre>
-        </li>
-      </ol>
-    </div>
+    <pre><code class="prettyprint">$0</code></pre>
   </div>
 </section>
 
@@ -121,6 +115,10 @@ DDOC_DEPRECATED = <div class="ddoc_deprecated">
     $(B Deprecated:) $0
   </p>
 </div>$(LF)
+
+DDOC_ENUM_MEMBERS = <ul class="ddoc_enum_members">
+  $0
+</ul>
 
 DDOC_PSYMBOL = $0
 

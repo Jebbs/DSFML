@@ -23,7 +23,7 @@
  */
 
 /**
- * $(U BlendMode) is a class that represents a blend mode. A blend mode
+ * $(U BlendMode) is a structure that represents a blend mode. A blend mode
  * determines how the colors of an object you draw are mixed with the colors
  * that are already in the buffer.
  *
@@ -36,7 +36,6 @@
  * $(LI Alpha Source Factor (alphaSrcFactor))
  * $(LI Alpha Destination Factor (alphaDstFactor))
  * $(LI Alpha Blend Equation (alphaEquation)))
- *
  * $(PARA
  * The source factor specifies how the pixel you are drawing contributes to the
  * final color. The destination factor specifies how the pixel already drawn in
@@ -69,7 +68,7 @@
  * auto noBlending             = BlendMode.None;
  * ---
  *
- * $(Para In DSFML, a blend mode can be specified every time you draw a Drawable
+ * $(PARA In DSFML, a blend mode can be specified every time you draw a Drawable
  * object to a render target. It is part of the RenderStates compound
  * that is passed to the member function RenderTarget::draw().)
  *

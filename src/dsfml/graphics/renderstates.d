@@ -44,14 +44,22 @@
  * defining render states explicitely – the default set of states is ok in most
  * cases.
  * ---
+ * RenderWindow window;
+ * Sprite sprite;
+ *
+ * ...
+ *
  * window.draw(sprite);
  * ---
  *
  * $(PARA If you want to use a single specific render state, for example a
- * shader, you can pass it directly to the Draw function: $(U RenderStates) has
- * an implicit one-argument constructor for each state.)
+ * shader, you can construct a $(U RenderStates) object from it:)
  * ---
- * window.draw(sprite, shader);
+ * auto states = RenderStates(shader)
+ * window.draw(sprite, states);
+ *
+ * //or
+ * window.draw(sprite, RenderStates(shader));
  * ---
  *
  * $(PARA When you're inside the `draw` function of a drawable object (inherited
