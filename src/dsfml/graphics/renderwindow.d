@@ -67,6 +67,7 @@
  *    window.display();
  * }
  * ---
+ *
  * $(PARA Like $(WINDOW_LINK), $(U RenderWindow) is still able to render direct
  * OpenGL stuff. It is even possible to mix together OpenGL calls and regular
  * DSFML drawing commands.)
