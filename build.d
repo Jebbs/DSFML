@@ -354,6 +354,7 @@ void initializeGDC()
 
     singleFileSwitches = archSwitch ~ " -c -O3 -frelease -Isrc";
     libCompilerSwitches = archSwitch ~ " -Isrc";
+    docCompilerSwitches = " -c -fdoc -I../../src";
 
     unittestCompilerSwitches =
     "-funittest -fversion=DSFML_Unittest_System " ~
@@ -740,12 +741,19 @@ bool buildDocumentation()
     if(buildingWebsiteDocs)
     {
         docExtension = ".php";
-        ddoc = " ../../doc/website_documentation.ddoc";
+
+        version(GNU)
+            ddoc = "../../doc/website_documentation.ddoc";
+        else
+            ddoc = " ../../doc/website_documentation.ddoc";
     }
     else
     {
         docExtension = ".html";
-        ddoc = " ../../doc/local_documentation.ddoc";
+        version(GNU)
+            ddoc = "../../doc/default_ddoc_theme.ddoc";
+        else
+            ddoc = " ../../doc/local_documentation.ddoc";
     }
 
     foreach(theModule;modules)
@@ -767,7 +775,16 @@ bool buildDocumentation()
             string dFile = theModule~"/"~name~".d";
 
 
-            string buildCommand = compiler~dFile~ddoc~docCompilerSwitches;
+            string buildCommand;
+
+            version(GNU)
+            {
+                buildCommand = compiler~dFile~" -fdoc-inc="~ddoc~
+                " -fdoc-dir=../../doc/dsfml/"~theModule~
+                docCompilerSwitches~" -o obj.o";
+            }
+            else
+                buildCommand = compiler~dFile~ddoc~docCompilerSwitches;
 
             if(needToBuild(docFile, dFile))
             {
@@ -780,7 +797,7 @@ bool buildDocumentation()
                     return false;
                 }
 
-                if(extension!=".html")
+                if(docExtension!=".html")
                     rename("../../doc/"~theModule~"/"~name~".html",
                            "../../doc/"~theModule~"/"~name~docExtension);
             }
@@ -788,6 +805,9 @@ bool buildDocumentation()
             currentFile++;
         }
     }
+
+    version(GNU)
+        core.stdc.stdio.remove("obj.o");
 
     chdir("../..");
 
