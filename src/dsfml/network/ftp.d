@@ -148,6 +148,9 @@ class Ftp
      * given directory. It is not recursive. The directory parameter is relative
      * to the current working directory.
      *
+     * Params:
+     * directory = Directory to list
+     *
      * Returns: Server response to the request.
      */
     ListingResponse getDirectoryListing(const(char)[] directory = "")
@@ -160,6 +163,9 @@ class Ftp
      * Change the current working directory.
      *
      * The new directory must be relative to the current one.
+     *
+     * Params:
+     * directory = New working directory
      *
      * Returns: Server response to the request.
      */
