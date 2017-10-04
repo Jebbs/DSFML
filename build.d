@@ -1,21 +1,27 @@
 /*
-DSFML - The Simple and Fast Multimedia Library for D
+ * DSFML - The Simple and Fast Multimedia Library for D
+ *
+ * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ *
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from the
+ * use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not claim
+ * that you wrote the original software. If you use this software in a product,
+ * an acknowledgment in the product documentation would be appreciated but is
+ * not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution
+ */
 
-Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose, including commercial applications,
-and to alter it and redistribute it freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
-If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source distribution
-*/
 module build;
 
 import std.stdio;
@@ -61,6 +67,7 @@ bool buildStop;
 bool buildingLibs;
 bool buildingInterfaceFiles;
 bool buildingDoc;
+bool buildingWebsiteDocs;
 bool showingHelp;
 bool force32Build;
 bool force64Build;
@@ -298,7 +305,7 @@ void initializeDMD()
 
     singleFileSwitches = archSwitch ~ " -c -O -release -inline -Isrc";
     libCompilerSwitches = archSwitch ~ " -lib  -Isrc";
-    //docCompilerSwitches = "-c -o- -op -D -Dd"~quoteString(docDirectory);
+    docCompilerSwitches = " -c -o- -op -D -Dd../../doc -I../../src";
     //interfaceCompilerSwitches = " -c -o- -op -H -Hd"~quoteString(interfaceDirectory);
 
     unittestCompilerSwitches =
@@ -308,13 +315,11 @@ void initializeDMD()
     linkToSFMLLibs;
     //unittestCompilerSwitches ="-main -unittest -version=DSFML_Unittest_Network "~linkToSFMLLibs;
     //libCompilerSwitches = "-lib -O -release -inline -I"~quoteString(impDirectory);
-    //docCompilerSwitches = "-c -o- -op -D -Dd"~quoteString(docDirectory);
     //interfaceCompilerSwitches = " -c -o- -op -H -Hd"~quoteString(interfaceDirectory);
 }
 
 void initializeGDC()
 {
-
     //need to set up for windows and macOS later
 
     string linkToSFMLLibs = "";
@@ -328,7 +333,6 @@ void initializeGDC()
 
         makefileProgram = "make";
         makefileType = `"Unix Makefiles"`;
-
 
         linkToSFMLLibs = "-Llib -LSFML/lib ";
 
@@ -350,6 +354,7 @@ void initializeGDC()
 
     singleFileSwitches = archSwitch ~ " -c -O3 -frelease -Isrc";
     libCompilerSwitches = archSwitch ~ " -Isrc";
+    docCompilerSwitches = " -c -fdoc -I../../src";
 
     unittestCompilerSwitches =
     "-funittest -fversion=DSFML_Unittest_System " ~
@@ -435,7 +440,6 @@ void initializeLDC()
         makefileProgram = "make";
         makefileType = `"Unix Makefiles"`;
 
-
         linkToSFMLLibs = "-L=-Llib -L=-LSFML/lib ";
 
         linkToSFMLLibs ~=
@@ -447,12 +451,11 @@ void initializeLDC()
         "-L=-lsfml-network -L=-lsfml-system ";
 
         linkToSFMLLibs ~= "-L=-lstdc++ -L=-rpath -L=. ";
-
-
     }
 
     singleFileSwitches = archSwitch ~ " -c -O -release -oq -I=src";
     libCompilerSwitches = archSwitch ~ " -lib -I=src";
+    docCompilerSwitches = " -c -o- -op -D -Dd=../../doc -I=../../src";
 
     unittestCompilerSwitches =
     "-main -unittest -d-version=DSFML_Unittest_System " ~
@@ -724,6 +727,93 @@ bool buildUnittests()
         return true;
 }
 
+bool buildDocumentation()
+{
+    if(!exists("doc/"))
+    {
+        mkdir("doc/");
+    }
+
+    chdir("src/dsfml/");
+
+    string docExtension;
+    string ddoc;
+    if(buildingWebsiteDocs)
+    {
+        docExtension = ".php";
+
+        version(GNU)
+            ddoc = "../../doc/website_documentation.ddoc";
+        else
+            ddoc = " ../../doc/website_documentation.ddoc";
+    }
+    else
+    {
+        docExtension = ".html";
+        version(GNU)
+            ddoc = "../../doc/default_ddoc_theme.ddoc";
+        else
+            ddoc = " ../../doc/local_documentation.ddoc";
+    }
+
+    foreach(theModule;modules)
+    {
+        if(selectedModule != "" && theModule != selectedModule)
+        {
+            continue;
+        }
+
+        // skipping package.d
+        size_t numberOfFiles = fileList[theModule].length -1 ;
+        int currentFile = 1;
+        foreach (string name; fileList[theModule])
+        {
+            if (name == "package")
+                continue;
+            string docFile = "../../doc/"~theModule~"/"~name~docExtension;
+            string outputFile = name~docExtension;
+            string dFile = theModule~"/"~name~".d";
+
+
+            string buildCommand;
+
+            version(GNU)
+            {
+                buildCommand = compiler~dFile~" -fdoc-inc="~ddoc~
+                " -fdoc-dir=../../doc/dsfml/"~theModule~
+                docCompilerSwitches~" -o obj.o";
+            }
+            else
+                buildCommand = compiler~dFile~ddoc~docCompilerSwitches;
+
+            if(needToBuild(docFile, dFile))
+            {
+                progressOutput(currentFile, numberOfFiles, outputFile);
+
+                auto status = executeShell(buildCommand);
+                if(status.status !=0)
+                {
+                    writeln(status.output);
+                    return false;
+                }
+
+                if(docExtension!=".html")
+                    rename("../../doc/"~theModule~"/"~name~".html",
+                           "../../doc/"~theModule~"/"~name~docExtension);
+            }
+
+            currentFile++;
+        }
+    }
+
+    version(GNU)
+        core.stdc.stdio.remove("obj.o");
+
+    chdir("../..");
+
+    return true;
+}
+
 /**
  * Display the progress as a percentage given the current file is next.
  *
@@ -808,7 +898,9 @@ int main(string[] args)
         "lib", "Build static libraries.", &buildingLibs,
         "m32", "Force 32 bit building.", &force32Build,
         "m64", "Force 64 bit building.", &force64Build,
-        "unittest", "Build DSFML unit test executable", &buildingUnittests
+        "unittest", "Build DSFML unit test executable.", &buildingUnittests,
+        "doc", "Build DSFML documentation.", &buildingDoc,
+        "webdoc", "Build the DSFML website documentation.", &buildingWebsiteDocs
         );
     }
     catch(GetOptException e)
@@ -826,7 +918,8 @@ int main(string[] args)
     }
 
     //default to building libs
-    if(!buildingLibs && !buildingDoc && !buildingInterfaceFiles && !buildingUnittests && !buildingAll)
+    if(!buildingLibs && !buildingDoc && !buildingInterfaceFiles &&
+       !buildingWebsiteDocs && !buildingUnittests && !buildingAll)
     {
         buildingLibs = true;
     }
@@ -860,6 +953,11 @@ int main(string[] args)
     if(buildingUnittests)
     {
         if(!buildUnittests())
+            return -1;
+    }
+    if(buildingDoc || buildingWebsiteDocs)
+    {
+        if(!buildDocumentation())
             return -1;
     }
 

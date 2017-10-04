@@ -1,23 +1,106 @@
 /*
-DSFML - The Simple and Fast Multimedia Library for D
+ * DSFML - The Simple and Fast Multimedia Library for D
+ *
+ * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ *
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from the
+ * use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not claim
+ * that you wrote the original software. If you use this software in a product,
+ * an acknowledgment in the product documentation would be appreciated but is
+ * not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution
+ */
 
-Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose, including commercial applications,
-and to alter it and redistribute it freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
-If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source distribution
-*/
-
-///A module containing the UdpSocket Class.
+/**
+ * A UDP socket is a connectionless socket.
+ *
+ * Instead of connecting once to a remote host, like TCP sockets, it can send to
+ * and receive from any host at any time.
+ *
+ * It is a datagram protocol: bounded blocks of data (datagrams) are transfered
+ * over the network rather than a continuous stream of data (TCP). Therefore,
+ * one call to send will always match one call to receive (if the datagram is
+ * not lost), with the same data that was sent.
+ *
+ * The UDP protocol is lightweight but unreliable. Unreliable means that
+ * datagrams may be duplicated, be lost or arrive reordered. However, if a
+ * datagram arrives, its data is guaranteed to be valid.
+ *
+ * UDP is generally used for real-time communication (audio or video streaming,
+ * real-time games, etc.) where speed is crucial and lost data doesn't matter
+ * much.
+ *
+ * Sending and receiving data can use either the low-level or the high-level
+ * functions. The low-level functions process a raw sequence of bytes, whereas
+ * the high-level interface uses packets (see Packet), which are easier to use
+ * and provide more safety regarding the data that is exchanged. You can look at
+ * the Packet class to get more details about how they work.
+ *
+ * It is important to note that UdpSocket is unable to send datagrams bigger
+ * than MaxDatagramSize. In this case, it returns an error and doesn't send
+ * anything. This applies to both raw data and packets. Indeed, even packets are
+ * unable to split and recompose data, due to the unreliability of the protocol
+ * (dropped, mixed or duplicated datagrams may lead to a big mess when trying to
+ * recompose a packet).
+ *
+ * If the socket is bound to a port, it is automatically unbound from it when
+ * the socket is destroyed. However, you can unbind the socket explicitely with
+ * the Unbind function if necessary, to stop receiving messages or make the port
+ * available for other sockets.
+ *
+ * Example:
+ * ---
+ * // ----- The client -----
+ *
+ * // Create a socket and bind it to the port 55001
+ * auto socket = UdpSocket();
+ * socket.bind(55001);
+ *
+ * // Send a message to 192.168.1.50 on port 55002
+ * string message = "Hi, I am " ~ IpAddress.getLocalAddress().toString();
+ * socket.send(message, "192.168.1.50", 55002);
+ *
+ * // Receive an answer (most likely from 192.168.1.50, but could be anyone else)
+ * char[1024] buffer;
+ * size_t received = 0;
+ * IpAddress sender;
+ * ushort port;
+ * socket.receive(buffer, received, sender, port);
+ * writeln( sender.toString(), " said: ", buffer[0 .. received]);
+ *
+ * // ----- The server -----
+ *
+ * // Create a socket and bind it to the port 55002
+ * auto socket = new UdpSocket();
+ * socket.bind(55002);
+ *
+ * // Receive a message from anyone
+ * char[1024] buffer;
+ * size_t received = 0;
+ * IpAddress sender;
+ * ushort port;
+ * socket.receive(buffer, received, sender, port);
+ * writeln(sender.toString(), " said: ", buffer[0 .. received]);
+ *
+ * // Send an answer
+ * message = "Welcome " ~ sender.toString();
+ * socket.send(message, sender, port);
+ * ---
+ *
+ * See_Also:
+ * $(SOCKET_LINK), $(TCPSOCKET_LINK), $(PACKET_LINK)
+ */
 module dsfml.network.udpsocket;
 
 import dsfml.network.ipaddress;
@@ -27,233 +110,253 @@ import dsfml.network.socket;
 import dsfml.system.err;
 
 /**
- *Specialized socket using the UDP protocol.
- *
- *A UDP socket is a connectionless socket.
- *
- *Instead of connecting once to a remote host, like TCP sockets, it can send to and receive from any host at any time.
- *
- *It is a datagram protocol: bounded blocks of data (datagrams) are transfered over the network rather than a continuous stream of data (TCP). Therefore, one call to send will always match one call to receive (if the datagram is not lost), with the same data that was sent.
- *
- *The UDP protocol is lightweight but unreliable. Unreliable means that datagrams may be duplicated, be lost or arrive reordered. However, if a datagram arrives, its data is guaranteed to be valid.
- *
- *UDP is generally used for real-time communication (audio or video streaming, real-time games, etc.) where speed is crucial and lost data doesn't matter much.
- *
- *Sending and receiving data can use either the low-level or the high-level functions. The low-level functions process a raw sequence of bytes, whereas the high-level interface uses packets (see sf::Packet), which are easier to use and provide more safety regarding the data that is exchanged. You can look at the sf::Packet class to get more details about how they work.
- *
- *It is important to note that UdpSocket is unable to send datagrams bigger than MaxDatagramSize. In this case, it returns an error and doesn't send anything. This applies to both raw data and packets. Indeed, even packets are unable to split and recompose data, due to the unreliability of the protocol (dropped, mixed or duplicated datagrams may lead to a big mess when trying to recompose a packet).
- *
- *If the socket is bound to a port, it is automatically unbound from it when the socket is destroyed. However, you can unbind the socket explicitely with the Unbind function if necessary, to stop receiving messages or make the port available for other sockets.
+ * Specialized socket using the UDP protocol.
  */
 class UdpSocket:Socket
 {
-	package sfUdpSocket* sfPtr;
+    package sfUdpSocket* sfPtr;
 
-	///The maximum number of bytes that can be sent in a single UDP datagram.
-	enum maxDatagramSize = 65507;
+    /// The maximum number of bytes that can be sent in a single UDP datagram.
+    enum maxDatagramSize = 65507;
 
-	///Default constructor
-	this()
-	{
-		sfPtr = sfUdpSocket_create();
-	}
+    /// Default constructor.
+    this()
+    {
+        sfPtr = sfUdpSocket_create();
+    }
 
-	///Destructor
-	~this()
-	{
-		import dsfml.system.config;
-		mixin(destructorOutput);
-		sfUdpSocket_destroy(sfPtr);
-	}
+    /// Destructor.
+    ~this()
+    {
+        import dsfml.system.config;
+        mixin(destructorOutput);
+        sfUdpSocket_destroy(sfPtr);
+    }
 
-	///Get the port to which the socket is bound locally.
-	///
-	///If the socket is not bound to a port, this function returns 0.
-	///
-	///Returns: Port to which the socket is bound.
-	ushort getLocalPort()
-	{
-		return sfUdpSocket_getLocalPort(sfPtr);
-	}
 
-	///Set the blocking state of the socket.
-	///
-	///In blocking mode, calls will not return until they have completed their task. For example, a call to Receive in blocking mode won't return until some data was actually received. In non-blocking mode, calls will always return immediately, using the return code to signal whether there was data available or not. By default, all sockets are blocking.
-	///
-	///Params:
-    ///		blocking = True to set the socket as blocking, false for non-blocking.
-	void setBlocking(bool blocking)
-	{
-		sfUdpSocket_setBlocking(sfPtr,blocking);
-	}
+    /**
+     * Get the port to which the socket is bound locally.
+     *
+     * If the socket is not bound to a port, this function returns 0.
+     *
+     * Returns: Port to which the socket is bound.
+     */
+    ushort getLocalPort()
+    {
+        return sfUdpSocket_getLocalPort(sfPtr);
+    }
 
-	///Bind the socket to a specific port.
-	///
-	///Binding the socket to a port is necessary for being able to receive data on that port. You can use the special value Socket::AnyPort to tell the system to automatically pick an available port, and then call getLocalPort to retrieve the chosen port.
-	///
-	///Params:
-    ///		port = Port to bind the socket to.
-    ///
-	///Returns: Status code.
-	Status bind(ushort port, IpAddress address = IpAddress.Any)
-	{
-		import dsfml.system.string;
+    /**
+     * Set the blocking state of the socket.
+     *
+     * In blocking mode, calls will not return until they have completed their
+     * task. For example, a call to Receive in blocking mode won't return until
+     * some data was actually received. In non-blocking mode, calls will always
+     * return immediately, using the return code to signal whether there was
+     * data available or not. By default, all sockets are blocking.
+     *
+     * Params:
+     * 	blocking = true to set the socket as blocking, false for non-blocking
+     */
+    void setBlocking(bool blocking)
+    {
+        sfUdpSocket_setBlocking(sfPtr,blocking);
+    }
 
-		Status toReturn = sfUdpSocket_bind(sfPtr,port, &address);
-		err.write(dsfml.system.string.toString(sfErr_getOutput()));
-		return toReturn;
-	}
+    /**
+     * Bind the socket to a specific port.
+     *
+     * Binding the socket to a port is necessary for being able to receive data
+     * on that port. You can use the special value Socket.AnyPort to tell the
+     * system to automatically pick an available port, and then call
+     * getLocalPort to retrieve the chosen port.
+     *
+     * Params:
+     * 	port = Port to bind the socket to
+     *
+     * Returns: Status code.
+     */
+    Status bind(ushort port, IpAddress address = IpAddress.Any)
+    {
+        import dsfml.system.string;
 
-	///Tell whether the socket is in blocking or non-blocking mode.
-	///
-	///Returns: True if the socket is blocking, false otherwise.
-	bool isBlocking()
-	{
-		return (sfUdpSocket_isBlocking(sfPtr));
-	}
+        Status toReturn = sfUdpSocket_bind(sfPtr,port, &address);
+        err.write(dsfml.system.string.toString(sfErr_getOutput()));
+        return toReturn;
+    }
 
-	///Send raw data to a remote peer.
-	///
-	///Make sure that the size is not greater than UdpSocket.MaxDatagramSize, otherwise this function will fail and no data will be sent.
-	///
-	///Params:
-    ///		data = Pointer to the sequence of bytes to send.
-    ///		address = Address of the receiver.
-    ///		port = Port of the receiver to send the data to.
-    ///
-    ///Returns: Status code.
-	Status send(const(void)[] data, IpAddress address, ushort port)
-	{
-		Status toReturn = sfUdpSocket_send(sfPtr,data.ptr, data.length,&address,port);
+    /**
+     * Tell whether the socket is in blocking or non-blocking mode.
+     *
+     * Returns: true if the socket is blocking, false otherwise.
+     */
+    bool isBlocking() const
+    {
+        return (sfUdpSocket_isBlocking(sfPtr));
+    }
 
-		return toReturn;
-	}
+    /**
+     * Send raw data to a remote peer.
+     *
+     * Make sure that the size is not greater than UdpSocket.MaxDatagramSize,
+     * otherwise this function will fail and no data will be sent.
+     *
+     * Params:
+     * 	data    = Pointer to the sequence of bytes to send
+     * 	address = Address of the receiver
+     * 	port    = Port of the receiver to send the data to
+     *
+     * Returns: Status code.
+     */
+    Status send(const(void)[] data, IpAddress address, ushort port)
+    {
+        Status toReturn = sfUdpSocket_send(sfPtr,data.ptr, data.length,&address,port);
 
-	///Send a formatted packet of data to a remote peer.
-	///
-	///Make sure that the packet size is not greater than UdpSocket.MaxDatagramSize, otherwise this function will fail and no data will be sent.
-	///
-	///Params:
-    ///		packet = Packet to send.
-    ///		address = Address of the receiver.
-    ///		port = Port of the receiver to send the data to.
-    ///
-	///Returns: Status code
-	Status send(Packet packet, IpAddress address, ushort port)
-	{
-		//temporary packet to be removed on function exit
-		scope SfPacket temp = new SfPacket();
+        return toReturn;
+    }
 
-		//getting packet's "to send" data
-		temp.append(packet.onSend());
+    /**
+     * Send a formatted packet of data to a remote peer.
+     *
+     * Make sure that the packet size is not greater than
+     * UdpSocket.MaxDatagramSize, otherwise this function will fail and no data
+     * will be sent.
+     *
+     * Params:
+     * 	packet = Packet to send
+     * 	address = Address of the receiver
+     * 	port = Port of the receiver to send the data to
+     *
+     * Returns: Status code.
+     */
+    Status send(Packet packet, IpAddress address, ushort port)
+    {
+        //temporary packet to be removed on function exit
+        scope SfPacket temp = new SfPacket();
 
-		//send the data
-		return sfUdpSocket_sendPacket(sfPtr, temp.sfPtr, &address, port);
-	}
+        //getting packet's "to send" data
+        temp.append(packet.onSend());
 
-	///Receive raw data from a remote peer.
-	///
-	///In blocking mode, this function will wait until some bytes are actually received.
-	///Be careful to use a buffer which is large enough for the data that you intend to receive, if it is too small then an error will be returned and all the data will be lost.
-	///
-	///Params:
-	///		data = The array to fill with the received bytes
-    ///		sizeReceived = The number of bytes received
-    ///		address = Address of the peer that sent the data
-    ///		port = Port of the peer that sent the data
-    ///
-	///Returns: Status code.
-	Status receive(void[] data, out size_t sizeReceived, out IpAddress address, out ushort port)
-	{
-		import dsfml.system.string;
+        //send the data
+        return sfUdpSocket_sendPacket(sfPtr, temp.sfPtr, &address, port);
+    }
 
-		Status status = sfUdpSocket_receive(sfPtr, data.ptr, data.length,
-											&sizeReceived, &address, &port);
+    /**
+     * Receive raw data from a remote peer.
+     *
+     * In blocking mode, this function will wait until some bytes are actually
+     * received.
+     *
+     * Be careful to use a buffer which is large enough for the data that you
+     * intend to receive, if it is too small then an error will be returned and
+     * all the data will be lost.
+     *
+     * Params:
+     * 		data = The array to fill with the received bytes
+     * 		sizeReceived = The number of bytes received
+     * 		address = Address of the peer that sent the data
+     * 		port = Port of the peer that sent the data
+     *
+     * Returns: Status code.
+     */
+    Status receive(void[] data, out size_t sizeReceived, out IpAddress address, out ushort port)
+    {
+        import dsfml.system.string;
 
-		err.write(dsfml.system.string.toString(sfErr_getOutput()));
+        Status status = sfUdpSocket_receive(sfPtr, data.ptr, data.length,
+                                            &sizeReceived, &address, &port);
 
-		return status;
-	}
+        err.write(dsfml.system.string.toString(sfErr_getOutput()));
 
-	///Receive a formatted packet of data from a remote peer.
-	///
-	///In blocking mode, this function will wait until the whole packet has been received.
-	///
-	///Params:
-    ///		packet = Packet to fill with the received data.
-    ///		address = Address of the peer that sent the data.
-    ///		port = Port of the peer that sent the data.
-    ///
-	///Returns: Status code.
-	Status receive(Packet packet, out IpAddress address, out ushort port)
-	{
-		//temporary packet to be removed on function exit
-		scope SfPacket temp = new SfPacket();
+        return status;
+    }
 
-		//get the sent data
-		Status status =  sfUdpSocket_receivePacket(sfPtr, temp.sfPtr, &address, &port);
+    /**
+     * Receive a formatted packet of data from a remote peer.
+     *
+     * In blocking mode, this function will wait until the whole packet has been
+     * received.
+     *
+     * Params:
+     * 	packet = Packet to fill with the received data
+     * 	address = Address of the peer that sent the data
+     * 	port = Port of the peer that sent the data
+     *
+     * Returns: Status code.
+     */
+    Status receive(Packet packet, out IpAddress address, out ushort port)
+    {
+        //temporary packet to be removed on function exit
+        scope SfPacket temp = new SfPacket();
 
-		//put data into the packet so that it can process it first if it wants.
-		packet.onRecieve(temp.getData());
+        //get the sent data
+        Status status =  sfUdpSocket_receivePacket(sfPtr, temp.sfPtr, &address, &port);
 
-		return status;
-	}
+        //put data into the packet so that it can process it first if it wants.
+        packet.onRecieve(temp.getData());
 
-	///Unbind the socket from the local port to which it is bound.
-	///
-	///The port that the socket was previously using is immediately available after this function is called. If the socket is not bound to a port, this function has no effect.
-	void unbind()
-	{
-		sfUdpSocket_unbind(sfPtr);
-	}
+        return status;
+    }
+
+    /**
+     * Unbind the socket from the local port to which it is bound.
+     *
+     * The port that the socket was previously using is immediately available
+     * after this function is called. If the socket is not bound to a port, this
+     * function has no effect.
+     */
+    void unbind()
+    {
+        sfUdpSocket_unbind(sfPtr);
+    }
 
 }
 
 unittest
 {
-	version(DSFML_Unittest_Network)
-	{
-		import std.stdio;
+    version(DSFML_Unittest_Network)
+    {
+        import std.stdio;
 
-		writeln("Unittest for Udp Socket");
+        writeln("Unittest for Udp Socket");
 
-		auto clientSocket = new UdpSocket();
+        auto clientSocket = new UdpSocket();
 
-		//bind this socket to this port for receiving data
-		clientSocket.bind(56001);
+        //bind this socket to this port for receiving data
+        clientSocket.bind(56001);
 
-		auto serverSocket = new UdpSocket();
+        auto serverSocket = new UdpSocket();
 
-		serverSocket.bind(56002);
-
-
-		//auto sendingPacket = new Packet();
-
-		//sendingPacket.writeString("I sent you data!");
-		writeln("Sending data!");
-		//send the data to the port our server is listening to
-		clientSocket.send("I sent you data!", IpAddress.LocalHost, 56002);
+        serverSocket.bind(56002);
 
 
-		IpAddress receivedFrom;
-		ushort receivedPort;
-		auto receivedPacket = new Packet();
+        //auto sendingPacket = new Packet();
 
-		//get the information received as well as information about the sender
-		//serverSocket.receive(receivedPacket,receivedFrom, receivedPort);
-
-		char[1024] temp2;
-		size_t received;
-
-		writeln("Receiving data!");
-		serverSocket.receive(temp2,received, receivedFrom, receivedPort);
-
-		//What did we get?!
-		writeln("The data received from ", receivedFrom, " at port ", receivedPort, " was: ", cast(string)temp2[0..received]);
+        //sendingPacket.writeString("I sent you data!");
+        writeln("Sending data!");
+        //send the data to the port our server is listening to
+        clientSocket.send("I sent you data!", IpAddress.LocalHost, 56002);
 
 
-		writeln();
-	}
+        IpAddress receivedFrom;
+        ushort receivedPort;
+        auto receivedPacket = new Packet();
+
+        //get the information received as well as information about the sender
+        //serverSocket.receive(receivedPacket,receivedFrom, receivedPort);
+
+        char[1024] temp2;
+        size_t received;
+
+        writeln("Receiving data!");
+        serverSocket.receive(temp2,received, receivedFrom, receivedPort);
+
+        //What did we get?!
+        writeln("The data received from ", receivedFrom, " at port ", receivedPort, " was: ", cast(string)temp2[0..received]);
+
+
+        writeln();
+    }
 }
 
 package extern(C):
