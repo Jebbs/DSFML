@@ -1,0 +1,154 @@
+DSFML 2.4
+=========
+
+General
+=======
+
+Compiler Support
+----------------
+Added Supported Compilers:
+- DMD 2.074.1, 2.075.0
+- LDC 1.2.0, 1.3.0
+
+Dropped Supported Compilers:
+- DMD 2.067.1 (Windows version does not include mscoff32 libs)
+- LDC 1.0.0 (Not correctly configured on Travic CI for OSX)
+- LDC 0.17.x (New versions of this compiler are not built for Windows)
+- LDC 0.16.1 (Droped support for DMD version 2.067)
+
+
+Documentation
+-------------
+Added documentation to functions that had none.
+
+Moved detailed class description to the module, which causes it to be displayed
+towards the top of the generated documentation.
+
+Added code examples.
+
+Documentation for property functions is no longer displayed twice when there
+exists a getter and setter.
+
+Added links to related modules.
+
+Removed the authors section in the documentation as it doesn't add anything of
+substance.
+
+Added ddoc files for locally generated documentation and documentation meant for
+the dsfml.org website.
+
+
+System
+======
+
+Vector2
+-------
+Bool types are now allowed(to be compatible with the GLSL moddule)
+
+
+Vector3
+-------
+Bool types are now allowed(to be compatible with the GLSL moddule)
+
+
+
+Network
+=======
+
+IpAddress
+---------
+Updated IpAddress to match the current SFML IpAddress structure, and changed all
+IpAddress usage to use the structure directly instead of relying on internal
+helper functions.
+
+Updated the IpAddress from bytes and from uint constructors to run at compile
+time.
+
+Added the IpAddress.Any constant, which represents any Ip Address.
+
+Socket
+------
+Changed socket to be an interface as opposed to an abstract class. This allows
+setBlocking and isBlocking to be declared here as they are common between all
+sockets that inherit from the Socket interface.
+
+
+TcpListener
+----------
+The listen function can now accept a specific IpAddress to listen to, and
+defaults to IpAddress.Any.
+
+
+TcpSocket
+--------
+Fixed an internal issue with receiving raw data.
+
+
+UdpSocket
+----------
+The bind function can now accept a specific IpAddress to be bound to, and
+defaults to IpAddress.Any.
+
+Fixed an internal issue with receiving raw data.
+
+
+Window
+======
+
+Event
+-----
+MouseWheelEvent was marked as deprecated (Use MouseWheelScrollEvent instead).
+
+
+Graphics
+========
+
+Color
+-----
+Added the color * color and color*= color operators, which SFML calls
+modulation.
+
+GLSL
+----
+Added glsl.d, which has all the types related to working with GLSL functions.
+
+
+PrimitiveType
+------------
+Added LineStrip, TriangleStrip, and TriangleFan members.
+
+LinesStrip, TrianglesStrip, and TrianglesFan were marked as deprecated (instead,
+use LineStrip, TriangleStrip, and TriangleFan respectively).
+
+
+RenderWindow
+------------
+Added RenderWindow.capture, and then marked it as deprecated. Although this was
+immediately marked as deprecated, it should still be present in the current API.
+Use a Texture, its update function, and copy its contents into an Image instead.
+
+
+Shader
+------
+Added setUniform and setUniformArray functions.
+
+Changed opIndexAssign functions to use the setUniform and setUniformArray
+functions instead of the setParameter functions where applicable.
+
+Added opIndexAssign for new setUniform and setUniformArray where needed.
+
+Marked all setParameter functions as deprecated. Use their setUniform variants
+instead.
+
+Texture
+-------
+Marked updateFromImage, updateFromPixels, updateFromWindow, and updateFromWindow
+as deprecated. These have been replaced by their respective update overloads,
+which are now also work with const objects if they didn't already.
+
+Added update functions for pixels, an Image, and Window/RenderWindow without the
+need to define an x and y.
+
+Transform
+--------
+getMatrix is now a const function.

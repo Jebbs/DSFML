@@ -3,13 +3,14 @@
         "description": "DSFML binding for SFML-The Simple and Fast Multimedia Library",
         "authors": ["Jeremy DeHaan"],
         "homepage": "https://github.com/Jebbs/DSFML",
+        "version":"2.4.0",
         "license": "Zlib",
         "dependencies": {
-            "dsfml:audio": "~>2.1",
-            "dsfml:graphics": "~>2.1",
-            "dsfml:window": "~>2.1",
-            "dsfml:network": "~>2.1",
-            "dsfml:system": "~>2.1"
+            "dsfml:audio": "~>2.4",
+            "dsfml:graphics": "~>2.4",
+            "dsfml:window": "~>2.4",
+            "dsfml:network": "~>2.4",
+            "dsfml:system": "~>2.4"
         },
         "subPackages":
         [
@@ -18,9 +19,9 @@
                         "targetType": "library",
                         "sourcePaths": ["src/dsfml/audio"],
                         "libs": [ "dsfmlc-audio" ],
-                        "dependencies": 
-                        { 
-                                "dsfml:system": "~>2.1" 
+                        "dependencies":
+                        {
+                                "dsfml:system": "~>2.4"
                         }
                 },
                 {
@@ -28,19 +29,19 @@
                         "targetType": "library",
                         "sourcePaths": ["src/dsfml/graphics"],
                         "libs": [ "dsfmlc-graphics" ],
-                        "dependencies": 
-                        { 
-                                "dsfml:system": "~>2.1",
-                                "dsfml:window": "~>2.1"
+                        "dependencies":
+                        {
+                                "dsfml:system": "~>2.4",
+                                "dsfml:window": "~>2.4"
                         }
                 },
                 {
                         "name": "window",
                         "sourcePaths": ["src/dsfml/window"],
                         "libs": [ "dsfmlc-window" ],
-                        "dependencies": 
-                        { 
-                                "dsfml:system": "~>2.1" 
+                        "dependencies":
+                        {
+                                "dsfml:system": "~>2.4"
                         }
                 },
                 {
@@ -48,9 +49,9 @@
                         "targetType": "library",
                         "sourcePaths": ["src/dsfml/network"],
                         "libs": [ "dsfmlc-network" ],
-                        "dependencies": 
-                        { 
-                                "dsfml:system": "~>2.1" 
+                        "dependencies":
+                        {
+                                "dsfml:system": "~>2.4"
                         }
                 },
                 {

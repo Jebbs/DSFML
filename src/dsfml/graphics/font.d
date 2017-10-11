@@ -1,22 +1,95 @@
 /*
-DSFML - The Simple and Fast Multimedia Library for D
+ * DSFML - The Simple and Fast Multimedia Library for D
+ *
+ * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ *
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from the
+ * use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not claim
+ * that you wrote the original software. If you use this software in a product,
+ * an acknowledgment in the product documentation would be appreciated but is
+ * not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution
+ */
 
-Copyright (c) 2013 - 2015 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose, including commercial applications,
-and to alter it and redistribute it freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
-If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-
-3. This notice may not be removed or altered from any source distribution
-*/
-
+/**
+ *
+ * Fonts can be loaded from a file, from memory or from a custom stream, and
+ * supports the most common types of fonts. See the `loadFromFile` function for
+ * the complete list of supported formats.
+ *
+ * Once it is loaded, a $(U Font) instance provides three types of information
+ * about the font:
+ * $(UL
+ * $(LI Global metrics, such as the line spacing)
+ * $(LI Per-glyph metrics, such as bounding box or kerning)
+ * $(LI Pixel representation of glyphs))
+ *
+ * $(PARA
+ * Fonts alone are not very useful: they hold the font data but cannot make
+ * anything useful of it. To do so you need to use the $(TEXT_LINK) class, which
+ * is able to properly output text with several options such as character size,
+ * style, color, position, rotation, etc.
+ * This separation allows more flexibility and better performances: indeed a
+ & $(U Font) is a heavy resource, and any operation on it is slow (often too
+ * slow for real-time applications). On the other side, a $(TEXT_LINK) is a
+ * lightweight object which can combine the glyphs data and metrics of a
+ * $(U Font) to display any text on a render target.
+ * Note that it is also possible to bind several $(TEXT_LINK) instances to the
+ * same $(U Font).
+ *
+ * It is important to note that the $(TEXT_LINK) instance doesn't copy the font
+ * that it uses, it only keeps a reference to it. Thus, a $(U Font) must not be
+ * destructed while it is used by a $(TEXT_LINK).)
+ *
+ * Example:
+ * ---
+ * // Declare a new font
+ * auto font = new Font();
+ *
+ * // Load it from a file
+ * if (!font.loadFromFile("arial.ttf"))
+ * {
+ *     // error...
+ * }
+ *
+ * // Create a text which uses our font
+ * auto text1 = new Text();
+ * text1.setFont(font);
+ * text1.setCharacterSize(30);
+ * text1.setStyle(Text.Style.Regular);
+ *
+ * // Create another text using the same font, but with different parameters
+ * auto text2 = new Text();
+ * text2.setFont(font);
+ * text2.setCharacterSize(50);
+ * text2.setStyle(Text.Style.Italic);
+ * ---
+ *
+ * $(PARA Apart from loading font files, and passing them to instances of
+ * $(TEXT_LINK), you should normally not have to deal directly with this class.
+ * However, it may be useful to access the font metrics or rasterized glyphs for
+ * advanced usage.
+ *
+ * Note that if the font is a bitmap font, it is not scalable, thus not all
+ * requested sizes will be available to use. This needs to be taken into
+ * consideration when using $(TEXT_LINK).
+ * If you need to display text of a certain size, make sure the corresponding
+ * bitmap font that supports that size is used.)
+ *
+ * See_Also:
+ * $(TEXT_LINK)
+ */
 module dsfml.graphics.font;
 
 import dsfml.graphics.texture;
@@ -24,276 +97,330 @@ import dsfml.graphics.glyph;
 import dsfml.system.inputstream;
 import dsfml.system.err;
 
-/++
- + Class for loading and manipulating character fonts.
- + 
- + Fonts can be loaded from a file, from memory or from a custom stream, and supports the most common types of fonts.
- + 
- + See the loadFromFile function for the complete list of supported formats.
- + 
- + Once it is loaded, a Font instance provides three types of information about the font:
- + - Global metrics, such as the line spacing
- + - Per-glyph metrics, such as bounding box or kerning
- + - Pixel representation of glyphs
- + 
- + Authors: Laurent Gomila, Jeremy DeHaan
- + See_Also: http://sfml-dev.org/documentation/2.0/classsf_1_1Font.php#details
- +/
+/**
+ * Class for loading and manipulating character fonts.
+ */
 class Font
 {
-	package sfFont* sfPtr;
 
-	private Texture fontTexture;
-	private fontStream m_stream;//keeps an instance of the C++ stream stored if used
+    /// Holds various information about a font.
+    struct Info
+    {
+        /// The font family.
+        const(char)[] family;
+    }
 
-	/// Defines an empty font
-	this()
-	{
-		sfPtr = sfFont_construct();
-		fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
-	}
+    package sfFont* sfPtr;
+    private Info m_info;
+    private Texture fontTexture;
+    //keeps an instance of the C++ stream stored if used
+    private fontStream m_stream;
 
-	package this(sfFont* newFont)
-	{
-		sfPtr = newFont;
-		fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
-	}
-	
-	~this()
-	{
-		import dsfml.system.config;
-		mixin(destructorOutput);
-		sfFont_destroy(sfPtr);
-	}
+    /**
+     * Default constructor.
+     *
+     * Defines an empty font.
+     */
+    this()
+    {
+        sfPtr = sfFont_construct();
+        fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
+    }
 
-	/**
-	 * Load the font from a file.
-	 * 
-	 * The supported font formats are: TrueType, Type 1, CFF, OpenType, SFNT, X11 PCF, Windows FNT, BDF, PFR and Type 42. Note that this function know nothing about the standard fonts installed on the user's system, thus you can't load them directly.
-	 * 
-	 * Params:
-	 * 		filename	= Path of the font file to load
-	 * 
-	 * Returns: True if loading succeeded, false if it failed.
-	 */
-	bool loadFromFile(string filename)
-	{
-		import dsfml.system.string;
+    package this(sfFont* newFont)
+    {
+        sfPtr = newFont;
+        fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
+    }
 
-		bool ret = sfFont_loadFromFile(sfPtr, toStringz(filename));
-		if(!ret)
-		{
-			err.write(dsfml.system.string.toString(sfErr_getOutput()));
-		}
-		
-		return ret;
-	}
+    /// Destructor.
+    ~this()
+    {
+        import dsfml.system.config;
+        mixin(destructorOutput);
+        sfFont_destroy(sfPtr);
+    }
 
-	/**
-	 * Load the font from a file in memory.
-	 * 
-	 * The supported font formats are: TrueType, Type 1, CFF, OpenType, SFNT, X11 PCF, Windows FNT, BDF, PFR and Type 42. Warning: SFML cannot preload all the font data in this function, so the buffer pointed by data has to remain valid as long as the font is used.
-	 * 
-	 * Params:
-	 * 		data	= data holding the font file
-	 * 
-	 * Returns: True if loading succeeded, false if it failed.
-	 */
-	bool loadFromMemory(const(void)[] data)
-	{
-		import dsfml.system.string;
+    /**
+     * Load the font from a file.
+     *
+     * The supported font formats are: TrueType, Type 1, CFF, OpenType, SFNT,
+     * X11 PCF, Windows FNT, BDF, PFR and Type 42. Note that this function know
+     * nothing about the standard fonts installed on the user's system, thus you
+     * can't load them directly.
+     *
+     * DSFML cannot preload all the font data in this function, so the file has
+     * to remain accessible until the Font object loads a new font or is
+     * destroyed.
+     *
+     * Params:
+     * 		filename	= Path of the font file to load
+     *
+     * Returns: true if loading succeeded, false if it failed.
+     */
+    bool loadFromFile(const(char)[] filename)
+    {
+        import dsfml.system.string;
 
-		bool ret = sfFont_loadFromMemory(sfPtr, data.ptr, data.length);
-		if(!ret)
-		{
-			err.write(dsfml.system.string.toString(sfErr_getOutput()));
-		}
-		
-		return ret;
-	}
+        bool ret = sfFont_loadFromFile(sfPtr, filename.ptr, filename.length);
+        if(!ret)
+        {
+            err.write(dsfml.system.string.toString(sfErr_getOutput()));
+        }
 
-	/**
-	 * Load the font from a custom stream.
-	 * 
-	 * The supported font formats are: TrueType, Type 1, CFF, OpenType, SFNT, X11 PCF, Windows FNT, BDF, PFR and Type 42. Warning: SFML cannot preload all the font data in this function, so the contents of stream have to remain valid as long as the font is used.
-	 * 
-	 * Params:
-	 * 		stream	= Source stream to read from
-	 * 
-	 * Returns: True if loading succeeded, false if it failed.
-	 */
-	bool loadFromStream(InputStream stream)
-	{
-		import dsfml.system.string;
+        return ret;
+    }
 
-		m_stream = new fontStream(stream);
+    /**
+     * Load the font from a file in memory.
+     *
+     * The supported font formats are: TrueType, Type 1, CFF, OpenType, SFNT,
+     * X11 PCF, Windows FNT, BDF, PFR and Type 42.
+     *
+     * DSFML cannot preload all the font data in this function, so the buffer
+     * pointed by data has to remain valid until the Font object loads a new
+     * font or is destroyed.
+     *
+     * Params:
+     * 		data	= data holding the font file
+     *
+     * Returns: true if loading succeeded, false if it failed.
+     */
+    bool loadFromMemory(const(void)[] data)
+    {
+        import dsfml.system.string;
 
-		bool ret = sfFont_loadFromStream(sfPtr, m_stream);
+        bool ret = sfFont_loadFromMemory(sfPtr, data.ptr, data.length);
+        if(!ret)
+        {
+            err.write(dsfml.system.string.toString(sfErr_getOutput()));
+        }
 
-		if(!ret)
-		{
-			err.write(dsfml.system.string.toString(sfErr_getOutput()));
-		}
-		
-		return ret;
-	}
+        return ret;
+    }
 
-	/**
-	 * Retrieve a glyph of the font.
-	 * 
-	 * Params:
-	 * 		codePoint		= Unicode code point of the character ot get
-	 * 		characterSize	= Reference character size
-	 * 		bols			= Retrieve the bold version or the regular one?
-	 * 
-	 * Returns: The glyph corresponding to codePoint and characterSize
-	 */
-	Glyph getGlyph(dchar codePoint, uint characterSize, bool bold) const
-	{
-		Glyph temp;
+    /**
+     * Load the font from a custom stream.
+     *
+     * The supported font formats are: TrueType, Type 1, CFF, OpenType, SFNT,
+     * X11 PCF, Windows FNT, BDF, PFR and Type 42.
+     *
+     * DSFML cannot preload all the font data in this function, so the contents
+     * of stream have to remain valid as long as the font is used.
+     *
+     * Params:
+     * 		stream	= Source stream to read from
+     *
+     * Returns: true if loading succeeded, false if it failed.
+     */
+    bool loadFromStream(InputStream stream)
+    {
+        import dsfml.system.string;
 
-		sfFont_getGlyph(sfPtr, cast(uint)codePoint, characterSize,bold,&temp.advance,&temp.bounds.left,&temp.bounds.top,&temp.bounds.width,&temp.bounds.height,&temp.textureRect.left,&temp.textureRect.top,&temp.textureRect.width,&temp.textureRect.height);
+        m_stream = new fontStream(stream);
 
-		return temp;
-	}
+        bool ret = sfFont_loadFromStream(sfPtr, m_stream);
 
-	/**
-	 * Get the kerning offset of two glyphs.
-	 * 
-	 * The kerning is an extra offset (negative) to apply between two glyphs when rendering them, to make the pair look more "natural". For example, the pair "AV" have a special kerning to make them closer than other characters. Most of the glyphs pairs have a kerning offset of zero, though.
-	 * 
-	 * Params:
-	 * 		first			= Unicode code point of the first character
-	 * 		second			= Unicode code point of the second character
-	 * 		characterSize	= Reference character size
-	 * 
-	 * Returns: Kerning value for first and second, in pixels
-	 */
-	int getKerning (dchar first, dchar second, uint characterSize) const 
-	{
-		return sfFont_getKerning(sfPtr, cast(uint)first, cast(uint)second, characterSize);	
-	}
+        if(!ret)
+        {
+            err.write(dsfml.system.string.toString(sfErr_getOutput()));
+        }
 
-	/**
-	 * Get the line spacing.
-	 * 
-	 * The spacing is the vertical offset to apply between consecutive lines of text.
-	 * 
-	 * Params:
-	 * 		characterSize	= Reference character size
-	 * 
-	 * Returns: Line spacing, in pixels
-	 */
-	int getLineSpacing (uint characterSize) const
-	{
-		return sfFont_getLineSpacing(sfPtr, characterSize);	
-	}
+        return ret;
+    }
 
-	/**
-	 * Retrieve the texture containing the loaded glyphs of a certain size.
-	 * 
-	 * The contents of the returned texture changes as more glyphs are requested, thus it is not very relevant. It is mainly used internally by Text.
-	 * 
-	 * Params:
-	 * 		characterSize	= Reference character size
-	 * 
-	 * Returns: Texture containing the glyphs of the requested size
-	 */
-	const(Texture) getTexture (uint characterSize) const
-	{
-		//ToDo: cache texture somehow?
-		//Possible: cache last size used using sound method(mutable instance storage)
+    ref const(Info) getInfo()
+    {
+        return m_info;
+    }
+
+    /**
+     * Retrieve a glyph of the font.
+     *
+     * Params:
+     * 		codePoint		= Unicode code point of the character ot get
+     * 		characterSize	= Reference character size
+     * 		bold			= Retrieve the bold version or the regular one?
+     *
+     * Returns: The glyph corresponding to codePoint and characterSize.
+     */
+    Glyph getGlyph(dchar codePoint, uint characterSize, bool bold) const
+    {
+        Glyph temp;
+
+        sfFont_getGlyph(sfPtr, cast(uint)codePoint, characterSize,bold,&temp.advance,&temp.bounds.left,&temp.bounds.top,&temp.bounds.width,&temp.bounds.height,&temp.textureRect.left,&temp.textureRect.top,&temp.textureRect.width,&temp.textureRect.height);
+
+        return temp;
+    }
+
+    /**
+     * Get the kerning offset of two glyphs.
+     *
+     * The kerning is an extra offset (negative) to apply between two glyphs
+     * when rendering them, to make the pair look more "natural". For example,
+     * the pair "AV" have a special kerning to make them closer than other
+     * characters. Most of the glyphs pairs have a kerning offset of zero,
+     * though.
+     *
+     * Params:
+     * 		first			= Unicode code point of the first character
+     * 		second			= Unicode code point of the second character
+     * 		characterSize	= Reference character size
+     *
+     * Returns: Kerning value for first and second, in pixels.
+     */
+    float getKerning (dchar first, dchar second, uint characterSize) const
+    {
+        return sfFont_getKerning(sfPtr, cast(uint)first, cast(uint)second, characterSize);
+    }
+
+    /**
+     * Get the line spacing.
+     *
+     * The spacing is the vertical offset to apply between consecutive lines of
+     * text.
+     *
+     * Params:
+     * 		characterSize	= Reference character size
+     *
+     * Returns: Line spacing, in pixels.
+     */
+    float getLineSpacing (uint characterSize) const
+    {
+        return sfFont_getLineSpacing(sfPtr, characterSize);
+    }
+
+    /**
+     * Get the position of the underline.
+     *
+     * Underline position is the vertical offset to apply between the baseline
+     * and the underline.
+     *
+     * Params:
+     * 		characterSize	= Reference character size
+     *
+     * Returns: Underline position, in pixels.
+     */
+    float getUnderlinePosition (uint characterSize) const
+    {
+        return sfFont_getUnderlinePosition(sfPtr, characterSize);
+    }
+
+    /**
+     * Get the thickness of the underline.
+     *
+     * Underline thickness is the vertical size of the underline.
+     *
+     * Params:
+     * 		characterSize	= Reference character size
+     *
+     * Returns: Underline thickness, in pixels.
+     */
+    float getUnderlineThickness (uint characterSize) const
+    {
+        return sfFont_getUnderlineThickness(sfPtr, characterSize);
+    }
+
+    /**
+     * Retrieve the texture containing the loaded glyphs of a certain size.
+     *
+     * The contents of the returned texture changes as more glyphs are
+     * requested, thus it is not very relevant. It is mainly used internally by
+     * Text.
+     *
+     * Params:
+     * 		characterSize	= Reference character size
+     *
+     * Returns: Texture containing the glyphs of the requested size.
+     */
+    const(Texture) getTexture (uint characterSize) const
+    {
+        //ToDo: cache texture somehow?
 
         import std.stdio;
-        
-        //writeln("Updating Texture");
-        
-		sfFont_updateTexture(sfPtr, characterSize);
-		
-		//fontTexture.sfPtr = sfFont_getTexture(sfPtr, characterSize);
 
-       // writeln("returning texture");
-		return fontTexture;
-	}
+        sfFont_updateTexture(sfPtr, characterSize);
 
-	/**
-	 * Performs a deep copy on the font.
-	 * 
-	 * Returns: The duplicated font.
-	 */
-	@property
-	Font dup() const
-	{
-		return new Font(sfFont_copy(sfPtr));
-	}
+        return fontTexture;
+    }
 
+    /**
+     * Performs a deep copy on the font.
+     *
+     * Returns: The duplicated font.
+     */
+    @property
+    Font dup() const
+    {
+        return new Font(sfFont_copy(sfPtr));
+    }
 }
 
 unittest
 {
-	version(DSFML_Unittest_Graphics)
-	{
-		import std.stdio;
+    version(DSFML_Unittest_Graphics)
+    {
+        import std.stdio;
 
-		import dsfml.graphics.text;
+        import dsfml.graphics.text;
 
-		writeln("Unitest for Font");
+        writeln("Unitest for Font");
 
-		auto font = new Font();
-		assert(font.loadFromFile("res/Warenhaus-Standard.ttf"));
+        auto font = new Font();
+        assert(font.loadFromFile("res/Warenhaus-Standard.ttf"));
 
-		Text text;
-		text = new Text("Sample String", font);
+        Text text;
+        text = new Text("Sample String", font);
 
 
-		//draw text or something
+        //draw text or something
 
-		writeln();
-	}
+        writeln();
+    }
 }
 
 
 private:
 private extern(C++) interface fontInputStream
 {
-	long read(void* data, long size);
-	
-	long seek(long position);
-	
-	long tell();
-	
-	long getSize();
+    long read(void* data, long size);
+
+    long seek(long position);
+
+    long tell();
+
+    long getSize();
 }
 
 
 private class fontStream:fontInputStream
 {
-	private InputStream myStream;
-	
-	this(InputStream stream)
-	{
-		myStream = stream;
-	}
-	
-	extern(C++)long read(void* data, long size)
-	{
-		return myStream.read(data[0..cast(size_t)size]);
-	}
-	
-	extern(C++)long seek(long position)
-	{
-		return myStream.seek(position);
-	}
-	
-	extern(C++)long tell()
-	{
-		return myStream.tell();
-	}
-	
-	extern(C++)long getSize()
-	{
-		return myStream.getSize();
-	}
+    private InputStream myStream;
+
+    this(InputStream stream)
+    {
+        myStream = stream;
+    }
+
+    extern(C++)long read(void* data, long size)
+    {
+        return myStream.read(data[0..cast(size_t)size]);
+    }
+
+    extern(C++)long seek(long position)
+    {
+        return myStream.seek(position);
+    }
+
+    extern(C++)long tell()
+    {
+        return myStream.tell();
+    }
+
+    extern(C++)long getSize()
+    {
+        return myStream.getSize();
+    }
 }
 
 
@@ -305,7 +432,7 @@ private extern(C):
 sfFont* sfFont_construct();
 
 //Create a new font from a file
-bool sfFont_loadFromFile(sfFont* font, const(char)* filename);
+bool sfFont_loadFromFile(sfFont* font, const(char)* filename, size_t length);
 
 
 //Create a new image font a file in memory
@@ -325,15 +452,21 @@ void sfFont_destroy(sfFont* font);
 
 
 //Get a glyph in a font
-void sfFont_getGlyph(const(sfFont)* font, uint codePoint, int characterSize, bool bold, int* glyphAdvance, int* glyphBoundsLeft, int* glyphBoundsTop, int* glyphBoundsWidth, int* glyphBoundsHeight, int* glyphTextRectLeft, int* glyphTextRectTop, int* glyphTextRectWidth, int* glyphTextRectHeight);
+void sfFont_getGlyph(const(sfFont)* font, uint codePoint, int characterSize, bool bold, float* glyphAdvance, float* glyphBoundsLeft, float* glyphBoundsTop, float* glyphBoundsWidth, float* glyphBoundsHeight, int* glyphTextRectLeft, int* glyphTextRectTop, int* glyphTextRectWidth, int* glyphTextRectHeight);
 
 
 //Get the kerning value corresponding to a given pair of characters in a font
-int sfFont_getKerning(const(sfFont)* font, uint first, uint second, uint characterSize);
+float sfFont_getKerning(const(sfFont)* font, uint first, uint second, uint characterSize);
 
 
 //Get the line spacing value
-int sfFont_getLineSpacing(const(sfFont)* font, uint characterSize);
+float sfFont_getLineSpacing(const(sfFont)* font, uint characterSize);
+
+//Get the position of the underline
+float sfFont_getUnderlinePosition (const(sfFont)* font, uint characterSize);
+
+//Get the thickness of the underline
+float sfFont_getUnderlineThickness (const(sfFont)* font, uint characterSize);
 
 
 //Get the texture pointer for a particular font
@@ -343,7 +476,5 @@ sfTexture* sfFont_getTexture(const(sfFont)* font, uint characterSize);
 
 //Update the internal texture associated with the font
 void sfFont_updateTexture(const(sfFont)* font, uint characterSize);
-
-
 
 const(char)* sfErr_getOutput();

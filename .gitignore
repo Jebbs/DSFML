@@ -1,2 +1,21 @@
-#Ignore these things because they are annoying
 *.DS_Store
+*.obj
+*.o
+lib/
+*.exe
+CMakeFiles/
+*.cmake
+Makefile
+CMakeCache.txt
+libdsfml.a
+.dub/
+build
+build.exe
+unittest/unittest
+unittest/unittest.exe
+unittest/Text.png
+unittest/log.txt
+unittest/*.dll
+unittest/*.so
+unittest/*.dylib
+dub.selections.json
