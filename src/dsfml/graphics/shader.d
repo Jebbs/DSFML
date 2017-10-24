@@ -1148,6 +1148,19 @@ class Shader
         err.write(dsfml.system.string.toString(sfErr_getOutput()));
         return toReturn;
     }
+
+    /**
+     * Tell whether or not the system supports geometry shaders
+     *
+     * Returns: true if geometry shaders are supported, false otherwise
+     */
+    static bool isGeometryAvailable()
+    {
+        import dsfml.system.string;
+        bool toReturn = sfShader_isGeometryAvailable();
+        err.write(dsfml.system.string.toString(sfErr_getOutput()));
+        return toReturn;
+    }
 }
 
 unittest
@@ -1297,6 +1310,9 @@ void sfShader_bind(const sfShader* shader);
 
 //Tell whether or not the system supports shaders
 bool sfShader_isAvailable();
+
+//Tell whether or not the system supports geometry shaders
+bool sfShader_isGeometryAvailable();
 
 const(char)* sfErr_getOutput();
 
