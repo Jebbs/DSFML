@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -361,6 +364,7 @@ class Text : Drawable, Transformable
             {
                 //update the size
                 lastSizeUsed = m_characterSize;
+
                 //grab the new texture
                 lastTextureUsed = m_font.getTexture(m_characterSize);
             }
@@ -472,7 +476,6 @@ private:
         {
             dchar curChar = m_string[i];
 
-
             // Apply the kerning offset
             x += cast(float)(m_font.getKerning(prevChar, curChar, m_characterSize));
 
@@ -512,8 +515,6 @@ private:
                 // Next glyph, no need to create a quad for whitespace
                 continue;
             }
-
-
 
             // Extract the current glyph's description
             Glyph glyph = m_font.getGlyph(curChar, m_characterSize, bold);

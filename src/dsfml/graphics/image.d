@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -67,14 +70,12 @@
  */
 module dsfml.graphics.image;
 
-import dsfml.system.vector2;
-
 import dsfml.graphics.color;
-import dsfml.system.inputstream;
-
 import dsfml.graphics.rect;
 
 import dsfml.system.err;
+import dsfml.system.inputstream;
+import dsfml.system.vector2;
 
 /**
  * Class for loading, manipulating and saving images.
@@ -307,7 +308,7 @@ class Image
      */
     void copyImage(const(Image) source, uint destX, uint destY, IntRect sourceRect = IntRect(0,0,0,0), bool applyAlpha = false)
     {
-        sfImage_copyImage(sfPtr, source.sfPtr, destX, destY,sourceRect.left, sourceRect.top, sourceRect.width, sourceRect.height, applyAlpha);//:sfImage_copyImage(sfPtr, source.sfPtr, destX, destY, temp, sfFalse);
+        sfImage_copyImage(sfPtr, source.sfPtr, destX, destY,sourceRect.left, sourceRect.top, sourceRect.width, sourceRect.height, applyAlpha);
     }
 
     /**
@@ -383,7 +384,6 @@ unittest
 
         assert(image.getPixel(0,0) == Color.Green);
 
-
         image.flipHorizontally();
 
         assert(image.getPixel(99,0) == Color.Green);
@@ -398,7 +398,6 @@ unittest
     }
 }
 
-
 private extern(C++) interface imageInputStream
 {
     long read(void* data, long size);
@@ -409,7 +408,6 @@ private extern(C++) interface imageInputStream
 
     long getSize();
 }
-
 
 private class imageStream:imageInputStream
 {
@@ -441,7 +439,6 @@ private class imageStream:imageInputStream
     }
 }
 
-
 package extern(C) struct sfImage;
 
 private extern(C):
@@ -451,52 +448,52 @@ sfImage* sfImage_construct();
 
 void sfImage_create(sfImage* image, uint width, uint height);
 
-/// \brief Create an image and fill it with a unique color
+//Create an image and fill it with a unique color
 void sfImage_createFromColor(sfImage* image, uint width, uint height, ubyte r, ubyte b, ubyte g, ubyte a);
 
-/// \brief Create an image from an array of pixels
+//Create an image from an array of pixels
 void sfImage_createFromPixels(sfImage* image, uint width, uint height, const(ubyte)* pixels);
 
-/// \brief Create an image from a file on disk
+//Create an image from a file on disk
 bool sfImage_loadFromFile(sfImage* image, const(char)* filename, size_t length);
 
-/// \brief Create an image from a file in memory
+//Create an image from a file in memory
 bool sfImage_loadFromMemory(sfImage* image, const(void)* data, size_t size);
 
-/// \brief Create an image from a custom stream
+//Create an image from a custom stream
 bool sfImage_loadFromStream(sfImage* image, imageInputStream stream);
 
-/// \brief Copy an existing image
+//Copy an existing image
 sfImage* sfImage_copy(const(sfImage)* image);
 
-/// \brief Destroy an existing image
+//Destroy an existing image
 void sfImage_destroy(sfImage* image);
 
-/// \brief Save an image to a file on disk
+//Save an image to a file on disk
 bool sfImage_saveToFile(const sfImage* image, const char* filename, size_t length);
 
-/// \brief Return the size of an image
+//Return the size of an image
 void sfImage_getSize(const sfImage* image, uint* width, uint* height);
 
-/// \brief Create a transparency mask from a specified color-key
+//Create a transparency mask from a specified color-key
 void sfImage_createMaskFromColor(sfImage* image, ubyte r, ubyte b, ubyte g, ubyte a, ubyte alpha);
 
-/// \brief Copy pixels from an image onto another
+//Copy pixels from an image onto another
 void sfImage_copyImage(sfImage* image, const(sfImage)* source, uint destX, uint destY, int sourceRectLeft, int sourceRectTop, int sourceRectWidth, int sourceRectHeight, bool applyAlpha);
 
-/// \brief Change the color of a pixel in an image
+//Change the color of a pixel in an image
 void sfImage_setPixel(sfImage* image, uint x, uint y, ubyte r, ubyte b, ubyte g, ubyte a);
 
-/// \brief Get the color of a pixel in an image
+//Get the color of a pixel in an image
 void sfImage_getPixel(const sfImage* image, uint x, uint y, ubyte* r, ubyte* b, ubyte* g, ubyte* a);
 
-/// \brief Get a read-only pointer to the array of pixels of an image
+//Get a read-only pointer to the array of pixels of an image
 const(ubyte)* sfImage_getPixelsPtr(const sfImage* image);
 
-/// \brief Flip an image horizontally (left <-> right)
+//Flip an image horizontally (left <-> right)
 void sfImage_flipHorizontally(sfImage* image);
 
-/// \brief Flip an image vertically (top <-> bottom)
+//Flip an image vertically (top <-> bottom)
 void sfImage_flipVertically(sfImage* image);
 
 const(char)* sfErr_getOutput();

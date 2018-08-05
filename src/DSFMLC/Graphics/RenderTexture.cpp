@@ -28,7 +28,6 @@ Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 All Libraries used by SFML - For a full list see http://www.sfml-dev.org/license.php
 */
 
-// Headers
 #include <DSFMLC/Graphics/RenderTexture.h>
 #include <DSFMLC/Graphics/RenderTextureStruct.h>
 #include <DSFMLC/Graphics/CreateRenderStates.hpp>
@@ -40,17 +39,13 @@ sfRenderTexture* sfRenderTexture_construct(void)
 
 void sfRenderTexture_create(sfRenderTexture* renderTexture, DUint width, DUint height, DBool depthBuffer)
 {
-
     renderTexture->This.create(width, height, depthBuffer == DTrue);
-    //renderTexture->Target = new sfTexture(const_cast<sf::Texture*>(&renderTexture->This.getTexture()));
 }
-
 
 void sfRenderTexture_destroy(sfRenderTexture* renderTexture)
 {
     delete renderTexture;
 }
-
 
 void sfRenderTexture_getSize(const sfRenderTexture* renderTexture, DUint* x, DUint* y)
 {
@@ -59,18 +54,15 @@ void sfRenderTexture_getSize(const sfRenderTexture* renderTexture, DUint* x, DUi
     *y = sfmlSize.y;
 }
 
-
 DBool sfRenderTexture_setActive(sfRenderTexture* renderTexture, DBool active)
 {
     return renderTexture->This.setActive(active == DTrue)?DTrue: DFalse;
 }
 
-
 void sfRenderTexture_display(sfRenderTexture* renderTexture)
 {
     renderTexture->This.display();
 }
-
 
 void sfRenderTexture_clear(sfRenderTexture* renderTexture, DUbyte r, DUbyte g, DUbyte b, DUbyte a)
 {
@@ -78,7 +70,6 @@ void sfRenderTexture_clear(sfRenderTexture* renderTexture, DUbyte r, DUbyte g, D
 
     renderTexture->This.clear(SFMLColor);
 }
-
 
 void sfRenderTexture_setView(sfRenderTexture* renderTexture, float centerX, float centerY, float sizeX,
 		float sizeY, float rotation, float viewportLeft, float viewportTop, float viewportWidth,
@@ -91,7 +82,6 @@ void sfRenderTexture_setView(sfRenderTexture* renderTexture, float centerX, floa
 	view.setViewport(sf::FloatRect(viewportLeft, viewportTop, viewportWidth, viewportHeight));
     renderTexture->This.setView(view);
 }
-
 
 void sfRenderTexture_getView(const sfRenderTexture* renderTexture, float* centerX, float* centerY, float* sizeX,
 		float* sizeY, float* rotation, float* viewportLeft, float* viewportTop, float* viewportWidth,
@@ -108,7 +98,6 @@ void sfRenderTexture_getView(const sfRenderTexture* renderTexture, float* center
     *viewportWidth = view.getViewport().width;
     *viewportHeight = view.getViewport().height;
 }
-
 
 void sfRenderTexture_getDefaultView(const sfRenderTexture* renderTexture, float* centerX, float* centerY, float* sizeX,
 		float* sizeY, float* rotation, float* viewportLeft, float* viewportTop, float* viewportWidth,
@@ -137,38 +126,31 @@ void sfRenderTexture_drawPrimitives(sfRenderTexture* renderTexture,
     		colorDstFactor, colorEquation, alphaSrcFactor, alphaDstFactor, alphaEquation, transform, texture, shader));
 }
 
-
 void sfRenderTexture_pushGLStates(sfRenderTexture* renderTexture)
 {
     renderTexture->This.pushGLStates();
 }
-
 
 void sfRenderTexture_popGLStates(sfRenderTexture* renderTexture)
 {
     renderTexture->This.popGLStates();
 }
 
-
 void sfRenderTexture_resetGLStates(sfRenderTexture* renderTexture)
 {
     renderTexture->This.resetGLStates();
 }
 
-
 sfTexture* sfRenderTexture_getTexture(const sfRenderTexture* renderTexture)
 {
     //Safe because the pointer will only be used in a const instance
-    //return const_cast<sfTexture*>(renderTexture->Target);
     return new sfTexture(const_cast<sf::Texture*>(&renderTexture->This.getTexture()));
 }
-
 
 void sfRenderTexture_setSmooth(sfRenderTexture* renderTexture, DBool smooth)
 {
     renderTexture->This.setSmooth(smooth == DTrue);
 }
-
 
 DBool sfRenderTexture_isSmooth(const sfRenderTexture* renderTexture)
 {

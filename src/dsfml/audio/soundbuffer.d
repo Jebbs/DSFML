@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -93,9 +96,7 @@ import dsfml.audio.sound;
 import dsfml.system.inputstream;
 
 import std.stdio;
-
 import std.string;
-
 import std.algorithm;
 import std.array;
 
@@ -298,7 +299,6 @@ class SoundBuffer
         }
         else
         {
-
             err.write(dsfml.system.string.toString(sfErr_getOutput()));
             return false;
         }
@@ -336,7 +336,6 @@ unittest
     }
 }
 
-
 private extern(C++) interface sfmlInputStream
 {
     long read(void* data, long size);
@@ -347,7 +346,6 @@ private extern(C++) interface sfmlInputStream
 
     long getSize();
 }
-
 
 private class SoundBufferStream:sfmlInputStream
 {

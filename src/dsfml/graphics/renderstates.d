@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -107,7 +110,6 @@ struct RenderStates
 
         m_texture = null;
         m_shader = null;
-
     }
 
     /**
@@ -178,6 +180,7 @@ struct RenderStates
             m_shader = theShader;
             return theShader;
         }
+
         /// ditto
         const(Shader) shader()
         {
@@ -193,6 +196,7 @@ struct RenderStates
             m_texture = theTexture;
             return theTexture;
         }
+
         /// ditto
         const(Texture) texture()
         {

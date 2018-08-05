@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -93,7 +96,6 @@ class Sound : SoundSource
         this();
 
         setBuffer(buffer);
-
     }
 
     /// Destructor.
@@ -121,6 +123,7 @@ class Sound : SoundSource
         {
             sfSound_setLoop(sfPtr, loop);
         }
+
         /// ditto
         bool isLooping()
         {
@@ -140,6 +143,7 @@ class Sound : SoundSource
         {
             sfSound_setPlayingOffset(sfPtr, offset.total!"usecs");
         }
+
         /// ditto
         Duration playingOffset()
         {
@@ -173,6 +177,7 @@ class Sound : SoundSource
         {
             sfSound_setPitch(sfPtr, newPitch);
         }
+
         /// ditto
         float pitch()
         {
@@ -192,6 +197,7 @@ class Sound : SoundSource
         {
             sfSound_setVolume(sfPtr, newVolume);
         }
+
         /// ditto
         float volume()
         {
@@ -212,6 +218,7 @@ class Sound : SoundSource
             sfSound_setPosition(sfPtr, newPosition.x, newPosition.y,
                                 newPosition.z);
         }
+
         /// ditto
         Vector3f position()
         {
@@ -237,6 +244,7 @@ class Sound : SoundSource
         {
             sfSound_setRelativeToListener(sfPtr, relative);
         }
+
         /// ditto
         bool relativeToListener()
         {
@@ -259,6 +267,7 @@ class Sound : SoundSource
         {
             sfSound_setMinDistance(sfPtr, distance);
         }
+
         /// ditto
         float minDistance()
         {
@@ -284,16 +293,13 @@ class Sound : SoundSource
         {
             sfSound_setAttenuation(sfPtr, newAttenuation);
         }
+
         /// ditto
         float attenuation()
         {
             return sfSound_getAttenuation(sfPtr);
         }
     }
-
-
-
-    //soundsource
 
     /*
      * Set the source buffer containing the audio data to play.

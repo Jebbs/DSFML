@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -57,7 +60,6 @@ module dsfml.audio.soundbufferrecorder;
 
 import dsfml.audio.soundrecorder;
 import dsfml.audio.soundbuffer;
-
 
 /**
  * Specialized SoundRecorder which stores the captured audio data into a sound
@@ -155,14 +157,11 @@ unittest
         import dsfml.system.clock;
         import dsfml.system.sleep;
 
-
         writeln("Unit test for SoundBufferRecorder.");
 
         assert(SoundRecorder.isAvailable());
 
-
         auto recorder = new SoundBufferRecorder();
-
 
         auto clock = new Clock();
 
@@ -174,6 +173,7 @@ unittest
         {
             //wait for a second
         }
+
         writeln("2");
 
         clock.restart();
@@ -182,6 +182,7 @@ unittest
         {
             //wait for a second
         }
+
         writeln("1");
 
         clock.restart();
@@ -190,6 +191,7 @@ unittest
         {
             //wait for a second
         }
+
         writeln("Recording!");
 
         recorder.start();
@@ -202,13 +204,10 @@ unittest
 
         writeln("Done!");
 
-
         recorder.stop();
 
         auto buffer = recorder.getBuffer();
-
         auto recorderDuration = buffer.getDuration();
-
         auto recorderSound = new Sound(buffer);
 
         clock.restart();

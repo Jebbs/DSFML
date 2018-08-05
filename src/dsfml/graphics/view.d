@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -46,7 +49,7 @@
  * auto window = RenderWindow();
  * auto view = View();
  *
- * // Initialize the view to a rectangle located at (100, 100) and with a size of 400x200
+ * // Initialize the view to a rectangle at (100, 100) and a size of 400x200
  * view.reset(FloatRect(100, 100, 400, 200));
  *
  * // Rotate it by 45 degrees
@@ -136,6 +139,7 @@ struct View
 
             return newCenter;
         }
+
         /// ditto
         Vector2f center() const
         {
@@ -160,6 +164,7 @@ struct View
 
             return newRotation;
         }
+
         /// ditto
         float rotation() const
         {
@@ -178,6 +183,7 @@ struct View
             m_invTransformUpdated = false;
             return newSize;
         }
+
         /// ditto
         Vector2f size() const
         {
@@ -203,6 +209,7 @@ struct View
 
             return newTarget;
         }
+
         /// ditto
         FloatRect viewport() const
         {
@@ -344,6 +351,7 @@ struct View
 
         return m_inverseTransform;
     }
+
     /// ditto
     Transform getInverseTransform() const
     {

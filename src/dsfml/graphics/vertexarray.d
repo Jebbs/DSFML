@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -247,8 +250,6 @@ unittest
 
         assert(texture.loadFromFile("res/TestImage.png"));
 
-
-
         auto dimensions = FloatRect(0,0,texture.getSize().x,texture.getSize().y);
 
         auto vertexArray = new VertexArray(PrimitiveType.Quads, 0);
@@ -259,9 +260,7 @@ unittest
         vertexArray.append(Vertex(Vector2f(dimensions.width,dimensions.height), Color.Blue, Vector2f(dimensions.width,dimensions.height)));
         vertexArray.append(Vertex(Vector2f(dimensions.width,dimensions.top), Color.Blue, Vector2f(dimensions.width,dimensions.top)));
 
-
         auto renderStates = RenderStates(texture);
-
 
         auto renderTexture = new RenderTexture();
 

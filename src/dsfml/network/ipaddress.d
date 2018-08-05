@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -220,7 +223,6 @@ struct IpAddress
     static immutable(IpAddress) Broadcast = IpAddress(255,255,255,255);
 }
 
-
 //these have the same implementation, but use different names for readability
 private uint htonl(uint host) nothrow @nogc @safe
 {
@@ -247,7 +249,6 @@ private uint ntohl(uint network) nothrow @nogc @safe
         return network;
     }
 }
-
 
 unittest
 {

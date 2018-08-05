@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -321,7 +324,6 @@ package class SfPacket
         sfPacket_destroy(sfPtr);
     }
 
-
     //Get a slice of the data contained in the packet.
     //
     //Returns: Slice containing the data.
@@ -338,7 +340,6 @@ package class SfPacket
         sfPacket_append(sfPtr, data.ptr, void.sizeof * data.length);
     }
 }
-
 
 unittest
 {
@@ -426,38 +427,29 @@ struct sfPacket;
 ///Create a new packet
 sfPacket* sfPacket_create();
 
-
 ///Create a new packet by copying an existing one
 sfPacket* sfPacket_copy(const sfPacket* packet);
-
 
 ///Destroy a packet
 void sfPacket_destroy(sfPacket* packet);
 
-
 ///Append data to the end of a packet
 void sfPacket_append(sfPacket* packet, const void* data, size_t sizeInBytes);
-
 
 ///Clear a packet
 void sfPacket_clear(sfPacket* packet);
 
-
 ///Get a pointer to the data contained in a packet
 const(void)* sfPacket_getData(const sfPacket* packet);
-
 
 ///Get the size of the data contained in a packet
 size_t sfPacket_getDataSize(const sfPacket* packet);
 
-
 ///Tell if the reading position has reached the end of a packet
 bool sfPacket_endOfPacket(const sfPacket* packet);
 
-
 ///Test the validity of a packet, for reading
 bool sfPacket_canRead(const sfPacket* packet);
-
 
 ///Functions to extract data from a packet
 bool    sfPacket_readBool(sfPacket* packet);

@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -182,20 +185,21 @@ class Window
 		}
 	}
 
-	/**
-	 * Get's or set's the window's position.
-	 *
-	 * This function only works for top-level windows (i.e. it will be ignored
-	 * for windows created from the handle of a child window/control).
-	 */
 	@property
 	{
+		/**
+	 	 * Get's or set's the window's position.
+	 	 *
+	 	 * This function only works for top-level windows (i.e. it will be ignored
+	 	 * for windows created from the handle of a child window/control).
+	 	 */
 		Vector2i position(Vector2i newPosition)
 		{
 			sfWindow_setPosition(sfPtr,newPosition.x, newPosition.y);
 			return newPosition;
 		}
 
+		/// ditto
 		Vector2i position()
 		{
 			Vector2i temp;
@@ -204,14 +208,16 @@ class Window
 		}
 	}
 
-	///Get's or set's the window's size.
 	@property
 	{
+		/// Get's or set's the window's size.
 		Vector2u size(Vector2u newSize)
 		{
 			sfWindow_setSize(sfPtr, newSize.x, newSize.y);
 			return newSize;
 		}
+
+		// ditto
 		Vector2u size()
 		{
 			Vector2u temp;
@@ -343,7 +349,7 @@ class Window
 	 */
 	void setKeyRepeatEnabled(bool enabled)
 	{
-		enabled ? sfWindow_setKeyRepeatEnabled(sfPtr,true):sfWindow_setKeyRepeatEnabled(sfPtr,false);
+		sfWindow_setKeyRepeatEnabled(sfPtr, enabled);
 	}
 
 	/**
@@ -356,7 +362,7 @@ class Window
 	 */
 	void setMouseCursorVisible(bool visible)
 	{
-		visible ? sfWindow_setMouseCursorVisible(sfPtr,true): sfWindow_setMouseCursorVisible(sfPtr,false);
+		 sfWindow_setMouseCursorVisible(sfPtr, visible);
 	}
 
 	//Cannot use templates here as template member functions cannot be virtual.
@@ -399,7 +405,7 @@ class Window
 	 */
 	void setVisible(bool visible)
 	{
-		sfWindow_setVisible(sfPtr,visible);
+		sfWindow_setVisible(sfPtr, visible);
 	}
 
 	/**
@@ -417,7 +423,7 @@ class Window
 	 */
 	void setVerticalSyncEnabled(bool enabled)
 	{
-		enabled ? sfWindow_setVerticalSyncEnabled(sfPtr, true): sfWindow_setVerticalSyncEnabled(sfPtr, false);
+		sfWindow_setVerticalSyncEnabled(sfPtr, enabled);
 	}
 
 	/**
@@ -624,7 +630,6 @@ unittest
 
 		writeln("Unit test for Window class.");
 
-
 		//constructor
 		auto window = new Window(VideoMode(800,600),"Test Window");
 
@@ -673,6 +678,7 @@ unittest
 			{
 
 			}
+
 			//requires users input
 			if(window.waitEvent(event))
 			{

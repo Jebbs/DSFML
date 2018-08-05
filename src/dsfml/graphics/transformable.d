@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -152,6 +155,7 @@ interface Transformable
          * The default origin of a transformable object is (0, 0).
          */
         Vector2f origin(Vector2f newOrigin);
+
         /// ditto
         Vector2f origin() const;
     }
@@ -160,6 +164,7 @@ interface Transformable
     {
         /// The position of the object. The default is (0, 0).
         Vector2f position(Vector2f newPosition);
+
         /// ditto
         Vector2f position() const;
     }
@@ -168,6 +173,7 @@ interface Transformable
     {
         /// The orientation of the object, in degrees. The default is 0 degrees.
         float rotation(float newRotation);
+
         /// ditto
         float rotation() const;
     }
@@ -176,6 +182,7 @@ interface Transformable
     {
         /// The scale factors of the object. The default is (1, 1).
         Vector2f scale(Vector2f newScale);
+
         /// ditto
         Vector2f scale() const;
     }
@@ -205,7 +212,6 @@ interface Transformable
      * 		offset	= The offset
      */
     void move(Vector2f offset);
-
 }
 
 /**

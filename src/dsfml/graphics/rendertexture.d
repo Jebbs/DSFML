@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -85,24 +88,20 @@
  */
 module dsfml.graphics.rendertexture;
 
-import dsfml.graphics.rendertarget;
-import dsfml.graphics.view;
-import dsfml.graphics.rect;
-import dsfml.graphics.drawable;
-import dsfml.graphics.texture;
-import dsfml.graphics.renderstates;
-import dsfml.graphics.vertex;
-import dsfml.graphics.primitivetype;
-
-import dsfml.graphics.text;
-import dsfml.graphics.shader;
-
 import dsfml.graphics.color;
-
-import dsfml.system.vector2;
-
+import dsfml.graphics.drawable;
+import dsfml.graphics.primitivetype;
+import dsfml.graphics.rect;
+import dsfml.graphics.renderstates;
+import dsfml.graphics.rendertarget;
+import dsfml.graphics.shader;
+import dsfml.graphics.text;
+import dsfml.graphics.texture;
+import dsfml.graphics.vertex;
+import dsfml.graphics.view;
 
 import dsfml.system.err;
+import dsfml.system.vector2;
 
 /**
  * Target for off-screen 2D rendering into a texture.
@@ -164,6 +163,7 @@ class RenderTexture : RenderTarget
             sfRenderTexture_setSmooth(sfPtr, newSmooth);
             return newSmooth;
         }
+
         /// ditto
         bool smooth()
         {
@@ -191,6 +191,7 @@ class RenderTexture : RenderTarget
                                     newView.viewport.left, newView.viewport.top, newView.viewport.width, newView.viewport.height);
             return newView;
         }
+
         /// ditto
         override View view() const
         {
@@ -422,7 +423,6 @@ unittest
         auto texture = renderTexture.getTexture();
 
         writeln();
-
     }
 }
 

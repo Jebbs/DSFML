@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -119,7 +122,6 @@ module dsfml.graphics.renderwindow;
 import dsfml.graphics.color;
 import dsfml.graphics.image;
 import dsfml.graphics.rect;
-
 import dsfml.graphics.drawable;
 import dsfml.graphics.primitivetype;
 import dsfml.graphics.renderstates;
@@ -129,7 +131,6 @@ import dsfml.graphics.text;
 import dsfml.graphics.texture;
 import dsfml.graphics.view;
 import dsfml.graphics.vertex;
-
 
 import dsfml.window.contextsettings;
 import dsfml.window.windowhandle;
@@ -182,7 +183,6 @@ class RenderWindow : Window, RenderTarget
     this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
         if (is(T == dchar)||is(T == wchar)||is(T == char))
     {
-
         this();
         create(mode, title, style, settings);
     }
@@ -229,6 +229,7 @@ class RenderWindow : Window, RenderTarget
             sfRenderWindow_setPosition(sfPtr,newPosition.x, newPosition.y);
             return newPosition;
         }
+
         /// ditto
         override Vector2i position()
         {
@@ -248,6 +249,7 @@ class RenderWindow : Window, RenderTarget
             sfRenderWindow_setSize(sfPtr, newSize.x, newSize.y);
             return newSize;
         }
+
         /// ditto
         override Vector2u size()
         {
@@ -277,6 +279,7 @@ class RenderWindow : Window, RenderTarget
                                     newView.viewport.left, newView.viewport.top, newView.viewport.width, newView.viewport.height);
             return newView;
         }
+
         /// ditto
         override View view() const
         {
@@ -342,7 +345,7 @@ class RenderWindow : Window, RenderTarget
     }
 
     //this is a duplicate with the size property. Need to look into that
-    ///(Inherited from RenderTarget)
+    //(Inherited from RenderTarget)
     /**
      * Return the size of the rendering region of the target.
      *
@@ -879,7 +882,6 @@ class RenderWindow : Window, RenderTarget
     {
         return getWindowPointer(window);
     }
-
 }
 
 unittest
@@ -913,7 +915,7 @@ unittest
 
         window.setTitle("thing");//uses the first set title
 
-        window.setTitle("素晴らしい ！"d);//forces the dstring override and uses unicode
+        window.setTitle("素晴らしい ！"d);//forces the dstring override and uses utf-32
 
         window.setActive(true);
 
@@ -960,9 +962,7 @@ unittest
             window.draw(sprite);
 
             window.display();
-
         }
-
 
         writeln();
     }

@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -120,7 +123,6 @@ class Thread
 			m_thread.join(true);
 		}
 	}
-
 }
 
 unittest
@@ -131,7 +133,6 @@ unittest
 		import dsfml.system.sleep;
 		import core.time;
 
-
 		void secondThreadHello()
 		{
 			for(int i = 0; i < 10; ++i)
@@ -140,16 +141,12 @@ unittest
 			}
 		}
 
-
-
-
 		writeln("Unit test for Thread class");
 		writeln();
 
 		writeln("Running two functions at once.");
 
 		auto secondThread = new Thread(&secondThreadHello);
-
 
 		secondThread.launch();
 
@@ -173,5 +170,4 @@ unittest
 		//	writeln("Hello from the main thread!");
 		//}
 	}
-
 }

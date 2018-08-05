@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -101,9 +104,7 @@ import core.time;
 import dsfml.audio.soundsource;
 
 import dsfml.system.vector3;
-
 import dsfml.system.err;
-
 
 /**
  * Abstract base class for streamed audio sources.
@@ -150,7 +151,6 @@ class SoundStream : SoundSource
         err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
-
     @property
     {
         /**
@@ -165,6 +165,7 @@ class SoundStream : SoundSource
         {
             sfSoundStream_setPitch(sfPtr, newPitch);
         }
+
         /// ditto
         float pitch()
         {
@@ -184,6 +185,7 @@ class SoundStream : SoundSource
         {
             sfSoundStream_setVolume(sfPtr, newVolume);
         }
+
         /// ditto
         float volume()
         {
@@ -203,6 +205,7 @@ class SoundStream : SoundSource
         {
             sfSoundStream_setPosition(sfPtr, newPosition.x, newPosition.y, newPosition.z);
         }
+
         /// ditto
         Vector3f position()
         {
@@ -226,6 +229,7 @@ class SoundStream : SoundSource
         {
             sfSoundStream_setLoop(sfPtr, loop);
         }
+
         /// ditto
         bool isLooping()
         {
@@ -246,6 +250,7 @@ class SoundStream : SoundSource
             sfSoundStream_setPlayingOffset(sfPtr, offset.total!"usecs");
 
         }
+
         /// ditto
         Duration playingOffset()
         {
@@ -269,6 +274,7 @@ class SoundStream : SoundSource
         {
             sfSoundStream_setRelativeToListener(sfPtr, relative);
         }
+
         /// ditto
         bool relativeToListener()
         {
@@ -291,6 +297,7 @@ class SoundStream : SoundSource
         {
             sfSoundStream_setMinDistance(sfPtr, distance);
         }
+
         /// ditto
         float minDistance()
         {
@@ -316,6 +323,7 @@ class SoundStream : SoundSource
         {
             sfSoundStream_setAttenuation(sfPtr, newAttenuation);
         }
+
         /// ditto
         float attenuation()
         {
@@ -425,8 +433,6 @@ class SoundStream : SoundSource
      *	timeOffset = New playing position, relative to the start of the stream
      */
     protected abstract void onSeek(Duration timeOffset);
-
-
 }
 
 private extern(C++)
@@ -465,24 +471,17 @@ class SoundStreamCallBacks: sfmlSoundStreamCallBacks
         (*chunk).sampleCount = samples.length;
 
         return ret;
-
     }
 
     extern(C++) void onSeek(long time)
     {
         m_stream.onSeek(usecs(time));
     }
-
-
-
 }
 
 private extern(C):
 
-
-
 struct sfSoundStream;
-
 
 sfSoundStream* sfSoundStream_construct(sfmlSoundStreamCallBacks callBacks);
 

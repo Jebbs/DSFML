@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -224,7 +227,6 @@ class Http
             sfHttpRequest_setBody(sfPtrRequest, requestBody.ptr, requestBody.length);
         }
 
-
         /**
          * Set the value of a field.
          *
@@ -320,7 +322,6 @@ class Http
 
             InvalidResponse = 1000,
             ConnectionFailed = 1001
-
         }
 
         package sfHttpResponse* sfPtrResponse;
@@ -437,70 +438,54 @@ struct sfHttp;
 //Create a new HTTP request
 sfHttpRequest* sfHttpRequest_create();
 
-
 //Destroy a HTTP request
 void sfHttpRequest_destroy(sfHttpRequest* httpRequest);
-
 
 //Set the value of a header field of a HTTP request
 void sfHttpRequest_setField(sfHttpRequest* httpRequest, const(char)* field, size_t fieldLength, const(char)* value, size_t valueLength);
 
-
 //Set a HTTP request method
 void sfHttpRequest_setMethod(sfHttpRequest* httpRequest, int method);
-
 
 //Set a HTTP request URI
 void sfHttpRequest_setUri(sfHttpRequest* httpRequest, const(char)* uri, size_t length);
 
-
 //Set the HTTP version of a HTTP request
 void sfHttpRequest_setHttpVersion(sfHttpRequest* httpRequest,uint major, uint minor);
 
-
 //Set the body of a HTTP request
 void sfHttpRequest_setBody(sfHttpRequest* httpRequest, const(char)* ody, size_t length);
-
 
 //HTTP Response Functions
 
 //Destroy a HTTP response
 void sfHttpResponse_destroy(sfHttpResponse* httpResponse);
 
-
 //Get the value of a field of a HTTP response
 const(char)* sfHttpResponse_getField(const sfHttpResponse* httpResponse, const(char)* field, size_t length);
-
 
 //Get the status code of a HTTP reponse
 Http.Response.Status sfHttpResponse_getStatus(const sfHttpResponse* httpResponse);
 
-
 //Get the major HTTP version number of a HTTP response
 uint sfHttpResponse_getMajorVersion(const sfHttpResponse* httpResponse);
-
 
 //Get the minor HTTP version number of a HTTP response
 uint sfHttpResponse_getMinorVersion(const sfHttpResponse* httpResponse);
 
-
 //Get the body of a HTTP response
 const(char)* sfHttpResponse_getBody(const sfHttpResponse* httpResponse);
-
 
 //HTTP Functions
 
 //Create a new Http object
 sfHttp* sfHttp_create();
 
-
 //Destroy a Http object
 void sfHttp_destroy(sfHttp* http);
 
-
 //Set the target host of a HTTP object
 void sfHttp_setHost(sfHttp* http, const(char)* host, size_t length, ushort port);
-
 
 //Send a HTTP request and return the server's response.
 sfHttpResponse* sfHttp_sendRequest(sfHttp* http, const(sfHttpRequest)* request, long timeout);

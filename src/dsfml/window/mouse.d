@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -179,13 +182,11 @@ unittest
         Mouse.setPosition(Vector2i(100,400));
 
         writeln("New mouse position: ", Mouse.getPosition().toString());
-
     }
 }
 
 private extern(C)
 {
-
     //Check if a mouse button is pressed
     bool sfMouse_isButtonPressed(int button);
 
