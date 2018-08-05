@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -63,7 +66,6 @@
  * $(TCPSOCKET_LINK), $(SOCKET_LINK)
  */
 module dsfml.network.tcplistener;
-
 
 import dsfml.network.ipaddress;
 import dsfml.network.socket;
@@ -172,7 +174,6 @@ class TcpListener:Socket
     {
         return (sfTcpListener_isBlocking(sfPtr));
     }
-
 }
 
 unittest
@@ -195,7 +196,6 @@ unittest
         //get our client socket to connect to the server
         clientSocket.connect(IpAddress.LocalHost, 55002);
 
-
         //socket on the server side connected to the client's socket
         auto serverSocket = new TcpSocket();
 
@@ -213,26 +213,20 @@ struct sfTcpListener;
 
 sfTcpListener* sfTcpListener_create();
 
-
 //Destroy a TCP listener
 void sfTcpListener_destroy(sfTcpListener* listener);
-
 
 //Set the blocking state of a TCP listener
 void sfTcpListener_setBlocking(sfTcpListener* listener, bool blocking);
 
-
 //Tell whether a TCP listener is in blocking or non-blocking mode
 bool sfTcpListener_isBlocking(const sfTcpListener* listener);
-
 
 //Get the port to which a TCP listener is bound locally
 ushort sfTcpListener_getLocalPort(const(sfTcpListener)* listener);
 
-
 //Start listening for connections
 Socket.Status sfTcpListener_listen(sfTcpListener* listener, ushort port, IpAddress* address);
-
 
 //Accept a new connection
 Socket.Status sfTcpListener_accept(sfTcpListener* listener, sfTcpSocket* connected);

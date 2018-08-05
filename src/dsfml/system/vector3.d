@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -66,8 +69,10 @@ struct Vector3(T)
 {
 	/// X coordinate of the vector.
 	T x;
+
 	/// Y coordinate of the vector.
 	T y;
+
 	/// Z coordinate of the vector.
 	T z;
 
@@ -120,7 +125,6 @@ struct Vector3(T)
 		{
 			return Vector3!(T)(cast(T)(x-otherVector.x),cast(T)(y-otherVector.y),cast(T)(z - otherVector.z));
 		}
-
 	}
 
 	/// Multiply/Divide a Vector3 with a numaric value.
@@ -204,6 +208,7 @@ struct Vector3(T)
 
 /// Definition of a Vector3 of integers.
 alias Vector3!(int) Vector3i;
+
 /// Definition of a Vector3 of floats.
 alias Vector3!(float) Vector3f;
 
@@ -244,5 +249,4 @@ unittest
 		writeln("Vector3 tests passed");
 		writeln();
 	}
-
 }

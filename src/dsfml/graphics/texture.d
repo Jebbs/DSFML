@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -116,7 +119,6 @@
  */
 module dsfml.graphics.texture;
 
-
 import dsfml.graphics.rect;
 import dsfml.graphics.image;
 import dsfml.graphics.renderwindow;
@@ -212,7 +214,6 @@ class Texture
     bool loadFromMemory(const(void)[] data, IntRect area = IntRect())
     {
         import dsfml.system.string;
-
 
         bool ret = sfTexture_loadFromMemory(sfPtr, data.ptr, data.length,area.left, area.top,area.width, area.height);
         if(!ret)
@@ -435,7 +436,6 @@ class Texture
         return (sfTexture_isSmooth(sfPtr));
     }
 
-
     /**
      * Update the whole texture from an array of pixels.
      *
@@ -575,7 +575,6 @@ class Texture
             sfTexture_updateFromWindow(sfPtr, RenderWindow.windowPointer(T),
                                         x, y);
         }
-
     }
 
     /**
@@ -669,7 +668,6 @@ class Texture
     {
         sfTexture_updateFromRenderWindow(sfPtr, window.sfPtr, x, y);
     }
-
 }
 
 unittest
@@ -701,7 +699,6 @@ private extern(C++) interface textureInputStream
     long getSize();
 }
 
-
 private class textureStream:textureInputStream
 {
     private InputStream myStream;
@@ -731,8 +728,6 @@ private class textureStream:textureInputStream
         return myStream.getSize();
     }
 }
-
-
 
 package extern(C) struct sfTexture;
 

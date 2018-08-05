@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -423,8 +426,6 @@ private class fontStream:fontInputStream
     }
 }
 
-
-
 package extern(C) struct sfFont;
 
 private extern(C):
@@ -434,30 +435,23 @@ sfFont* sfFont_construct();
 //Create a new font from a file
 bool sfFont_loadFromFile(sfFont* font, const(char)* filename, size_t length);
 
-
 //Create a new image font a file in memory
 bool sfFont_loadFromMemory(sfFont* font, const(void)* data, size_t sizeInBytes);
-
 
 //Create a new image font a custom stream
 bool sfFont_loadFromStream(sfFont* font, fontInputStream stream);
 
-
 // Copy an existing font
 sfFont* sfFont_copy(const sfFont* font);
-
 
 //Destroy an existing font
 void sfFont_destroy(sfFont* font);
 
-
 //Get a glyph in a font
 void sfFont_getGlyph(const(sfFont)* font, uint codePoint, int characterSize, bool bold, float* glyphAdvance, float* glyphBoundsLeft, float* glyphBoundsTop, float* glyphBoundsWidth, float* glyphBoundsHeight, int* glyphTextRectLeft, int* glyphTextRectTop, int* glyphTextRectWidth, int* glyphTextRectHeight);
 
-
 //Get the kerning value corresponding to a given pair of characters in a font
 float sfFont_getKerning(const(sfFont)* font, uint first, uint second, uint characterSize);
-
 
 //Get the line spacing value
 float sfFont_getLineSpacing(const(sfFont)* font, uint characterSize);
@@ -467,7 +461,6 @@ float sfFont_getUnderlinePosition (const(sfFont)* font, uint characterSize);
 
 //Get the thickness of the underline
 float sfFont_getUnderlineThickness (const(sfFont)* font, uint characterSize);
-
 
 //Get the texture pointer for a particular font
 sfTexture* sfFont_getTexturePtr(const(sfFont)* font);

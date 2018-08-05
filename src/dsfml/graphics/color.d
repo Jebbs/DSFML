@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -62,9 +65,9 @@
  */
 module dsfml.graphics.color;
 
-import std.math, std.traits;
-
 import std.algorithm;
+import std.math;
+import std.traits;
 
 /**
  * Color is a utility struct for manipulating 32-bits RGBA colors.
@@ -338,7 +341,6 @@ unittest
         color/= 2;//(25, 25, 25, 25)
 
         color+= Color(40,20,10,5);//(65,45, 35, 30)
-
 
         color-= Color(5,10,20,40);//(60, 35, 15, 0)
 

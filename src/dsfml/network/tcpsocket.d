@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -391,50 +394,38 @@ struct sfTcpSocket;
 //Create a new TCP socket
 sfTcpSocket* sfTcpSocket_create();
 
-
 //Destroy a TCP socket
 void sfTcpSocket_destroy(sfTcpSocket* socket);
-
 
 //Set the blocking state of a TCP listener
 void sfTcpSocket_setBlocking(sfTcpSocket* socket, bool blocking);
 
-
 //Tell whether a TCP socket is in blocking or non-blocking mode
 bool sfTcpSocket_isBlocking(const(sfTcpSocket)* socket);
-
 
 //Get the port to which a TCP socket is bound locally
 ushort sfTcpSocket_getLocalPort(const(sfTcpSocket)* socket);
 
-
 //Get the address of the connected peer of a TCP socket
 void sfTcpSocket_getRemoteAddress(const(sfTcpSocket)* socket, IpAddress* ipAddress);
-
 
 //Get the port of the connected peer to which a TCP socket is connected
 ushort sfTcpSocket_getRemotePort(const(sfTcpSocket)* socket);
 
-
 //Connect a TCP socket to a remote peer
 Socket.Status sfTcpSocket_connect(sfTcpSocket* socket, IpAddress* host, ushort port, long timeout);
-
 
 //Disconnect a TCP socket from its remote peer
 void sfTcpSocket_disconnect(sfTcpSocket* socket);
 
-
 //Send raw data to the remote peer of a TCP socket
 Socket.Status sfTcpSocket_send(sfTcpSocket* socket, const void* data, size_t size);
-
 
 //Receive raw data from the remote peer of a TCP socket
 Socket.Status sfTcpSocket_receive(sfTcpSocket* socket, void* data, size_t maxSize, size_t* sizeReceived);
 
-
 //Send a formatted packet of data to the remote peer of a TCP socket
 Socket.Status sfTcpSocket_sendPacket(sfTcpSocket* socket, sfPacket* packet);
-
 
 //Receive a formatted packet of data from the remote peer
 Socket.Status sfTcpSocket_receivePacket(sfTcpSocket* socket, sfPacket* packet);

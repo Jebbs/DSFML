@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -65,6 +68,7 @@ interface SoundSource
          * as well. The default value for the pitch is 1.
          */
         void pitch(float newPitch);
+
         /// ditto
         float pitch();
     }
@@ -78,6 +82,7 @@ interface SoundSource
          * value for the volume is 100.
          */
         void volume(float newVolume);
+
         /// ditto
         float volume();
     }
@@ -91,6 +96,7 @@ interface SoundSource
          * default position of a sound is (0, 0, 0).
          */
         void position(Vector3f newPosition);
+
         /// ditto
         Vector3f position();
     }
@@ -108,6 +114,7 @@ interface SoundSource
          * is absolute).
          */
         void relativeToListener(bool relative);
+
         /// ditto
         bool relativeToListener();
     }
@@ -124,6 +131,7 @@ interface SoundSource
          * The default value of the minimum distance is 1.
          */
         void minDistance(float distance);
+
         /// ditto
         float minDistance();
     }
@@ -143,6 +151,7 @@ interface SoundSource
          * value of the attenuation is 1.
          */
         void attenuation(float newAttenuation);
+
         /// ditto
         float attenuation();
     }

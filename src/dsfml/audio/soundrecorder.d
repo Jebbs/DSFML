@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -130,7 +133,6 @@ import core.thread;
 import core.time;
 import dsfml.system.string;
 import dsfml.system.err;
-
 
 /**
  * Abstract base class for capturing sound data.
@@ -266,7 +268,6 @@ class SoundRecorder
             {
                 availableDevices[i] = .toString(devices[i]);
             }
-
         }
 
         return availableDevices;
@@ -366,7 +367,6 @@ private:
 
 extern(C++) interface sfmlSoundRecorderCallBacks
 {
-
     bool onStart();
     bool onProcessSamples(const(short)* samples, size_t sampleCount);
     void onStop();
@@ -380,7 +380,6 @@ class SoundRecorderCallBacks: sfmlSoundRecorderCallBacks
 
     this(SoundRecorder recorder)
     {
-
         m_recorder = recorder;
     }
 

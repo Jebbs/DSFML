@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -102,8 +105,10 @@ struct Event
     {
         /// Index of the joystick (in range [0 .. Joystick::Count - 1])
         uint joystickId;
+
         /// Axis on which the joystick moved
         int axis;
+
         /// New position on the axis (in range [-100 .. 100])
         float position;
     }
@@ -115,12 +120,16 @@ struct Event
     {
         /// Code of the key that has been pressed.
         Keyboard.Key code;
+
         /// Is the Alt key pressed?
         bool alt;
+
         /// Is the Control key pressed?
         bool control;
+
         /// Is the Shift key pressed?
         bool shift;
+
         /// Is the System key pressed?
         bool system;
     }
@@ -220,6 +229,7 @@ struct Event
     {
         ///New width, in pixels
         uint width;
+
         ///New height, in pixels
         uint height;
     }
@@ -240,10 +250,13 @@ struct Event
     {
         ///Type of the sensor
         Sensor.Type type;
+
         /// Current value of the sensor on X axis
         float x;
+
         /// Current value of the sensor on Y axis
         float y;
+
         /// Current value of the sensor on Z axis
         float z;
     }
@@ -255,8 +268,10 @@ struct Event
     {
         ///Index of the finger in case of multi-touch events.
         uint finger;
+
         /// X position of the touch, relative to the left of the owner window.
         int x;
+
         /// Y position of the touch, relative to the top of the owner window.
         int y;
     }
@@ -322,26 +337,37 @@ struct Event
     {
         /// Size event parameters (Event::Resized)
         SizeEvent size;
+
         /// Key event parameters (Event::KeyPressed, Event::KeyReleased)
         KeyEvent key;
+
         /// Text event parameters (Event::TextEntered)
         TextEvent text;
+
         /// Mouse move event parameters (Event::MouseMoved)
         MouseMoveEvent mouseMove;
+
         /// Mouse button event parameters (Event::MouseButtonPressed, Event::MouseButtonReleased)
         MouseButtonEvent mouseButton;
+
         /// Mouse wheel event parameters (Event::MouseWheelMoved)
         MouseWheelEvent mouseWheel;
+
         /// Mouse wheel scroll event parameters
         MouseWheelScrollEvent mouseWheelScroll;
+
         /// Joystick move event parameters (Event::JoystickMoved)
         JoystickMoveEvent joystickMove;
+
         /// Joystick button event parameters (Event::JoystickButtonPressed, Event::JoystickButtonReleased)
         JoystickButtonEvent joystickButton;
+
         /// Joystick (dis)connect event parameters (Event::JoystickConnected, Event::JoystickDisconnected)
         JoystickConnectEvent joystickConnect;
+
         /// Touch event parameters
         TouchEvent touch;
+
         /// Sensor event Parameters
         SensorEvent sensor;
     }
@@ -609,7 +635,6 @@ unittest
             window.draw(joystickEventText);
 
             window.display();
-
         }
     }
 }

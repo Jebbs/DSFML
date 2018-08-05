@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -84,8 +87,10 @@ final abstract class Joystick
     struct Identification
     {
         private static dstring[immutable(uint)[2]] nameCache;
+
         /// Index of the joystick.
         uint index;
+
         /// Name of the joystick.
         @property dstring name()
         {
@@ -117,6 +122,7 @@ final abstract class Joystick
 
         /// Manufacturer identifier.
         uint vendorId;
+
         /// Product identifier.
         uint productId;
     }
@@ -265,7 +271,6 @@ unittest
 {
     version(DSFML_Unittest_Window)
     {
-
         import std.stdio;
 
         Joystick.update();
@@ -306,11 +311,8 @@ unittest
                     if(Joystick.hasAxis(i,axis))
                     {
                         writeln("Axis ", axis, " has a position of ", Joystick.getAxisPosition(i,axis), "for joystick", i);
-
-
                     }
                 }
-
             }
         }
     }

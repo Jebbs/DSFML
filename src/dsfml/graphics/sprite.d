@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -100,7 +103,6 @@ class Sprite : Drawable, Transformable
         Vertex[4] m_vertices;
         Rebindable!(const(Texture)) m_texture;
         IntRect m_textureRect;
-
     }
 
     /**
@@ -178,6 +180,7 @@ class Sprite : Drawable, Transformable
             m_vertices[3].color = newColor;
             return newColor;
         }
+
         /// ditto
         Color color()
         {
@@ -287,11 +290,13 @@ class Sprite : Drawable, Transformable
     Sprite dup() const
     {
         Sprite temp = new Sprite();
+
         // properties from Transformable
         temp.origin = origin;
         temp.position = position;
         temp.rotation = rotation;
         temp.scale = scale;
+
         // properties from Sprite:
         temp.setTexture(m_texture);
         temp.color = m_vertices[0].color;
@@ -339,7 +344,6 @@ unittest
         assert(texture.loadFromFile("res/TestImage.png"));
 
         auto sprite = new Sprite(texture);
-
 
         auto renderTexture = new RenderTexture();
 

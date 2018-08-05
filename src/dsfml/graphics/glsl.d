@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -64,7 +67,6 @@ alias Vec3 = Vector3!(float);
 alias Ivec3 = Vector3!(int);
 /// 3D bool vector (bvec3 in GLSL)
 alias Bvec3 = Vector3!(bool);
-
 
 /**
  * 4D float vector (vec4 in GLSL)
@@ -217,7 +219,6 @@ struct Vector4(T)
             w = cast(T)source.a;
         }
     }
-
 }
 
 /**

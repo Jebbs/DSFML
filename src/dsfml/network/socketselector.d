@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -290,7 +293,6 @@ unittest
         import std.stdio;
         import dsfml.network.ipaddress;
 
-
         writeln("Unittest for SocketSelector");
 
         auto selector = new SocketSelector();
@@ -305,7 +307,6 @@ unittest
         //The client tries to connect to the server
         auto clientSocket = new TcpSocket();
         clientSocket.connect(IpAddress.LocalHost, 55004);
-
 
         //wait for the selector to be informed of new things!
         selector.wait();
@@ -332,30 +333,24 @@ sfSocketSelector* sfSocketSelector_create();
 //Create a new socket selector by copying an existing one
 sfSocketSelector* sfSocketSelector_copy(const sfSocketSelector* selector);
 
-
 //Destroy a socket selector
 void sfSocketSelector_destroy(sfSocketSelector* selector);
-
 
 //Add a new socket to a socket selector
 void sfSocketSelector_addTcpListener(sfSocketSelector* selector, sfTcpListener* socket);
 void sfSocketSelector_addTcpSocket(sfSocketSelector* selector, sfTcpSocket* socket);
 void sfSocketSelector_addUdpSocket(sfSocketSelector* selector, sfUdpSocket* socket);
 
-
 //Remove a socket from a socket selector
 void sfSocketSelector_removeTcpListener(sfSocketSelector* selector, sfTcpListener* socket);
 void sfSocketSelector_removeTcpSocket(sfSocketSelector* selector, sfTcpSocket* socket);
 void sfSocketSelector_removeUdpSocket(sfSocketSelector* selector, sfUdpSocket* socket);
 
-
 //Remove all the sockets stored in a selector
 void sfSocketSelector_clear(sfSocketSelector* selector);
 
-
 //Wait until one or more sockets are ready to receive
 bool sfSocketSelector_wait(sfSocketSelector* selector, long timeout);
-
 
 //Test a socket to know if it is ready to receive data
 bool sfSocketSelector_isTcpListenerReady(const(sfSocketSelector)* selector, sfTcpListener* socket);

@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -93,7 +96,6 @@ module dsfml.network.ftp;
 import core.time;
 
 import dsfml.network.ipaddress;
-
 
 /**
  * An FTP client.
@@ -468,7 +470,6 @@ class Ftp
             super(sfFtpListingResponse_getStatus(FtpListingResponce), sfFtpListingResponse_getMessage(FtpListingResponce));
 
             sfFtpListingResponse_destroy(FtpListingResponce);
-
         }
 
         /**
@@ -589,6 +590,7 @@ class Ftp
         }
     }
 }
+
 unittest
 {
     version(DSFML_Unittest_Network)
@@ -626,7 +628,6 @@ unittest
             assert(0);
         }
 
-
         auto directory = ftp.getWorkingDirectory();
         if (directory.isOk())
         {
@@ -662,7 +663,6 @@ unittest
 
 private extern(C):
 
-
 struct sfFtpDirectoryResponse;
 struct sfFtpListingResponse;
 struct sfFtpResponse;
@@ -681,114 +681,86 @@ Ftp.Response.Status sfFtpListingResponse_getStatus(const sfFtpListingResponse* f
 ///Get the full message contained in a FTP listing response
  const(char)* sfFtpListingResponse_getMessage(const(sfFtpListingResponse)* ftpListingResponse);
 
-
 ///Return the number of directory/file names contained in a FTP listing response
  size_t sfFtpListingResponse_getCount(const(sfFtpListingResponse)* ftpListingResponse);
 
-
 ///Return a directory/file name contained in a FTP listing response
  const(char)* sfFtpListingResponse_getName(const(sfFtpListingResponse)* ftpListingResponse, size_t index);
-
-
 
 //FTP Directory Responce Functions
 
 ///Destroy a FTP directory response
  void sfFtpDirectoryResponse_destroy(sfFtpDirectoryResponse* ftpDirectoryResponse);
 
-
 ///Get the status code of a FTP directory response
 Ftp.Response.Status sfFtpDirectoryResponse_getStatus(const(sfFtpDirectoryResponse)* ftpDirectoryResponse);
-
 
 ///Get the full message contained in a FTP directory response
  const(char)* sfFtpDirectoryResponse_getMessage(const(sfFtpDirectoryResponse)* ftpDirectoryResponse);
 
-
 ///Get the directory returned in a FTP directory response
  const(char)* sfFtpDirectoryResponse_getDirectory(const(sfFtpDirectoryResponse)* ftpDirectoryResponse);
-
-
 
 //FTP Responce functions
 
 ///Destroy a FTP response
  void sfFtpResponse_destroy(sfFtpResponse* ftpResponse);
 
-
 ///Get the status code of a FTP response
 Ftp.Response.Status sfFtpResponse_getStatus(const(sfFtpResponse)* ftpResponse);
 
-
 ///Get the full message contained in a FTP response
 const (char)* sfFtpResponse_getMessage(const sfFtpResponse* ftpResponse);
-
 
 ////FTP functions
 
 ///Create a new Ftp object
 sfFtp* sfFtp_create();
 
-
 ///Destroy a Ftp object
 void sfFtp_destroy(sfFtp* ftp);
-
 
 ///Connect to the specified FTP server
 sfFtpResponse* sfFtp_connect(sfFtp* ftp, IpAddress* serverIP, ushort port, long timeout);
 
-
 ///Log in using an anonymous account
 sfFtpResponse* sfFtp_loginAnonymous(sfFtp* ftp);
-
 
 ///Log in using a username and a password
 sfFtpResponse* sfFtp_login(sfFtp* ftp, const(char)* userName, size_t userNameLength, const(char)* password, size_t passwordLength);
 
-
 ///Close the connection with the server
 sfFtpResponse* sfFtp_disconnect(sfFtp* ftp);
-
 
 ///Send a null command to keep the connection alive
 sfFtpResponse* sfFtp_keepAlive(sfFtp* ftp);
 
-
 ///Get the current working directory
 sfFtpDirectoryResponse* sfFtp_getWorkingDirectory(sfFtp* ftp);
-
 
 ///Get the contents of the given directory
 sfFtpListingResponse* sfFtp_getDirectoryListing(sfFtp* ftp, const(char)* directory, size_t length);
 
-
 ///Change the current working directory
 sfFtpResponse* sfFtp_changeDirectory(sfFtp* ftp, const(char)* directory, size_t length);
-
 
 ///Go to the parent directory of the current one
 sfFtpResponse* sfFtp_parentDirectory(sfFtp* ftp);
 
-
 ///Create a new directory
 sfFtpResponse* sfFtp_createDirectory(sfFtp* ftp, const(char)* name, size_t length);
-
 
 ///Remove an existing directory
 sfFtpResponse* sfFtp_deleteDirectory(sfFtp* ftp, const(char)* name, size_t length);
 
-
 ///Rename an existing file
 sfFtpResponse* sfFtp_renameFile(sfFtp* ftp, const(char)* file, size_t fileLength, const(char)* newName, size_t newNameLength);
-
 
 ///Remove an existing file
 sfFtpResponse* sfFtp_deleteFile(sfFtp* ftp, const(char)* name, size_t length);
 
-
 ///Download a file from a FTP server
 sfFtpResponse* sfFtp_download(sfFtp* ftp, const(char)* distantFile, size_t distantFileLength, const(char)* destPath, size_t destPathLength, int mode);
-
 
 ///Upload a file to a FTP server
 sfFtpResponse* sfFtp_upload(sfFtp* ftp, const(char)* localFile, size_t localFileLength, const(char)* destPath, size_t destPathLength, int mode);

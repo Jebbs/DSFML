@@ -1,7 +1,7 @@
 /*
  * DSFML - The Simple and Fast Multimedia Library for D
  *
- * Copyright (c) 2013 - 2017 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
+ * Copyright (c) 2013 - 2018 Jeremy DeHaan (dehaan.jeremiah@gmail.com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the
@@ -20,6 +20,9 @@
  * misrepresented as being the original software.
  *
  * 3. This notice may not be removed or altered from any source distribution
+ *
+ *
+ * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
 /**
@@ -74,6 +77,7 @@ final abstract class Listener
             sfListener_setDirection(orientation.x, orientation.y,
                                     orientation.z);
         }
+
         /// ditto
         static Vector3f direction()
         {
@@ -99,6 +103,7 @@ final abstract class Listener
         {
             sfListener_setUpVector(orientation.x, orientation.y, orientation.z);
         }
+
         /// ditto
         static Vector3f upVector()
         {
@@ -124,12 +129,12 @@ final abstract class Listener
         {
             sfListener_setGlobalVolume(volume);
         }
+
         /// ditto
         static float globalVolume()
         {
             return sfListener_getGlobalVolume();
         }
-
     }
 
     @property
@@ -143,6 +148,7 @@ final abstract class Listener
         {
             sfListener_setPosition(pos.x, pos.y, pos.z);
         }
+
         /// ditto
         static Vector3f position()
         {
@@ -172,6 +178,7 @@ final abstract class Listener
             sfListener_setDirection(orientation.x, orientation.y,
                                     orientation.z);
         }
+
         /// ditto
         static Vector3f Direction()
         {
@@ -200,6 +207,7 @@ final abstract class Listener
         {
             sfListener_setUpVector(orientation.x, orientation.y, orientation.z);
         }
+
         /// ditto
         static Vector3f UpVector()
         {
@@ -227,12 +235,12 @@ final abstract class Listener
         {
             sfListener_setGlobalVolume(volume);
         }
+
         /// ditto
         static float GlobalVolume()
         {
             return sfListener_getGlobalVolume();
         }
-
     }
 
     deprecated("Use the 'position' property instead.")
@@ -249,6 +257,7 @@ final abstract class Listener
         {
             sfListener_setPosition(position.x, position.y, position.z);
         }
+
         /// ditto
         static Vector3f Position()
         {
