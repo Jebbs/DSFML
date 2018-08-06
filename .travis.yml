@@ -7,6 +7,10 @@ language: d
 dist: trusty
 sudo: false
 
+env:
+# avoid ALSA errors
+- AUDIODEV=null
+
 addons:
   apt:
     packages:
@@ -25,6 +29,8 @@ addons:
       - libudev-dev
       - libvorbis-dev
       - libflac-dev
+      - libstdc++6 #required for gdc testing
+      - xvfb #required only for testing
 
 d:
  - dmd-2.075.0
@@ -70,8 +76,18 @@ install:
    - make -j2
    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/SFML/lib
    - cd $TRAVIS_BUILD_DIR
+   - cp -aR SFML/extlibs/libs-osx/Frameworks $TRAVIS_BUILD_DIR #required for testing on OSX
+
+before_script:
+ - if [ $TRAVIS_OS_NAME = "linux" ]; then
+   export DISPLAY=:99.0;
+   sh -e /etc/init.d/xvfb start;
+   sleep 3;
+   fi
 
 script:
   - echo ${DMD} build.d
   - ${DMD} build.d
   - ./build --unittest
+  - cd unittest
+  - ./unittest

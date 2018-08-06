@@ -160,6 +160,8 @@ install:
 #download and unpack sfml binaries
 - ps: InstallSFML
 
+- copy sfml\\lib\\*.* unittest
+
 
 
 before_build:
@@ -233,3 +235,7 @@ build_script:
 - '"%compilersetup%" %compilersetupargs%'
 - '%DC% build.d %outputfile%'
 - 'build.exe --%DConf% --unittest'
+
+test_script:
+- cd unittest
+- unittest

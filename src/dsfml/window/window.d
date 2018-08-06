@@ -680,7 +680,7 @@ unittest
 			}
 
 			//requires users input
-			if(window.waitEvent(event))
+			//if(window.waitEvent(event))
 			{
 
 			}

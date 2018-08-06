@@ -517,6 +517,7 @@ unittest
         bool keyPressMode = true;
 
         dstring savedText = "";
+        auto clock = new Clock();
 
         auto window = new RenderWindow(VideoMode(800,600),"Event Unit Test Window");
 
@@ -621,8 +622,13 @@ unittest
                         }
                     }
                 }
-
             }
+
+            if(clock.getElapsedTime().total!"seconds" > 1)
+            {
+                window.close();
+            }
+
             window.clear();
 
             window.draw(text1);
