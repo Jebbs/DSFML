@@ -432,6 +432,9 @@ unittest
                     }
                 }
             }
+
+            //only run once
+            running = false;
         }
     }
 }

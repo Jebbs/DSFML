@@ -602,7 +602,10 @@ unittest
 
         auto ftp = new Ftp();
 
-        auto responce = ftp.connect("ftp.hq.nasa.gov");//Thanks, NASA!
+        // Using a public FTP test server courtesy of DLP Test
+        // (https://dlptest.com/ftp-test/)
+
+        auto responce = ftp.connect("ftp.dlptest.com");
 
         if(responce.isOk())
         {
@@ -616,7 +619,7 @@ unittest
         }
 
         //annonymous log in
-        responce = ftp.login();
+        responce = ftp.login("dlpuser@dlptest.com", "3D6XZV9MKdhM5fF");
         if(responce.isOk())
         {
             writeln("Logged in! Huzzah!");
@@ -656,6 +659,8 @@ unittest
                 writeln(list[i]);
             }
         }
+
+        ftp.disconnect();
 
         writeln();
     }
