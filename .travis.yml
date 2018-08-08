@@ -10,21 +10,21 @@ sudo: false
 addons:
   apt:
     packages:
-      - libfreetype6-dev
-      - libgl1-mesa-dev
-      - libglew-dev
-      - libjpeg8-dev
+      #- libfreetype6-dev
+      #- libgl1-mesa-dev
+      #- libglew-dev
+      #- libjpeg8-dev
       - libopenal-dev
-      - libpthread-stubs0-dev
-      - libsndfile1-dev
-      - libx11-dev
-      - libx11-xcb-dev
-      - libxrandr-dev
-      - libxcb-image0-dev
-      - libxcb-randr0-dev
-      - libudev-dev
-      - libvorbis-dev
-      - libflac-dev
+      #- libpthread-stubs0-dev
+      #- libsndfile1-dev
+      #- libx11-dev
+      #- libx11-xcb-dev
+      #- libxrandr-dev
+      #- libxcb-image0-dev
+      #- libxcb-randr0-dev
+      #- libudev-dev
+      #- libvorbis-dev
+      #- libflac-dev
 
 d:
  - dmd-2.075.0
@@ -43,7 +43,6 @@ d:
  - ldc-1.2.0
  - ldc-1.1.1
 
-#GDC is not supported on OS X :(
 matrix:
   exclude:
 #  - os: osx
@@ -55,19 +54,12 @@ matrix:
   - os: osx
     d: gdc-4.8.5
 
-#Build and install DSFMLC
+#Download SFML binaries
 install:
-#  - cd $HOME
-#  - git clone --depth=1 --branch 2.4 https://github.com/jebbs/DSFMLC.git
-#  - cd DSFMLC
-#  - cmake .
-#  - make -j2
-#  - export LIBRARY_PATH=${HOME}/DSFMLC/lib
-#  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/DSFMLC/lib
-#  - cd $TRAVIS_BUILD_DIR
-   - cd SFML
-   - cmake .
-   - make -j2
+   - mkdir SFML/lib
+   - cd SFML/lib
+   - curl dsfml.com/bins/ci/${TRAVIS_OS_NAME}/sfml.tar.gz -o sfml.tar.gz
+   - tar xf sfml.tar.gz
    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/SFML/lib
    - cd $TRAVIS_BUILD_DIR
 
