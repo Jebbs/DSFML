@@ -110,11 +110,10 @@ class Http
      * 		host = Web server to connect to
      * 		port = Port to use for connection
      */
-    this(string host, ushort port = 0)
+    this(const(char)[] host, ushort port = 0)
     {
-        import dsfml.system.string;
         sfPtr = sfHttp_create();
-        sfHttp_setHost(sfPtr, host.ptr, host.length ,port);
+        sfHttp_setHost(sfPtr, host.ptr, host.length, port);
     }
 
     ///Destructor
@@ -139,9 +138,8 @@ class Http
      * 		host = Web server to connect to
      * 		port = Port to use for connection
      */
-    void setHost(string host, ushort port = 0)
+    void setHost(const(char)[] host, ushort port = 0)
     {
-        import dsfml.system.string;
         sfHttp_setHost(sfPtr, host.ptr, host.length,port);
     }
 
@@ -194,9 +192,8 @@ class Http
          * 	method = Method to use for the request
          * 	requestBody   = Content of the request's body
          */
-        this(string uri = "/", Method method = Method.Get, string requestBody = "")
+        this(const(char)[] uri = "/", Method method = Method.Get, const(char)[] requestBody = "")
         {
-            import dsfml.system.string;
             sfPtrRequest = sfHttpRequest_create();
             sfHttpRequest_setUri(sfPtrRequest, uri.ptr, uri.length);
             sfHttpRequest_setMethod(sfPtrRequest, method);
@@ -206,8 +203,8 @@ class Http
         /// Destructor
         ~this()
         {
-            import std.stdio;
-            writeln("Destroying HTTP Request");
+            import dsfml.system.config;
+            mixin(destructorOutput);
             sfHttpRequest_destroy(sfPtrRequest);
         }
 
@@ -221,9 +218,8 @@ class Http
          * Params:
          * 		requestBody = Content of the body
          */
-        void setBody(string requestBody)
+        void setBody(const(char)[] requestBody)
         {
-            import dsfml.system.string;
             sfHttpRequest_setBody(sfPtrRequest, requestBody.ptr, requestBody.length);
         }
 
@@ -239,9 +235,8 @@ class Http
          * 	field = Name of the field to set
          * 	value = Value of the field
          */
-        void setField(string field, string value)
+        void setField(const(char)[] field, const(char)[] value)
         {
-            import dsfml.system.string;
             sfHttpRequest_setField(sfPtrRequest, field.ptr, field.length , value.ptr, value.length);
         }
 
@@ -282,9 +277,8 @@ class Http
          * Params
          * 	uri = URI to request, relative to the host
          */
-        void setUri(string uri)
+        void setUri(const(char)[] uri)
         {
-            import dsfml.system.string;
             sfHttpRequest_setUri(sfPtrRequest, uri.ptr, uri.length);
         }
     }
