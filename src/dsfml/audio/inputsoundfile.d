@@ -224,7 +224,7 @@ class InputSoundFile
      *
      * Returns: Number of samples.
      */
-    long getSampleCount()
+    long getSampleCount() const
     {
         return sfInputSoundFile_getSampleCount(m_soundFile);
     }
@@ -234,7 +234,7 @@ class InputSoundFile
      *
      * Returns: Sample rate, in samples per second.
      */
-    uint getSampleRate()
+    uint getSampleRate() const
     {
         return sfInputSoundFile_getSampleRate(m_soundFile);
     }
@@ -244,7 +244,7 @@ class InputSoundFile
      *
      * Returns: Number of channels (1 = mono, 2 = stereo).
      */
-    uint getChannelCount()
+    uint getChannelCount() const
     {
         return sfInputSoundFile_getChannelCount(m_soundFile);
     }

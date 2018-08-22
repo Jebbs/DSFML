@@ -125,7 +125,7 @@ class Sound : SoundSource
         }
 
         /// ditto
-        bool isLooping()
+        bool isLooping() const
         {
             return sfSound_getLoop(sfPtr);
         }
@@ -145,7 +145,7 @@ class Sound : SoundSource
         }
 
         /// ditto
-        Duration playingOffset()
+        Duration playingOffset() const
         {
             return usecs(sfSound_getPlayingOffset(sfPtr));
         }
@@ -156,7 +156,7 @@ class Sound : SoundSource
         /**
          * Get the current status of the sound (stopped, paused, playing).
          */
-        Status status()
+        Status status() const
         {
             return cast(Status)sfSound_getStatus(sfPtr);
         }
@@ -179,7 +179,7 @@ class Sound : SoundSource
         }
 
         /// ditto
-        float pitch()
+        float pitch() const
         {
             return sfSound_getPitch(sfPtr);
         }
@@ -199,7 +199,7 @@ class Sound : SoundSource
         }
 
         /// ditto
-        float volume()
+        float volume() const
         {
             return sfSound_getVolume(sfPtr);
         }
@@ -220,7 +220,7 @@ class Sound : SoundSource
         }
 
         /// ditto
-        Vector3f position()
+        Vector3f position() const
         {
             Vector3f temp;
             sfSound_getPosition(sfPtr, &temp.x, &temp.y, &temp.z);
@@ -246,7 +246,7 @@ class Sound : SoundSource
         }
 
         /// ditto
-        bool relativeToListener()
+        bool relativeToListener() const
         {
             return sfSound_isRelativeToListener(sfPtr);
         }
@@ -269,7 +269,7 @@ class Sound : SoundSource
         }
 
         /// ditto
-        float minDistance()
+        float minDistance() const
         {
             return sfSound_getMinDistance(sfPtr);
         }
@@ -295,7 +295,7 @@ class Sound : SoundSource
         }
 
         /// ditto
-        float attenuation()
+        float attenuation() const
         {
             return sfSound_getAttenuation(sfPtr);
         }
