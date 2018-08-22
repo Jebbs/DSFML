@@ -144,13 +144,16 @@ class RenderTexture : RenderTarget
      * 	height		= Height of the render-texture
      * 	depthBuffer	= Do you want this render-texture to have a depth buffer?
      *
+     * Returns: True if creation has been successful.
      */
-    void create(uint width, uint height, bool depthBuffer = false)
+    bool create(uint width, uint height, bool depthBuffer = false)
     {
         import dsfml.system.string;
 
-        sfRenderTexture_create(sfPtr, width, height, depthBuffer);
+        bool ret = sfRenderTexture_create(sfPtr, width, height, depthBuffer);
         err.write(dsfml.system.string.toString(sfErr_getOutput()));
+
+        return ret;
     }
 
     @property
@@ -434,7 +437,7 @@ private extern(C):
 sfRenderTexture* sfRenderTexture_construct();
 
 //Construct a new render texture
-void sfRenderTexture_create(sfRenderTexture* renderTexture, uint width, uint height, bool depthBuffer);
+bool sfRenderTexture_create(sfRenderTexture* renderTexture, uint width, uint height, bool depthBuffer);
 
 //Destroy an existing render texture
 void sfRenderTexture_destroy(sfRenderTexture* renderTexture);

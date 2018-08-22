@@ -35,7 +35,7 @@
 DSFML_GRAPHICS_API sfRenderTexture* sfRenderTexture_construct(void);
 
 // Construct a new render texture
-DSFML_GRAPHICS_API void sfRenderTexture_create(sfRenderTexture* renderTexture, DUint width, DUint height, DBool depthBuffer);
+DSFML_GRAPHICS_API DBool sfRenderTexture_create(sfRenderTexture* renderTexture, DUint width, DUint height, DBool depthBuffer);
 
 // Destroy an existing render texture
 DSFML_GRAPHICS_API void sfRenderTexture_destroy(sfRenderTexture* renderTexture);
