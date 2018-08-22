@@ -76,7 +76,7 @@ class RectangleShape:Shape
     /// The point count for a rectangle is always 4.
     @property
     {
-        override uint pointCount()
+        override uint pointCount() const
         {
             return 4;
         }

@@ -232,7 +232,7 @@ class Font
         return ret;
     }
 
-    ref const(Info) getInfo()
+    ref const(Info) getInfo() const
     {
         return m_info;
     }

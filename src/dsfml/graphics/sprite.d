@@ -156,7 +156,7 @@ class Sprite : Drawable, Transformable
             return rect;
         }
         /// ditto
-        IntRect textureRect()
+        IntRect textureRect() const
         {
             return m_textureRect;
         }
@@ -182,7 +182,7 @@ class Sprite : Drawable, Transformable
         }
 
         /// ditto
-        Color color()
+        Color color() const
         {
             return m_vertices[0].color;
         }
@@ -214,7 +214,7 @@ class Sprite : Drawable, Transformable
      *
      * Returns: Local bounding rectangle of the entity.
      */
-    FloatRect getLocalBounds()
+    FloatRect getLocalBounds() const
     {
         float width = (abs(m_textureRect.width));
         float height = (abs(m_textureRect.height));
@@ -230,7 +230,7 @@ class Sprite : Drawable, Transformable
      *
      * Returns: The sprite's texture.
      */
-    const(Texture) getTexture()
+    const(Texture) getTexture() const
     {
         return m_texture;
     }

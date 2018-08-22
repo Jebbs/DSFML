@@ -205,7 +205,7 @@ class Shape : Drawable, Transformable
         /**
          * The total number of points in the shape.
          */
-        abstract uint pointCount();
+        abstract uint pointCount() const;
     }
 
     /**

@@ -165,7 +165,7 @@ class RenderTexture : RenderTarget
         }
 
         /// ditto
-        bool smooth()
+        bool smooth() const
         {
             return (sfRenderTexture_isSmooth(sfPtr));
         }
@@ -265,7 +265,7 @@ class RenderTexture : RenderTarget
      *
      * Returns: Const reference to the texture.
      */
-    const(Texture) getTexture()
+    const(Texture) getTexture() const
     {
         return m_texture;
     }

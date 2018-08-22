@@ -231,7 +231,7 @@ class RenderWindow : Window, RenderTarget
         }
 
         /// ditto
-        override Vector2i position()
+        override Vector2i position() const
         {
             Vector2i temp;
             sfRenderWindow_getPosition(sfPtr,&temp.x, &temp.y);
@@ -251,7 +251,7 @@ class RenderWindow : Window, RenderTarget
         }
 
         /// ditto
-        override Vector2u size()
+        override Vector2u size() const
         {
             Vector2u temp;
             sfRenderWindow_getSize(sfPtr,&temp.x, &temp.y);
@@ -766,7 +766,7 @@ class RenderWindow : Window, RenderTarget
      *
      * Returns: true if the window is open, false if it has been closed
      */
-    override bool isOpen()
+    override bool isOpen() const
     {
         return (sfRenderWindow_isOpen(sfPtr));
     }

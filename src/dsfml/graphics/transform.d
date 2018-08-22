@@ -273,7 +273,7 @@ struct Transform
 		sfTransform_scaleWithCenter(m_matrix.ptr, scaleX, scaleY, centerX, centerY);
 	}
 
-	string toString()
+	string toString() const
 	{
 		return "";//text(InternalsfTransform.matrix);
 	}

@@ -244,18 +244,18 @@ struct Rect(T)
     }
 
     /// Output the string representation of the Rect.
-    string toString()
+    string toString() const
     {
         import std.conv;
         return "Left: " ~ text(left) ~ " Top: " ~ text(top) ~ " Width: " ~ text(width) ~ " Height: " ~ text(height);
     }
 
-    private T max(T a, T b)
+    private T max(T a, T b) const
     {
         return a>b?a:b;
     }
 
-    private T min(T a, T b)
+    private T min(T a, T b) const
     {
         return a<b?a:b;
     }

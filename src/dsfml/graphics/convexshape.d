@@ -93,7 +93,7 @@ class ConvexShape : Shape
         }
 
         /// ditto
-        override uint pointCount()
+        override uint pointCount() const
         {
             import std.algorithm;
             return cast(uint)min(m_points.length, uint.max);
