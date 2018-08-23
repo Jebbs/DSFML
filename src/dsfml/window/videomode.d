@@ -161,7 +161,7 @@ struct VideoMode
 	}
 
 	///Returns a string representation of the video mode.
-	string toString()
+	string toString() const
 	{
 		import std.conv: text;
 		return "Width: " ~ text(width) ~ " Height: " ~ text(height) ~ " Bits per pixel: " ~ text(bitsPerPixel);
