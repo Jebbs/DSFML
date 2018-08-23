@@ -100,7 +100,7 @@ class TcpListener:Socket
      *
      * Returns: Port to which the socket is bound.
      */
-    ushort getLocalPort()
+    ushort getLocalPort() const
     {
         return sfTcpListener_getLocalPort(sfPtr);
     }

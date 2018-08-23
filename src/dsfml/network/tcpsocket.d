@@ -136,7 +136,7 @@ class TcpSocket:Socket
      *
      * Returns: Port to which the socket is bound.
      */
-    ushort getLocalPort()
+    ushort getLocalPort() const
     {
         return sfTcpSocket_getLocalPort(sfPtr);
     }
@@ -148,7 +148,7 @@ class TcpSocket:Socket
      *
      * Returns: Address of the remote peer.
      */
-    IpAddress getRemoteAddress()
+    IpAddress getRemoteAddress() const
     {
         IpAddress temp;
 
@@ -164,7 +164,7 @@ class TcpSocket:Socket
      *
      * Returns: Remote port to which the socket is connected.
      */
-    ushort getRemotePort()
+    ushort getRemotePort() const
     {
         return sfTcpSocket_getRemotePort(sfPtr);
     }

@@ -208,19 +208,19 @@ class SocketSelector
      * that if this function returns true for a TcpListener, this means that it
      * is ready to accept a new connection.
      */
-    bool isReady(TcpListener listener)
+    bool isReady(TcpListener listener) const
     {
         return (sfSocketSelector_isTcpListenerReady(sfPtr, listener.sfPtr));
     }
 
     /// ditto
-    bool isReady(TcpSocket socket)
+    bool isReady(TcpSocket socket) const
     {
         return (sfSocketSelector_isTcpSocketReady(sfPtr, socket.sfPtr));
     }
 
     /// ditto
-    bool isReady(UdpSocket socket)
+    bool isReady(UdpSocket socket) const
     {
         return (sfSocketSelector_isUdpSocketReady(sfPtr, socket.sfPtr));
     }

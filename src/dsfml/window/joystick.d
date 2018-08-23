@@ -92,7 +92,7 @@ final abstract class Joystick
         uint index;
 
         /// Name of the joystick.
-        @property dstring name()
+        @property dstring name() const
         {
             //In theory, each vid:pid combination should only have one name associated with it.
             //slightly arcane syntax to make older GDC happy.

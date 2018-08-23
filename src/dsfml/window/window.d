@@ -200,7 +200,7 @@ class Window
 		}
 
 		/// ditto
-		Vector2i position()
+		Vector2i position() const
 		{
 			Vector2i temp;
 			sfWindow_getPosition(sfPtr,&temp.x, &temp.y);
@@ -218,7 +218,7 @@ class Window
 		}
 
 		// ditto
-		Vector2u size()
+		Vector2u size() const
 		{
 			Vector2u temp;
 			sfWindow_getSize(sfPtr,&temp.x, &temp.y);
@@ -540,7 +540,7 @@ class Window
 	 *
 	 * Returns: true if the window is open, false if it has been closed.
 	 */
-	bool isOpen()
+	bool isOpen() const
 	{
 		return (sfWindow_isOpen(sfPtr));
 	}
@@ -587,7 +587,7 @@ class Window
 	//TODO: Clean this up. The names are so bad. :(
 
 	//Gives a way for RenderWindow to send its mouse position
-	protected Vector2i getMousePosition()const
+	protected Vector2i getMousePosition() const
 	{
 		Vector2i temp;
 		sfMouse_getPosition(sfPtr,&temp.x, &temp.y);
@@ -596,7 +596,7 @@ class Window
 
 	//A method for the Mouse class to use in order to get the mouse position
 	//relative to the window
-	package Vector2i mouse_getPosition()const
+	package Vector2i mouse_getPosition() const
 	{
 		return getMousePosition();
 	}

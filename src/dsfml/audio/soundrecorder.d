@@ -204,7 +204,7 @@ class SoundRecorder
          * The higher, the better the quality (for example, 44100 samples/sec is CD
          * quality).
          */
-        uint sampleRate()
+        uint sampleRate() const
         {
             return sfSoundRecorder_getSampleRate(sfPtr);
         }
@@ -424,4 +424,3 @@ bool sfSoundRecorder_isAvailable();
 void sfSoundRecorder_setProcessingInterval(sfSoundRecorder* soundRecorder, ulong time);
 
 const(char)* sfErr_getOutput();
-

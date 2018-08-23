@@ -119,7 +119,7 @@ class VertexArray : Drawable
      *
      * Returns: Bounding rectangle of the vertex array.
      */
-    FloatRect getBounds()
+    FloatRect getBounds() const
     {
         if (Vertices.length>0)
         {
@@ -158,7 +158,7 @@ class VertexArray : Drawable
      *
      * Returns: Number of vertices in the array
      */
-    uint getVertexCount()
+    uint getVertexCount() const
     {
         import std.algorithm;
         return cast(uint)min(uint.max, Vertices.length);
@@ -233,6 +233,8 @@ class VertexArray : Drawable
     {
         return Vertices[index];
     }
+
+    //TODO: const ref Vertex opIndex(size_t) const, perhaps?
 }
 
 unittest

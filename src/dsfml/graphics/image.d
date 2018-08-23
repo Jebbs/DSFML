@@ -224,7 +224,7 @@ class Image
      *
      * Returns: Color of the pixel at coordinates (x, y)
      */
-    Color getPixel(uint x, uint y)
+    Color getPixel(uint x, uint y) const
     {
         Color temp;
         sfImage_getPixel(sfPtr, x,y, &temp.r, &temp.b, &temp.g, &temp.a);
@@ -243,7 +243,7 @@ class Image
      *
      * Returns: Read-only array of pixels that make up the image.
      */
-    const(ubyte)[] getPixelArray()
+    const(ubyte)[] getPixelArray() const
     {
         Vector2u size = getSize();
         int length = size.x * size.y * 4;
@@ -264,7 +264,7 @@ class Image
      *
      * Returns: Size of the image, in pixels.
      */
-    Vector2u getSize()
+    Vector2u getSize() const
     {
         Vector2u temp;
         sfImage_getSize(sfPtr,&temp.x, &temp.y);
@@ -357,7 +357,7 @@ class Image
      *
      * Returns: true if saving was successful
      */
-    bool saveToFile(const(char)[] filename)
+    bool saveToFile(const(char)[] filename) const
     {
         import dsfml.system.string;
         bool toReturn = sfImage_saveToFile(sfPtr, filename.ptr, filename.length);

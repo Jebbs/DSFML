@@ -143,7 +143,7 @@ class UdpSocket:Socket
      *
      * Returns: Port to which the socket is bound.
      */
-    ushort getLocalPort()
+    ushort getLocalPort() const
     {
         return sfUdpSocket_getLocalPort(sfPtr);
     }

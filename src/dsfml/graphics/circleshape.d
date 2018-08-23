@@ -100,7 +100,7 @@ class CircleShape : Shape
         }
 
         /// ditto
-        override uint pointCount()
+        override uint pointCount() const
         {
             return m_pointCount;
         }
@@ -117,7 +117,7 @@ class CircleShape : Shape
         }
 
         /// ditto
-        float radius()
+        float radius() const
         {
             return m_radius;
         }

@@ -445,7 +445,7 @@ class Ftp
          *
          * Returns: Directory name.
          */
-        string getDirectory()
+        string getDirectory() const
         {
             return Directory;
         }
@@ -477,7 +477,7 @@ class Ftp
          *
          * Returns: Array containing the requested listing.
          */
-        const(string[]) getFilenames()
+        const(string[]) getFilenames() const
         {
             return Filenames;
         }

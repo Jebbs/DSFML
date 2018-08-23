@@ -182,7 +182,7 @@ struct RenderStates
         }
 
         /// ditto
-        const(Shader) shader()
+        const(Shader) shader() const
         {
             return m_shader;
         }
@@ -198,7 +198,7 @@ struct RenderStates
         }
 
         /// ditto
-        const(Texture) texture()
+        const(Texture) texture() const
         {
             return m_texture;
         }

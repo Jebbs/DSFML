@@ -167,7 +167,7 @@ class SoundStream : SoundSource
         }
 
         /// ditto
-        float pitch()
+        float pitch() const
         {
             return sfSoundStream_getPitch(sfPtr);
         }
@@ -187,7 +187,7 @@ class SoundStream : SoundSource
         }
 
         /// ditto
-        float volume()
+        float volume() const
         {
             return sfSoundStream_getVolume(sfPtr);
         }
@@ -207,7 +207,7 @@ class SoundStream : SoundSource
         }
 
         /// ditto
-        Vector3f position()
+        Vector3f position() const
         {
             Vector3f temp;
             sfSoundStream_getPosition(sfPtr, &temp.x, &temp.y, &temp.z);
@@ -231,7 +231,7 @@ class SoundStream : SoundSource
         }
 
         /// ditto
-        bool isLooping()
+        bool isLooping() const
         {
             return sfSoundStream_getLoop(sfPtr);
         }
@@ -252,7 +252,7 @@ class SoundStream : SoundSource
         }
 
         /// ditto
-        Duration playingOffset()
+        Duration playingOffset() const
         {
             return usecs(sfSoundStream_getPlayingOffset(sfPtr));
         }
@@ -276,7 +276,7 @@ class SoundStream : SoundSource
         }
 
         /// ditto
-        bool relativeToListener()
+        bool relativeToListener() const
         {
             return sfSoundStream_isRelativeToListener(sfPtr);
         }
@@ -299,7 +299,7 @@ class SoundStream : SoundSource
         }
 
         /// ditto
-        float minDistance()
+        float minDistance() const
         {
             return sfSoundStream_getMinDistance(sfPtr);
         }
@@ -325,7 +325,7 @@ class SoundStream : SoundSource
         }
 
         /// ditto
-        float attenuation()
+        float attenuation() const
         {
             return sfSoundStream_getAttenuation(sfPtr);
         }
@@ -339,7 +339,7 @@ class SoundStream : SoundSource
          *
          * 1 channel means mono sound, 2 means stereo, etc.
          */
-        uint channelCount()
+        uint channelCount() const
         {
             return sfSoundStream_getChannelCount(sfPtr);
         }
@@ -353,7 +353,7 @@ class SoundStream : SoundSource
          * The sample rate is the number of audio samples played per second. The
          * higher, the better the quality.
          */
-        uint sampleRate()
+        uint sampleRate() const
         {
             return sfSoundStream_getSampleRate(sfPtr);
         }
@@ -362,7 +362,7 @@ class SoundStream : SoundSource
     @property
     {
         /// The current status of the stream (stopped, paused, playing)
-        Status status()
+        Status status() const
         {
             return cast(Status)sfSoundStream_getStatus(sfPtr);
         }

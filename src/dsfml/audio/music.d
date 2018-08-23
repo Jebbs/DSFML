@@ -207,7 +207,7 @@ class Music : SoundStream
      *
      * Returns: Music duration
      */
-    Duration getDuration()
+    Duration getDuration() const
     {
         return m_duration;
     }

@@ -290,7 +290,7 @@ class SoundBuffer
      *
      * Returns: true if saving succeeded, false if it failed.
      */
-    bool saveToFile(const(char)[] filename)
+    bool saveToFile(const(char)[] filename) const
     {
         import dsfml.system.string;
         if(sfSoundBuffer_saveToFile(sfPtr, filename.ptr, filename.length))
