@@ -331,7 +331,7 @@ class Http
          *
          * Returns: The response body.
          */
-        string getBody()
+        string getBody() const
         {
             import dsfml.system.string;
             return dsfml.system.string.toString(sfHttpResponse_getBody(sfPtrResponse));
@@ -348,7 +348,7 @@ class Http
          *
          * Returns: Value of the field, or empty string if not found.
          */
-        string getField(const(char)[] field)
+        string getField(const(char)[] field) const
         {
             import dsfml.system.string;
             return dsfml.system.string.toString(sfHttpResponse_getField(sfPtrResponse, field.ptr, field.length));
@@ -359,7 +359,7 @@ class Http
          *
          * Returns: Major HTTP version number.
          */
-        uint getMajorHttpVersion()
+        uint getMajorHttpVersion() const
         {
             return sfHttpResponse_getMajorVersion(sfPtrResponse);
         }
@@ -369,7 +369,7 @@ class Http
          *
          * Returns: Minor HTTP version number.
          */
-        uint getMinorHttpVersion()
+        uint getMinorHttpVersion() const
         {
             return sfHttpResponse_getMinorVersion(sfPtrResponse);
         }
@@ -383,7 +383,7 @@ class Http
          *
          * Returns: Status code of the response.
          */
-        Status getStatus()
+        Status getStatus() const
         {
             return sfHttpResponse_getStatus(sfPtrResponse);
         }
