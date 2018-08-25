@@ -110,7 +110,17 @@ class Music : SoundStream
     {
         import dsfml.system.config;
         mixin(destructorOutput);
-        stop();
+
+        /*
+         * Calling stop() causes a segmentation fault when m_mutex is
+         * destroyed before this destructor has run (which is what happens
+         * during a GC collection).
+         *
+         * It is probably OK to not call it here since it only resets the seek
+         * position on top of what the SoundStream destructor already does.
+         */
+
+        //stop();
     }
 
     /**
