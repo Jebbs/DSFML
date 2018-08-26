@@ -147,9 +147,10 @@ struct Transform
 	 *
 	 * Returns: Reference to this.
 	 */
-	void combine(Transform otherTransform)
+	ref Transform combine(Transform otherTransform)
 	{
 		sfTransform_combine(m_matrix.ptr, otherTransform.m_matrix.ptr);
+		return this;
 	}
 
 	/**
@@ -188,7 +189,6 @@ struct Transform
 		return temp;
 	}
 
-	//TODO: These functions should probably return this; like the documentation states.
 	/**
 	 * Combine the current transform with a translation.
 	 *
@@ -199,9 +199,10 @@ struct Transform
 	 *
 	 * Returns: this
 	 */
-	void translate(float x, float y)
+	ref Transform translate(float x, float y)
 	{
 		sfTransform_translate(m_matrix.ptr, x, y);
+		return this;
 	}
 
 	/**
@@ -214,9 +215,10 @@ struct Transform
 	 *
 	 * Returns: this
 	 */
-	void rotate(float angle)
+	ref Transform rotate(float angle)
 	{
 		sfTransform_rotate(m_matrix.ptr, angle);
+		return this;
 	}
 
 	/**
@@ -235,9 +237,10 @@ struct Transform
 	 *
 	 * Returns: this
 	 */
-	void rotate(float angle, float centerX, float centerY)
+	ref Transform rotate(float angle, float centerX, float centerY)
 	{
 		sfTransform_rotateWithCenter(m_matrix.ptr, angle, centerX, centerY);
+		return this;
 	}
 
 	/**
@@ -251,9 +254,10 @@ struct Transform
 	 *
 	 * Returns: this
 	 */
-	void scale(float scaleX, float scaleY)
+	ref Transform scale(float scaleX, float scaleY)
 	{
 		sfTransform_scale(m_matrix.ptr, scaleX, scaleY);
+		return this;
 	}
 
 	/**
@@ -274,9 +278,10 @@ struct Transform
 	 *
 	 * Returns: this
 	 */
-	void scale(float scaleX, float scaleY, float centerX, float centerY)
+	ref Transform scale(float scaleX, float scaleY, float centerX, float centerY)
 	{
 		sfTransform_scaleWithCenter(m_matrix.ptr, scaleX, scaleY, centerX, centerY);
+		return this;
 	}
 
 	string toString() const
@@ -301,9 +306,8 @@ struct Transform
 	Transform opBinary(string op)(Transform rhs)
 		if(op == "*")
 	{
-		Transform temp = this;//Transform(InternalsfTransform);
-		temp.combine(rhs);
-		return temp;
+		Transform temp = this;
+		return temp.combine(rhs);
 	}
 
 	/**
@@ -319,9 +323,7 @@ struct Transform
 	ref Transform opOpAssign(string op)(Transform rhs)
 		if(op == "*")
 	{
-
-		this.combine(rhs);
-		return this;
+		return this.combine(rhs);
 	}
 
 	/**
@@ -353,21 +355,11 @@ unittest
 
 		bool compareTransform(Transform a, Transform b)
 		{
-			auto matrixA = a.getMatrix();
-			auto matrixB = b.getMatrix();
-			for(int i = 0; i < matrixA.length; ++i)
-			{
-				real aT = trunc(matrixA[i]*1e5);
-				real bT = trunc(matrixB[i]*1e5);
-				//rounding because of precision differences in D & C++
-				if(trunc(matrixA[i]*1e5) != trunc(matrixB[i]*1e5))
-					return false;
-
-				//if(!approxEqual(matrixA[i], matrixB[i]))
-					//return false;
-			}
-
-			return true;
+			/*
+			 * There's a slight difference in precision between D's and C++'s
+			 * sine and cosine functions, so we'll use approxEqual here.
+			 */
+			return approxEqual(a.getMatrix(), b.getMatrix());
 		}
 
 		writeln("Unit Test for Transform");
@@ -392,16 +384,11 @@ unittest
     	float cos = cos(rad);
     	float sin = sin(rad);
 
-		//combine identity with rotational matrix (what rotate() should do)
-    	comparisonTransform = Transform();
-		comparisonTransform.combine(Transform(cos, -sin, 0,
-                       					   sin,  cos, 0,
-                       					   0,    0,   1));
+		// combine identity with rotational matrix (what rotate() should do)
+    	comparisonTransform = Transform().combine(Transform(cos, -sin, 0,
+                       					   					sin,  cos, 0,
+                       					   					0,    0,   1));
 
-
-		// This test will fail for some angles because of the difference in how
-		// D and C++ perform their sin/cosin functions, but this one passes
-		// and others are pretty close (off by only around 2x10^-8 or something)
 		assert(compareTransform(rotatedTransform, comparisonTransform));
 
 		writeln();
