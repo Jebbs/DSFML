@@ -29,7 +29,6 @@
 #include <DSFMLC/Graphics/TextStruct.h>
 #include <DSFMLC/Graphics/Font.h>
 #include <SFML/Graphics/Color.hpp>
-#include <DSFMLC/Graphics/CreateTransform.hpp>
 
 sfText* sfText_construct(void)
 {
@@ -112,12 +111,12 @@ void sfText_scale(sfText* text, float factorX, float factorY)
 
 void sfText_getTransform(const sfText* text, float* transform)
 {
-    createTransform(text->This.getTransform(), transform);
+    *reinterpret_cast<sf::Transform*>(transform) = text->This.getTransform();
 }
 
 void sfText_getInverseTransform(const sfText* text, float* transform)
 {
-    createTransform(text->This.getInverseTransform(), transform);
+    *reinterpret_cast<sf::Transform*>(transform) = text->This.getInverseTransform();
 }
 
 void sfText_setString(sfText* text, const char* string)

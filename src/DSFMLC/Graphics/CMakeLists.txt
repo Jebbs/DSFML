@@ -6,7 +6,6 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/DSFMLC/Graphics)
 set(SRC
     ${INCROOT}/Export.h
     ${SRCROOT}/CreateRenderStates.hpp
-    ${SRCROOT}/CreateTransform.hpp
     ${SRCROOT}/Font.cpp
     ${SRCROOT}/FontStruct.h
     ${INCROOT}/Font.h
@@ -36,7 +35,6 @@ set(SRC
 )
 
 source_group("" FILES ${SRC})
-    
 
 #set(CMAKE_CXX_FLAGS "/P")
 

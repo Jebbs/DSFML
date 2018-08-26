@@ -71,10 +71,14 @@ public import std.math;
  */
 struct Transform
 {
-	float[9] m_matrix = [1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f];
+	/// 4x4 matrix defining the transformation.
+	package float[16] m_matrix = [1.0f, 0.0f, 0.0f, 0.0f,
+						  		  0.0f, 1.0f, 0.0f, 0.0f,
+						  		  0.0f, 0.0f, 1.0f, 0.0f,
+						  		  0.0f, 0.0f, 0.0f, 1.0f];
 
 	/**
-	 * Construct a 3x3 matrix.
+	 * Construct a transform from a 3x3 matrix.
 	 *
 	 * Params:
 	 * 		a00	= Element (0, 0) of the matrix
@@ -89,13 +93,19 @@ struct Transform
 	 */
 	this(float a00, float a01, float a02, float a10, float a11, float a12, float a20, float a21, float a22)
 	{
-		m_matrix = [a00, a01, a02, a10, a11, a12, a20, a21, a22];
+		m_matrix = [ a00,  a10, 0.0f,  a20,
+    			     a01,  a11, 0.0f,  a21,
+    				0.0f, 0.0f, 1.0f, 0.0f,
+    				 a02,  a12, 0.0f,  a22];
 	}
 
-	/// Construct a 3x3 matrix from a float array.
-	this(float[9] newMatrix)
+	/// Construct a transform from a float array describing a 3x3 matrix.
+	this(float[9] matrix)
 	{
-		m_matrix = newMatrix.dup;
+		m_matrix = [matrix[0], matrix[3], 0.0f, matrix[6],
+    			    matrix[1], matrix[4], 0.0f, matrix[7],
+    				     0.0f,      0.0f, 1.0f,      0.0f,
+    				matrix[2], matrix[5], 0.0f, matrix[8]];
 	}
 
 	/**
@@ -107,9 +117,9 @@ struct Transform
 	 */
 	Transform getInverse() const
 	{
-		float[9] temp;
-		sfTransform_getInverse(m_matrix.ptr,temp.ptr);
-		return Transform(temp);
+		Transform temp;
+		sfTransform_getInverse(m_matrix.ptr,temp.m_matrix.ptr);
+		return temp;
 	}
 
 	/**
@@ -123,11 +133,7 @@ struct Transform
 	 */
 	const(float)[] getMatrix() const
 	{
-		static float[16] temp;
-
-		sfTransform_getMatrix(m_matrix.ptr, temp.ptr);
-
-		return temp.dup;
+		return m_matrix;
 	}
 
 	/**
@@ -338,10 +344,71 @@ struct Transform
 	static const(Transform) Identity;
 }
 
-private extern(C):
+unittest
+{
+	version(DSFML_Unittest_Graphics)
+	{
+		import std.stdio;
+		import std.math;
 
-//Return the 4x4 matrix of a transform
-void sfTransform_getMatrix(const float* transform, float* matrix);
+		bool compareTransform(Transform a, Transform b)
+		{
+			auto matrixA = a.getMatrix();
+			auto matrixB = b.getMatrix();
+			for(int i = 0; i < matrixA.length; ++i)
+			{
+				real aT = trunc(matrixA[i]*1e5);
+				real bT = trunc(matrixB[i]*1e5);
+				//rounding because of precision differences in D & C++
+				if(trunc(matrixA[i]*1e5) != trunc(matrixB[i]*1e5))
+					return false;
+
+				//if(!approxEqual(matrixA[i], matrixB[i]))
+					//return false;
+			}
+
+			return true;
+		}
+
+		writeln("Unit Test for Transform");
+
+		assert(compareTransform(Transform.Identity.getInverse(), Transform.Identity));
+
+		Transform scaledTransform;
+		scaledTransform.scale(2, 3);
+
+		Transform comparisonTransform;
+		comparisonTransform.m_matrix =  [2.0f, 0.0f, 0.0f, 0.0f,
+						  		  	  	 0.0f, 3.0f, 0.0f, 0.0f,
+						  		  	  	 0.0f, 0.0f, 1.0f, 0.0f,
+						  		  	  	 0.0f, 0.0f, 0.0f, 1.0f];
+
+		assert(compareTransform(scaledTransform, comparisonTransform));
+
+		Transform rotatedTransform;
+		rotatedTransform.rotate(20);
+
+		float rad = 20 * 3.141592654f / 180.0f;
+    	float cos = cos(rad);
+    	float sin = sin(rad);
+
+		//combine identity with rotational matrix (what rotate() should do)
+    	comparisonTransform = Transform();
+		comparisonTransform.combine(Transform(cos, -sin, 0,
+                       					   sin,  cos, 0,
+                       					   0,    0,   1));
+
+
+		// This test will fail for some angles because of the difference in how
+		// D and C++ perform their sin/cosin functions, but this one passes
+		// and others are pretty close (off by only around 2x10^-8 or something)
+		assert(compareTransform(rotatedTransform, comparisonTransform));
+
+		writeln();
+	}
+}
+
+private extern(C):
 
 //Return the inverse of a transform
 void sfTransform_getInverse(const float* transform, float* inverse);

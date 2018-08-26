@@ -30,7 +30,6 @@
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/BlendMode.hpp>
-#include <DSFMLC/Graphics/CreateTransform.hpp>
 #include <DSFMLC/Graphics/TextureStruct.h>
 #include <DSFMLC/Graphics/ShaderStruct.h>
 
@@ -51,7 +50,7 @@ inline sf::RenderStates createRenderStates(DInt colorSrcFactor, DInt colorDstFac
     blendMode.alphaEquation = static_cast<sf::BlendMode::Equation>(alphaEquation);
 
     sfmlStates.blendMode = blendMode;
-    sfmlStates.transform = createTransform(transform);
+    sfmlStates.transform = *reinterpret_cast<const sf::Transform*>(transform);
     sfmlStates.texture = texture ? texture->This : NULL;
     sfmlStates.shader = shader ? &shader->This : NULL;
 

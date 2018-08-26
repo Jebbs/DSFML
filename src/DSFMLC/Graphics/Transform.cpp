@@ -27,24 +27,18 @@
 
 #include <DSFMLC/Graphics/Transform.h>
 #include <SFML/Graphics/Transform.hpp>
-#include <DSFMLC/Graphics/CreateTransform.hpp>
 #include <cstring>
-
-void sfTransform_getMatrix(const float* transform, float* matrix)
-{
-    sf::Transform createed = createTransform(transform);
-    if (matrix)
-        std::memcpy(matrix, createed.getMatrix(), 16 * sizeof(float));
-}
 
 void sfTransform_getInverse(const float* transform, float* inverse)
 {
-    createTransform(createTransform(transform).getInverse(), inverse);
+    *reinterpret_cast<sf::Transform*>(inverse) =
+    reinterpret_cast<const sf::Transform*>(transform)->getInverse();
 }
 
 void sfTransform_transformPoint(const float* transform, float xIn, float yIn, float* xOut, float* yOut)
 {
-    sf::Vector2f sfmlPoint = createTransform(transform).transformPoint(xIn, yIn);
+    sf::Vector2f sfmlPoint =
+    (reinterpret_cast<const sf::Transform*>(transform))->transformPoint(xIn, yIn);
 
     *xOut = sfmlPoint.x;
     *yOut = sfmlPoint.y;
@@ -52,7 +46,8 @@ void sfTransform_transformPoint(const float* transform, float xIn, float yIn, fl
 
 void sfTransform_transformRect(const float* transform, float leftIn, float topIn, float widthIn, float heightIn, float* leftOut, float* topOut, float* widthOut, float* heightOut)
 {
-    sf::FloatRect sfmlRect = createTransform(transform).transformRect(sf::FloatRect(leftIn, topIn, widthIn, heightIn));
+    sf::FloatRect sfmlRect =
+    reinterpret_cast<const sf::Transform*>(transform)->transformRect(sf::FloatRect(leftIn, topIn, widthIn, heightIn));
 
     *leftOut = sfmlRect.left;
     *topOut = sfmlRect.top;
@@ -62,30 +57,30 @@ void sfTransform_transformRect(const float* transform, float leftIn, float topIn
 
 void sfTransform_combine(float* transform, const float* other)
 {
-    createTransform(createTransform(transform).combine(createTransform(other)),transform);
+    reinterpret_cast<sf::Transform*>(transform)->combine(*reinterpret_cast<const sf::Transform*>(other));
 }
 
 void sfTransform_translate(float* transform, float x, float y)
 {
-    createTransform(createTransform(transform).translate(x, y), transform);
+    reinterpret_cast<sf::Transform*>(transform)->translate(x, y);
 }
 
 void sfTransform_rotate(float* transform, float angle)
 {
-    createTransform(createTransform(transform).rotate(angle),transform);
+    reinterpret_cast<sf::Transform*>(transform)->rotate(angle);
 }
 
 void sfTransform_rotateWithCenter(float* transform, float angle, float centerX, float centerY)
 {
-    createTransform(createTransform(transform).rotate(angle, centerX, centerY),transform);
+    reinterpret_cast<sf::Transform*>(transform)->rotate(angle, centerX, centerY);
 }
 
 void sfTransform_scale(float* transform, float scaleX, float scaleY)
 {
-    createTransform(createTransform(transform).scale(scaleX, scaleY),transform);
+    reinterpret_cast<sf::Transform*>(transform)->scale(scaleX, scaleY);
 }
 
 void sfTransform_scaleWithCenter(float* transform, float scaleX, float scaleY, float centerX, float centerY)
 {
-    createTransform(createTransform(transform).scale(scaleX, scaleY, centerX, centerY),transform);
+    reinterpret_cast<sf::Transform*>(transform)->scale(scaleX, scaleY, centerX, centerY);
 }

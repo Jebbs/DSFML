@@ -28,7 +28,6 @@
 #include <DSFMLC/Graphics/Shader.h>
 #include <DSFMLC/Graphics/ShaderStruct.h>
 #include <DSFMLC/Graphics/TextureStruct.h>
-#include <DSFMLC/Graphics/CreateTransform.hpp>
 
 sfShader* sfShader_construct(void)
 {
@@ -280,7 +279,7 @@ void sfShader_setColorParameter(sfShader* shader, const char* name, size_t lengt
 
 void sfShader_setTransformParameter(sfShader* shader, const char* name, size_t length, float* transform)
 {
-    shader->This.setParameter(std::string(name, length), createTransform(transform));
+    shader->This.setParameter(std::string(name, length),*reinterpret_cast<sf::Transform*>(transform));
 }
 
 void sfShader_setTextureParameter(sfShader* shader, const char* name, size_t length, const sfTexture* texture)
