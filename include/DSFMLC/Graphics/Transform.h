@@ -31,9 +31,6 @@
 #include <DSFMLC/Graphics/Export.h>
 #include <DSFMLC/Graphics/Types.h>
 
-//Return the 4x4 matrix of a transform
-DSFML_GRAPHICS_API void sfTransform_getMatrix(const float* transform, float* matrix);
-
 //Return the inverse of a transform
 DSFML_GRAPHICS_API void sfTransform_getInverse(const float* transform, float* inverse);
 
