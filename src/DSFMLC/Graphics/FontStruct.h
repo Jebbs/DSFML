@@ -36,7 +36,6 @@
 struct sfFont
 {
     sf::Font This;
-    mutable sfTexture* fontTexture;
     sfmlStream Stream;
 };
 

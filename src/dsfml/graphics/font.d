@@ -115,7 +115,8 @@ class Font
 
     package sfFont* sfPtr;
     private Info m_info;
-    private Texture fontTexture;
+    private Texture[int] textures;
+
     //keeps an instance of the C++ stream stored if used
     private fontStream m_stream;
 
@@ -127,13 +128,11 @@ class Font
     this()
     {
         sfPtr = sfFont_construct();
-        fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
     }
 
     package this(sfFont* newFont)
     {
         sfPtr = newFont;
-        fontTexture = new Texture(sfFont_getTexturePtr(sfPtr));
     }
 
     /// Destructor.
@@ -336,15 +335,17 @@ class Font
      *
      * Returns: Texture containing the glyphs of the requested size.
      */
-    const(Texture) getTexture (uint characterSize) const
+    const(Texture) getTexture (uint characterSize)
     {
-        //ToDo: cache texture somehow?
+        Texture ret = textures.get(characterSize, null);
 
-        import std.stdio;
+        if(ret is null)
+        {
+            ret = new Texture(sfFont_getTexture(sfPtr, characterSize));
+            textures[characterSize] = ret;
+        }
 
-        sfFont_updateTexture(sfPtr, characterSize);
-
-        return fontTexture;
+        return ret;
     }
 
     /**
@@ -462,12 +463,7 @@ float sfFont_getUnderlinePosition (const(sfFont)* font, uint characterSize);
 //Get the thickness of the underline
 float sfFont_getUnderlineThickness (const(sfFont)* font, uint characterSize);
 
-//Get the texture pointer for a particular font
-sfTexture* sfFont_getTexturePtr(const(sfFont)* font);
-
+//Get the font texture for a given character size
 sfTexture* sfFont_getTexture(const(sfFont)* font, uint characterSize);
-
-//Update the internal texture associated with the font
-void sfFont_updateTexture(const(sfFont)* font, uint characterSize);
 
 const(char)* sfErr_getOutput();

@@ -113,16 +113,12 @@ class Text : Drawable, Transformable
     private
     {
         dstring m_string;
-        Rebindable!(const(Font)) m_font;
+        Font m_font;
         uint m_characterSize;
         Style m_style;
         Color m_color;
         VertexArray m_vertices;
         FloatRect m_bounds;
-
-        //used for caching the font texture
-        uint lastSizeUsed = 0;
-        Rebindable!(const(Texture)) lastTextureUsed;
     }
 
     /**
@@ -154,7 +150,7 @@ class Text : Drawable, Transformable
      *	font          = Font used to draw the string
      *	characterSize = Base size of characters, in pixels
      */
-    this(T)(immutable(T)[] text, const(Font) font, uint characterSize = 30)
+    this(T)(immutable(T)[] text, Font font, uint characterSize = 30)
         if (is(T == dchar)||is(T == wchar)||is(T == char))
     {
         import dsfml.system.string;
@@ -207,14 +203,7 @@ class Text : Drawable, Transformable
      */
     const(Font) getFont() const
     {
-        if(m_font is null)
-        {
-            return null;
-        }
-        else
-        {
-            return m_font;
-        }
+        return m_font;
     }
 
     /**
@@ -310,7 +299,7 @@ class Text : Drawable, Transformable
      * Params:
      * 		font	= New font
      */
-    void setFont(const(Font) font)
+    void setFont(Font font)
     {
         m_font = font;
         updateGeometry();
@@ -353,21 +342,9 @@ class Text : Drawable, Transformable
      */
     void draw(RenderTarget renderTarget, RenderStates renderStates)
     {
-        import std.stdio;
-
-        if ((m_font !is null) && (m_characterSize>0))
+        if (m_font !is null)
         {
             renderStates.transform *= getTransform();
-
-            //only call getTexture if the size has changed
-            if(m_characterSize != lastSizeUsed)
-            {
-                //update the size
-                lastSizeUsed = m_characterSize;
-
-                //grab the new texture
-                lastTextureUsed = m_font.getTexture(m_characterSize);
-            }
 
             updateGeometry();
 
