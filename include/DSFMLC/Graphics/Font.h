@@ -66,10 +66,7 @@ DSFML_GRAPHICS_API float sfFont_getUnderlinePosition (const sfFont * font, DUint
 //Get the thickness of the underline
 DSFML_GRAPHICS_API float sfFont_getUnderlineThickness (const sfFont * font, DUint charactersize);
 
-//Get the texture pointer for a particular font
-DSFML_GRAPHICS_API sfTexture* sfFont_getTexturePtr(const sfFont* font);
-
-//Update the internal texture associated with the font
-DSFML_GRAPHICS_API void sfFont_updateTexture(const sfFont* font, DUint characterSize);
+//Get the font texture for a given character size
+DSFML_GRAPHICS_API sfTexture* sfFont_getTexture(const sfFont* font, DUint characterSize);
 
 #endif // SFML_IMAGE_H

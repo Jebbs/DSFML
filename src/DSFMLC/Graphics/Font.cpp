@@ -32,15 +32,6 @@
 sfFont* sfFont_construct()
 {
     sfFont* font = new sfFont;
-    font->fontTexture = new sfTexture;
-
-    //Delete the internal texture and set OwnInstance to false
-    //This will allow us to set the sf::Texture vtable to the address
-    //of the one returned by the font without copying it or destroying it.
-    delete font->fontTexture->This;
-    font->fontTexture->This = 0;
-    font->fontTexture->OwnInstance = false;
-
     return font;
 }
 
@@ -67,7 +58,6 @@ sfFont* sfFont_copy(const sfFont* font)
 
 void sfFont_destroy(sfFont* font)
 {
-    //purposefully do not delete the texture as that is handled by the D Texture class
     delete font;
 }
 
@@ -106,15 +96,8 @@ float sfFont_getUnderlineThickness(const sfFont* font, DUint characterSize)
     return font->This.getUnderlineThickness(characterSize);
 }
 
-sfTexture* sfFont_getTexturePtr(const sfFont* font)
+sfTexture* sfFont_getTexture(const sfFont* font, DUint characterSize)
 {
-    return font->fontTexture;
-}
-
-void sfFont_updateTexture(const sfFont* font, DUint characterSize)
-{
-    //Get the address of the underlying sf::Texture to avoid copying it.
-    //This is safe because the underlying sf::Texture is only exposed in const form.
-    font->fontTexture->This = const_cast<sf::Texture*>(&(font->This.getTexture(characterSize)));
-
+    //This is safe because the D Texture that uses this is only exposed as const 
+    return new sfTexture(const_cast<sf::Texture*>(&(font->This.getTexture(characterSize))));
 }
