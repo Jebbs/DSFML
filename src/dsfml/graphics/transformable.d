@@ -277,6 +277,7 @@ mixin template NormalTransformable()
 
     @property
     {
+        import std.math: fmod;
         float rotation(float newRotation)
         {
             m_rotation = cast(float)fmod(newRotation, 360);
@@ -324,6 +325,7 @@ mixin template NormalTransformable()
 
     const(Transform) getTransform()
     {
+        import std.math: cos, sin;
         if (m_transformNeedUpdate)
         {
             float angle = -m_rotation * 3.141592654f / 180f;

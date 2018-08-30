@@ -362,6 +362,7 @@ class Shape : Drawable, Transformable
     {
         Vector2f computeNormal(Vector2f p1, Vector2f p2)
         {
+            import std.math:sqrt;
             Vector2f normal = Vector2f(p1.y - p2.y, p2.x - p1.x);
             float length = sqrt(normal.x * normal.x + normal.y * normal.y);
             if (length != 0f)

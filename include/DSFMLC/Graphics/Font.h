@@ -52,7 +52,7 @@ DSFML_GRAPHICS_API sfFont* sfFont_copy(const sfFont* font);
 DSFML_GRAPHICS_API void sfFont_destroy(sfFont* font);
 
 //Get a glyph in a font
-DSFML_GRAPHICS_API void sfFont_getGlyph(const sfFont* font, DUint codePoint, DInt characterSize, DBool bold, float* glyphAdvance, float* glyphBoundsLeft, float* glyphBoundsTop, float* glyphBoundsWidth, float* glyphBoundsHeight, DInt* glyphTextRectLeft, DInt* glyphTextRectTop, DInt* glyphTextRectWidth, DInt* glyphTextRectHeight);
+DSFML_GRAPHICS_API void sfFont_getGlyph(const sfFont* font, DUint codePoint, DInt characterSize, DBool bold, float outlineThickness, float* glyphAdvance, float* glyphBoundsLeft, float* glyphBoundsTop, float* glyphBoundsWidth, float* glyphBoundsHeight, DInt* glyphTextRectLeft, DInt* glyphTextRectTop, DInt* glyphTextRectWidth, DInt* glyphTextRectHeight);
 
 //Get the kerning value corresponding to a given pair of characters in a font
 DSFML_GRAPHICS_API float sfFont_getKerning(const sfFont* font, DUint first, DUint second, DUint characterSize);

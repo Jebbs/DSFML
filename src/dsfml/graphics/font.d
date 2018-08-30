@@ -246,11 +246,11 @@ class Font
      *
      * Returns: The glyph corresponding to codePoint and characterSize.
      */
-    Glyph getGlyph(dchar codePoint, uint characterSize, bool bold) const
+    Glyph getGlyph(dchar codePoint, uint characterSize, bool bold, float outlineThickness = 0) const
     {
         Glyph temp;
 
-        sfFont_getGlyph(sfPtr, cast(uint)codePoint, characterSize,bold,&temp.advance,&temp.bounds.left,&temp.bounds.top,&temp.bounds.width,&temp.bounds.height,&temp.textureRect.left,&temp.textureRect.top,&temp.textureRect.width,&temp.textureRect.height);
+        sfFont_getGlyph(sfPtr, cast(uint)codePoint, characterSize, bold, outlineThickness, &temp.advance,&temp.bounds.left,&temp.bounds.top,&temp.bounds.width,&temp.bounds.height,&temp.textureRect.left,&temp.textureRect.top,&temp.textureRect.width,&temp.textureRect.height);
 
         return temp;
     }
@@ -449,7 +449,7 @@ sfFont* sfFont_copy(const sfFont* font);
 void sfFont_destroy(sfFont* font);
 
 //Get a glyph in a font
-void sfFont_getGlyph(const(sfFont)* font, uint codePoint, int characterSize, bool bold, float* glyphAdvance, float* glyphBoundsLeft, float* glyphBoundsTop, float* glyphBoundsWidth, float* glyphBoundsHeight, int* glyphTextRectLeft, int* glyphTextRectTop, int* glyphTextRectWidth, int* glyphTextRectHeight);
+void sfFont_getGlyph(const(sfFont)* font, uint codePoint, int characterSize, bool bold, float outlineThickness, float* glyphAdvance, float* glyphBoundsLeft, float* glyphBoundsTop, float* glyphBoundsWidth, float* glyphBoundsHeight, int* glyphTextRectLeft, int* glyphTextRectTop, int* glyphTextRectWidth, int* glyphTextRectHeight);
 
 //Get the kerning value corresponding to a given pair of characters in a font
 float sfFont_getKerning(const(sfFont)* font, uint first, uint second, uint characterSize);

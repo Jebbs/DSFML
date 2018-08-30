@@ -92,7 +92,7 @@ class VertexArray : Drawable
      *  type        = Type of primitives
      *  vertexCount = Initial number of vertices in the array
      */
-    this(PrimitiveType type, uint vertexCount)
+    this(PrimitiveType type, uint vertexCount = 0)
     {
         primitiveType = type;
         Vertices = new Vertex[vertexCount];

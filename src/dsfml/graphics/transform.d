@@ -63,7 +63,6 @@ module dsfml.graphics.transform;
 
 import dsfml.system.vector2;
 import dsfml.graphics.rect;
-public import std.math;
 
 
 /**

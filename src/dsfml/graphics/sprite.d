@@ -216,6 +216,7 @@ class Sprite : Drawable, Transformable
      */
     FloatRect getLocalBounds() const
     {
+        import std.math:abs;
         float width = (abs(m_textureRect.width));
         float height = (abs(m_textureRect.height));
         return FloatRect(0f, 0f, width, height);
