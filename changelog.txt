@@ -108,6 +108,7 @@ Color
 Added the color * color and color*= color operators, which SFML calls
 modulation.
 
+
 GLSL
 ----
 Added glsl.d, which has all the types related to working with GLSL functions.
@@ -120,6 +121,11 @@ Added LineStrip, TriangleStrip, and TriangleFan members.
 LinesStrip, TrianglesStrip, and TrianglesFan were marked as deprecated (instead,
 use LineStrip, TriangleStrip, and TriangleFan respectively).
 
+Text
+----
+Updated Text class to be current as of SFML 2.4.
+
+Added properties to replace most getters/setters, which were then deprecated.
 
 RenderWindow
 ------------
@@ -140,6 +146,7 @@ Added opIndexAssign for new setUniform and setUniformArray where needed.
 Marked all setParameter functions as deprecated. Use their setUniform variants
 instead.
 
+
 Texture
 -------
 Marked updateFromImage, updateFromPixels, updateFromWindow, and updateFromWindow
@@ -148,6 +155,7 @@ which are now also work with const objects if they didn't already.
 
 Added update functions for pixels, an Image, and Window/RenderWindow without the
 need to define an x and y.
+
 
 Transform
 --------

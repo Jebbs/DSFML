@@ -88,8 +88,6 @@ import dsfml.graphics.primitivetype;
 
 import dsfml.system.vector2;
 
-import std.typecons: Rebindable;
-
 /**
  * Graphical text that can be drawn to a render target.
  */
@@ -105,7 +103,9 @@ class Text : Drawable, Transformable
         /// Italic characters
         Italic = 1 << 1,
         /// Underlined characters
-        Underlined = 1 << 2
+        Underlined = 1 << 2,
+        /// Strike through characters
+        StrikeThrough = 1 << 3
     }
 
     mixin NormalTransformable;
@@ -116,9 +116,13 @@ class Text : Drawable, Transformable
         Font m_font;
         uint m_characterSize;
         Style m_style;
-        Color m_color;
+        Color m_fillColor;
+        Color m_outlineColor;
+        float m_outlineThickness;
         VertexArray m_vertices;
+        VertexArray m_outlineVertices;
         FloatRect m_bounds;
+        bool m_geometryNeedUpdate;
     }
 
     /**
@@ -131,9 +135,13 @@ class Text : Drawable, Transformable
         m_string = "";
         m_characterSize = 30;
         m_style = Style.Regular;
-        m_color = Color(255,255,255);
-        m_vertices = new VertexArray(PrimitiveType.Quads,0);
+        m_fillColor = Color(255,255,255);
+        m_outlineColor = Color(0,0,0);
+        m_outlineThickness = 0;
+        m_vertices = new VertexArray(PrimitiveType.Triangles);
+        m_outlineVertices = new VertexArray(PrimitiveType.Triangles);
         m_bounds = FloatRect();
+        m_geometryNeedUpdate = false;
     }
 
     /**
@@ -156,13 +164,16 @@ class Text : Drawable, Transformable
         import dsfml.system.string;
 
         m_string = stringConvert!(T, dchar)(text);
+        m_font = font;
         m_characterSize = characterSize;
         m_style = Style.Regular;
-        m_color = Color(255,255,255);
-        m_vertices = new VertexArray(PrimitiveType.Quads,0);
+        m_fillColor = Color(255,255,255);
+        m_outlineColor = Color(0,0,0);
+        m_outlineThickness = 0;
+        m_vertices = new VertexArray(PrimitiveType.Triangles);
+        m_outlineVertices = new VertexArray(PrimitiveType.Triangles);
         m_bounds = FloatRect();
-        m_font = font;
-        updateGeometry();
+        m_geometryNeedUpdate = true;
     }
 
     /// Destructor.
@@ -172,38 +183,243 @@ class Text : Drawable, Transformable
         mixin(destructorOutput);
     }
 
+    @property
+    {
+        /**
+         * The character size in pixels.
+         *
+         * The default size is 30.
+         *
+         * Note that if the used font is a bitmap font, it is not scalable, thus
+         * not all requested sizes will be available to use. This needs to be
+         * taken into consideration when setting the character size. If you need
+         * to display text of a certain size, make sure the corresponding bitmap
+         * font that supports that size is used.
+         */
+        uint characterSize(uint size)
+        {
+            if(m_characterSize != size)
+            {
+                m_characterSize = size;
+                m_geometryNeedUpdate = true;
+            }
+            return m_characterSize;
+        }
+
+        /// ditto
+        uint characterSize() const
+        {
+            return m_characterSize;
+        }
+    }
+
+    /**
+     * Set the character size.
+     *
+     * The default size is 30.
+     *
+     * Note that if the used font is a bitmap font, it is not scalable, thus
+     * not all requested sizes will be available to use. This needs to be
+     * taken into consideration when setting the character size. If you need
+     * to display text of a certain size, make sure the corresponding bitmap
+     * font that supports that size is used.
+     *
+     * Params:
+     * 		size	= New character size, in pixels.
+     *
+     * Deprecated: Use the 'characterSize' property instead.
+     */
+    deprecated("Use the 'characterSize' property instead.")
+    void setCharacterSize(uint size)
+    {
+        characterSize = size;
+    }
+
     /**
      * Get the character size.
      *
      * Returns: Size of the characters, in pixels.
+     *
+     * Deprecated: Use the 'characterSize' property instead.
      */
+    deprecated("Use the 'characterSize' property instead.")
     uint getCharacterSize() const
     {
-        return m_characterSize;
+        return characterSize;
     }
 
     /**
-     * Get the global color of the text.
+     * Set the fill color of the text.
      *
-     * Returns: Global color of the text.
+     * By default, the text's color is opaque white.
+     *
+     * Params:
+     * 		color	= New color of the text.
+     *
+     * Deprecated: Use the 'fillColor' or 'outlineColor' properties instead.
      */
+    deprecated("Use the 'fillColor' or 'outlineColor' properties instead.")
+    void setColor(Color color)
+    {
+        fillColor = color;
+    }
+
+    /**
+     * Get the fill color of the text.
+     *
+     * Returns: Fill color of the text.
+     *
+     * Deprecated: Use the 'fillColor' or 'outlineColor' properties instead.
+     */
+    deprecated("Use the 'fillColor' or 'outlineColor' properties instead.")
     Color getColor() const
     {
-        return m_color;
+        return fillColor;
+    }
+
+    @property
+    {
+        /**
+        * The fill color of the text.
+        *
+        * By default, the text's fill color is opaque white. Setting the fill
+        * color to a transparent color with an outline will cause the outline to
+        * be displayed in the fill area of the text.
+        */
+        Color fillColor(Color color)
+        {
+            if(m_fillColor != color)
+            {
+                m_fillColor = color;
+
+                // Change vertex colors directly, no need to update whole geometry
+                // (if geometry is updated anyway, we can skip this step)
+                if(!m_geometryNeedUpdate)
+                {
+                    for(int i = 0; i < m_vertices.getVertexCount(); ++i)
+                    {
+                        m_vertices[i].color = m_fillColor;
+                    }
+                }
+            }
+
+            return m_fillColor;
+        }
+
+        /// ditto
+        Color fillColor() const
+        {
+            return m_fillColor;
+        }
+    }
+
+    @property
+    {
+        /**
+        * The outline color of the text.
+        *
+        * By default, the text's outline color is opaque black.
+        */
+        Color outlineColor(Color color)
+        {
+            if(m_outlineColor != color)
+            {
+                m_outlineColor = color;
+
+                // Change vertex colors directly, no need to update whole geometry
+                // (if geometry is updated anyway, we can skip this step)
+                if(!m_geometryNeedUpdate)
+                {
+                    for(int i = 0; i < m_outlineVertices.getVertexCount(); ++i)
+                    {
+                        m_outlineVertices[i].color = m_outlineColor;
+                    }
+                }
+            }
+
+            return m_outlineColor;
+        }
+
+        /// ditto
+        Color outlineColor() const
+        {
+            return m_outlineColor;
+        }
+    }
+
+    @property
+    {
+        /**
+        * The outline color of the text.
+        *
+        * By default, the text's outline color is opaque black.
+        */
+        float outlineThickness(float thickness)
+        {
+            if(m_outlineThickness != thickness)
+            {
+                m_outlineThickness = thickness;
+                m_geometryNeedUpdate = true;
+            }
+
+            return m_outlineThickness;
+        }
+
+        /// ditto
+        float outlineThickness() const
+        {
+            return m_outlineThickness;
+        }
+    }
+
+    @property
+    {
+        /**
+        * The text's font.
+        */
+        const(Font) font(Font newFont)
+        {
+            if (m_font !is newFont)
+            {
+                m_font = newFont;
+                m_geometryNeedUpdate = true;
+            }
+
+            return m_font;
+        }
+
+        /// ditto
+        const(Font) font() const
+        {
+            return m_font;
+        }
+    }
+
+    /**
+     * Set the text's font.
+     *
+     * Params:
+     * 		newFont	= New font
+     *
+     * Deprecated: Use the 'font' property instead.
+     */
+    deprecated("Use the 'font' property instead.")
+    void setFont(Font newFont)
+    {
+        font = newFont;
     }
 
     /**
      * Get thet text's font.
      *
-     * If the text has no font attached, a NULL pointer is returned.
-     * The returned reference is const, which means that you cannot modify the
-     * font when you get it from this function.
-     *
      * Returns: Text's font.
+     *
+     * Deprecated: Use the 'font' property instead.
      */
+    deprecated("Use the 'font' property instead.")
     const(Font) getFont() const
     {
-        return m_font;
+        return font;
     }
 
     /**
@@ -216,9 +432,27 @@ class Text : Drawable, Transformable
      *
      * Returns: Global bounding rectangle of the entity.
      */
+    @property FloatRect globalBounds()
+    {
+        return getTransform().transformRect(localBounds);
+    }
+
+    /**
+     * Get the global bounding rectangle of the entity.
+     *
+     * The returned rectangle is in global coordinates, which means that it
+     * takes in account the transformations (translation, rotation, scale, ...)
+     * that are applied to the entity. In other words, this function returns the
+     * bounds of the sprite in the global 2D world's coordinate system.
+     *
+     * Returns: Global bounding rectangle of the entity.
+     *
+     * Deprecated: Use the 'globalBounds' property instead.
+     */
+    deprecated("Use the 'globalBounds' property instead.")
     FloatRect getGlobalBounds()
     {
-        return getTransform().transformRect(getLocalBounds());
+        return globalBounds;
     }
 
     /**
@@ -231,9 +465,101 @@ class Text : Drawable, Transformable
      *
      * Returns: Local bounding rectangle of the entity.
      */
-    FloatRect getLocalBounds() const
+    @property FloatRect localBounds() const
     {
         return m_bounds;
+    }
+
+    /**
+     * Get the local bounding rectangle of the entity.
+     *
+     * The returned rectangle is in local coordinates, which means that it
+     * ignores the transformations (translation, rotation, scale, ...) that are
+     * applied to the entity. In other words, this function returns the bounds
+     * of the entity in the entity's coordinate system.
+     *
+     * Returns: Local bounding rectangle of the entity.
+     *
+     * Deprecated: Use the 'globalBounds' property instead.
+     */
+    deprecated("Use the 'localBounds' property instead.")
+    FloatRect getLocalBounds() const
+    {
+        return localBounds;
+    }
+
+    @property
+    {
+        /**
+         * The text's style.
+         *
+         * You can pass a combination of one or more styles, for example
+         * Style.Bold | Text.Italic.
+         */
+        Style style(Style newStyle)
+        {
+            if(m_style != newStyle)
+            {
+                m_style = newStyle;
+                m_geometryNeedUpdate = true;
+            }
+
+            return m_style;
+        }
+
+        /// ditto
+        Style style() const
+        {
+            return m_style;
+        }
+    }
+
+    /**
+     * Set the text's style.
+     *
+     * You can pass a combination of one or more styles, for example
+     * Style.Bold | Text.Italic.
+     *
+     * Params:
+     *      newStyle = New style
+     *
+     * Deprecated: Use the 'style' property instead.
+     */
+    deprecated("Use the 'style' property instead.")
+    void setStyle(Style newStyle)
+    {
+        style = newStyle;
+    }
+
+    /**
+     * Get the text's style.
+     *
+     * Returns: Text's style.
+     *
+     * Deprecated: Use the 'style' property instead.
+     */
+    deprecated("Use the 'style' property instead.")
+    Style getStyle() const
+    {
+        return style;
+    }
+
+    /**
+     * Set the text's string.
+     *
+     * A text's string is empty by default.
+     *
+     * Params:
+     * 		text	= New string
+     */
+    void setString(T)(immutable(T)[] text)
+        if (is(T == dchar)||is(T == wchar)||is(T == char))
+    {
+        import dsfml.system.string;
+
+        // Because of the conversion, assume the text is new
+        m_string = stringConvert!(T,dchar)(text);
+        m_geometryNeedUpdate = true;
     }
 
     //TODO: maybe a getString!dstring or getString!wstring etc template would be appropriate?
@@ -250,90 +576,6 @@ class Text : Drawable, Transformable
     }
 
     /**
-     * Get the text's style.
-     *
-     * Returns: Text's style.
-     */
-    Style getStyle() const
-    {
-        return m_style;
-    }
-
-    /**
-     * Set the character size.
-     *
-     * The default size is 30.
-     *
-     * Params:
-     * 		size	= New character size, in pixels.
-     */
-    void setCharacterSize(uint size)
-    {
-        m_characterSize = size;
-        updateGeometry();
-    }
-
-    /**
-     * Set the global color of the text.
-     *
-     * By default, the text's color is opaque white.
-     *
-     * Params:
-     * 		color	= New color of the text.
-     */
-    void setColor(Color color)
-    {
-        m_color = color;
-        updateGeometry();
-    }
-
-    /**
-     * Set the text's font.
-     *
-     * The font argument refers to a font that must exist as long as the text
-     * uses it. Indeed, the text doesn't store its own copy of the font, but
-     * rather keeps a pointer to the one that you passed to this function. If
-     * the font is destroyed and the text tries to use it, the behaviour is
-     * undefined.
-     *
-     * Params:
-     * 		font	= New font
-     */
-    void setFont(Font font)
-    {
-        m_font = font;
-        updateGeometry();
-    }
-
-    /**
-     * Set the text's string.
-     *
-     * A text's string is empty by default.
-     *
-     * Params:
-     * 		text	= New string
-     */
-    void setString(T)(immutable(T)[] text)
-        if (is(T == dchar)||is(T == wchar)||is(T == char))
-    {
-        import dsfml.system.string;
-        m_string = stringConvert!(T,dchar)(text);
-        updateGeometry();
-    }
-
-    /**
-     * Set the text's style.
-     *
-     * You can pass a combination of one or more styles, for example
-     * Style.Bold | Text.Italic.
-     */
-    void setStyle(Style style)
-    {
-        m_style = style;
-        updateGeometry();
-    }
-
-    /**
      * Draw the object to a render target.
      *
      * Params:
@@ -344,11 +586,14 @@ class Text : Drawable, Transformable
     {
         if (m_font !is null)
         {
+            ensureGeometryUpdate();
+
             renderStates.transform *= getTransform();
-
-            updateGeometry();
-
             renderStates.texture =  m_font.getTexture(m_characterSize);
+
+            // Only draw the outline if there is something to draw
+            if (m_outlineThickness != 0)
+                renderTarget.draw(m_outlineVertices, renderStates);
 
             renderTarget.draw(m_vertices, renderStates);
         }
@@ -381,11 +626,12 @@ class Text : Drawable, Transformable
             index = m_string.length;
         }
 
+        // Precompute the variables needed by the algorithm
         bool bold  = (m_style & Style.Bold) != 0;
-
         float hspace = cast(float)(m_font.getGlyph(' ', m_characterSize, bold).advance);
         float vspace = cast(float)(m_font.getLineSpacing(m_characterSize));
 
+        // Compute the position
         Vector2f position;
         dchar prevChar = 0;
         for (size_t i = 0; i < index; ++i)
@@ -403,8 +649,7 @@ class Text : Drawable, Transformable
                 case '\t' : position.x += hspace * 4; continue;
                 case '\n' : position.y += vspace; position.x = 0; continue;
                 case '\v' : position.y += vspace * 4; continue;
-                default:
-                    break;
+                default : break;
             }
 
             // For regular characters, add the advance offset of the glyph
@@ -418,71 +663,131 @@ class Text : Drawable, Transformable
     }
 
 private:
-    void updateGeometry()
+    void ensureGeometryUpdate()
     {
-        import std.algorithm;
+        import std.math: floor;
+        import std.algorithm: max, min;
+
+        // Add an underline or strikethrough line to the vertex array
+        static void addLine(VertexArray vertices, float lineLength,
+                            float lineTop, ref const(Color) color, float offset,
+                            float thickness, float outlineThickness = 0)
+        {
+            float top = floor(lineTop + offset - (thickness / 2) + 0.5f);
+            float bottom = top + floor(thickness + 0.5f);
+
+            vertices.append(Vertex(Vector2f(-outlineThickness,             top    - outlineThickness), color, Vector2f(1, 1)));
+            vertices.append(Vertex(Vector2f(lineLength + outlineThickness, top    - outlineThickness), color, Vector2f(1, 1)));
+            vertices.append(Vertex(Vector2f(-outlineThickness,             bottom + outlineThickness), color, Vector2f(1, 1)));
+            vertices.append(Vertex(Vector2f(-outlineThickness,             bottom + outlineThickness), color, Vector2f(1, 1)));
+            vertices.append(Vertex(Vector2f(lineLength + outlineThickness, top    - outlineThickness), color, Vector2f(1, 1)));
+            vertices.append(Vertex(Vector2f(lineLength + outlineThickness, bottom + outlineThickness), color, Vector2f(1, 1)));
+        }
+
+        // Add a glyph quad to the vertex array
+        static void addGlyphQuad(VertexArray vertices, Vector2f position,
+                                 ref const(Color) color, ref const(Glyph) glyph,
+                                 float italic, float outlineThickness = 0)
+        {
+            float left   = glyph.bounds.left;
+            float top    = glyph.bounds.top;
+            float right  = glyph.bounds.left + glyph.bounds.width;
+            float bottom = glyph.bounds.top  + glyph.bounds.height;
+
+            float u1 = glyph.textureRect.left;
+            float v1 = glyph.textureRect.top;
+            float u2 = glyph.textureRect.left + glyph.textureRect.width;
+            float v2 = glyph.textureRect.top  + glyph.textureRect.height;
+
+            vertices.append(Vertex(Vector2f(position.x + left  - italic * top    - outlineThickness, position.y + top    - outlineThickness), color, Vector2f(u1, v1)));
+            vertices.append(Vertex(Vector2f(position.x + right - italic * top    - outlineThickness, position.y + top    - outlineThickness), color, Vector2f(u2, v1)));
+            vertices.append(Vertex(Vector2f(position.x + left  - italic * bottom - outlineThickness, position.y + bottom - outlineThickness), color, Vector2f(u1, v2)));
+            vertices.append(Vertex(Vector2f(position.x + left  - italic * bottom - outlineThickness, position.y + bottom - outlineThickness), color, Vector2f(u1, v2)));
+            vertices.append(Vertex(Vector2f(position.x + right - italic * top    - outlineThickness, position.y + top    - outlineThickness), color, Vector2f(u2, v1)));
+            vertices.append(Vertex(Vector2f(position.x + right - italic * bottom - outlineThickness, position.y + bottom - outlineThickness), color, Vector2f(u2, v2)));
+        }
+
+        // Do nothing, if geometry has not changed
+        if (!m_geometryNeedUpdate)
+            return;
+
+        // Mark geometry as updated
+        m_geometryNeedUpdate = false;
 
         // Clear the previous geometry
         m_vertices.clear();
+        m_outlineVertices.clear();
         m_bounds = FloatRect();
 
-        // No font: nothing to draw
-        if (m_font is null)
+        // No font or text: nothing to draw
+        if (!m_font || m_string.length == 0)
             return;
 
-        // No text: nothing to draw
-        if (m_string.length == 0)
-            return;
         // Compute values related to the text style
-        bool bold = (m_style & Style.Bold) != 0;
-        bool underlined = (m_style & Style.Underlined) != 0;
-        float italic = (m_style & Style.Italic) ? 0.208f : 0f; // 12 degrees
-        float underlineOffset = m_characterSize * 0.1f;
-        float underlineThickness = m_characterSize * (bold ? 0.1f : 0.07f);
+        bool  bold               = (m_style & Style.Bold) != 0;
+        bool  underlined         = (m_style & Style.Underlined) != 0;
+        bool  strikeThrough      = (m_style & Style.StrikeThrough) != 0;
+        float italic             = (m_style & Style.Italic) ? 0.208f : 0.0f; // 12 degrees
+        float underlineOffset    = m_font.getUnderlinePosition(m_characterSize);
+        float underlineThickness = m_font.getUnderlineThickness(m_characterSize);
+
+        // Compute the location of the strike through dynamically
+        // We use the center point of the lowercase 'x' glyph as the reference
+        // We reuse the underline thickness as the thickness of the strike through as well
+        FloatRect xBounds = m_font.getGlyph('x', m_characterSize, bold).bounds;
+        float strikeThroughOffset = xBounds.top + xBounds.height / 2.0f;
 
         // Precompute the variables needed by the algorithm
-        float hspace = cast(float)(m_font.getGlyph(' ', m_characterSize, bold).advance);
-        float vspace = cast(float)(m_font.getLineSpacing(m_characterSize));
-        float x = 0f;
-        float y = cast(float)(m_characterSize);
+        float hspace = m_font.getGlyph(' ', m_characterSize, bold).advance;
+        float vspace = m_font.getLineSpacing(m_characterSize);
+        float x      = 0.0f;
+        float y      = cast(float)m_characterSize;
 
         // Create one quad for each character
-        float minX = m_characterSize, minY = m_characterSize, maxX = 0, maxY = 0;
-        dchar prevChar = 0;
+        float minX = cast(float)m_characterSize;
+        float minY = cast(float)m_characterSize;
+        float maxX = 0.0f;
+        float maxY = 0.0f;
+        dchar prevChar = '\0';
         for (size_t i = 0; i < m_string.length; ++i)
         {
             dchar curChar = m_string[i];
 
             // Apply the kerning offset
-            x += cast(float)(m_font.getKerning(prevChar, curChar, m_characterSize));
-
+            x += m_font.getKerning(prevChar, curChar, m_characterSize);
             prevChar = curChar;
 
             // If we're using the underlined style and there's a new line, draw a line
             if (underlined && (curChar == '\n'))
             {
-                float top = y + underlineOffset;
-                float bottom = top + underlineThickness;
+                addLine(m_vertices, x, y, m_fillColor, underlineOffset, underlineThickness);
 
-                m_vertices.append(Vertex(Vector2f(0, top), m_color, Vector2f(1, 1)));
-                m_vertices.append(Vertex(Vector2f(x, top), m_color, Vector2f(1, 1)));
-                m_vertices.append(Vertex(Vector2f(x, bottom), m_color, Vector2f(1, 1)));
-                m_vertices.append(Vertex(Vector2f(0, bottom), m_color, Vector2f(1, 1)));
+                if (m_outlineThickness != 0)
+                    addLine(m_outlineVertices, x, y, m_outlineColor, underlineOffset, underlineThickness, m_outlineThickness);
+            }
+
+            // If we're using the strike through style and there's a new line, draw a line across all characters
+            if (strikeThrough && (curChar == '\n'))
+            {
+                addLine(m_vertices, x, y, m_fillColor, strikeThroughOffset, underlineThickness);
+
+                if (m_outlineThickness != 0)
+                    addLine(m_outlineVertices, x, y, m_outlineColor, strikeThroughOffset, underlineThickness, m_outlineThickness);
             }
 
             // Handle special characters
-            if ((curChar == ' ') || (curChar == '\t') || (curChar == '\n') || (curChar == '\v'))
+            if ((curChar == ' ') || (curChar == '\t') || (curChar == '\n'))
             {
                 // Update the current bounds (min coordinates)
                 minX = min(minX, x);
                 minY = min(minY, y);
 
-                final switch (curChar)
+                switch (curChar)
                 {
-                    case ' ' : x += hspace; break;
-                    case '\t' : x += hspace * 4; break;
-                    case '\n' : y += vspace; x = 0; break;
-                    case '\v' : y += vspace * 4; break;
+                    case ' ':  x += hspace;        break;
+                    case '\t': x += hspace * 4;    break;
+                    case '\n': y += vspace; x = 0; break;
+                    default : break;
                 }
 
                 // Update the current bounds (max coordinates)
@@ -493,45 +798,66 @@ private:
                 continue;
             }
 
+            // Apply the outline
+            if (m_outlineThickness != 0)
+            {
+                Glyph glyph = m_font.getGlyph(curChar, m_characterSize, bold, m_outlineThickness);
+
+                float left   = glyph.bounds.left;
+                float top    = glyph.bounds.top;
+                float right  = glyph.bounds.left + glyph.bounds.width;
+                float bottom = glyph.bounds.top  + glyph.bounds.height;
+
+                // Add the outline glyph to the vertices
+                addGlyphQuad(m_outlineVertices, Vector2f(x, y), m_outlineColor, glyph, italic, m_outlineThickness);
+
+                // Update the current bounds with the outlined glyph bounds
+                minX = min(minX, x + left   - italic * bottom - m_outlineThickness);
+                maxX = max(maxX, x + right  - italic * top    - m_outlineThickness);
+                minY = min(minY, y + top    - m_outlineThickness);
+                maxY = max(maxY, y + bottom - m_outlineThickness);
+            }
+
             // Extract the current glyph's description
-            Glyph glyph = m_font.getGlyph(curChar, m_characterSize, bold);
+            const Glyph glyph = m_font.getGlyph(curChar, m_characterSize, bold);
 
-            float left = glyph.bounds.left;
-            float top = glyph.bounds.top;
-            float right = glyph.bounds.left + glyph.bounds.width;
-            float bottom = glyph.bounds.top + glyph.bounds.height;
+            // Add the glyph to the vertices
+            addGlyphQuad(m_vertices, Vector2f(x, y), m_fillColor, glyph, italic);
 
-            float u1 = cast(float)(glyph.textureRect.left);
-            float v1 = cast(float)(glyph.textureRect.top);
-            float u2 = cast(float)(glyph.textureRect.left + glyph.textureRect.width);
-            float v2 = cast(float)(glyph.textureRect.top + glyph.textureRect.height);
+            // Update the current bounds with the non outlined glyph bounds
+            if (m_outlineThickness == 0)
+            {
+                float left   = glyph.bounds.left;
+                float top    = glyph.bounds.top;
+                float right  = glyph.bounds.left + glyph.bounds.width;
+                float bottom = glyph.bounds.top  + glyph.bounds.height;
 
-            // Add a quad for the current character
-            m_vertices.append(Vertex(Vector2f(x + left - italic * top, y + top), m_color, Vector2f(u1, v1)));
-            m_vertices.append(Vertex(Vector2f(x + right - italic * top, y + top), m_color, Vector2f(u2, v1)));
-            m_vertices.append(Vertex(Vector2f(x + right - italic * bottom, y + bottom), m_color, Vector2f(u2, v2)));
-            m_vertices.append(Vertex(Vector2f(x + left - italic * bottom, y + bottom), m_color, Vector2f(u1, v2)));
-
-            // Update the current bounds
-            minX = min(minX, x + left - italic * bottom);
-            maxX = max(maxX, x + right - italic * top);
-            minY = min(minY, y + top);
-            maxY = max(maxY, y + bottom);
+                minX = min(minX, x + left  - italic * bottom);
+                maxX = max(maxX, x + right - italic * top);
+                minY = min(minY, y + top);
+                maxY = max(maxY, y + bottom);
+            }
 
             // Advance to the next character
             x += glyph.advance;
         }
 
         // If we're using the underlined style, add the last line
-        if (underlined)
+        if (underlined && (x > 0))
         {
-            float top = y + underlineOffset;
-            float bottom = top + underlineThickness;
+            addLine(m_vertices, x, y, m_fillColor, underlineOffset, underlineThickness);
 
-            m_vertices.append(Vertex(Vector2f(0, top), m_color, Vector2f(1, 1)));
-            m_vertices.append(Vertex(Vector2f(x, top), m_color, Vector2f(1, 1)));
-            m_vertices.append(Vertex(Vector2f(x, bottom), m_color, Vector2f(1, 1)));
-            m_vertices.append(Vertex(Vector2f(0, bottom), m_color, Vector2f(1, 1)));
+            if (m_outlineThickness != 0)
+                addLine(m_outlineVertices, x, y, m_outlineColor, underlineOffset, underlineThickness, m_outlineThickness);
+        }
+
+        // If we're using the strike through style, add the last line across all characters
+        if (strikeThrough && (x > 0))
+        {
+            addLine(m_vertices, x, y, m_fillColor, strikeThroughOffset, underlineThickness);
+
+            if (m_outlineThickness != 0)
+                addLine(m_outlineVertices, x, y, m_outlineColor, strikeThroughOffset, underlineThickness, m_outlineThickness);
         }
 
         // Update the bounding rectangle
@@ -553,21 +879,64 @@ unittest
 
         auto renderTexture = new RenderTexture();
 
-        renderTexture.create(100,100);
+        renderTexture.create(400,200);
 
         auto font = new Font();
         assert(font.loadFromFile("res/Warenhaus-Standard.ttf"));
 
-        Text text;
-        text = new Text("Sample String", font);
+        Text regular = new Text("Regular", font, 20);
+        Text bold = new Text("Bold", font, 20);
+        Text italic = new Text("Italic", font, 20);
+        Text boldItalic = new Text("Bold Italic", font, 20);
+        Text strikeThrough = new Text("Strike Through", font, 20);
+        Text italicStrikeThrough = new Text("Italic Strike Through", font, 20);
+        Text boldStrikeThrough = new Text("Bold Strike Through", font, 20);
+        Text boldItalicStrikeThrough = new Text("Bold Italic Strike Through", font, 20);
+        Text outlined = new Text("Outlined", font, 20);
+        Text outlinedBoldItalicStrikeThrough = new Text("Outlined Bold Italic Strike Through", font, 20);
 
-        string temp = text.getString();
+        bold.style = Text.Style.Bold;
+        bold.position = Vector2f(0,20);
 
-        writeln(temp);
+        italic.style = Text.Style.Italic;
+        italic.position = Vector2f(0,40);
+
+        boldItalic.style = Text.Style.Bold | Text.Style.Italic;
+        boldItalic.position = Vector2f(0,60);
+
+        strikeThrough.style = Text.Style.StrikeThrough;
+        strikeThrough.position = Vector2f(0,80);
+
+        italicStrikeThrough.style = Text.Style.Italic | Text.Style.StrikeThrough;
+        italicStrikeThrough.position = Vector2f(0,100);
+
+        boldStrikeThrough.style = Text.Style.Bold | Text.Style.StrikeThrough;
+        boldStrikeThrough.position = Vector2f(0,120);
+
+        boldItalicStrikeThrough.style = Text.Style.Bold | Text.Style.Italic | Text.Style.StrikeThrough;
+        boldItalicStrikeThrough.position = Vector2f(0,140);
+
+        outlined.outlineColor = Color.Red;
+        outlined.outlineThickness = 0.5f;
+        outlined.position = Vector2f(0,160);
+
+        outlinedBoldItalicStrikeThrough.style = Text.Style.Bold | Text.Style.Italic | Text.Style.StrikeThrough;
+        outlinedBoldItalicStrikeThrough.outlineColor = Color.Red;
+        outlinedBoldItalicStrikeThrough.outlineThickness = 0.5f;
+        outlinedBoldItalicStrikeThrough.position = Vector2f(0,180);
 
         renderTexture.clear();
 
-        renderTexture.draw(text);
+        renderTexture.draw(regular);
+        renderTexture.draw(bold);
+        renderTexture.draw(italic);
+        renderTexture.draw(boldItalic);
+        renderTexture.draw(strikeThrough);
+        renderTexture.draw(italicStrikeThrough);
+        renderTexture.draw(boldStrikeThrough);
+        renderTexture.draw(boldItalicStrikeThrough);
+        renderTexture.draw(outlined);
+        renderTexture.draw(outlinedBoldItalicStrikeThrough);
 
         renderTexture.display();
 
