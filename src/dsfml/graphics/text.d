@@ -112,7 +112,7 @@ class Text : Drawable, Transformable
 
     private
     {
-        dstring m_string;
+        dchar[] m_string;
         Font m_font;
         uint m_characterSize;
         Style m_style;
@@ -123,6 +123,20 @@ class Text : Drawable, Transformable
         VertexArray m_outlineVertices;
         FloatRect m_bounds;
         bool m_geometryNeedUpdate;
+
+        //helper function to copy input string into character buffer
+        void stringCopy(T)(immutable(T)[] str)
+        if (is(T == dchar)||is(T == wchar)||is(T == char))
+        {
+            import std.utf: byDchar;
+
+            //make a conservative estimate on how much room we'll need
+            m_string.reserve(T.sizeof * str.length / dchar.sizeof);
+            m_string.length = 0;
+
+            foreach(dchar c; str.byDchar())
+                m_string~=c;
+        }
     }
 
     /**
@@ -132,7 +146,6 @@ class Text : Drawable, Transformable
      */
     this()
     {
-        m_string = "";
         m_characterSize = 30;
         m_style = Style.Regular;
         m_fillColor = Color(255,255,255);
@@ -161,9 +174,7 @@ class Text : Drawable, Transformable
     this(T)(immutable(T)[] text, Font font, uint characterSize = 30)
         if (is(T == dchar)||is(T == wchar)||is(T == char))
     {
-        import dsfml.system.string;
-
-        m_string = stringConvert!(T, dchar)(text);
+        stringCopy(text);
         m_font = font;
         m_characterSize = characterSize;
         m_style = Style.Regular;
@@ -555,24 +566,28 @@ class Text : Drawable, Transformable
     void setString(T)(immutable(T)[] text)
         if (is(T == dchar)||is(T == wchar)||is(T == char))
     {
-        import dsfml.system.string;
-
         // Because of the conversion, assume the text is new
-        m_string = stringConvert!(T,dchar)(text);
+        stringCopy(text);
         m_geometryNeedUpdate = true;
     }
 
-    //TODO: maybe a getString!dstring or getString!wstring etc template would be appropriate?
     /**
-     * Get the text's string.
+     * Get a copy of the text's string.
      *
-     * The returned string is a dstring, a unicode type.
+     * Returns: a copy of the text's string.
      */
     immutable(T)[] getString(T=char)() const
         if (is(T == dchar)||is(T == wchar)||is(T == char))
     {
-        import dsfml.system.string;
-        return stringConvert!(dchar, T)(m_string);
+        import std.utf: toUTF8, toUTF16, toUTF32;
+
+        static if(is(T == char))
+		    return toUTF8(m_string);
+	    else static if(is(T == wchar))
+		    return toUTF16(m_string);
+	    else static if(is(T == dchar))
+		    return toUTF32(m_string);
+
     }
 
     /**
@@ -924,6 +939,8 @@ unittest
         outlinedBoldItalicStrikeThrough.outlineColor = Color.Red;
         outlinedBoldItalicStrikeThrough.outlineThickness = 0.5f;
         outlinedBoldItalicStrikeThrough.position = Vector2f(0,180);
+
+        writeln(regular.getString());
 
         renderTexture.clear();
 
