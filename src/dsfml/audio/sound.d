@@ -61,7 +61,7 @@
  */
 module dsfml.audio.sound;
 
-public import core.time;
+public import dsfml.system.time;
 
 import dsfml.audio.soundbuffer;
 import dsfml.audio.soundsource;
@@ -139,15 +139,15 @@ class Sound : SoundSource
          * The playing position can be changed when the sound is either paused or
          * playing.
          */
-        void playingOffset(Duration offset)
+        void playingOffset(Time offset)
         {
-            sfSound_setPlayingOffset(sfPtr, offset.total!"usecs");
+            sfSound_setPlayingOffset(sfPtr, offset.asMicroseconds());
         }
 
         /// ditto
-        Duration playingOffset() const
+        Time playingOffset() const
         {
-            return usecs(sfSound_getPlayingOffset(sfPtr));
+            return microseconds(sfSound_getPlayingOffset(sfPtr));
         }
     }
 
@@ -361,8 +361,6 @@ unittest
     {
         import std.stdio;
         import dsfml.system.clock;
-        import core.time;
-
 
         writeln("Unit test for Sound class");
 
@@ -376,7 +374,7 @@ unittest
             return;
         }
 
-        float duration = soundbuffer.getDuration().total!"seconds";
+        float duration = soundbuffer.getDuration().asSeconds();
 
         auto sound = new Sound(soundbuffer);
 
@@ -387,7 +385,7 @@ unittest
         sound.play();
 
 
-        while(clock.getElapsedTime().total!"seconds" < duration)
+        while(clock.getElapsedTime().asSeconds() < duration)
         {
             //wait for sound to finish
         }

@@ -41,15 +41,25 @@ the dsfml.org website.
 System
 ======
 
+Time
+----
+Removed the usage of core.time's Duration struct in favor of the original Time
+struct. This was done in hopes of removing any cofusion users might have had
+because Time was missing, which wasn't well documented or handled.
+
+Time now supports converting to/from core.time's Duration struct via the
+duration and asDuration methods for those that wish to work directly with this
+struct.
+
+
 Vector2
 -------
-Bool types are now allowed(to be compatible with the GLSL moddule)
+Bool types are now allowed(to be compatible with the GLSL moddule).
 
 
 Vector3
 -------
-Bool types are now allowed(to be compatible with the GLSL moddule)
-
+Bool types are now allowed(to be compatible with the GLSL moddule).
 
 
 Network

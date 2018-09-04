@@ -93,7 +93,7 @@
  */
 module dsfml.network.ftp;
 
-import core.time;
+public import dsfml.system.time;
 
 import dsfml.network.ipaddress;
 
@@ -188,7 +188,7 @@ class Ftp
      * This function tries to connect to the server so it may take a while to
      * complete, especially if the server is not reachable. To avoid blocking
      * your application for too long, you can use a timeout. The default value,
-     * Duration.Zero, means that the system timeout will be used (which is
+     * Time.Zero, means that the system timeout will be used (which is
      * usually pretty long).
      *
      * Params:
@@ -198,9 +198,9 @@ class Ftp
      *
      * Returns: Server response to the request.
      */
-    Response connect(IpAddress address, ushort port = 21, Duration timeout = Duration.zero())
+    Response connect(IpAddress address, ushort port = 21, Time timeout = Time.Zero)
     {
-        return new Response(sfFtp_connect(sfPtr, &address, port, timeout.total!"usecs"));
+        return new Response(sfFtp_connect(sfPtr, &address, port, timeout.asMicroseconds()));
     }
 
     /**
@@ -213,7 +213,7 @@ class Ftp
      * This function tries to connect to the server so it may take a while to
      * complete, especially if the server is not reachable. To avoid blocking
      * your application for too long, you can use a timeout. The default value,
-     * Duration.Zero, means that the system timeout will be used (which is
+     * Time.Zero, means that the system timeout will be used (which is
      * usually pretty long).
      *
      * Params:
@@ -223,10 +223,10 @@ class Ftp
      *
      * Returns: Server response to the request.
      */
-    Response connect(const(char)[] address, ushort port = 21, Duration timeout = Duration.zero())
+    Response connect(const(char)[] address, ushort port = 21, Time timeout = Time.Zero)
     {
         auto iaddress = IpAddress(address);
-        return new Response(sfFtp_connect(sfPtr, &iaddress, port, timeout.total!"usecs"));
+        return new Response(sfFtp_connect(sfPtr, &iaddress, port, timeout.asMicroseconds()));
     }
 
     /**

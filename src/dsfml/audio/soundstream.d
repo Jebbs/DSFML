@@ -99,12 +99,13 @@ module dsfml.audio.soundstream;
 
 
 import core.thread;
-import core.time;
 
 import dsfml.audio.soundsource;
 
 import dsfml.system.vector3;
 import dsfml.system.err;
+
+public import dsfml.system.time;
 
 /**
  * Abstract base class for streamed audio sources.
@@ -245,16 +246,16 @@ class SoundStream : SoundSource
          * The playing position can be changed when the stream is either paused or
          * playing.
          */
-        void playingOffset(Duration offset)
+        void playingOffset(Time offset)
         {
-            sfSoundStream_setPlayingOffset(sfPtr, offset.total!"usecs");
+            sfSoundStream_setPlayingOffset(sfPtr, offset.asMicroseconds);
 
         }
 
         /// ditto
-        Duration playingOffset() const
+        Time playingOffset() const
         {
-            return usecs(sfSoundStream_getPlayingOffset(sfPtr));
+            return microseconds(sfSoundStream_getPlayingOffset(sfPtr));
         }
     }
 
@@ -432,7 +433,7 @@ class SoundStream : SoundSource
      * Params:
      *	timeOffset = New playing position, relative to the start of the stream
      */
-    protected abstract void onSeek(Duration timeOffset);
+    protected abstract void onSeek(Time timeOffset);
 }
 
 private extern(C++)
@@ -475,7 +476,7 @@ class SoundStreamCallBacks: sfmlSoundStreamCallBacks
 
     extern(C++) void onSeek(long time)
     {
-        m_stream.onSeek(usecs(time));
+        m_stream.onSeek(microseconds(time));
     }
 }
 

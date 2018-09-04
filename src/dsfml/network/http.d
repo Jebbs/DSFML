@@ -82,7 +82,7 @@
  */
 module dsfml.network.http;
 
-import core.time;
+public import dsfml.system.time;
 
 /**
  * An HTTP client.
@@ -151,16 +151,16 @@ class Http
      * appropriate value. Warning: this function waits for the server's response
      * and may not return instantly; use a thread if you don't want to block
      * your application, or use a timeout to limit the time to wait. A value of
-     * Duration.Zero means that the client will use the system defaut timeout
+     * Time.Zero means that the client will use the system defaut timeout
      * (which is usually pretty long).
      *
      * Params:
      * 		request = Request to send
      * 		timeout = Maximum time to wait
      */
-    Response sendRequest(Request request, Duration timeout = Duration.zero())
+    Response sendRequest(Request request, Time timeout = Time.Zero)
     {
-        return new Response(sfHttp_sendRequest(sfPtr,request.sfPtrRequest,timeout.total!"usecs"));
+        return new Response(sfHttp_sendRequest(sfPtr,request.sfPtrRequest,timeout.asMicroseconds()));
     }
 
     /// Define a HTTP request.

@@ -131,7 +131,6 @@ unittest
 	{
 		import std.stdio;
 		import dsfml.system.sleep;
-		import core.time;
 
 		void secondThreadHello()
 		{

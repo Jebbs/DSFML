@@ -37,20 +37,21 @@
  * ---
  * auto clock = Clock();
  * ...
- * Duration duration1 = clock.getElapsedTime();
+ * Time duration1 = clock.getElapsedTime();
  * ...
- * Duration duration2 = clock.restart();
+ * Time duration2 = clock.restart();
  * ---
  *
- * $(PARA The Duration value ($(I core.time.Duration)) returned by the clock can
- * then be converted to a number of seconds, milliseconds or even microseconds.)
+ * $(PARA The Time value returned by the clock can then be converted to a number
+ * of seconds, milliseconds or even microseconds.)
  *
  * See_Also:
- * $(LINK2 https://dlang.org/library/core/time/duration.html, Duration)
+ * $(TIME_LINK)
  */
 module dsfml.system.clock;
 
-public import core.time;
+public import dsfml.system.time;
+import core.time: MonoTime, Duration;
 
 /**
  * Utility class that measures the elapsed time.
@@ -81,9 +82,9 @@ class Clock
 	 *
 	 * Returns: Time elapsed.
 	 */
-	Duration getElapsedTime() const
+	Time getElapsedTime() const
 	{
-		return currTime - m_startTime;
+		return microseconds((currTime - m_startTime).total!"usecs");
 	}
 
 	/**
@@ -94,14 +95,15 @@ class Clock
 	 *
 	 * Returns: Time elapsed.
 	 */
-	Duration restart()
+	Time restart()
 	{
 		MonoTime now = currTime;
 		auto elapsed = now - m_startTime;
 		m_startTime = now;
 
-		return elapsed;
+		return microseconds(elapsed.total!"usecs");
 	}
+
 }
 
 unittest
@@ -118,9 +120,9 @@ unittest
 
 		writeln("Counting Time for 5 seconds.(rounded to nearest second)");
 
-		while(clock.getElapsedTime().total!"seconds" < 5)
+		while(clock.getElapsedTime().asSeconds() < 5)
 		{
-			writeln(clock.getElapsedTime().total!"seconds");
+			writeln(clock.getElapsedTime().asSeconds());
 			sleep(seconds(1));
 		}
 

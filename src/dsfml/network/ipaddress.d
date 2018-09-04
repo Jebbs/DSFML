@@ -68,7 +68,7 @@
  */
 module dsfml.network.ipaddress;
 
-public import core.time;
+public import dsfml.system.time;
 
 /**
  * Encapsulate an IPv4 network address.
@@ -206,10 +206,10 @@ struct IpAddress
      *
      * Returns: Public IP address of the computer.
      */
-    static IpAddress getPublicAddress(Duration timeout = Duration.zero())
+    static IpAddress getPublicAddress(Time timeout = Time.Zero)
     {
         IpAddress temp;
-        sfIpAddress_getPublicAddress(&temp, timeout.total!"usecs");
+        sfIpAddress_getPublicAddress(&temp, timeout.asMicroseconds());
         return temp;
     }
 

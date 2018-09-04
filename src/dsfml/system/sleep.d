@@ -28,7 +28,7 @@
 /// A module containing the sleep function.
 module dsfml.system.sleep;
 
-import core.time;
+public import dsfml.system.time;
 
 /**
  * Make the current thread sleep for a given duration.
@@ -39,10 +39,11 @@ import core.time;
  * Params:
  *		duration = The length of time to sleep for
  */
-void sleep(Duration duration)
+void sleep(Time duration)
 {
-	import core.thread;
-	Thread.sleep(duration);
+	import core.thread: Thread;
+	import core.time: usecs;
+	Thread.sleep(usecs(duration.asMicroseconds()));
 }
 
 unittest

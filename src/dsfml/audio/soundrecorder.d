@@ -130,7 +130,6 @@
 module dsfml.audio.soundrecorder;
 
 import core.thread;
-import core.time;
 import dsfml.system.string;
 import dsfml.system.err;
 
