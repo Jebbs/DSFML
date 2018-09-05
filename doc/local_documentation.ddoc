@@ -118,6 +118,7 @@ INPUTSTREAM_LINK = <a href="../system/inputstream.html" title="Interface for cus
 LOCK_LINK = <a href="../system/lock.html" title="Automatic wrapper for locking and unlocking mutexes.">Lock</a>
 MUTEX_LINK = <a href="../system/mutex.html" title="Blocks concurrent access to shared resources from multiple threads.">Mutex</a>
 THREAD_LINK = <a href="../system/thread.html" title="Utility class to manipulate threads.">Thread</a>
+TIME_LINK = <a href="../system/time.html" title="Represents a time value.">Thread</a>
 VECTOR2_LINK = <a href="../system/vector2.html" title="Utility template struct for manipulating 2-dimensional vectors.">Vector2</a>
 VECTOR3_LINK = <a href="../system/vector3.html" title="Utility template struct for manipulating 3-dimensional vectors.">Vector3</a>
 

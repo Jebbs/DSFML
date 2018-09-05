@@ -952,7 +952,7 @@ unittest
                 //no events
             }
 
-            if(clock.getElapsedTime().total!"seconds" > 1)
+            if(clock.getElapsedTime().asSeconds() > 1)
             {
                 window.close();
             }

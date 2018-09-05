@@ -100,7 +100,7 @@
  */
 module dsfml.network.tcpsocket;
 
-import core.time;
+public import dsfml.system.time;
 
 import dsfml.network.ipaddress;
 import dsfml.network.packet;
@@ -204,9 +204,9 @@ class TcpSocket:Socket
      *
      * Returns: Status code.
      */
-    Status connect(IpAddress host, ushort port, Duration timeout = Duration.zero())
+    Status connect(IpAddress host, ushort port, Time timeout = Time.Zero)
     {
-        return sfTcpSocket_connect(sfPtr, &host, port, timeout.total!"usecs");
+        return sfTcpSocket_connect(sfPtr, &host, port, timeout.asMicroseconds());
     }
 
     /**

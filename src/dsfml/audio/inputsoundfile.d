@@ -69,7 +69,7 @@ import std.string;
 import dsfml.system.inputstream;
 import dsfml.system.err;
 
-public import core.time;
+public import dsfml.system.time;
 
 /**
  * Provide read access to sound files.
@@ -214,9 +214,9 @@ class InputSoundFile
      * Params:
      *	timeOffset = Time to jump to, relative to the beginning
      */
-    void seek(Duration timeOffset)
+    void seek(Time timeOffset)
     {
-        seek(timeOffset.total!"usecs");
+        seek(timeOffset.asMicroseconds());
     }
 
     /**

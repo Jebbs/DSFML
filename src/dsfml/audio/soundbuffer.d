@@ -88,7 +88,7 @@
  */
 module dsfml.audio.soundbuffer;
 
-public import core.time;
+public import dsfml.system.time;
 
 import dsfml.audio.inputsoundfile;
 import dsfml.audio.sound;
@@ -172,10 +172,9 @@ class SoundBuffer
      *
      * Returns: Sound duration.
      */
-    Duration getDuration() const
+    Time getDuration() const
     {
-        import core.time;
-        return usecs(sfSoundBuffer_getDuration(sfPtr));
+        return microseconds(sfSoundBuffer_getDuration(sfPtr));
     }
 
     /**
@@ -326,7 +325,7 @@ unittest
 
         writeln("Channel Count: ", soundbuffer.getChannelCount());
 
-        writeln("Duration: ", soundbuffer.getDuration().total!"seconds");
+        writeln("Duration: ", soundbuffer.getDuration().asSeconds());
 
         writeln("Sample Count: ", soundbuffer.getSamples().length);
 

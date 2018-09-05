@@ -151,7 +151,6 @@ unittest
     version(DSFML_Unittest_Audio)
     {
         import std.stdio;
-        import core.time;
         import dsfml.window.keyboard;
         import dsfml.audio.sound;
         import dsfml.system.clock;
@@ -169,7 +168,7 @@ unittest
         writeln("3");
         clock.restart();
 
-        while(clock.getElapsedTime().total!"seconds" <1)
+        while(clock.getElapsedTime().asSeconds() <1)
         {
             //wait for a second
         }
@@ -178,7 +177,7 @@ unittest
 
         clock.restart();
 
-        while(clock.getElapsedTime().total!"seconds" <1)
+        while(clock.getElapsedTime().asSeconds() <1)
         {
             //wait for a second
         }
@@ -187,7 +186,7 @@ unittest
 
         clock.restart();
 
-        while(clock.getElapsedTime().total!"seconds" <1)
+        while(clock.getElapsedTime().asSeconds() <1)
         {
             //wait for a second
         }
@@ -197,7 +196,7 @@ unittest
         recorder.start();
         clock.restart();
 
-        while(clock.getElapsedTime().total!"seconds" <5)
+        while(clock.getElapsedTime().asSeconds() <5)
         {
             //wait for a second
         }

@@ -188,6 +188,7 @@ INPUTSTREAM_LINK = <a class="dsfml_link" href="../system/inputstream.php" title=
 LOCK_LINK = <a class="dsfml_link" href="../system/lock.php" title="Automatic wrapper for locking and unlocking mutexes.">Lock</a>
 MUTEX_LINK = <a class="dsfml_link" href="../system/mutex.php" title="Blocks concurrent access to shared resources from multiple threads.">Mutex</a>
 THREAD_LINK = <a class="dsfml_link" href="../system/thread.php" title="Utility class to manipulate threads.">Thread</a>
+TIME_LINK = <a class="dsfml_link" href="../system/time.php" title="Represents a time value.">Thread</a>
 VECTOR2_LINK = <a class="dsfml_link" href="../system/vector2.php" title="Utility template struct for manipulating 2-dimensional vectors.">Vector2</a>
 VECTOR3_LINK = <a class="dsfml_link" href="../system/vector3.php" title="Utility template struct for manipulating 3-dimensional vectors.">Vector3</a>
 

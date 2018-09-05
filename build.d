@@ -148,7 +148,7 @@ void initialize()
     //populate file lists
     fileList["system"] = ["clock", "config", "err", "inputstream", "lock",
                           "mutex", "package", "sleep", "string", "thread",
-                          "vector2", "vector3"];
+                          "time", "vector2", "vector3"];
 
     fileList["audio"] = ["listener", "music", "package", "sound",
                          "soundbuffer", "soundbufferrecorder",

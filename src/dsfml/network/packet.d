@@ -353,8 +353,6 @@ unittest
         import dsfml.network.tcplistener;
         import dsfml.network.ipaddress;
 
-        import core.time;
-
         writeln("Unittest for Packet");
 
         //packet to send data
