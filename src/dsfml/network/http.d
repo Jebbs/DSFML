@@ -284,7 +284,7 @@ class Http
     }
 
     /// Define a HTTP response.
-    class Response
+    static class Response
     {
         /// Enumerate all the valid status codes for a response.
         enum Status

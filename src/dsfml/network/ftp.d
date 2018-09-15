@@ -424,7 +424,7 @@ class Ftp
     }
 
     /// Specialization of FTP response returning a directory.
-    class DirectoryResponse:Response
+    static class DirectoryResponse:Response
     {
         private string Directory;
 
@@ -452,7 +452,7 @@ class Ftp
     }
 
     /// Specialization of FTP response returning a filename lisiting.
-    class ListingResponse:Response
+    static class ListingResponse:Response
     {
         private string[] Filenames;
 
@@ -484,7 +484,7 @@ class Ftp
     }
 
     ///Define a FTP response.
-    class Response
+    static class Response
     {
         /// Status codes possibly returned by a FTP response.
         enum Status
