@@ -37,14 +37,32 @@
 //Construct a new shader
 DSFML_GRAPHICS_API sfShader* sfShader_construct(void);
 
-//Load both the vertex and fragment shaders from files
-DSFML_GRAPHICS_API DBool sfShader_loadFromFile(sfShader* shader, const char* vertexShaderFilename, size_t vertexShaderFilenameLength, const char* fragmentShaderFilename, size_t fragmentShaderFilenameLength);
+//Load a single shader type from file
+DSFML_GRAPHICS_API DBool sfShader_loadTypeFromFile(sfShader* shader, const char* shaderFilename, size_t shaderFilenameLength, DInt type);
 
-//Load both the vertex and fragment shaders from source codes in memory
-DSFML_GRAPHICS_API DBool sfShader_loadFromMemory(sfShader* shader, const char* vertexShader, size_t vertexShaderLength, const char* fragmentShader, size_t fragmentShaderLength);
+//Load both the vertex and fragment shaders from files
+DSFML_GRAPHICS_API DBool sfShader_loadVertexAndFragmentFromFile(sfShader* shader, const char* vertexFilename, size_t vertexFilenameLength, const char* fragmentFilename, size_t fragmentFilenameLength);
+
+//Load the vertex, geometry, and fragment shaders from files
+DSFML_GRAPHICS_API DBool sfShader_loadAllFromFile(sfShader* shader, const char* vertexFilename, size_t vertexFilenameLength, const char* geometryFilename, size_t geometryFilenameLength, const char* fragmentFilename, size_t fragmentFilenameLength);
+
+//Load a single shader type from source code in memory
+DSFML_GRAPHICS_API DBool sfShader_loadTypeFromMemory(sfShader* shader, const char* shaderSource, size_t shaderSourceLength, DInt type);
+
+//Load both the vertex and fragment shaders from source code in memory
+DSFML_GRAPHICS_API DBool sfShader_loadVertexAndFragmentFromMemory(sfShader* shader, const char* vertexSource, size_t vertexSourceLength, const char* fragmentSource, size_t fragmentSourceLength);
+
+//Load the vertex, geometry, and fragment shaders from source code in memory
+DSFML_GRAPHICS_API DBool sfShader_loadAllFromMemory(sfShader* shader, const char* vertexSource, size_t vertexSourceLength, const char* geometrySource, size_t geometrySourceLength,const char* fragmentSource, size_t fragmentSourceLength);
+
+//Load a single shader type from custom stream
+DSFML_GRAPHICS_API DBool sfShader_loadTypeFromStream(sfShader* shader, DStream* shaderStream, DInt type);
 
 //Load both the vertex and fragment shaders from custom streams
-DSFML_GRAPHICS_API DBool sfShader_loadFromStream(sfShader* shader, DStream* vertexShaderStream, DStream* fragmentShaderStream);
+DSFML_GRAPHICS_API DBool sfShader_loadVertexAndFragmentFromStream(sfShader* shader, DStream* vertexStream, DStream* fragmentStream);
+
+//Load the vertex, geometry, and fragment shaders from custom streams
+DSFML_GRAPHICS_API DBool sfShader_loadAllFromStream(sfShader* shader, DStream* vertexStream, DStream* geometryStream, DStream* fragmentStream);
 
 //Destroy an existing shader
 DSFML_GRAPHICS_API void sfShader_destroy(sfShader* shader);
@@ -120,6 +138,9 @@ DSFML_GRAPHICS_API void sfShader_bind(const sfShader* shader);
 
 //Tell whether or not the system supports shaders
 DSFML_GRAPHICS_API DBool sfShader_isAvailable(void);
+
+//Tell whether or not the system supports geometry shaders
+DSFML_GRAPHICS_API DBool sfShader_isGeometryAvailable(void);
 
 
 /**************Deprecated*******************/

@@ -203,17 +203,17 @@ class Shader
     }
 
     /**
-     * Load either the vertex, geometry or fragment shader from a file.
+     * Load the vertex, geometry, or fragment shader from a file.
      *
-     * This function loads a single shader, either vertex, geometry or fragment,
+     * This function loads a single shader, vertex, geometry, or fragment,
      * identified by the second argument. The source must be a text file
      * containing a valid shader in GLSL language. GLSL is a C-like language
      * dedicated to OpenGL shaders; you'll probably need to read a good
      * documentation for it before writing your own shaders.
      *
      * Params:
-     * 		filename	= Path of the vertex or fragment shader file to load
-     * 		type		= Type of shader (vertex or fragment)
+     * 		filename	= Path of the vertex, geometry, or fragment shader file to load
+     * 		type		= Type of shader (vertex geometry, or fragment)
      *
      * Returns: true if loading succeeded, false if it failed.
      */
@@ -223,18 +223,7 @@ class Shader
 
         bool ret;
 
-        if(type == Type.Vertex)
-        {
-            ret = sfShader_loadFromFile(sfPtr, filename.ptr, filename.length, null, 0, null, 0);
-        }
-        else if(type == Type.Geometry)
-        {
-            ret = sfShader_loadFromFile(sfPtr, null, 0 , filename.ptr, filename.length, null, 0);
-        }
-        else
-        {
-            ret = sfShader_loadFromFile(sfPtr, null, 0 , null, 0, filename.ptr, filename.length);
-        }
+        ret = sfShader_loadTypeFromFile(sfPtr, filename.ptr, filename.length, type);
 
         if(!ret)
         {
@@ -264,7 +253,7 @@ class Shader
     {
         import dsfml.system.string;
 
-        bool ret = sfShader_loadFromFile(sfPtr, vertexShaderFilename.ptr, vertexShaderFilename.length,
+        bool ret = sfShader_loadVertexAndFragmentFromFile(sfPtr, vertexShaderFilename.ptr, vertexShaderFilename.length,
                                          fragmentShaderFilename.ptr, fragmentShaderFilename.length);
         if(!ret)
         {
@@ -275,10 +264,10 @@ class Shader
     }
 
     /**
-     * Load the vertex, geometry and fragment shaders from files.
+     * Load the vertex, geometry, and fragment shaders from files.
      *
-     * This function loads the vertex, geometry and the fragment shaders. If one of
-     * them fails to load, the shader is left empty (the valid shader is
+     * This function loads the vertex, geometry and the fragment shaders. If one
+     * of them fails to load, the shader is left empty (the valid shader is
      * unloaded). The sources must be text files containing valid shaders in
      * GLSL language. GLSL is a C-like language dedicated to OpenGL shaders;
      * you'll probably need to read a good documentation for it before writing
@@ -295,7 +284,7 @@ class Shader
     {
         import dsfml.system.string;
 
-        bool ret = sfShader_loadFromFile(sfPtr, vertexShaderFilename.ptr, vertexShaderFilename.length,
+        bool ret = sfShader_loadAllFromFile(sfPtr, vertexShaderFilename.ptr, vertexShaderFilename.length,
                                          geometryShaderFilename.ptr, geometryShaderFilename.length,
                                          fragmentShaderFilename.ptr, fragmentShaderFilename.length);
         if(!ret)
@@ -307,9 +296,9 @@ class Shader
     }
 
     /**
-     * Load either the vertex, geometry or fragment shader from a source code in memory.
+     * Load the vertex, geometry, or fragment shader from a source code in memory.
      *
-     * This function loads a single shader, either vertex, geometry or fragment,
+     * This function loads a single shader, vertex, geometry, or fragment,
      * identified by the second argument. The source code must be a valid shader
      * in GLSL language. GLSL is a C-like language dedicated to OpenGL shaders;
      * you'll probably need to read a good documentation for it before writing
@@ -317,7 +306,7 @@ class Shader
      *
      * Params:
      * 		shader	= String containing the source code of the shader
-     * 		type	= Type of shader (vertex or fragment)
+     * 		type	= Type of shader (vertex geometry, or fragment)
      *
      * Returns: true if loading succeeded, false if it failed.
      */
@@ -327,18 +316,8 @@ class Shader
 
         bool ret;
 
-        if(type == Type.Vertex)
-        {
-            ret = sfShader_loadFromMemory(sfPtr, shader.ptr, shader.length, null, 0, null, 0);
-        }
-        else if(type == Type.Geometry)
-        {
-            ret = sfShader_loadFromMemory(sfPtr, null, 0 , shader.ptr, shader.length, null, 0 );
-        }
-        else
-        {
-            ret = sfShader_loadFromMemory(sfPtr, null, 0 , null, 0, shader.ptr, shader.length );
-        }
+        ret = sfShader_loadTypeFromMemory(sfPtr, shader.ptr, shader.length, type);
+
         if(!ret)
         {
             err.write(dsfml.system.string.toString(sfErr_getOutput()));
@@ -366,7 +345,8 @@ class Shader
     {
         import dsfml.system.string;
 
-        bool ret = sfShader_loadFromMemory(sfPtr, vertexShader.ptr, vertexShader.length , fragmentShader.ptr, fragmentShader.length);
+        bool ret = sfShader_loadVertexAndFragmentFromMemory(sfPtr, vertexShader.ptr, vertexShader.length, fragmentShader.ptr, fragmentShader.length);
+
         if(!ret)
         {
             err.write(dsfml.system.string.toString(sfErr_getOutput()));
@@ -396,7 +376,7 @@ class Shader
     {
         import dsfml.system.string;
 
-        bool ret = sfShader_loadFromMemory(sfPtr, vertexShader.ptr, vertexShader.length,
+        bool ret = sfShader_loadAllFromMemory(sfPtr, vertexShader.ptr, vertexShader.length,
                                            geometryShader.ptr, geometryShader.length,
                                            fragmentShader.ptr, fragmentShader.length);
         if(!ret)
@@ -407,7 +387,7 @@ class Shader
         return ret;
     }
     /**
-     * Load either the vertex, geometry or fragment shader from a custom stream.
+     * Load the vertex, geometry or fragment shader from a custom stream.
      *
      * This function loads a single shader, either vertex, geometry or fragment,
      * identified by the second argument. The source code must be a valid shader
@@ -417,7 +397,7 @@ class Shader
      *
      * Params:
      * 		stream	= Source stream to read from
-     * 		type	= Type of shader (Vertex, Geometry or Fragment)
+     * 		type	= Type of shader (vertex, geometry or fragment)
      *
      * Returns: true if loading succeeded, false if it failed.
      */
@@ -427,18 +407,8 @@ class Shader
 
         bool ret;
 
-        if(type == Type.Vertex)
-        {
-            ret = sfShader_loadFromStream(sfPtr, new shaderStream(stream), null, null);
-        }
-        else if(type == Type.Geometry)
-        {
-            ret = sfShader_loadFromStream(sfPtr, null, new shaderStream(stream), null);
-        }
-        else
-        {
-            ret = sfShader_loadFromStream(sfPtr, null, null, new shaderStream(stream));
-        }
+        ret = sfShader_loadTypeFromStream(sfPtr, new shaderStream(stream), type);
+
         if(!ret)
         {
             err.write(dsfml.system.string.toString(sfErr_getOutput()));
@@ -466,7 +436,7 @@ class Shader
     {
         import dsfml.system.string;
 
-        bool ret = sfShader_loadFromStream(sfPtr, new shaderStream(vertexShaderStream),
+        bool ret = sfShader_loadVertexAndFragmentFromStream(sfPtr, new shaderStream(vertexShaderStream),
                                            new shaderStream(fragmentShaderStream));
         if(!ret)
         {
@@ -494,7 +464,7 @@ class Shader
     {
         import dsfml.system.string;
 
-        bool ret = sfShader_loadFromStream(sfPtr, new shaderStream(vertexShaderStream),
+        bool ret = sfShader_loadAllFromStream(sfPtr, new shaderStream(vertexShaderStream),
                                            new shaderStream(geometryShaderStream),
                                            new shaderStream(fragmentShaderStream));
         if(!ret)
@@ -1142,7 +1112,7 @@ class Shader
      * This function should always be called before using the shader features.
      * If it returns false, then any attempt to use DSFML Shader will fail.
      *
-     * Returns: true if shaders are supported, false otherwise
+     * Returns: true if shaders are supported, false otherwise.
      */
     static bool isAvailable()
     {
@@ -1153,9 +1123,9 @@ class Shader
     }
 
     /**
-     * Tell whether or not the system supports geometry shaders
+     * Tell whether or not the system supports geometry shaders.
      *
-     * Returns: true if geometry shaders are supported, false otherwise
+     * Returns: true if geometry shaders are supported, false otherwise.
      */
     static bool isGeometryAvailable()
     {
@@ -1221,23 +1191,32 @@ private extern(C):
 //Construct a new shader
 sfShader* sfShader_construct();
 
+//Load a single shader type from file
+bool sfShader_loadTypeFromFile(sfShader* shader, const(char)* shaderFilename, size_t shaderFilenameLength, int type);
+
 //Load both the vertex and fragment shaders from files
-bool sfShader_loadFromFile(sfShader* shader, const(char)* vertexShaderFilename, size_t vertexShaderFilenameLength, const char* fragmentShaderFilename, size_t fragmentShaderFilenameLength);
+bool sfShader_loadVertexAndFragmentFromFile(sfShader* shader, const(char)* vertexFilename, size_t vertexFilenameLength, const(char)* fragmentFilename, size_t fragmentFilenameLength);
 
-//Load the vertex, geometry and fragment shaders from files
-bool sfShader_loadFromFile(sfShader* shader, const(char)* vertexShaderFilename, size_t vertexShaderFilenameLength, const(char)* geometryShaderFilename, size_t geometryShaderFilenameLength, const char* fragmentShaderFilename, size_t fragmentShaderFilenameLength);
+//Load the vertex, geometry, and fragment shaders from files
+bool sfShader_loadAllFromFile(sfShader* shader, const(char)* vertexFilename, size_t vertexFilenameLength, const(char)* geometryFilename, size_t geometryFilenameLength, const(char)* fragmentFilename, size_t fragmentFilenameLength);
 
-//Load both the vertex and fragment shaders from source codes in memory
-bool sfShader_loadFromMemory(sfShader* shader, const(char)* vertexShader, size_t vertexShaderLength, const char* fragmentShader, size_t fragmentShaderLength);
+//Load a single shader type from source code in memory
+bool sfShader_loadTypeFromMemory(sfShader* shader, const(char)* shaderSource, size_t shaderSourceLength, int type);
 
-//Load the vertex, geometry and fragment shaders from source codes in memory
-bool sfShader_loadFromMemory(sfShader* shader, const(char)* vertexShader, size_t vertexShaderLength, const(char)* geometryShader, size_t geometryShaderLength, const char* fragmentShader, size_t fragmentShaderLength);
+//Load both the vertex and fragment shaders from source code in memory
+bool sfShader_loadVertexAndFragmentFromMemory(sfShader* shader, const(char)* vertexSource, size_t vertexSourceLength, const(char)* fragmentSource, size_t fragmentSourceLength);
+
+//Load the vertex, geometry, and fragment shaders from source code in memory
+bool sfShader_loadAllFromMemory(sfShader* shader, const(char)* vertexSource, size_t vertexSourceLength, const(char)* geometrySource, size_t geometrySourceLength,const(char)* fragmentSource, size_t fragmentSourceLength);
+
+//Load a single shader type from custom stream
+bool sfShader_loadTypeFromStream(sfShader* shader, shaderInputStream shaderStream, int type);
 
 //Load both the vertex and fragment shaders from custom streams
-bool sfShader_loadFromStream(sfShader* shader, shaderInputStream vertexShaderStream, shaderInputStream fragmentShaderStream);
+bool sfShader_loadVertexAndFragmentFromStream(sfShader* shader, shaderInputStream vertexStream, shaderInputStream fragmentStream);
 
-//Load the vertex, geometry and fragment shaders from custom streams
-bool sfShader_loadFromStream(sfShader* shader, shaderInputStream vertexShaderStream, shaderInputStream geometryInputShader, shaderInputStream fragmentShaderStream);
+//Load the vertex, geometry, and fragment shaders from custom streams
+bool sfShader_loadAllFromStream(sfShader* shader, shaderInputStream vertexStream, shaderInputStream geometryStream, shaderInputStream fragmentStream);
 
 //Destroy an existing shader
 void sfShader_destroy(sfShader* shader);

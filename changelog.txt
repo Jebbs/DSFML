@@ -146,6 +146,8 @@ Use a Texture, its update function, and copy its contents into an Image instead.
 
 Shader
 ------
+Added support for geometry shaders.
+
 Added setUniform and setUniformArray functions.
 
 Changed opIndexAssign functions to use the setUniform and setUniformArray
