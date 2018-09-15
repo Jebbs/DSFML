@@ -34,88 +34,85 @@ sfShader* sfShader_construct(void)
     return new sfShader;
 }
 
-DBool sfShader_loadFromFile(sfShader* shader, const char* vertexShaderFilename, size_t vertexShaderFilenameLength,
-							const char* fragmentShaderFilename, size_t fragmentShaderFilenameLength)
+DBool sfShader_loadTypeFromFile(sfShader* shader, const char* shaderFilename, size_t shaderFilenameLength, DInt type)
 {
-    bool success = false;
+    sf::Shader::Type shaderType = static_cast<sf::Shader::Type>(type);
 
-    if (vertexShaderFilename || fragmentShaderFilename)
-    {
-        if (!vertexShaderFilename || vertexShaderFilenameLength < 1)
-        {
-            // fragment shader only
-            success = shader->This.loadFromFile(std::string(fragmentShaderFilename, fragmentShaderFilenameLength), sf::Shader::Fragment);
-        }
-        else if (!fragmentShaderFilename || fragmentShaderFilenameLength < 1)
-        {
-            // vertex shader only
-            success = shader->This.loadFromFile(std::string(vertexShaderFilename, vertexShaderFilenameLength), sf::Shader::Vertex);
-        }
-        else
-        {
-            // vertex + fragment shaders
-            success = shader->This.loadFromFile(std::string(vertexShaderFilename, vertexShaderFilenameLength),
-            			std::string(fragmentShaderFilename, fragmentShaderFilenameLength));
-        }
-    }
+    bool success = shader->This.loadFromFile(std::string(shaderFilename, shaderFilenameLength), shaderType);
 
     return success?DTrue:DFalse;
 }
 
-DBool sfShader_loadFromMemory(sfShader* shader, const char* vertexShader, size_t vertexShaderLength,
-								const char* fragmentShader, size_t fragmentShaderLength)
+DBool sfShader_loadVertexAndFragmentFromFile(sfShader* shader, const char* vertexFilename, size_t vertexFilenameLength, const char* fragmentFilename, size_t fragmentFilenameLength)
 {
-    bool success = false;
-
-    if (vertexShader || fragmentShader)
-    {
-        if (!vertexShader || vertexShaderLength < 1)
-        {
-            // fragment shader only
-            success = shader->This.loadFromMemory(std::string(fragmentShader, fragmentShaderLength), sf::Shader::Fragment);
-        }
-        else if (!fragmentShader || fragmentShaderLength < 1)
-        {
-            // vertex shader only
-            success = shader->This.loadFromMemory(std::string(vertexShader, vertexShaderLength), sf::Shader::Vertex);
-        }
-        else
-        {
-            // vertex + fragment shaders
-            success = shader->This.loadFromMemory(std::string(vertexShader, vertexShaderLength),
-            										std::string(fragmentShader, fragmentShaderLength));
-        }
-    }
+    bool success = shader->This.loadFromFile(std::string(vertexFilename, vertexFilenameLength),
+            			std::string(fragmentFilename, fragmentFilenameLength));
 
     return success?DTrue:DFalse;
 }
 
-DBool sfShader_loadFromStream(sfShader* shader, DStream* vertexShaderStream, DStream* fragmentShaderStream)
+DBool sfShader_loadAllFromFile(sfShader* shader, const char* vertexFilename, size_t vertexFilenameLength, const char* geometryFilename, size_t geometryFilenameLength, const char* fragmentFilename, size_t fragmentFilenameLength)
 {
-    bool success = false;
+    bool success = shader->This.loadFromFile(std::string(vertexFilename, vertexFilenameLength),
+                        std::string(geometryFilename, geometryFilenameLength),
+            			std::string(fragmentFilename, fragmentFilenameLength));
 
-    if (vertexShaderStream || fragmentShaderStream)
-    {
-        if (!vertexShaderStream)
-        {
-            // fragment shader only
-            sfmlStream stream(fragmentShaderStream);
-            success = shader->This.loadFromStream(stream, sf::Shader::Fragment);
-        }
-        else if (!fragmentShaderStream)
-        {
-            // vertex shader only
-            sfmlStream stream(vertexShaderStream);
-            success = shader->This.loadFromStream(stream, sf::Shader::Vertex);
-        }
-        else
-        {
-            // vertex + fragment shaders
-            sfmlStream vertexStream(vertexShaderStream);
-            sfmlStream fragmentStream(fragmentShaderStream);
-            success = shader->This.loadFromStream(vertexStream, fragmentStream);
-        }
-    }
+    return success?DTrue:DFalse;
+}
+
+DBool sfShader_loadTypeFromMemory(sfShader* shader, const char* shaderSource, size_t shaderSourceLength, DInt type)
+{
+    sf::Shader::Type shaderType = static_cast<sf::Shader::Type>(type);
+
+    bool success = shader->This.loadFromMemory(std::string(shaderSource, shaderSourceLength), shaderType);
+
+    return success?DTrue:DFalse;
+}
+
+DBool sfShader_loadVertexAndFragmentFromMemory(sfShader* shader, const char* vertexSource, size_t vertexSourceLength, const char* fragmentSource, size_t fragmentSourceLength)
+{
+    bool success = shader->This.loadFromMemory(std::string(vertexSource, vertexSourceLength),
+            			std::string(fragmentSource, fragmentSourceLength));
+
+    return success?DTrue:DFalse;
+}
+
+DBool sfShader_loadAllFromMemory(sfShader* shader, const char* vertexSource, size_t vertexSourceLength, const char* geometrySource, size_t geometrySourceLength,const char* fragmentSource, size_t fragmentSourceLength)
+{
+    bool success = shader->This.loadFromFile(std::string(vertexSource, vertexSourceLength),
+                        std::string(geometrySource, geometrySourceLength),
+            			std::string(fragmentSource, fragmentSourceLength));
+
+    return success?DTrue:DFalse;
+}
+
+DBool sfShader_loadTypeFromStream(sfShader* shader, DStream* shaderStream, DInt type)
+{
+    sf::Shader::Type shaderType = static_cast<sf::Shader::Type>(type);
+
+    sfmlStream stream(shaderStream);
+
+    bool success = shader->This.loadFromStream(stream, shaderType);
+
+    return success?DTrue:DFalse;
+}
+
+DBool sfShader_loadVertexAndFragmentFromStream(sfShader* shader, DStream* vertexStream, DStream* fragmentStream)
+{
+    sfmlStream vStream(vertexStream);
+    sfmlStream fStream(fragmentStream);
+    bool success = shader->This.loadFromStream(vStream, fStream);
+
+    return success?DTrue:DFalse;
+
+}
+
+DBool sfShader_loadAllFromStream(sfShader* shader, DStream* vertexStream, DStream* geometryStream, DStream* fragmentStream)
+{
+    sfmlStream vStream(vertexStream);
+    sfmlStream gStream(geometryStream);
+    sfmlStream fStream(fragmentStream);
+    bool success = shader->This.loadFromStream(vStream, gStream, fStream);
 
     return success?DTrue:DFalse;
 }
@@ -133,6 +130,11 @@ void sfShader_bind(const sfShader* shader)
 DBool sfShader_isAvailable(void)
 {
     return sf::Shader::isAvailable() ? DTrue : DFalse;
+}
+
+DBool sfShader_isGeometryAvailable(void)
+{
+    return sf::Shader::isGeometryAvailable() ? DTrue : DFalse;
 }
 
 void sfShader_setFloatUniform(sfShader* shader, const char* name, size_t length, float x)
