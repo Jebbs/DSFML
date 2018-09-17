@@ -240,9 +240,10 @@ class Font
      * Retrieve a glyph of the font.
      *
      * Params:
-     * 		codePoint		= Unicode code point of the character ot get
-     * 		characterSize	= Reference character size
-     * 		bold			= Retrieve the bold version or the regular one?
+     * 		codePoint		 = Unicode code point of the character ot get
+     * 		characterSize	 = Reference character size
+     * 		bold			 = Retrieve the bold version or the regular one?
+     *      outlineThickness = Thickness of outline (when != 0 the glyph will not be filled)
      *
      * Returns: The glyph corresponding to codePoint and characterSize.
      */

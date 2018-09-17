@@ -325,7 +325,7 @@ class Window
 	 * The threshold value is 0.1 by default.
 	 *
 	 * Params:
-	 *     threshold = New threshold, in the range [0, 100].
+	 *     threshhold = New threshold, in the range [0, 100].
 	 *
 	 * Deprecated: Use set `setJoystickThreshold` instead.
 	 */
@@ -371,7 +371,7 @@ class Window
 	 * Change the title of the window.
 	 *
 	 * Params:
-     * 		title = New title
+     * 		newTitle = New title
 	 */
 	void setTitle(const(char)[] newTitle)
 	{

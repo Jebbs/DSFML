@@ -174,7 +174,8 @@ class UdpSocket:Socket
      * getLocalPort to retrieve the chosen port.
      *
      * Params:
-     * 	port = Port to bind the socket to
+     * 	port    = Port to bind the socket to
+     *  address = Address of the interface to bind to
      *
      * Returns: Status code.
      */

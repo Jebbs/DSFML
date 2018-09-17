@@ -34,7 +34,7 @@
  * that supports arithmetic operations (+, -, /, *) and comparisons (==, !=),
  * for example int or float.
  *
- * You generally don't have to care about the templated form (Vector2!(T),
+ * You generally don't have to care about the templated form (Vector2!(T)),
  * the most common specializations have special aliases:
  * $(UL
  * $(LI Vector2!(float) is Vector2f)

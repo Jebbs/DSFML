@@ -142,7 +142,7 @@ struct Transform
 	 * transform. Mathematically, it is equivalent to a matrix multiplication.
 	 *
 	 * Params:
-	 * 		transform	= Transform to combine with this one
+	 * 		otherTransform	= Transform to combine with this one
 	 *
 	 * Returns: Reference to this.
 	 */
@@ -156,8 +156,7 @@ struct Transform
 	 * Transform a 2D point.
 	 *
 	 * Params:
-	 * 		x	= X coordinate of the point to transform
-	 * 		y	= Y coordinate of the point to transform
+	 *		point 	= the point to transform
 	 *
 	 * Returns: Transformed point.
 	 */
@@ -194,7 +193,8 @@ struct Transform
 	 * This function returns a reference to this, so that calls can be chained.
 	 *
 	 * Params:
-	 * 		offset	= Translation offset to apply.
+	 * 		x	= Offset to apply on X axis
+	 *		y	= Offset to apply on Y axis
 	 *
 	 * Returns: this
 	 */
@@ -232,7 +232,8 @@ struct Transform
 	 *
 	 * Params:
 	 * 		angle	= Rotation angle, in degrees
-	 * 		center	= Center of rotation
+	 * 		centerX	= X coordinate of the center of rotation
+	 *		centerY = Y coordinate of the center of rotation
 	 *
 	 * Returns: this
 	 */

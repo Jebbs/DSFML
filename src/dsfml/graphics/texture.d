@@ -206,7 +206,6 @@ class Texture
      *
      * Params:
      * 		data	= Image in memory
-     * 		size	= Size of the data to load, in bytes.
      * 		area	= Area of the image to load
      *
      * Returns: true if loading was successful, false otherwise.
@@ -592,6 +591,8 @@ class Texture
      *
      * Params:
      * 		image	= Image to copy to the texture.
+     *		y     = Y offset in the texture where to copy the source image.
+     *		x     = X offset in the texture where to copy the source image.
      */
     deprecated("Use update function.")
     void updateFromImage(Image image, uint x, uint y)

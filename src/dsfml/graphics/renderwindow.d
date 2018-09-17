@@ -460,7 +460,7 @@ class RenderWindow : Window, RenderTarget
      * The threshold value is 0.1 by default.
      *
      * Params:
-     * 		threshold	= New threshold, in the range [0, 100]
+     * 		threshhold	= New threshold, in the range [0, 100]
 	 *
 	 * Deprecated: Use set `setJoystickThreshold` instead.
 	 */
