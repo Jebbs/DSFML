@@ -140,12 +140,12 @@ struct Rect(T)
      *
      * Returns: true if the point is inside, false otherwise.
      */
-    bool contains(E)(E X, E Y) const
+    bool contains(E)(E x, E y) const
         if(isNumeric!(E))
     {
-        if(left <= X && X<= (left + width))
+        if(left <= x && x<= (left + width))
         {
-            if(top <= Y && Y <= (top + height))
+            if(top <= y && y <= (top + height))
             {
                 return true;
             }

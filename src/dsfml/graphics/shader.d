@@ -456,6 +456,7 @@ class Shader
      *
      * Params:
      * 	vertexShaderStream	 = Source stream to read the vertex shader from
+     *  geometryShaderStream = Source stream to read the geometry shader from
      * 	fragmentShaderStream = Source stream to read the fragment shader from
      *
      * Returns: true if loading succeeded, false if it failed.
@@ -1085,9 +1086,10 @@ class Shader
      * 		name	= The name of the variable to change in the shader.
      *                The corresponding parameter in the shader must be a 2D texture
      *                (sampler2D GLSL type)
+     *      currentTexture = Dummy variable to denote the texture of the object
      */
     deprecated("Use setUniform(const(char)[] , CurrentTextureType) instead.")
-    void setParameter(const(char)[] name, CurrentTextureType)
+    void setParameter(const(char)[] name, CurrentTextureType currentTexture)
     {
         import dsfml.system.string;
         sfShader_setCurrentTextureParameter(sfPtr, name.ptr, name.length);

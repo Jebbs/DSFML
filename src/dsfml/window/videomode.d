@@ -85,11 +85,11 @@ struct VideoMode
      * 		modeHeight = Height in pixels
      * 		modeBitsPerPixel = Pixel depths in bits per pixel
 	 */
-	this(uint Width, uint Height, uint bits= 32)
+	this(uint modeWidth, uint modeHeight, uint modeBitsPerPixel= 32)
 	{
-		width = Width;
-		height = Height;
-		bitsPerPixel = bits;
+		width = modeWidth;
+		height = modeHeight;
+		bitsPerPixel = modeBitsPerPixel;
 	}
 
 	/**

@@ -152,7 +152,8 @@ class TcpListener:Socket
      * it will be stopped first and bound to the new port.
      *
      * Params:
-     *  port = Port to listen for new connections
+     *  port    = Port to listen for new connections
+     *  address = Address of the interface to listen on
      *
      * Returns: Status code.
      */

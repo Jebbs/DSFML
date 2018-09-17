@@ -117,7 +117,9 @@ final abstract class Touch
     * coordinates.
     *
     * Params:
-    *	finger = Finger index
+    *	finger     = Finger index
+    *   relativeTo = Reference window
+
     *
     * Returns:
     *    Current position of finger, or undefined if it's not down

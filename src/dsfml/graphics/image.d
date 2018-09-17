@@ -318,8 +318,8 @@ class Image
      * color to alpha (0 by default) so that they become transparent.
      *
      * Params:
-     * 		color	= Color to make transparent
-     * 		alpha	= Alpha value to assign to transparent pixels
+     * 		maskColor   = Color to make transparent
+     * 		alpha	    = Alpha value to assign to transparent pixels
      */
     void createMaskFromColor(Color maskColor, ubyte alpha = 0)
     {

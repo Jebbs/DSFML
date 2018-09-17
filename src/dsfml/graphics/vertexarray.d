@@ -168,7 +168,7 @@ class VertexArray : Drawable
      * Add a vertex to the array.
      *
      * Params:
-     * 		vertex	= Vertex to add.
+     * 		newVertex = Vertex to add.
      */
     void append(Vertex newVertex)
     {
@@ -191,8 +191,8 @@ class VertexArray : Drawable
      * Draw the object to a render target.
      *
      * Params:
-     *  		renderTarget =	Render target to draw to
-     *  		renderStates =	Current render states
+     *  	renderTarget = Render target to draw to
+     *  	renderStates = Current render states
      */
     override void draw(RenderTarget renderTarget, RenderStates renderStates)
     {
@@ -213,9 +213,9 @@ class VertexArray : Drawable
      * Params:
      * 		vertexCount	= New size of the array (number of vertices).
      */
-    void resize(uint length)
+    void resize(uint vertexCount)
     {
-        Vertices.length = length;
+        Vertices.length = vertexCount;
     }
 
     /**
