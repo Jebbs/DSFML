@@ -2,6 +2,7 @@
 *.obj
 *.o
 lib/
+import/
 *.exe
 CMakeFiles/
 *.cmake

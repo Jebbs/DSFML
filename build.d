@@ -58,7 +58,7 @@ string prefix;
 string extension;
 string libCompilerSwitches;
 string docCompilerSwitches;
-string interfaceCompilerSwitches;
+string interfaceSwitches;
 string unittestCompilerSwitches;
 bool buildStop;
 
@@ -210,6 +210,7 @@ void initialize()
     writeln();
 }
 
+/// Initialize the DMD compiler
 void initializeDMD()
 {
 
@@ -306,7 +307,7 @@ void initializeDMD()
     singleFileSwitches = archSwitch ~ " -c -O -release -inline -Isrc";
     libCompilerSwitches = archSwitch ~ " -lib  -Isrc";
     docCompilerSwitches = " -c -o- -op -D -Dd../../doc -I../../src";
-    //interfaceCompilerSwitches = " -c -o- -op -H -Hd"~quoteString(interfaceDirectory);
+    interfaceSwitches = " -c -o- -op -H -Hd../import -I../src";
 
     unittestCompilerSwitches =
     "-main -unittest -version=DSFML_Unittest_System " ~
@@ -315,9 +316,10 @@ void initializeDMD()
     linkToSFMLLibs;
     //unittestCompilerSwitches ="-main -unittest -version=DSFML_Unittest_Network "~linkToSFMLLibs;
     //libCompilerSwitches = "-lib -O -release -inline -I"~quoteString(impDirectory);
-    //interfaceCompilerSwitches = " -c -o- -op -H -Hd"~quoteString(interfaceDirectory);
+    //interfaceSwitches = " -c -o- -op -H -Hd"~quoteString(interfaceDirectory);
 }
 
+/// Initialize the GDC compiler
 void initializeGDC()
 {
     //need to set up for windows and macOS later
@@ -355,6 +357,7 @@ void initializeGDC()
     singleFileSwitches = archSwitch ~ " -c -O3 -frelease -Isrc";
     libCompilerSwitches = archSwitch ~ " -Isrc";
     docCompilerSwitches = " -c -fdoc -I../../src";
+    interfaceSwitches = " -c -fintfc -I../src -o obj.o";
 
     unittestCompilerSwitches =
     "-funittest -fversion=DSFML_Unittest_System " ~
@@ -364,6 +367,7 @@ void initializeGDC()
 
 }
 
+/// Initialize the LDC compiler
 void initializeLDC()
 {
     string linkToSFMLLibs = "";
@@ -456,6 +460,7 @@ void initializeLDC()
     singleFileSwitches = archSwitch ~ " -c -O -release -oq -I=src";
     libCompilerSwitches = archSwitch ~ " -lib -I=src";
     docCompilerSwitches = " -c -o- -op -D -Dd=../../doc -I=../../src";
+    interfaceSwitches = " -c -o- -op -H -Hd=../import -I=../src";
 
     unittestCompilerSwitches =
     "-main -unittest -d-version=DSFML_Unittest_System " ~
@@ -464,17 +469,19 @@ void initializeLDC()
     linkToSFMLLibs;
 }
 
-//build the static libraries. Returns true on successful build, false on unsuccessful build
+/**
+ * Build the static libraries.
+ *
+ * Returns: true on successful build, false otherwise.
+ */
 bool buildLibs()
 {
-    import std.ascii; //toUpper
+    import std.ascii: toUpper;
 
     if(!exists("lib/"))
     {
         mkdir("lib/");
     }
-
-
 
     if(!exists("CMakeCache.txt"))
     {
@@ -508,9 +515,9 @@ bool buildLibs()
 
         //+1 for lib file
         size_t numberOfFiles = fileList[theModule].length + 1;
-        int currentFile = 1;
         string files = "";
-        foreach (string name; fileList[theModule])
+
+        foreach (i, name; fileList[theModule])
         {
             string objectFile = "src/dsfml/" ~theModule~"/"~name~objExt;
             string dFile = "src/dsfml/" ~theModule~"/"~name~".d";
@@ -531,10 +538,9 @@ bool buildLibs()
                                   " -of=" ~objectFile;
             }
 
-
             if(needToBuild(objectFile, dFile))
             {
-                progressOutput(currentFile, numberOfFiles, dFile);
+                progressOutput(i, numberOfFiles, dFile);
 
                 auto status = executeShell(buildCommand);
                 if(status.status !=0)
@@ -545,9 +551,7 @@ bool buildLibs()
             }
 
             files~= objectFile ~ " ";
-            currentFile++;
         }
-
 
         string buildCommand = compiler ~ files;
 
@@ -573,12 +577,10 @@ bool buildLibs()
             writeln("building the library");
 
             //we want to use ar here, so we'll completely reset the build command
-
             buildCommand = "cd "~"src/dsfml/"~theModule~"/ && "~
             "ar -x ../../../lib/"~prefix~"dsfmlc-"~theModule~extension ~ " && "~
             " ar rcs ../../../lib/libdsfml-"~theModule~extension~" *"~objExt~"&& "~
             "cd ../../../";
-
         }
         else
         {
@@ -616,9 +618,13 @@ bool buildLibs()
     return true;
 }
 
+/**
+ * Build DSFML unit tests.
+ *
+ * Returns: true if unit tests could be built, false if not.
+ */
 bool buildUnittests()
 {
-
     version(Windows)
     {
         //technically, we also need .lib files because Windows is stupid, but
@@ -634,7 +640,7 @@ bool buildUnittests()
         string dynamicExtension = ".dylib";
     }
 
-    import std.ascii; //toUpper
+    import std.ascii: toUpper;
     //string[2] testModules = ["system", "network"];
     //check to make sure ALL SFML libs were built
     foreach(theModule; modules)
@@ -727,6 +733,11 @@ bool buildUnittests()
         return true;
 }
 
+/**
+ * Build DSFML documentation.
+ *
+ * Returns: true if documentation could be built, false if not.
+ */
 bool buildDocumentation()
 {
     if(!exists("doc/"))
@@ -765,15 +776,14 @@ bool buildDocumentation()
 
         // skipping package.d
         size_t numberOfFiles = fileList[theModule].length -1 ;
-        int currentFile = 1;
-        foreach (string name; fileList[theModule])
+        foreach (i, name; fileList[theModule])
         {
             if (name == "package")
                 continue;
+
             string docFile = "../../doc/"~theModule~"/"~name~docExtension;
             string outputFile = name~docExtension;
             string dFile = theModule~"/"~name~".d";
-
 
             string buildCommand;
 
@@ -788,7 +798,7 @@ bool buildDocumentation()
 
             if(needToBuild(docFile, dFile))
             {
-                progressOutput(currentFile, numberOfFiles, outputFile);
+                progressOutput(i, numberOfFiles, outputFile);
 
                 auto status = executeShell(buildCommand);
                 if(status.status !=0)
@@ -801,9 +811,64 @@ bool buildDocumentation()
                     rename("../../doc/"~theModule~"/"~name~".html",
                            "../../doc/"~theModule~"/"~name~docExtension);
             }
-
-            currentFile++;
         }
+    }
+
+    version(GNU)
+        core.stdc.stdio.remove("obj.o");
+
+    chdir("../..");
+
+    return true;
+}
+
+/**
+ * Build DSFML interface files.
+ *
+ * Returns: true if documentation could be built, false if not.
+ */
+bool buildInterfaceFiles()
+{
+    if(!exists("import/"))
+    {
+        mkdir("import/");
+    }
+
+    chdir("src/");
+
+    foreach(theModule;modules)
+    {
+        size_t numberOfFiles = fileList[theModule].length;
+
+        foreach (i, name; fileList[theModule])
+        {
+            string dFile = "dsfml/"~theModule~"/"~name~".d";
+            string outputFile = "../import/dsfml/"~theModule~"/"~name~".di";
+            if(name == "package")
+                outputFile.length = outputFile.length - 1;
+
+            version(GNU)
+            {
+                interfaceSwitches ~= " -fintfc-dir=../import/dsfml/"~theModule;
+            }
+
+            string buildCommand = compiler~dFile~interfaceSwitches;
+
+            if(needToBuild(outputFile, dFile))
+            {
+                progressOutput(i+1, numberOfFiles, outputFile[3 .. $]);
+
+                auto status = executeShell(buildCommand);
+                if(status.status !=0)
+                {
+                    writeln(status.output);
+                    return false;
+                }
+            }
+        }
+
+        rename("../import/dsfml/"~theModule~"/package.di",
+               "../import/dsfml/"~theModule~"/package.d");
     }
 
     version(GNU)
@@ -820,9 +885,9 @@ bool buildDocumentation()
  * Display example:
  * [ 20%] Building dsfml/src/system/clock.d
  */
-void progressOutput(int current, size_t total, string file)
+void progressOutput(size_t current, size_t total, string file)
 {
-    size_t percentage = (current*100)/total;
+    size_t percentage = ((current+1)*100)/total;
 
     writefln("[%3u%%] Building %s", percentage, file);
 }
@@ -890,7 +955,6 @@ string pathToMSVCToolChain()
 
 int main(string[] args)
 {
-
     GetoptResult optInfo;
     try
     {
@@ -900,7 +964,8 @@ int main(string[] args)
         "m64", "Force 64 bit building.", &force64Build,
         "unittest", "Build DSFML unit test executable.", &buildingUnittests,
         "doc", "Build DSFML documentation.", &buildingDoc,
-        "webdoc", "Build the DSFML website documentation.", &buildingWebsiteDocs
+        "webdoc", "Build the DSFML website documentation.", &buildingWebsiteDocs,
+        "import", "Generate D interface files.", &buildingInterfaceFiles,
         );
     }
     catch(GetOptException e)
@@ -958,6 +1023,11 @@ int main(string[] args)
     if(buildingDoc || buildingWebsiteDocs)
     {
         if(!buildDocumentation())
+            return -1;
+    }
+    if(buildingInterfaceFiles)
+    {
+        if(!buildInterfaceFiles())
             return -1;
     }
 
