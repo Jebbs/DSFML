@@ -1,6 +1,5 @@
 *.DS_Store
-*.obj
-*.o
+obj/
 lib/
 import/
 *.exe

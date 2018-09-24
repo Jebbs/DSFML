@@ -55,6 +55,7 @@ else
 
 //build settings
 string prefix;
+string postfix;
 string extension;
 string linkerInclude;
 string libCompilerSwitches;
@@ -67,7 +68,7 @@ bool buildingLibs;
 bool buildingInterfaceFiles;
 bool buildingDoc;
 bool buildingWebsiteDocs;
-bool showingHelp;
+bool debugLibs;
 bool force32Build;
 bool force64Build;
 
@@ -174,6 +175,7 @@ void initialize()
                             "transformable", "vertex", "vertexarray", "view"];
 
     archSwitch = "";
+    postfix = "";
 
     version(DigitalMars)
     {
@@ -194,18 +196,25 @@ void initialize()
         {
             version(DigitalMars)
             {
-                archSwitch = "-m32mscoff";
+                archSwitch = " -m32mscoff";
             }
         }
         else
         {
-            archSwitch = "-m32";
+            archSwitch = " -m32";
         }
     }
 
     if(force64Build)
     {
-        archSwitch = "-m64";
+        archSwitch = " -m64";
+    }
+
+    if(debugLibs)
+    {
+        singleFileSwitches = " -g " ~ singleFileSwitches;
+        libCompilerSwitches = " -g " ~ libCompilerSwitches;
+        postfix = "-d";
     }
 
     writeln();
@@ -459,9 +468,18 @@ bool buildLibs()
         size_t numberOfFiles = fileList[theModule].length + 1;
         string files = "";
 
+        string objLocation = "obj/"~(debugLibs?"debug":"release")~
+            "/dsfml/" ~theModule~"/";
+
+        if(!exists(objLocation))
+        {
+            mkdirRecurse(objLocation);
+        }
+
         foreach (i, name; fileList[theModule])
         {
-            string objectFile = "src/dsfml/" ~theModule~"/"~name~objExt;
+            string objectFile = objLocation~name~objExt;
+
             string dFile = "src/dsfml/" ~theModule~"/"~name~".d";
             string buildCommand = compiler~dFile~singleFileSwitches~objectFile;
 
@@ -470,6 +488,7 @@ bool buildLibs()
                 progressOutput(i, numberOfFiles, dFile);
 
                 auto status = executeShell(buildCommand);
+
                 if(status.status !=0)
                 {
                     writeln(status.output);
@@ -488,27 +507,27 @@ bool buildLibs()
             //adding the library to dmd doesn't work on OSX
             buildCommand = "cd "~"src/dsfml/"~theModule~"/ && "~
             "ar -x ../../../lib/"~prefix~"dsfmlc-"~theModule~extension ~ " && "~
-            " ar rcs ../../../lib/libdsfml-"~theModule~extension~" *"~objExt~"&& "~
+            " ar rcs ../../../lib/libdsfml-"~theModule~postfix~extension~" *"~objExt~"&& "~
             "cd ../../../";
         }
         else version(DigitalMars)
         {
             //build the static libs directly
             buildCommand ~= " -lib -L-Llib/ -L-l"~"dsfmlc-"~theModule~extension ~
-            " -oflib/"~prefix~"dsfml-"~theModule~extension~archSwitch;
+            " -oflib/"~prefix~"dsfml-"~theModule~postfix~extension~archSwitch;
         }
         else version(GNU)
         {
             //we want to use ar here, so we'll completely reset the build command
             buildCommand = "cd "~"src/dsfml/"~theModule~"/ && "~
             "ar -x ../../../lib/"~prefix~"dsfmlc-"~theModule~extension ~ " && "~
-            " ar rcs ../../../lib/libdsfml-"~theModule~extension~" *"~objExt~"&& "~
+            " ar rcs ../../../lib/libdsfml-"~theModule~postfix~extension~" *"~objExt~"&& "~
             "cd ../../../";
         }
         else
         {
             buildCommand ~= " -lib lib/"~prefix~"dsfmlc-"~theModule~extension ~
-            " -of=lib/"~prefix~"dsfml-"~theModule~extension~archSwitch;
+            " -of=lib/"~prefix~"dsfml-"~theModule~postfix~extension~archSwitch;
         }
 
         //always rebuilds the lib in case the cpp files were re-built
@@ -836,6 +855,7 @@ int main(string[] args)
         "doc", "Build DSFML documentation.", &buildingDoc,
         "webdoc", "Build the DSFML website documentation.", &buildingWebsiteDocs,
         "import", "Generate D interface files.", &buildingInterfaceFiles,
+        "debug", "Build debug libraries (ignored when not building libraries).", &debugLibs
         );
     }
     catch(GetOptException e)
