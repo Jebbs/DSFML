@@ -39,8 +39,8 @@ source_group("" FILES ${SRC})
 #set(CMAKE_CXX_FLAGS "/P")
 
 #build only object files that can be linked into a d static library
-add_library(dsfmlc-graphics STATIC ${SRC})
+add_library(dsfmlc-graphics OBJECT ${SRC})
 
-if(MSVC)
-    target_link_libraries(dsfmlc-graphics STATIC opengl32.lib)
-endif(MSVC)
+#if(MSVC)
+    #target_link_libraries(dsfmlc-graphics STATIC opengl32.lib)
+#endif(MSVC)

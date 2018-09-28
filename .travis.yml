@@ -66,4 +66,7 @@ install:
 script:
   - echo ${DMD} build.d
   - ${DMD} build.d
+  # build static libraries
+  - ./build
+  #build unit tests
   - ./build --unittest

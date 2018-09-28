@@ -232,4 +232,7 @@ build_script:
        }
 - '"%compilersetup%" %compilersetupargs%'
 - '%DC% build.d %outputfile%'
+#build static libraries
+- 'build.exe --%DConf%'
+#build unit tests
 - 'build.exe --%DConf% --unittest'

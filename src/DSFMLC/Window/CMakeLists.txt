@@ -32,6 +32,5 @@ set(SRC
 
 source_group("" FILES ${SRC})
 
-
 #build only object files that can be linked into a d static library
-add_library(dsfmlc-window STATIC ${SRC})
+add_library(dsfmlc-window OBJECT ${SRC})
