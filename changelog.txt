@@ -4,6 +4,15 @@ DSFML 2.4
 General
 =======
 
+Build System
+------------
+Changed build system to produce only one set of static libraries instead of two.
+
+Updated interface file generation to not produce package.di files.
+
+Performed some major refactoring to clean up and simplify build script.
+
+
 Compiler Support
 ----------------
 Added Supported Compilers:

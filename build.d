@@ -58,10 +58,10 @@ string prefix;
 string postfix;
 string extension;
 string linkerInclude;
-string libCompilerSwitches;
-string docCompilerSwitches;
+string libSwitches;
+string docSwitches;
 string interfaceSwitches;
-string unittestCompilerSwitches;
+string unittestSwitches;
 
 //switch settings
 bool buildingLibs;
@@ -112,7 +112,7 @@ string selectedModule;
 
 //lists of d files and c++ object files
 string[][string] fileList;
-string[][string] objectList;
+string[string] objectList;
 
 
 /**
@@ -148,6 +148,85 @@ bool checkSwitchErrors()
 //initialize all build settings
 void initialize()
 {
+    archSwitch = "";
+    postfix = "";
+
+    if(force32Build)
+    {
+        archSwitch = " -m32";
+    }
+
+    if(force64Build)
+    {
+        archSwitch = " -m64";
+    }
+
+    version (Windows)
+    {
+        write("Building for Windows ");
+        prefix = "";
+        extension = ".lib";
+        objExt = ".obj";
+
+        //Default to 64 bit on windows because why wouldn't we?
+        if(!force64Build || !force32Build)
+        {
+            archSwitch = " -m64";
+        }
+
+        if(force32Build)
+        {
+            archSwitch = " -m32mscoff";
+        }
+
+        makefileProgram = "nmake";
+        makefileType = `"NMake Makefiles"`;
+        linkerInclude = "";
+    }
+    else
+    {
+        version(linux)
+            write("Building for Linux ");
+        else
+            write("Building for OSX ");
+
+        prefix = "lib";
+        extension = ".a";
+        objExt = ".o";
+
+        makefileProgram = "make";
+        makefileType = `"Unix Makefiles"`;
+    }
+
+    version(DigitalMars)
+    {
+        writeln("with dmd");
+        initializeDMD();
+    }
+    else version(GNU)
+    {
+        writeln("with gdc");
+        initializeGDC();
+    }
+    else version(LDC)
+    {
+        writeln("with ldc");
+        initializeLDC();
+    }
+
+    // add links to the SFML files for building the unit tests
+    unittestSwitches ~= lib("sfml-graphics")~lib("sfml-window")~
+                        lib("sfml-audio")~lib("sfml-network")~
+                        lib("sfml-system");
+
+    //need to link to c++ standard library on these systems
+    version(Posix)
+    {
+        unittestSwitches ~= lib("stdc++");
+    }
+
+    //Does OSX need to include rpath for unittests?
+
     //populate file lists
     fileList["system"] = ["clock", "config", "err", "inputstream", "lock",
                           "mutex", "package", "sleep", "string", "thread",
@@ -174,46 +253,57 @@ void initialize()
                             "sprite", "text", "texture", "transform",
                             "transformable", "vertex", "vertexarray", "view"];
 
-    archSwitch = "";
-    postfix = "";
+    //populate C++ object list
+    string dir = "src/DSFMLC/System/CMakeFiles/dsfmlc-system.dir/";
+    objectList["system"] = dir~"Err.cpp"~objExt~" "~
+                           dir~"String.cpp"~objExt~" ";
 
-    version(DigitalMars)
-    {
-        initializeDMD();
-    }
-    else version(GNU)
-    {
-        initializeGDC();
-    }
-    else
-    {
-        initializeLDC();
-    }
+    dir = "src/DSFMLC/Audio/CMakeFiles/dsfmlc-audio.dir/";
+    objectList["audio"] = dir~"Err.cpp"~objExt~" "~
+                          dir~"InputSoundFile.cpp"~objExt~" "~
+                          dir~"Listener.cpp"~objExt~" "~
+                          dir~"OutputSoundFile.cpp"~objExt~" "~
+                          dir~"Sound.cpp"~objExt~" "~
+                          dir~"SoundBuffer.cpp"~objExt~" "~
+                          dir~"SoundRecorder.cpp"~objExt~" "~
+                          dir~"SoundStream.cpp"~objExt~" ";
 
-    if(force32Build)
-    {
-        version(Windows)
-        {
-            version(DigitalMars)
-            {
-                archSwitch = " -m32mscoff";
-            }
-        }
-        else
-        {
-            archSwitch = " -m32";
-        }
-    }
+    dir = "src/DSFMLC/Network/CMakeFiles/dsfmlc-network.dir/";
+    objectList["network"] = dir~"Err.cpp"~objExt~" "~
+                            dir~"Ftp.cpp"~objExt~" "~
+                            dir~"Http.cpp"~objExt~" "~
+                            dir~"IpAddress.cpp"~objExt~" "~
+                            dir~"Packet.cpp"~objExt~" "~
+                            dir~"SocketSelector.cpp"~objExt~" "~
+                            dir~"TcpListener.cpp"~objExt~" "~
+                            dir~"TcpSocket.cpp"~objExt~" "~
+                            dir~"UdpSocket.cpp"~objExt~" ";
 
-    if(force64Build)
-    {
-        archSwitch = " -m64";
-    }
+    dir = "src/DSFMLC/Window/CMakeFiles/dsfmlc-window.dir/";
+    objectList["window"] = dir~"Context.cpp"~objExt~" "~
+                           dir~"Err.cpp"~objExt~" "~
+                           dir~"Joystick.cpp"~objExt~" "~
+                           dir~"Keyboard.cpp"~objExt~" "~
+                           dir~"Mouse.cpp"~objExt~" "~
+                           dir~"Sensor.cpp"~objExt~" "~
+                           dir~"Touch.cpp"~objExt~" "~
+                           dir~"VideoMode.cpp"~objExt~" "~
+                           dir~"Window.cpp"~objExt~" ";
+
+    dir = "src/DSFMLC/Graphics/CMakeFiles/dsfmlc-graphics.dir/";
+    objectList["graphics"] = dir~"DText.cpp"~objExt~" "~
+                             dir~"Font.cpp"~objExt~" "~
+                             dir~"Image.cpp"~objExt~" "~
+                             dir~"RenderTexture.cpp"~objExt~" "~
+                             dir~"RenderWindow.cpp"~objExt~" "~
+                             dir~"Shader.cpp"~objExt~" "~
+                             dir~"Text.cpp"~objExt~" "~
+                             dir~"Texture.cpp"~objExt~" "~
+                             dir~"Transform.cpp"~objExt~" ";
 
     if(debugLibs)
     {
         singleFileSwitches = " -g " ~ singleFileSwitches;
-        libCompilerSwitches = " -g " ~ libCompilerSwitches;
         postfix = "-d";
     }
 
@@ -223,77 +313,26 @@ void initialize()
 /// Initialize the DMD compiler
 void initializeDMD()
 {
-    string linkToSFMLLibs = "";
+    singleFileSwitches = archSwitch ~ " -c -O -release -inline -Isrc -of";
+    libSwitches = archSwitch ~ " -lib -oflib/"~prefix~"dsfml-";
+    docSwitches = " -c -o- -op -D -Dd../../doc -I../../src";
+    interfaceSwitches = " -c -o- -op -H -Hd../import -I../src";
+
+    unittestSwitches =
+    archSwitch ~ " -main -unittest -version=DSFML_Unittest_System " ~
+    "-version=DSFML_Unittest_Window -version=DSFML_Unittest_Graphics " ~
+    "-version=DSFML_Unittest_Audio -version=DSFML_Unittest_Network " ~
+    "-ofunittest/unittest";
 
     version (Windows)
     {
-        writeln("Building for Windows with dmd");
-        prefix = "";
-        extension = ".lib";
-        objExt = ".obj";
-
-        //Default to 64 bit on windows because why wouldn't we?
-        if(!force64Build || !force32Build)
-        {
-            archSwitch = " -m64";
-        }
-
-        makefileProgram = "nmake";
-        makefileType = `"NMake Makefiles"`;
-        linkerInclude = "";
-
-        linkToSFMLLibs = "-L/LIBPATH:lib -L/LIBPATH:SFML\\lib "~
-        "-L/LIBPATH:SFML\\extlibs\\libs-msvc-universal\\x64 ";
-    }
-    else version(linux)
-    {
-        writeln("Building for Linux with dmd");
-        prefix = "lib";
-        extension = ".a";
-        objExt = ".o";
-
-        makefileProgram = "make";
-        makefileType = `"Unix Makefiles"`;
-        linkerInclude = "-L-l";
-
-        linkToSFMLLibs = "-L-Llib -L-LSFML/lib ";
+        unittestSwitches ~= ".exe -L/LIBPATH:lib -L/LIBPATH:SFML\\lib ";
     }
     else
     {
-        writeln("Building for OSX with dmd");
-        prefix = "lib";
-        extension = ".a";
-        objExt = ".o";
-
-        makefileProgram = "make";
-        makefileType = `"Unix Makefiles"`;
         linkerInclude = "-L-l";
-
-        linkToSFMLLibs = "-L-Llib -L-LSFML/lib ";
-
-        //linkToSFMLLibs ~= "-L-lstdc++ -L-rpath -L. ";
+        unittestSwitches ~= " -L-LSFML/lib ";
     }
-
-    singleFileSwitches = archSwitch ~ " -c -O -release -inline -Isrc -of";
-    libCompilerSwitches = archSwitch ~ " -lib  -Isrc";
-    docCompilerSwitches = " -c -o- -op -D -Dd../../doc -I../../src";
-    interfaceSwitches = " -c -o- -op -H -Hd../import -I../src";
-
-    linkToSFMLLibs ~= lib("dsfmlc-graphics")~lib("dsfmlc-window")~
-    lib("dsfmlc-audio")~lib("dsfmlc-network")~lib("dsfmlc-system")~
-    lib("sfml-graphics")~lib("sfml-window")~lib("sfml-audio")~
-    lib("sfml-network")~lib("sfml-system");
-
-    version(Posix)
-    {
-        linkToSFMLLibs ~= lib("stdc++");
-    }
-
-    unittestCompilerSwitches =
-    "-main -unittest -version=DSFML_Unittest_System " ~
-    "-version=DSFML_Unittest_Window -version=DSFML_Unittest_Graphics " ~
-    "-version=DSFML_Unittest_Audio -version=DSFML_Unittest_Network "~
-    linkToSFMLLibs;
 }
 
 /// Initialize the GDC compiler
@@ -301,43 +340,22 @@ void initializeGDC()
 {
     //need to set up for windows and macOS later
 
-    string linkToSFMLLibs = "";
+    singleFileSwitches = archSwitch ~ " -c -O3 -frelease -Isrc -o";
+    libSwitches = "ar rcs ./lib/libdsfml-";
+    docSwitches = " -c -fdoc -I../../src";
+    interfaceSwitches = " -c -fintfc -I../src -o obj.o";
+
+    unittestSwitches =
+    archSwitch ~ " -funittest -fversion=DSFML_Unittest_System " ~
+    "-fversion=DSFML_Unittest_Window -fversion=DSFML_Unittest_Graphics " ~
+    "-fversion=DSFML_Unittest_Audio -fversion=DSFML_Unittest_Network " ~
+    "-ounittest/unittest";
 
     version(linux)
     {
-        writeln("Building for Linux with gdc");
-        prefix = "lib";
-        extension = ".a";
-        objExt = ".o";
-
-        makefileProgram = "make";
-        makefileType = `"Unix Makefiles"`;
         linkerInclude = "-l";
-
-        linkToSFMLLibs = "-Llib -LSFML/lib ";
+        unittestSwitches ~= " -LSFML/lib ";
     }
-
-    singleFileSwitches = archSwitch ~ " -c -O3 -frelease -Isrc -o";
-    libCompilerSwitches = archSwitch ~ " -Isrc";
-    docCompilerSwitches = " -c -fdoc -I../../src";
-    interfaceSwitches = " -c -fintfc -I../src -o obj.o";
-
-    linkToSFMLLibs ~= lib("dsfmlc-graphics")~lib("dsfmlc-window")~
-    lib("dsfmlc-audio")~lib("dsfmlc-network")~lib("dsfmlc-system")~
-    lib("sfml-graphics")~lib("sfml-window")~lib("sfml-audio")~
-    lib("sfml-network")~lib("sfml-system");
-
-    version(Posix)
-    {
-        linkToSFMLLibs ~= lib("stdc++");
-    }
-
-    unittestCompilerSwitches =
-    "-funittest -fversion=DSFML_Unittest_System " ~
-    "-fversion=DSFML_Unittest_Window -fversion=DSFML_Unittest_Graphics " ~
-    "-fversion=DSFML_Unittest_Audio -fversion=DSFML_Unittest_Network "~
-    linkToSFMLLibs;
-
 }
 
 /// Initialize the LDC compiler
@@ -345,75 +363,26 @@ void initializeLDC()
 {
     string linkToSFMLLibs = "";
 
-    //fix this before testing on windows
+    singleFileSwitches = archSwitch ~ " -c -O -release -oq -I=src -of=";
+    libSwitches = archSwitch ~ " -lib -of=lib/"~prefix~"dsfml-";
+    docSwitches = " -c -o- -op -D -Dd=../../doc -I=../../src";
+    interfaceSwitches = " -c -o- -op -H -Hd=../import -I=../src";
+
+    unittestSwitches =
+    archSwitch ~ " -main -unittest -d-version=DSFML_Unittest_System " ~
+    "-d-version=DSFML_Unittest_Window -d-version=DSFML_Unittest_Graphics " ~
+    "-d-version=DSFML_Unittest_Audio -d-version=DSFML_Unittest_Network " ~
+    "-of=unittest/unittest";
+
     version(Windows)
     {
-        writeln("Building for Windows with ldc");
-        prefix = "";
-        extension = ".lib";
-        objExt = ".obj";
-
-        //Default to 64 bit on windows because why wouldn't we?
-        if(!force64Build || !force32Build)
-        {
-            archSwitch = " -m64";
-        }
-
-        makefileProgram = "nmake";
-        makefileType = `"NMake Makefiles"`;
-        linkerInclude = "";
-
-         linkToSFMLLibs = "-L=/LIBPATH:lib -L=/LIBPATH:SFML\\lib "~
-        "-L=/LIBPATH:SFML\\extlibs\\libs-msvc-universal\\x64 ";
-    }
-    else version(linux)
-    {
-        writeln("Building for Linux with ldc");
-        prefix = "lib";
-        extension = ".a";
-        objExt = ".o";
-
-        makefileProgram = "make";
-        makefileType = `"Unix Makefiles"`;
-        linkerInclude = "-L=-l";
-
-        linkToSFMLLibs = "-L=-Llib -L=-LSFML/lib ";
+         unittestSwitches ~= ".exe -L=/LIBPATH:lib -L=/LIBPATH:SFML\\lib ";
     }
     else
     {
-        writeln("Building for OSX with ldc");
-        prefix = "lib";
-        extension = ".a";
-        objExt = ".o";
-
-        makefileProgram = "make";
-        makefileType = `"Unix Makefiles"`;
         linkerInclude = "-L=-l";
-
-        linkToSFMLLibs = "-L=-Llib -L=-LSFML/lib ";
-        //linkToSFMLLibs ~= "-L=-lstdc++ ";//-L=-rpath -L=. ";
+        unittestSwitches ~= " -L=-LSFML/lib ";
     }
-
-    singleFileSwitches = archSwitch ~ " -c -O -release -oq -I=src -of=";
-    libCompilerSwitches = archSwitch ~ " -lib -I=src";
-    docCompilerSwitches = " -c -o- -op -D -Dd=../../doc -I=../../src";
-    interfaceSwitches = " -c -o- -op -H -Hd=../import -I=../src";
-
-    linkToSFMLLibs ~= lib("dsfmlc-graphics")~lib("dsfmlc-window")~
-    lib("dsfmlc-audio")~lib("dsfmlc-network")~lib("dsfmlc-system")~
-    lib("sfml-graphics")~lib("sfml-window")~lib("sfml-audio")~
-    lib("sfml-network")~lib("sfml-system");
-
-    version(Posix)
-    {
-        linkToSFMLLibs ~= lib("stdc++");
-    }
-
-    unittestCompilerSwitches =
-    "-main -unittest -d-version=DSFML_Unittest_System " ~
-    "-d-version=DSFML_Unittest_Window -d-version=DSFML_Unittest_Graphics " ~
-    "-d-version=DSFML_Unittest_Audio -d-version=DSFML_Unittest_Network "~
-    linkToSFMLLibs;
 }
 
 /**
@@ -464,7 +433,7 @@ bool buildLibs()
 
     foreach(theModule;modules)
     {
-        //+1 for lib file
+        //+1 to include the library file in the count
         size_t numberOfFiles = fileList[theModule].length + 1;
         string files = "";
 
@@ -476,7 +445,7 @@ bool buildLibs()
             mkdirRecurse(objLocation);
         }
 
-        foreach (i, name; fileList[theModule])
+        foreach (fileNumber, name; fileList[theModule])
         {
             string objectFile = objLocation~name~objExt;
 
@@ -485,7 +454,7 @@ bool buildLibs()
 
             if(needToBuild(objectFile, dFile))
             {
-                progressOutput(i, numberOfFiles, dFile);
+                progressOutput(fileNumber, numberOfFiles, dFile);
 
                 auto status = executeShell(buildCommand);
 
@@ -499,35 +468,18 @@ bool buildLibs()
             files~= objectFile ~ " ";
         }
 
+        files ~= objectList[theModule];
+
         string buildCommand = compiler ~ files;
 
-        //This needs to be fixed. It is basically all wrong. :(
-        version(OSX)
+        version(GNU)
         {
-            //adding the library to dmd doesn't work on OSX
-            buildCommand = "cd "~"src/dsfml/"~theModule~"/ && "~
-            "ar -x ../../../lib/"~prefix~"dsfmlc-"~theModule~extension ~ " && "~
-            " ar rcs ../../../lib/libdsfml-"~theModule~postfix~extension~" *"~objExt~"&& "~
-            "cd ../../../";
-        }
-        else version(DigitalMars)
-        {
-            //build the static libs directly
-            buildCommand ~= " -lib -L-Llib/ -L-l"~"dsfmlc-"~theModule~extension ~
-            " -oflib/"~prefix~"dsfml-"~theModule~postfix~extension~archSwitch;
-        }
-        else version(GNU)
-        {
-            //we want to use ar here, so we'll completely reset the build command
-            buildCommand = "cd "~"src/dsfml/"~theModule~"/ && "~
-            "ar -x ../../../lib/"~prefix~"dsfmlc-"~theModule~extension ~ " && "~
-            " ar rcs ../../../lib/libdsfml-"~theModule~postfix~extension~" *"~objExt~"&& "~
-            "cd ../../../";
+            //We're using ar here, so we'll completely reset the build command
+            buildCommand = libSwitches~theModule~postfix~extension~" "~files;
         }
         else
         {
-            buildCommand ~= " -lib lib/"~prefix~"dsfmlc-"~theModule~extension ~
-            " -of=lib/"~prefix~"dsfml-"~theModule~postfix~extension~archSwitch;
+            buildCommand ~= libSwitches~theModule~postfix~extension;
         }
 
         //always rebuilds the lib in case the cpp files were re-built
@@ -569,36 +521,20 @@ bool buildUnittests()
         {
             files~= "src/dsfml/" ~theModule~"/"~name~".d ";
         }
+
+        files ~= objectList[theModule];
     }
 
     string buildCommand = compiler;
 
-    version(DigitalMars)
-    {
-        buildCommand ~= files~" "~unittestCompilerSwitches~archSwitch;
-        buildCommand ~= " -ofunittest/unittest";
-    }
-    else version(GNU)
+    version(GNU)
     {
         std.file.write("main.d", "void main(){}");
 
-        buildCommand ~= "main.d "~files~unittestCompilerSwitches~archSwitch~
-        " -ounittest/unittest -Wl,--verbose";
-    }
-    else
-    {
-        //why -oq? it isn't needed here
-
-        buildCommand ~= unittestCompilerSwitches~archSwitch~" -oq "~files;
-        buildCommand ~= "-of=unittest/unittest";
+        buildCommand ~= "main.d ";
     }
 
-    version(Windows)
-    {
-        buildCommand ~= ".exe";
-    }
-
-    writeln(buildCommand);
+    buildCommand ~= files~unittestSwitches;
 
     auto status = executeShell(buildCommand);
 
@@ -659,7 +595,7 @@ bool buildDocumentation()
 
         // skipping package.d
         size_t numberOfFiles = fileList[theModule].length -1 ;
-        foreach (i, name; fileList[theModule])
+        foreach (fileNumber, name; fileList[theModule])
         {
             if (name == "package")
                 continue;
@@ -674,14 +610,14 @@ bool buildDocumentation()
             {
                 buildCommand = compiler~dFile~" -fdoc-inc="~ddoc~
                 " -fdoc-dir=../../doc/dsfml/"~theModule~
-                docCompilerSwitches~" -o obj.o";
+                docSwitches~" -o obj.o";
             }
             else
-                buildCommand = compiler~dFile~ddoc~docCompilerSwitches;
+                buildCommand = compiler~dFile~ddoc~docSwitches;
 
             if(needToBuild(docFile, dFile))
             {
-                progressOutput(i, numberOfFiles, outputFile);
+                progressOutput(fileNumber, numberOfFiles, outputFile);
 
                 auto status = executeShell(buildCommand);
                 if(status.status !=0)
@@ -723,7 +659,7 @@ bool buildInterfaceFiles()
     {
         size_t numberOfFiles = fileList[theModule].length;
 
-        foreach (i, name; fileList[theModule])
+        foreach (fileNumber, name; fileList[theModule])
         {
             string dFile = "dsfml/"~theModule~"/"~name~".d";
             string outputFile = "../import/dsfml/"~theModule~"/"~name~".di";
@@ -739,7 +675,7 @@ bool buildInterfaceFiles()
 
             if(needToBuild(outputFile, dFile))
             {
-                progressOutput(i+1, numberOfFiles, outputFile[3 .. $]);
+                progressOutput(fileNumber, numberOfFiles, outputFile[3 .. $]);
 
                 auto status = executeShell(buildCommand);
                 if(status.status !=0)
@@ -750,8 +686,11 @@ bool buildInterfaceFiles()
             }
         }
 
-        rename("../import/dsfml/"~theModule~"/package.di",
-               "../import/dsfml/"~theModule~"/package.d");
+        if(exists("../import/dsfml/"~theModule~"/package.di"))
+        {
+            rename("../import/dsfml/"~theModule~"/package.di",
+                   "../import/dsfml/"~theModule~"/package.d");
+        }
     }
 
     version(GNU)
@@ -768,11 +707,11 @@ bool buildInterfaceFiles()
  * Display example:
  * [ 20%] Building dsfml/src/system/clock.d
  */
-void progressOutput(size_t current, size_t total, string file)
+void progressOutput(size_t currentFile, size_t totalFiles, string fileName)
 {
-    size_t percentage = ((current+1)*100)/total;
+    size_t percentage = ((currentFile+1)*100)/totalFiles;
 
-    writefln("[%3u%%] Building %s", percentage, file);
+    writefln("[%3u%%] Building %s", percentage, fileName);
 }
 
 /**
