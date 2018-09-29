@@ -47,6 +47,12 @@ Added ddoc files for locally generated documentation and documentation meant for
 the dsfml.org website.
 
 
+Other
+-----
+Moved everything relating to DSFMLC into the src/DSFMLC directory, cleaning up
+the top level directory a little.
+
+
 System
 ======
 

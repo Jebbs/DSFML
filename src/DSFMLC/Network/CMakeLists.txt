@@ -1,36 +1,34 @@
-set(INCROOT ${PROJECT_SOURCE_DIR}/include/DSFMLC/Network)
-set(SRCROOT ${PROJECT_SOURCE_DIR}/src/DSFMLC/Network)
-
+set(SRCROOT ${PROJECT_SOURCE_DIR}/Network)
 
 # all source files
 set(SRC
-    ${INCROOT}/Export.h
-    ${INCROOT}/Err.h
+    ${SRCROOT}/Export.h
+    ${SRCROOT}/Err.h
     ${SRCROOT}/Err.cpp
     ${SRCROOT}/Ftp.cpp
     ${SRCROOT}/FtpStruct.h
-    ${INCROOT}/Ftp.h
+    ${SRCROOT}/Ftp.h
     ${SRCROOT}/Http.cpp
     ${SRCROOT}/HttpStruct.h
-    ${INCROOT}/Http.h
+    ${SRCROOT}/Http.h
     ${SRCROOT}/IpAddress.cpp
-    ${INCROOT}/IpAddress.h
+    ${SRCROOT}/IpAddress.h
     ${SRCROOT}/Packet.cpp
     ${SRCROOT}/PacketStruct.h
-    ${INCROOT}/Packet.h
+    ${SRCROOT}/Packet.h
     ${SRCROOT}/SocketSelector.cpp
     ${SRCROOT}/SocketSelectorStruct.h
-    ${INCROOT}/SocketSelector.h
+    ${SRCROOT}/SocketSelector.h
     ${SRCROOT}/TcpListener.cpp
     ${SRCROOT}/TcpListenerStruct.h
-    ${INCROOT}/TcpListener.h
+    ${SRCROOT}/TcpListener.h
     ${SRCROOT}/TcpSocket.cpp
     ${SRCROOT}/TcpSocketStruct.h
-    ${INCROOT}/TcpSocket.h
-    ${INCROOT}/Types.h
+    ${SRCROOT}/TcpSocket.h
+    ${SRCROOT}/Types.h
     ${SRCROOT}/UdpSocket.cpp
     ${SRCROOT}/UdpSocketStruct.h
-    ${INCROOT}/UdpSocket.h
+    ${SRCROOT}/UdpSocket.h
 )
 
 source_group("" FILES ${SRC})
