@@ -1,33 +1,31 @@
-set(INCROOT ${PROJECT_SOURCE_DIR}/include/DSFMLC/Window)
-set(SRCROOT ${PROJECT_SOURCE_DIR}/src/DSFMLC/Window)
-
+set(SRCROOT ${PROJECT_SOURCE_DIR}/Window)
 
 # all source files
 set(SRC
-    ${INCROOT}/Export.h
+    ${SRCROOT}/Export.h
     ${SRCROOT}/Context.cpp
     ${SRCROOT}/ContextStruct.h
-    ${INCROOT}/Context.h
-    ${INCROOT}/Event.h
-    ${INCROOT}/Err.h
+    ${SRCROOT}/Context.h
+    ${SRCROOT}/Event.h
+    ${SRCROOT}/Err.h
     ${SRCROOT}/Err.cpp
     ${SRCROOT}/Joystick.cpp
-    ${INCROOT}/Joystick.h
+    ${SRCROOT}/Joystick.h
     ${SRCROOT}/Keyboard.cpp
-    ${INCROOT}/Keyboard.h
+    ${SRCROOT}/Keyboard.h
     ${SRCROOT}/Mouse.cpp
-    ${INCROOT}/Mouse.h
+    ${SRCROOT}/Mouse.h
     ${SRCROOT}/Sensor.cpp
-    ${INCROOT}/Sensor.h
+    ${SRCROOT}/Sensor.h
     ${SRCROOT}/Touch.cpp
-    ${INCROOT}/Touch.h
-    ${INCROOT}/Types.h
+    ${SRCROOT}/Touch.h
+    ${SRCROOT}/Types.h
     ${SRCROOT}/VideoMode.cpp
-    ${INCROOT}/VideoMode.h
+    ${SRCROOT}/VideoMode.h
     ${SRCROOT}/Window.cpp
     ${SRCROOT}/WindowStruct.h
-    ${INCROOT}/Window.h
-    ${INCROOT}/WindowHandle.h
+    ${SRCROOT}/Window.h
+    ${SRCROOT}/WindowHandle.h
 )
 
 source_group("" FILES ${SRC})

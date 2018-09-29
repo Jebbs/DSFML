@@ -1,29 +1,28 @@
-set(INCROOT ${PROJECT_SOURCE_DIR}/include/DSFMLC/Audio)
-set(SRCROOT ${PROJECT_SOURCE_DIR}/src/DSFMLC/Audio)
+set(SRCROOT ${PROJECT_SOURCE_DIR}/Audio)
 
 # all source files
 set(SRC
      ${SRCROOT}/Err.cpp
-     ${INCROOT}/Err.h
-     ${INCROOT}/Export.h
+     ${SRCROOT}/Err.h
+     ${SRCROOT}/Export.h
      ${SRCROOT}/Listener.cpp
-     ${INCROOT}/Listener.h
+     ${SRCROOT}/Listener.h
      ${SRCROOT}/Sound.cpp
-     ${INCROOT}/Sound.h
+     ${SRCROOT}/Sound.h
      ${SRCROOT}/SoundBuffer.cpp
-     ${INCROOT}/SoundBuffer.h
+     ${SRCROOT}/SoundBuffer.h
      ${SRCROOT}/InputSoundFile.cpp
-     ${INCROOT}/InputSoundFile.h
+     ${SRCROOT}/InputSoundFile.h
      ${SRCROOT}/InputSoundFileStruct.h
      ${SRCROOT}/OutputSoundFile.cpp
-     ${INCROOT}/OutputSoundFile.h
+     ${SRCROOT}/OutputSoundFile.h
      ${SRCROOT}/OutputSoundFileStruct.h
      ${SRCROOT}/SoundRecorder.cpp
-     ${INCROOT}/SoundRecorder.h
+     ${SRCROOT}/SoundRecorder.h
      ${SRCROOT}/SoundRecorderStruct.h
      ${SRCROOT}/SoundStreamStruct.h
      ${SRCROOT}/SoundStream.cpp
-     ${INCROOT}/SoundStream.h
+     ${SRCROOT}/SoundStream.h
 )
 source_group("" FILES ${SRC})
 

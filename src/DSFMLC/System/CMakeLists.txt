@@ -1,14 +1,12 @@
-
-set(INCROOT ${PROJECT_SOURCE_DIR}/include/DSFMLC/System)
-set(SRCROOT ${PROJECT_SOURCE_DIR}/src/DSFMLC/System)
+set(SRCROOT ${PROJECT_SOURCE_DIR}/System)
 
 set(SRC
-    ${INCROOT}/DStream.hpp
+    ${SRCROOT}/DStream.hpp
     ${SRCROOT}/Err.cpp
-    ${INCROOT}/Err.h
+    ${SRCROOT}/Err.h
     ${SRCROOT}/String.cpp
-    ${INCROOT}/String.h
-    ${INCROOT}/Export.h
+    ${SRCROOT}/String.h
+    ${SRCROOT}/Export.h
 )
 
 #build only object files that can be linked into a d static library

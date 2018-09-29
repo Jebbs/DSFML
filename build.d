@@ -392,6 +392,8 @@ void initializeLDC()
  */
 bool buildDSFMLC()
 {
+    chdir("src/DSFMLC/");
+
     // generate the cmake files on the first run
     if(!exists("CMakeCache.txt"))
     {
@@ -410,6 +412,8 @@ bool buildDSFMLC()
     }
 
     writeln();
+
+    chdir("../..");
 
     return true;
 }
