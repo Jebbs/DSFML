@@ -124,6 +124,10 @@ Event
 -----
 MouseWheelEvent was marked as deprecated (Use MouseWheelScrollEvent instead).
 
+Window
+------
+Deprecated using string's and wstring's to set the title.
+
 
 Graphics
 ========
@@ -146,17 +150,23 @@ Added LineStrip, TriangleStrip, and TriangleFan members.
 LinesStrip, TrianglesStrip, and TrianglesFan were marked as deprecated (instead,
 use LineStrip, TriangleStrip, and TriangleFan respectively).
 
+
 Text
 ----
 Updated Text class to be current as of SFML 2.4.
 
-Added properties to replace most getters/setters, which were then deprecated.
+Added properties to replace getters/setters, which were then deprecated.
+
+Deprecated using string's and wstring's to set the contents of the Text.
+
 
 RenderWindow
 ------------
 Added RenderWindow.capture, and then marked it as deprecated. Although this was
 immediately marked as deprecated, it should still be present in the current API.
 Use a Texture, its update function, and copy its contents into an Image instead.
+
+Deprecated using string's and wstring's to set the title.
 
 
 Shader

@@ -372,24 +372,32 @@ class Window
 	 *
 	 * Params:
      * 		newTitle = New title
+	 *
+	 * Deprecated: Use the version of setTitle that takes a 'const(dchar)[]'.
 	 */
+	deprecated("Use the version of setTitle that takes a 'const(dchar)[]'.")
 	void setTitle(const(char)[] newTitle)
 	{
-		import dsfml.system.string;
-
-		auto convertedTitle = stringConvert!(char, dchar)(newTitle);
+		import std.utf: toUTF32;
+		auto convertedTitle = toUTF32(newTitle);
 		sfWindow_setUnicodeTitle(sfPtr, convertedTitle.ptr, convertedTitle.length);
 	}
 
 	/// ditto
+	deprecated("Use the version of setTitle that takes a 'const(dchar)[]'.")
 	void setTitle(const(wchar)[] newTitle)
 	{
-		import dsfml.system.string;
-		auto convertedTitle = stringConvert!(wchar, dchar)(newTitle);
+		import std.utf: toUTF32;
+		auto convertedTitle = toUTF32(newTitle);
 		sfWindow_setUnicodeTitle(sfPtr, convertedTitle.ptr, convertedTitle.length);
 	}
 
-	/// ditto
+	/**
+	 * Change the title of the window.
+	 *
+	 * Params:
+     * 		newTitle = New title
+	 */
 	void setTitle(const(dchar)[] newTitle)
 	{
 		sfWindow_setUnicodeTitle(sfPtr, newTitle.ptr, newTitle.length);
@@ -485,26 +493,39 @@ class Window
 	 *
 	 * The fourth parameter is an optional structure specifying advanced OpenGL
 	 * context settings such as antialiasing, depth-buffer bits, etc.
+	 *
+	 * Deprecated: Use the version of create that takes a 'const(dchar)[]'.
 	 */
+	deprecated("Use the version of create that takes a 'const(dchar)[]'.")
 	void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
+		import std.utf: toUTF32;
 		import dsfml.system.string;
-
-		auto convertedTitle = stringConvert!(char,dchar)(title);
+		auto convertedTitle = toUTF32(title);
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	/// ditto
+	deprecated("Use the version of create that takes a 'const(dchar)[]'.")
 	void create(VideoMode mode, const(wchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
+		import std.utf: toUTF32;
 		import dsfml.system.string;
-		auto convertedTitle = stringConvert!(wchar,dchar)(title);
+		auto convertedTitle = toUTF32(title);
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
 		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
-	/// ditto
+	/**
+	 * Create (or recreate) the window.
+	 *
+	 * If the window was already created, it closes it first. If style contains
+	 * Style.Fullscreen, then mode must be a valid video mode.
+	 *
+	 * The fourth parameter is an optional structure specifying advanced OpenGL
+	 * context settings such as antialiasing, depth-buffer bits, etc.
+	 */
 	void create(VideoMode mode, const(dchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import dsfml.system.string;

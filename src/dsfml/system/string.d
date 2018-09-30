@@ -53,7 +53,10 @@ immutable(T)[] toString(T)(in const(T)* str) pure
  * 		str = The string to convert
  *
  * Returns: the C style string pointer.
+ *
+ * Deprecated: Use conversion methonds in std.utf instead.
  */
+ deprecated("Use conversion methonds in std.utf instead.")
 immutable(U)[] stringConvert(T, U)(in T[] str) pure
 if ((is(T == dchar)||is(T == wchar)||is(T == char)) &&
 	(is(U == dchar)||is(U == wchar)||is(U == char)))

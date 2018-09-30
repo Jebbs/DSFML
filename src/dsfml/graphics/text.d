@@ -125,13 +125,13 @@ class Text : Drawable, Transformable
         bool m_geometryNeedUpdate;
 
         //helper function to copy input string into character buffer
-        void stringCopy(T)(immutable(T)[] str)
+        void stringCopy(T)(const(T)[] str)
         if (is(T == dchar)||is(T == wchar)||is(T == char))
         {
             import std.utf: byDchar;
 
             //make a conservative estimate on how much room we'll need
-            m_string.reserve(T.sizeof * str.length / dchar.sizeof);
+            m_string.reserve(dchar.sizeof * str.length);
             m_string.length = 0;
 
             foreach(dchar c; str.byDchar())
@@ -170,9 +170,41 @@ class Text : Drawable, Transformable
      *	text          = Text assigned to the string
      *	font          = Font used to draw the string
      *	characterSize = Base size of characters, in pixels
+     *
+     * Deprecated: Use the constructor that takes a 'const(dchar)[]' instead.
      */
-    this(T)(immutable(T)[] text, Font font, uint characterSize = 30)
+    deprecated("Use the constructor that takes a 'const(dchar)[]' instead.")
+    this(T)(const(T)[] text, Font font, uint characterSize = 30)
         if (is(T == dchar)||is(T == wchar)||is(T == char))
+    {
+        stringCopy(text);
+        m_font = font;
+        m_characterSize = characterSize;
+        m_style = Style.Regular;
+        m_fillColor = Color(255,255,255);
+        m_outlineColor = Color(0,0,0);
+        m_outlineThickness = 0;
+        m_vertices = new VertexArray(PrimitiveType.Triangles);
+        m_outlineVertices = new VertexArray(PrimitiveType.Triangles);
+        m_bounds = FloatRect();
+        m_geometryNeedUpdate = true;
+    }
+
+    /**
+     * Construct the text from a string, font and size
+     *
+     * Note that if the used font is a bitmap font, it is not scalable, thus not
+     * all requested sizes will be available to use. This needs to be taken into
+     * consideration when setting the character size. If you need to display
+     * text of a certain size, make sure the corresponding bitmap font that
+     * supports that size is used.
+     *
+     * Params:
+     *	text          = Text assigned to the string
+     *	font          = Font used to draw the string
+     *	characterSize = Base size of characters, in pixels
+     */
+    this(T)(const(dchar)[] text, Font font, uint characterSize = 30)
     {
         stringCopy(text);
         m_font = font;
@@ -555,6 +587,27 @@ class Text : Drawable, Transformable
         return style;
     }
 
+    @property
+    {
+        /**
+         * The text's string.
+         *
+         * A text's string is empty by default.
+         */
+        const(dchar)[] string(const(dchar)[] str)
+        {
+            // Because of the conversion, assume the text is new
+            stringCopy(str);
+            m_geometryNeedUpdate = true;
+            return m_string;
+        }
+        /// ditto
+        const(dchar)[] string() const
+        {
+            return m_string;
+        }
+    }
+
     /**
      * Set the text's string.
      *
@@ -562,8 +615,11 @@ class Text : Drawable, Transformable
      *
      * Params:
      * 		text	= New string
+     *
+     * Deprecated: Use the 'string' property instead.
      */
-    void setString(T)(immutable(T)[] text)
+    deprecated("Use the 'string' property instead.")
+    void setString(T)(const(T)[] text)
         if (is(T == dchar)||is(T == wchar)||is(T == char))
     {
         // Because of the conversion, assume the text is new
@@ -575,8 +631,11 @@ class Text : Drawable, Transformable
      * Get a copy of the text's string.
      *
      * Returns: a copy of the text's string.
+     *
+     * Deprecated: Use the 'string' property instead.
      */
-    immutable(T)[] getString(T=char)() const
+    deprecated("Use the 'string' property instead.")
+    const(T)[] getString(T=char)() const
         if (is(T == dchar)||is(T == wchar)||is(T == char))
     {
         import std.utf: toUTF8, toUTF16, toUTF32;
@@ -587,7 +646,6 @@ class Text : Drawable, Transformable
 		    return toUTF16(m_string);
 	    else static if(is(T == dchar))
 		    return toUTF32(m_string);
-
     }
 
     /**
@@ -940,7 +998,7 @@ unittest
         outlinedBoldItalicStrikeThrough.outlineThickness = 0.5f;
         outlinedBoldItalicStrikeThrough.position = Vector2f(0,180);
 
-        writeln(regular.getString());
+        writeln(regular.string);
 
         renderTexture.clear();
 

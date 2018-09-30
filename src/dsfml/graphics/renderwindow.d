@@ -179,9 +179,37 @@ class RenderWindow : Window, RenderTarget
      * title    = Title of the window
      * style    = Window style, a bitwise OR combination of Style enumerators
      * settings = Additional settings for the underlying OpenGL context
+     *
+     * Deprecated: Use the constructor that takes a 'const(dchar)[]' instead.
      */
-    this(T)(VideoMode mode, immutable(T)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
-        if (is(T == dchar)||is(T == wchar)||is(T == char))
+    deprecated("Use the constructor that takes a 'const(dchar)[]' instead.")
+    this(T)(VideoMode mode, const(T)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
+        if (is(T == wchar)||is(T == char))
+    {
+        this();
+        create(mode, title, style, settings);
+    }
+
+    /**
+     * Construct a new window.
+     *
+     * This constructor creates the window with the size and pixel depth defined
+     * in mode. An optional style can be passed to customize the look and
+     * behavior of the window (borders, title bar, resizable, closable, ...).
+     *
+     * The fourth parameter is an optional structure specifying advanced OpenGL
+     * context settings such as antialiasing, depth-buffer bits, etc. You
+     * shouldn't care about these parameters for a regular usage of the graphics
+     * module.
+     *
+     * Params:
+     * mode     = Video mode to use (defines the width, height and depth of the
+     * 			  rendering area of the window)
+     * title    = Title of the window
+     * style    = Window style, a bitwise OR combination of Style enumerators
+     * settings = Additional settings for the underlying OpenGL context
+     */
+    this(T)(VideoMode mode, const(dchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
     {
         this();
         create(mode, title, style, settings);
@@ -510,8 +538,8 @@ class RenderWindow : Window, RenderTarget
      */
     override void setTitle(const(char)[] newTitle)
     {
-        import dsfml.system.string;
-        auto convertedTitle = stringConvert!(char, dchar)(newTitle);
+        import std.utf: toUTF32;
+		auto convertedTitle = toUTF32(newTitle);
         sfRenderWindow_setUnicodeTitle(sfPtr, convertedTitle.ptr, convertedTitle.length);
     }
     /**
@@ -522,8 +550,8 @@ class RenderWindow : Window, RenderTarget
      */
     override void setTitle(const(wchar)[] newTitle)
     {
-        import dsfml.system.string;
-        auto convertedTitle = stringConvert!(wchar, dchar)(newTitle);
+        import std.utf: toUTF32;
+		auto convertedTitle = toUTF32(newTitle);
         sfRenderWindow_setUnicodeTitle(sfPtr, convertedTitle.ptr, convertedTitle.length);
     }
     /**
@@ -613,39 +641,26 @@ class RenderWindow : Window, RenderTarget
     * title    = Title of the window
     * style    = Window style, a bitwise OR combination of Style enumerators
     * settings = Additional settings for the underlying OpenGL context
+    *
+	 * Deprecated: Use the version of create that takes a 'const(dchar)[]'.
     */
+    deprecated("Use the version of create that takes a 'const(dchar)[]'.")
     override void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
     {
-        import dsfml.system.string;
-
-        auto convertedTitle = stringConvert!(char, dchar)(title);
-
+        import std.utf: toUTF32;
+		import dsfml.system.string;
+		auto convertedTitle = toUTF32(title);
         sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
         err.write(dsfml.system.string.toString(sfErr_getOutput()));
 
     }
 
-    /**
-     * Create (or recreate) the window.
-     *
-     * If the window was already created, it closes it first. If style contains
-     * Window.Style.Fullscreen, then mode must be a valid video mode.
-     *
-     * The fourth parameter is an optional structure specifying advanced OpenGL
-     * context settings such as antialiasing, depth-buffer bits, etc.
-     *
-     * Params:
-     * mode     = Video mode to use (defines the width, height and depth of the
-     * rendering area of the window)
-     * title    = Title of the window
-     * style    = Window style, a bitwise OR combination of Style enumerators
-     * settings = Additional settings for the underlying OpenGL context
-     */
+    /// ditto
     override void create(VideoMode mode, const(wchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
     {
-        import dsfml.system.string;
-        auto convertedTitle = stringConvert!(wchar, dchar)(title);
-
+        import std.utf: toUTF32;
+		import dsfml.system.string;
+		auto convertedTitle = toUTF32(title);
         sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
         err.write(dsfml.system.string.toString(sfErr_getOutput()));
 
