@@ -29,7 +29,10 @@
  * A module containing functions for interacting with strings going to and from
  * a C/C++ library as well as converting between D's string types. This module
  * has no dependencies except for std.utf.
+ *
+ * Deprecated: This module is expected to be removed in DSFML 2.5.
  */
+deprecated("This module is expected to be removed in DSFML 2.5.")
 module dsfml.system.string;
 
 /**
@@ -39,7 +42,10 @@ module dsfml.system.string;
  * 		str = The C style string to convert
  *
  * Returns: The D style string copy.
+ *
+ * Deprecated: This method is expected to be removed in DSFML 2.5.
  */
+deprecated("This method is expected to be removed in DSFML 2.5.")
 immutable(T)[] toString(T)(in const(T)* str) pure
 	if (is(T == dchar)||is(T == wchar)||is(T == char))
 {
