@@ -26,7 +26,7 @@
  */
 
 /**
- * $(U IpAddress) is a utility class for manipulating network addresses. It
+ * $(U IpAddress) is a utility structure for manipulating network addresses. It
  * provides a set a implicit constructors and conversion functions to easily
  * build or transform an IP address from/to various representations.
  *

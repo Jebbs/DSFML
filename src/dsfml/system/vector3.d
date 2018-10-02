@@ -26,7 +26,7 @@
  */
 
 /**
- * Vector3 is a simple class that defines a mathematical vector with three
+ * Vector3 is a simple structure that defines a mathematical vector with three
  * coordinates (x, y and z). It can be used to represent anything that has three
  * dimensions: a size, a point, a velocity, etc.
  *

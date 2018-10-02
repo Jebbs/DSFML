@@ -26,7 +26,7 @@
  */
 
 /**
-* This class allows users to define their own file input sources from which
+* This interface allows users to define their own file input sources from which
 * DSFML can load resources.
 *
 * DSFML resource classes like $(TEXTURE_LINK) and $(SOUNDBUFFER_LINK) provide
