@@ -42,7 +42,7 @@
  * $(LI Vector2!(uint) is Vector2u))
  *
  * $(PARA
- * The $(U Vector2) class has a small and simple interface, its x and y members
+ * The $(U Vector2) struct has a small and simple interface, its x and y members
  * can be accessed directly (there are no accessors like `setX()`, `getX()`) and
  * it contains no mathematical function like dot product, cross product, length,
  * etc.)

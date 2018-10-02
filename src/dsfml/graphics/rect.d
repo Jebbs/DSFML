@@ -27,9 +27,9 @@
 
 /**
  * A rectangle is defined by its top-left corner and its size. It is a very
- * simple class defined for convenience, so its member variables (`left`, `top`,
- * `width`, and `height`) are public and can be accessed directly, just like the
- * vector classes ($(VECTOR2_LINK) and $(VECTOR3_LINK)).
+ * simple structure defined for convenience, so its member variables (`left`,
+ * `top`, `width`, and `height`) are public and can be accessed directly, just
+ * like the vector structures ($(VECTOR2_LINK) and $(VECTOR3_LINK)).
  *
  * To keep things simple, $(U Rect) doesn't define functions to emulate the
  * properties that are not directly members (such as right, bottom, center,
@@ -79,7 +79,7 @@ import std.traits;
 import dsfml.system.vector2;
 
 /**
- * Utility class for manipulating 2D axis aligned rectangles.
+ * Utility structure for manipulating 2D axis aligned rectangles.
  */
 struct Rect(T)
     if(isNumeric!(T))

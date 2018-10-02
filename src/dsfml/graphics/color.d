@@ -26,7 +26,7 @@
  */
 
 /**
- * $(U Color) is a simple color class composed of 4 components:
+ * $(U Color) is a simple color structure composed of 4 components:
  * $(UL
  * $(LI Red)
  * $(LI Green)

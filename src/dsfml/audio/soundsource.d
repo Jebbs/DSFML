@@ -42,7 +42,7 @@ module dsfml.audio.soundsource;
 import dsfml.system.vector3;
 
 /**
- * Base class defining a sound's properties.
+ * Interface defining a sound's properties.
  */
 interface SoundSource
 {

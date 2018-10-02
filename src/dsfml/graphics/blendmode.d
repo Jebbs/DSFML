@@ -30,7 +30,7 @@
  * determines how the colors of an object you draw are mixed with the colors
  * that are already in the buffer.
  *
- * The class is composed of 6 components, each of which has its
+ * The structure is composed of 6 components, each of which has its
  * own public member variable:
  * $(UL
  * $(LI Color Source Factor (colorSrcFactor))
