@@ -256,11 +256,11 @@ void initialize()
     //populate C++ object list
     string dir = "src/DSFMLC/System/CMakeFiles/dsfmlc-system.dir/";
     objectList["system"] = dir~"Err.cpp"~objExt~" "~
+                           dir~"ErrStream.cpp"~objExt~" "~
                            dir~"String.cpp"~objExt~" ";
 
     dir = "src/DSFMLC/Audio/CMakeFiles/dsfmlc-audio.dir/";
-    objectList["audio"] = dir~"Err.cpp"~objExt~" "~
-                          dir~"InputSoundFile.cpp"~objExt~" "~
+    objectList["audio"] = dir~"InputSoundFile.cpp"~objExt~" "~
                           dir~"Listener.cpp"~objExt~" "~
                           dir~"OutputSoundFile.cpp"~objExt~" "~
                           dir~"Sound.cpp"~objExt~" "~
@@ -269,8 +269,7 @@ void initialize()
                           dir~"SoundStream.cpp"~objExt~" ";
 
     dir = "src/DSFMLC/Network/CMakeFiles/dsfmlc-network.dir/";
-    objectList["network"] = dir~"Err.cpp"~objExt~" "~
-                            dir~"Ftp.cpp"~objExt~" "~
+    objectList["network"] = dir~"Ftp.cpp"~objExt~" "~
                             dir~"Http.cpp"~objExt~" "~
                             dir~"IpAddress.cpp"~objExt~" "~
                             dir~"Packet.cpp"~objExt~" "~
@@ -281,7 +280,6 @@ void initialize()
 
     dir = "src/DSFMLC/Window/CMakeFiles/dsfmlc-window.dir/";
     objectList["window"] = dir~"Context.cpp"~objExt~" "~
-                           dir~"Err.cpp"~objExt~" "~
                            dir~"Joystick.cpp"~objExt~" "~
                            dir~"Keyboard.cpp"~objExt~" "~
                            dir~"Mouse.cpp"~objExt~" "~
@@ -291,13 +289,11 @@ void initialize()
                            dir~"Window.cpp"~objExt~" ";
 
     dir = "src/DSFMLC/Graphics/CMakeFiles/dsfmlc-graphics.dir/";
-    objectList["graphics"] = dir~"DText.cpp"~objExt~" "~
-                             dir~"Font.cpp"~objExt~" "~
+    objectList["graphics"] = dir~"Font.cpp"~objExt~" "~
                              dir~"Image.cpp"~objExt~" "~
                              dir~"RenderTexture.cpp"~objExt~" "~
                              dir~"RenderWindow.cpp"~objExt~" "~
                              dir~"Shader.cpp"~objExt~" "~
-                             dir~"Text.cpp"~objExt~" "~
                              dir~"Texture.cpp"~objExt~" "~
                              dir~"Transform.cpp"~objExt~" ";
 
@@ -539,6 +535,12 @@ bool buildUnittests()
     }
 
     buildCommand ~= files~unittestSwitches;
+
+    write("Building unittest/unitest");
+    version(Windows)
+        writeln(".exe");
+    else
+        writeln();
 
     auto status = executeShell(buildCommand);
 

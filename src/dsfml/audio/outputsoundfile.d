@@ -94,10 +94,7 @@ class OutputSoundFile
      */
     bool openFromFile(const(char)[] filename, uint sampleRate, uint channelCount)
     {
-        import dsfml.system.string;
-        bool toReturn = sfOutputSoundFile_openFromFile(m_soundFile, filename.ptr, filename.length,channelCount,sampleRate);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return  sfOutputSoundFile_openFromFile(m_soundFile, filename.ptr, filename.length,channelCount,sampleRate);
     }
 
     /**
@@ -112,8 +109,6 @@ class OutputSoundFile
     }
 
 }
-
-extern(C) const(char)* sfErr_getOutput();
 
 private extern(C)
 {

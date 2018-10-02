@@ -4,6 +4,8 @@ set(SRC
     ${SRCROOT}/DStream.hpp
     ${SRCROOT}/Err.cpp
     ${SRCROOT}/Err.h
+    ${SRCROOT}/ErrStream.cpp
+    ${SRCROOT}/ErrStream.hpp
     ${SRCROOT}/String.cpp
     ${SRCROOT}/String.h
     ${SRCROOT}/Export.h

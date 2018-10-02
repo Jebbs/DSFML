@@ -242,11 +242,7 @@ class TcpSocket:Socket
      */
     Status send(const(void)[] data)
     {
-        import dsfml.system.string;
-
-        Status toReturn = sfTcpSocket_send(sfPtr, data.ptr, data.length);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return sfTcpSocket_send(sfPtr, data.ptr, data.length);
     }
 
     /**
@@ -429,5 +425,3 @@ Socket.Status sfTcpSocket_sendPacket(sfTcpSocket* socket, sfPacket* packet);
 
 //Receive a formatted packet of data from the remote peer
 Socket.Status sfTcpSocket_receivePacket(sfTcpSocket* socket, sfPacket* packet);
-
-const(char)* sfErr_getOutput();

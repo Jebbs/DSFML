@@ -137,11 +137,7 @@ class TcpListener:Socket
      */
     Status accept(TcpSocket socket)
     {
-        import dsfml.system.string;
-
-        Status toReturn = sfTcpListener_accept(sfPtr, socket.sfPtr);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return sfTcpListener_accept(sfPtr, socket.sfPtr);
     }
 
     /**
@@ -159,11 +155,7 @@ class TcpListener:Socket
      */
     Status listen(ushort port, IpAddress address = IpAddress.Any)
     {
-        import dsfml.system.string;
-
-        Status toReturn = sfTcpListener_listen(sfPtr, port, &address);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return sfTcpListener_listen(sfPtr, port, &address);
     }
 
     /**
@@ -231,5 +223,3 @@ Socket.Status sfTcpListener_listen(sfTcpListener* listener, ushort port, IpAddre
 
 //Accept a new connection
 Socket.Status sfTcpListener_accept(sfTcpListener* listener, sfTcpSocket* connected);
-
-const(char)* sfErr_getOutput();

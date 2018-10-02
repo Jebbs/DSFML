@@ -145,11 +145,7 @@ class SoundStream : SoundSource
      */
     protected void initialize(uint channelCount, uint sampleRate)
     {
-        import dsfml.system.string;
-
         sfSoundStream_initialize(sfPtr, channelCount, sampleRate);
-
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
     @property
@@ -379,11 +375,7 @@ class SoundStream : SoundSource
      */
     void play()
     {
-        import dsfml.system.string;
-
         sfSoundStream_play(sfPtr);
-
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
     /**
@@ -533,5 +525,3 @@ float sfSoundStream_getAttenuation(const sfSoundStream* soundStream);
 bool sfSoundStream_getLoop(const sfSoundStream* soundStream);
 
 long sfSoundStream_getPlayingOffset(const sfSoundStream* soundStream);
-
-const(char)* sfErr_getOutput();

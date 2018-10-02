@@ -56,6 +56,12 @@ the top level directory a little.
 System
 ======
 
+Err
+---
+Added a custom stream buffer on the C++ side to more cleanly get SFML's error
+output sent to DSFML's err File. This also automates the process, eliminating
+the need to check for errors each time in DSFML.
+
 Time
 ----
 Removed the usage of core.time's Duration struct in favor of the original Time

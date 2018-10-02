@@ -60,6 +60,18 @@ static this()
 {
 	//Let's our err output go to the console by default
 	err = stderr;
+
+	//redirect sf:err()
+	sfErr_redirect(&writeToErr);
+}
+
+//Redirect sf::err() to write to our err File instance
+private extern(C) void sfErr_redirect(void function(const(char*) str, int size) writeFunc);
+
+//export a function to be used in C++ so that SFML can write to err
+private extern(C) void writeToErr(const(char*) str, int size)
+{
+	err.write(str[0..size]);
 }
 
 unittest
@@ -68,16 +80,25 @@ unittest
 	{
 		import std.stdio;
 		import std.file;
+		import dsfml.graphics.texture;
 
 		writeln("Unit test for err");
-
 
 		writeln("Writing a line to err");
 		err.writeln("This line was written with err.");
 
 		writeln("Routing err to a file, and then writing to it.");
 		err.open("log.txt", "w");
+
 		err.writeln("This line was written with err after being routed to log.txt");
+
+		auto noTexture = new Texture();
+
+		//This should generate a message from SFML that get's written to out output file
+		noTexture.loadFromFile("nonexistantTexture1.png");
+		noTexture.loadFromFile("nonexistantTexture2.png");
+
+
 		err.detach();//need to detach before being able to read the contents of the file(it's in use while open)
 
 		writeln("Reading log.txt to confirm its contents.");

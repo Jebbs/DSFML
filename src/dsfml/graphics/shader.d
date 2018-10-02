@@ -219,18 +219,7 @@ class Shader
      */
     bool loadFromFile(const(char)[] filename, Type type)
     {
-        import dsfml.system.string;
-
-        bool ret;
-
-        ret = sfShader_loadTypeFromFile(sfPtr, filename.ptr, filename.length, type);
-
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfShader_loadTypeFromFile(sfPtr, filename.ptr, filename.length, type);
     }
 
     /**
@@ -251,16 +240,8 @@ class Shader
      */
     bool loadFromFile(const(char)[] vertexShaderFilename, const(char)[] fragmentShaderFilename)
     {
-        import dsfml.system.string;
-
-        bool ret = sfShader_loadVertexAndFragmentFromFile(sfPtr, vertexShaderFilename.ptr, vertexShaderFilename.length,
+        return sfShader_loadVertexAndFragmentFromFile(sfPtr, vertexShaderFilename.ptr, vertexShaderFilename.length,
                                          fragmentShaderFilename.ptr, fragmentShaderFilename.length);
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
     }
 
     /**
@@ -282,17 +263,9 @@ class Shader
      */
     bool loadFromFile(const(char)[] vertexShaderFilename, const(char)[] geometryShaderFilename, const(char)[] fragmentShaderFilename)
     {
-        import dsfml.system.string;
-
-        bool ret = sfShader_loadAllFromFile(sfPtr, vertexShaderFilename.ptr, vertexShaderFilename.length,
+        return sfShader_loadAllFromFile(sfPtr, vertexShaderFilename.ptr, vertexShaderFilename.length,
                                          geometryShaderFilename.ptr, geometryShaderFilename.length,
                                          fragmentShaderFilename.ptr, fragmentShaderFilename.length);
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
     }
 
     /**
@@ -312,17 +285,7 @@ class Shader
      */
     bool loadFromMemory(const(char)[] shader, Type type)
     {
-        import dsfml.system.string;
-
-        bool ret;
-
-        ret = sfShader_loadTypeFromMemory(sfPtr, shader.ptr, shader.length, type);
-
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-        return ret;
+        return sfShader_loadTypeFromMemory(sfPtr, shader.ptr, shader.length, type);
     }
 
     /**
@@ -343,16 +306,7 @@ class Shader
      */
     bool loadFromMemory(const(char)[] vertexShader, const(char)[] fragmentShader)
     {
-        import dsfml.system.string;
-
-        bool ret = sfShader_loadVertexAndFragmentFromMemory(sfPtr, vertexShader.ptr, vertexShader.length, fragmentShader.ptr, fragmentShader.length);
-
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfShader_loadVertexAndFragmentFromMemory(sfPtr, vertexShader.ptr, vertexShader.length, fragmentShader.ptr, fragmentShader.length);
     }
 
     /**
@@ -374,17 +328,9 @@ class Shader
      */
     bool loadFromMemory(const(char)[] vertexShader, const(char)[] geometryShader, const(char)[] fragmentShader)
     {
-        import dsfml.system.string;
-
-        bool ret = sfShader_loadAllFromMemory(sfPtr, vertexShader.ptr, vertexShader.length,
+        return sfShader_loadAllFromMemory(sfPtr, vertexShader.ptr, vertexShader.length,
                                            geometryShader.ptr, geometryShader.length,
                                            fragmentShader.ptr, fragmentShader.length);
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
     }
     /**
      * Load the vertex, geometry or fragment shader from a custom stream.
@@ -403,18 +349,8 @@ class Shader
      */
     bool loadFromStream(InputStream stream, Type type)
     {
-        import dsfml.system.string;
+        return sfShader_loadTypeFromStream(sfPtr, new shaderStream(stream), type);
 
-        bool ret;
-
-        ret = sfShader_loadTypeFromStream(sfPtr, new shaderStream(stream), type);
-
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
     }
 
     /**
@@ -434,15 +370,8 @@ class Shader
      */
     bool loadFromStream(InputStream vertexShaderStream, InputStream fragmentShaderStream)
     {
-        import dsfml.system.string;
-
-        bool ret = sfShader_loadVertexAndFragmentFromStream(sfPtr, new shaderStream(vertexShaderStream),
+        return sfShader_loadVertexAndFragmentFromStream(sfPtr, new shaderStream(vertexShaderStream),
                                            new shaderStream(fragmentShaderStream));
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-        return ret;
     }
 
     /**
@@ -463,16 +392,9 @@ class Shader
      */
     bool loadFromStream(InputStream vertexShaderStream, InputStream geometryShaderStream, InputStream fragmentShaderStream)
     {
-        import dsfml.system.string;
-
-        bool ret = sfShader_loadAllFromStream(sfPtr, new shaderStream(vertexShaderStream),
+        return sfShader_loadAllFromStream(sfPtr, new shaderStream(vertexShaderStream),
                                            new shaderStream(geometryShaderStream),
                                            new shaderStream(fragmentShaderStream));
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-        return ret;
     }
 
     /**
@@ -750,21 +672,15 @@ class Shader
      */
     void setUniform(const(char)[] name, const(Texture) texture)
     {
-        import dsfml.system.string:toString;
-
         sfShader_setTextureUniform(sfPtr, name.ptr, name.length,
                                    texture?texture.sfPtr:null);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
     ///ditto
     void opIndexAssign(const(Texture) texture, const(char)[] name)
     {
-        import dsfml.system.string:toString;
-
         sfShader_setTextureUniform(sfPtr, name.ptr, name.length,
                                    texture?texture.sfPtr:null);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
     /**
@@ -780,10 +696,7 @@ class Shader
      */
     void setUniform(const(char)[] name, CurrentTextureType)
     {
-        import dsfml.system.string:toString;
-
         sfShader_setCurrentTextureUniform(sfPtr, name.ptr, name.length);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
     ///ditto
@@ -1070,9 +983,7 @@ class Shader
     deprecated("Use setUniform(const(char)[] , const(Texture)) instead.")
     void setParameter(const(char)[] name, const(Texture) texture)
     {
-        import dsfml.system.string;
         sfShader_setTextureParameter(sfPtr, name.ptr, name.length, texture?texture.sfPtr:null);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
     /**
@@ -1118,10 +1029,7 @@ class Shader
      */
     static bool isAvailable()
     {
-        import dsfml.system.string;
-        bool toReturn = sfShader_isAvailable();
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return sfShader_isAvailable();
     }
 
     /**
@@ -1131,10 +1039,7 @@ class Shader
      */
     static bool isGeometryAvailable()
     {
-        import dsfml.system.string;
-        bool toReturn = sfShader_isGeometryAvailable();
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return sfShader_isGeometryAvailable();
     }
 }
 
@@ -1297,8 +1202,6 @@ bool sfShader_isAvailable();
 
 //Tell whether or not the system supports geometry shaders
 bool sfShader_isGeometryAvailable();
-
-const(char)* sfErr_getOutput();
 
 //DEPRECATED
 

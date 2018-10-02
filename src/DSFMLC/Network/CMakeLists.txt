@@ -3,8 +3,6 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/Network)
 # all source files
 set(SRC
     ${SRCROOT}/Export.h
-    ${SRCROOT}/Err.h
-    ${SRCROOT}/Err.cpp
     ${SRCROOT}/Ftp.cpp
     ${SRCROOT}/FtpStruct.h
     ${SRCROOT}/Ftp.h

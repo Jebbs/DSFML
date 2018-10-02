@@ -420,10 +420,7 @@ class RenderWindow : Window, RenderTarget
      */
     override bool setActive(bool active)
     {
-        import dsfml.system.string;
-        bool toReturn = sfRenderWindow_setActive(sfPtr, active);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return sfRenderWindow_setActive(sfPtr, active);
     }
 
     /**
@@ -648,10 +645,8 @@ class RenderWindow : Window, RenderTarget
     override void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
     {
         import std.utf: toUTF32;
-		import dsfml.system.string;
 		auto convertedTitle = toUTF32(title);
         sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
 
     }
 
@@ -659,10 +654,8 @@ class RenderWindow : Window, RenderTarget
     override void create(VideoMode mode, const(wchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
     {
         import std.utf: toUTF32;
-		import dsfml.system.string;
 		auto convertedTitle = toUTF32(title);
         sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
 
     }
 
@@ -684,9 +677,7 @@ class RenderWindow : Window, RenderTarget
      */
     override void create(VideoMode mode, const(dchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
     {
-        import dsfml.system.string;
         sfRenderWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, title.ptr, title.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
     /**
@@ -705,9 +696,7 @@ class RenderWindow : Window, RenderTarget
     */
     override void create(WindowHandle handle, ContextSettings settings = ContextSettings.init)
     {
-        import dsfml.system.string;
         sfRenderWindow_createFromHandle(sfPtr, handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
     /**
@@ -818,9 +807,7 @@ class RenderWindow : Window, RenderTarget
      */
     void pushGLStates()
     {
-        import dsfml.system.string;
         sfRenderWindow_pushGLStates(sfPtr);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
     /**
@@ -1107,5 +1094,3 @@ void sfMouse_getPositionRenderWindow(const sfRenderWindow* relativeTo, int* x, i
 
 //Set the current position of the mouse relatively to a render-window
 void sfMouse_setPositionRenderWindow(int x, int y, const sfRenderWindow* relativeTo);
-
-const(char)* sfErr_getOutput();

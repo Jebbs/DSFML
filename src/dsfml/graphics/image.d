@@ -150,16 +150,7 @@ class Image
      */
     bool loadFromFile(const(char)[] filename)
     {
-        import dsfml.system.string;
-
-        bool ret = sfImage_loadFromFile(sfPtr, filename.ptr, filename.length);
-
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfImage_loadFromFile(sfPtr, filename.ptr, filename.length);
     }
 
     /**
@@ -176,15 +167,7 @@ class Image
      */
     bool loadFromMemory(const(void)[] data)
     {
-        import dsfml.system.string;
-
-        bool ret = sfImage_loadFromMemory(sfPtr, data.ptr, data.length);
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfImage_loadFromMemory(sfPtr, data.ptr, data.length);
     }
 
     /**
@@ -201,15 +184,7 @@ class Image
      */
     bool loadFromStream(InputStream stream)
     {
-        import dsfml.system.string;
-
-        bool ret = sfImage_loadFromStream(sfPtr, new imageStream(stream));
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfImage_loadFromStream(sfPtr, new imageStream(stream));
     }
 
     /**
@@ -359,10 +334,7 @@ class Image
      */
     bool saveToFile(const(char)[] filename) const
     {
-        import dsfml.system.string;
-        bool toReturn = sfImage_saveToFile(sfPtr, filename.ptr, filename.length);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return sfImage_saveToFile(sfPtr, filename.ptr, filename.length);
     }
 }
 
@@ -495,5 +467,3 @@ void sfImage_flipHorizontally(sfImage* image);
 
 //Flip an image vertically (top <-> bottom)
 void sfImage_flipVertically(sfImage* image);
-
-const(char)* sfErr_getOutput();

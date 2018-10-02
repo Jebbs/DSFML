@@ -25,35 +25,24 @@
  * DSFML is based on SFML (Copyright Laurent Gomila)
  */
 
-#include <DSFMLC/Graphics/Err.h>
-#include <SFML/System/Err.hpp>
-#include <sstream>
-#include <string>
+#ifndef DSFML_ERRSRTEAM_HPP
+#define DSFML_ERRSRTEAM_HPP
 
-namespace
+#include <streambuf>
+
+class ErrStream: public std:: streambuf
 {
-    //stream sf::err() get's redirected to
-    std::ostringstream outputStream;
+public:
+    enum {BUFFER_SIZE=128};
+    ErrStream();
+    void setWriteFunc(void (*writeFunc)(const char* str, int size));
 
-    //string for storing output
-    std::string outputString;
-}
+private:
+    int_type overflow(int_type ch) override;
+    int sync() override;
+    void write();
+    void (*m_writeFunc)(const char* str, int size);
+    char m_buffer[BUFFER_SIZE];
+};
 
-
-void sfErrGraphics_redirect(void)
-{
-    //redirect sf::err() to write to outputStream
-    sf::err().rdbuf(outputStream.rdbuf());
-}
-
-
-const char* sfErrGraphics_getOutput(void)
-{
-    //get the contents of outputstream
-    outputString = outputStream.str();
-
-    //and then clear the stream
-    outputStream.str("");
-
-    return outputString.c_str();
-}
+#endif //DSFML_ERRSRTEAM_HPP

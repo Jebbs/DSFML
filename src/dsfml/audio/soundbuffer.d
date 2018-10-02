@@ -112,9 +112,7 @@ class SoundBuffer
     /// Default constructor.
     this()
     {
-        import dsfml.system.string;
         sfPtr = sfSoundBuffer_construct();
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
     /// Destructor.
@@ -190,16 +188,7 @@ class SoundBuffer
      */
     bool loadFromFile(const(char)[] filename)
     {
-        import dsfml.system.string;
-        if(sfSoundBuffer_loadFromFile(sfPtr, filename.ptr, filename.length))
-        {
-            return true;
-        }
-        else
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-            return false;
-        }
+        return sfSoundBuffer_loadFromFile(sfPtr, filename.ptr, filename.length);
     }
 
     /**
@@ -215,16 +204,7 @@ class SoundBuffer
      */
     bool loadFromMemory(const(void)[] data)
     {
-        if(sfSoundBuffer_loadFromMemory(sfPtr, data.ptr, data.length))
-        {
-            return true;
-        }
-        else
-        {
-            import dsfml.system.string;
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-            return false;
-        }
+        return sfSoundBuffer_loadFromMemory(sfPtr, data.ptr, data.length);
     }
 
     /*
@@ -240,16 +220,7 @@ class SoundBuffer
      */
     bool loadFromStream(InputStream stream)
     {
-        if(sfSoundBuffer_loadFromStream(sfPtr, new SoundBufferStream(stream)))
-        {
-            return true;
-        }
-        else
-        {
-            import dsfml.system.string;
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-            return false;
-        }
+        return sfSoundBuffer_loadFromStream(sfPtr, new SoundBufferStream(stream));
     }
 
     /**
@@ -267,16 +238,7 @@ class SoundBuffer
      */
     bool loadFromSamples(const(short[]) samples, uint channelCount, uint sampleRate)
     {
-        if(sfSoundBuffer_loadFromSamples(sfPtr, samples.ptr, samples.length, channelCount, sampleRate))
-        {
-            return true;
-        }
-        else
-        {
-            import dsfml.system.string;
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-            return false;
-        }
+        return sfSoundBuffer_loadFromSamples(sfPtr, samples.ptr, samples.length, channelCount, sampleRate);
     }
 
     /**
@@ -291,16 +253,7 @@ class SoundBuffer
      */
     bool saveToFile(const(char)[] filename) const
     {
-        import dsfml.system.string;
-        if(sfSoundBuffer_saveToFile(sfPtr, filename.ptr, filename.length))
-        {
-            return true;
-        }
-        else
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-            return false;
-        }
+        return sfSoundBuffer_saveToFile(sfPtr, filename.ptr, filename.length);
     }
 
 }
@@ -405,5 +358,3 @@ uint sfSoundBuffer_getSampleRate(const sfSoundBuffer* soundBuffer);
 uint sfSoundBuffer_getChannelCount(const sfSoundBuffer* soundBuffer);
 
 long sfSoundBuffer_getDuration(const sfSoundBuffer* soundBuffer);
-
-const(char)* sfErr_getOutput();

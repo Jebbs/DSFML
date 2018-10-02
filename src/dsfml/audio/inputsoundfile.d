@@ -109,9 +109,7 @@ class InputSoundFile
     bool openFromFile(const(char)[] filename)
     {
         import dsfml.system.string;
-        bool toReturn = sfInputSoundFile_openFromFile(m_soundFile, filename.ptr, filename.length);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return sfInputSoundFile_openFromFile(m_soundFile, filename.ptr, filename.length);
     }
 
     /**
@@ -127,10 +125,7 @@ class InputSoundFile
      */
     bool openFromMemory(const(void)[] data)
     {
-        import dsfml.system.string;
-        bool toReturn = sfInputSoundFile_openFromMemory(m_soundFile, data.ptr, data.length);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return sfInputSoundFile_openFromMemory(m_soundFile, data.ptr, data.length);
     }
 
     /**
@@ -146,12 +141,8 @@ class InputSoundFile
      */
     bool openFromStream(InputStream stream)
     {
-        import dsfml.system.string;
         m_stream = new soundFileStream(stream);
-
-        bool toReturn  = sfInputSoundFile_openFromStream(m_soundFile, m_stream);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return sfInputSoundFile_openFromStream(m_soundFile, m_stream);
     }
 
     /**
@@ -185,21 +176,6 @@ class InputSoundFile
     void seek(long sampleOffset)
     {
         sfInputSoundFile_seek(m_soundFile, sampleOffset);
-
-        //Temporary fix for a bug where attempting to write to err
-        //throws an exception in a thread created in C++. This causes
-        //the program to explode. Hooray.
-
-        //This fix will skip the call to err.write if there was no error
-        //to report. If there is an error, well, the program will still explode,
-        //but the user should see the error prior to the call that will make the
-        //program explode.
-
-        string temp = dsfml.system.string.toString(sfErr_getOutput());
-        if(temp.length > 0)
-        {
-            err.write(temp);
-        }
     }
 
     /**
@@ -294,10 +270,6 @@ class soundFileStream:soundInputStream
         return myStream.getSize();
     }
 }
-
-
-extern(C) const(char)* sfErr_getOutput();
-
 
 extern(C)
 {

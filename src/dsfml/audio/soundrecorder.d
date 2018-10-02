@@ -144,11 +144,8 @@ class SoundRecorder
     /// Default constructor.
     protected this()
     {
-        import dsfml.system.string;
         callBacks = new SoundRecorderCallBacks(this);
         sfPtr = sfSoundRecorder_construct(callBacks);
-
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
 
         //Fix for some strange bug that I can't seem to track down.
         //This bug causes the array in SoundBufferRecorder to segfault if
@@ -182,10 +179,7 @@ class SoundRecorder
      */
     void start(uint theSampleRate = 44100)
     {
-        import dsfml.system.string;
         sfSoundRecorder_start(sfPtr, theSampleRate);
-
-        err.write(.toString(sfErr_getOutput()));
     }
 
     /// Stop the capture.
@@ -421,5 +415,3 @@ const(char)* sfSoundRecorder_getDefaultDevice();
 bool sfSoundRecorder_isAvailable();
 
 void sfSoundRecorder_setProcessingInterval(sfSoundRecorder* soundRecorder, ulong time);
-
-const(char)* sfErr_getOutput();

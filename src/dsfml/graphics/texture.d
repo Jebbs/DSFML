@@ -180,15 +180,7 @@ class Texture
      */
     bool loadFromFile(const(char)[] filename, IntRect area = IntRect() )
     {
-        import dsfml.system.string;
-
-        bool ret = sfTexture_loadFromFile(sfPtr, filename.ptr, filename.length,area.left, area.top,area.width, area.height);
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfTexture_loadFromFile(sfPtr, filename.ptr, filename.length,area.left, area.top,area.width, area.height);
     }
 
     /**
@@ -212,15 +204,7 @@ class Texture
      */
     bool loadFromMemory(const(void)[] data, IntRect area = IntRect())
     {
-        import dsfml.system.string;
-
-        bool ret = sfTexture_loadFromMemory(sfPtr, data.ptr, data.length,area.left, area.top,area.width, area.height);
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfTexture_loadFromMemory(sfPtr, data.ptr, data.length,area.left, area.top,area.width, area.height);
     }
 
     /**
@@ -244,15 +228,7 @@ class Texture
      */
     bool loadFromStream(InputStream stream, IntRect area = IntRect())
     {
-        import dsfml.system.string;
-
-        bool ret = sfTexture_loadFromStream(sfPtr, new textureStream(stream), area.left, area.top,area.width, area.height);
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfTexture_loadFromStream(sfPtr, new textureStream(stream), area.left, area.top,area.width, area.height);
     }
 
     /**
@@ -276,15 +252,7 @@ class Texture
      */
     bool loadFromImage(Image image, IntRect area = IntRect())
     {
-        import dsfml.system.string;
-
-        bool ret = sfTexture_loadFromImage(sfPtr, image.sfPtr, area.left, area.top,area.width, area.height);
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfTexture_loadFromImage(sfPtr, image.sfPtr, area.left, area.top,area.width, area.height);
     }
 
     /**
@@ -380,15 +348,7 @@ class Texture
      */
     bool create(uint width, uint height)
     {
-        import dsfml.system.string;
-
-        bool ret = sfTexture_create(sfPtr, width, height);
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfTexture_create(sfPtr, width, height);
     }
 
     /**
@@ -796,5 +756,3 @@ uint sfTexture_getMaximumSize();
 
 //Flush the OpenGL command buffer.
 //void  sfTexture_flush();
-
-const(char)* sfErr_getOutput();

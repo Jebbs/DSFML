@@ -2,8 +2,6 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/Audio)
 
 # all source files
 set(SRC
-     ${SRCROOT}/Err.cpp
-     ${SRCROOT}/Err.h
      ${SRCROOT}/Export.h
      ${SRCROOT}/Listener.cpp
      ${SRCROOT}/Listener.h
