@@ -156,6 +156,22 @@ struct Transform
 	 * Transform a 2D point.
 	 *
 	 * Params:
+	 *		x 	= X coordinate of the point to transform
+	 * 		y	= Y coordinate of the point to transform
+	 *
+	 * Returns: Transformed point.
+	 */
+	Vector2f transformPoint(float x, float y) const
+	{
+		Vector2f temp;
+		sfTransform_transformPoint(m_matrix.ptr, x, y, &temp.x, &temp.y);
+		return temp;
+	}
+
+	/**
+	 * Transform a 2D point.
+	 *
+	 * Params:
 	 *		point 	= the point to transform
 	 *
 	 * Returns: Transformed point.
@@ -185,6 +201,22 @@ struct Transform
 		FloatRect temp;
 		sfTransform_transformRect(m_matrix.ptr,rect.left, rect.top, rect.width, rect.height, &temp.left, &temp.top, &temp.width, &temp.height);
 		return temp;
+	}
+
+	/**
+	 * Combine the current transform with a translation.
+	 *
+	 * This function returns a reference to this, so that calls can be chained.
+	 *
+	 * Params:
+	 * 		offset	= Translation offset to apply
+	 *
+	 * Returns: this
+	 */
+	ref Transform translate(Vector2f offset)
+	{
+		sfTransform_translate(m_matrix.ptr, offset.x, offset.y);
+		return this;
 	}
 
 	/**
@@ -244,6 +276,28 @@ struct Transform
 	}
 
 	/**
+	 * Combine the current transform with a rotation.
+	 *
+	 * The center of rotation is provided for convenience as a second argument,
+	 * so that you can build rotations around arbitrary points more easily (and
+	 * efficiently) than the usual
+	 * translate(-center).rotate(angle).translate(center).
+	 *
+	 * This function returns a reference to this, so that calls can be chained.
+	 *
+	 * Params:
+	 * 		angle	= Rotation angle, in degrees
+	 * 		center	= Center of rotation
+	 *
+	 * Returns: this
+	 */
+	ref Transform rotate(float angle, Vector2f center)
+	{
+		sfTransform_rotateWithCenter(m_matrix.ptr, angle, center.x, center.y);
+		return this;
+	}
+
+	/**
 	 * Combine the current transform with a scaling.
 	 *
 	 * This function returns a reference to this, so that calls can be chained.
@@ -257,6 +311,22 @@ struct Transform
 	ref Transform scale(float scaleX, float scaleY)
 	{
 		sfTransform_scale(m_matrix.ptr, scaleX, scaleY);
+		return this;
+	}
+
+	/**
+	 * Combine the current transform with a scaling.
+	 *
+	 * This function returns a reference to this, so that calls can be chained.
+	 *
+	 * Params:
+	 * 		factors	= Scaling factors
+	 *
+	 * Returns: this
+	 */
+	ref Transform scale(Vector2f factors)
+	{
+		sfTransform_scale(m_matrix.ptr, factors.x, factors.y);
 		return this;
 	}
 
@@ -281,6 +351,28 @@ struct Transform
 	ref Transform scale(float scaleX, float scaleY, float centerX, float centerY)
 	{
 		sfTransform_scaleWithCenter(m_matrix.ptr, scaleX, scaleY, centerX, centerY);
+		return this;
+	}
+
+	/**
+	 * Combine the current transform with a scaling.
+	 *
+	 * The center of scaling is provided for convenience as a second argument,
+	 * so that you can build scaling around arbitrary points more easily
+	 * (and efficiently) than the usual
+	 * translate(-center).scale(factors).translate(center).
+	 *
+	 * This function returns a reference to this, so that calls can be chained.
+	 *
+	 * Params:
+	 * 		factors	= Scaling factors
+	 * 		center	= Center of scaling
+	 *
+	 * Returns: this
+	 */
+	ref Transform scale(Vector2f factors, Vector2f center)
+	{
+		sfTransform_scaleWithCenter(m_matrix.ptr, factors.x, factors.y, center.x, center.y);
 		return this;
 	}
 
