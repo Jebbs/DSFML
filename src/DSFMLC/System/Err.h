@@ -30,10 +30,8 @@
 
 #include <DSFMLC/System/Export.h>
 
-//Redirect sf::err() so that its output can be gotten later
-DSFML_SYSTEM_API void sfErr_redirect(void);
-
-//Get the current contents of sf::err()
-DSFML_SYSTEM_API const char* sfErr_getOutput(void);
+//Redirect sf::err() to our custom stream buffer
+//This takes a function poiter to the write function because mscv complains about missing symbols
+DSFML_SYSTEM_API void sfErr_redirect(void (*writeFunc)(const char* str, int size));
 
 #endif // DSFML_ERR_H

@@ -148,12 +148,7 @@ class RenderTexture : RenderTarget
      */
     bool create(uint width, uint height, bool depthBuffer = false)
     {
-        import dsfml.system.string;
-
-        bool ret = sfRenderTexture_create(sfPtr, width, height, depthBuffer);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-
-        return ret;
+        return sfRenderTexture_create(sfPtr, width, height, depthBuffer);
     }
 
     @property
@@ -379,9 +374,7 @@ class RenderTexture : RenderTarget
      */
     void pushGLStates()
     {
-        import dsfml.system.string;
         sfRenderTexture_pushGLStates(sfPtr);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
     }
 
     /**
@@ -490,6 +483,3 @@ void sfRenderTexture_setSmooth(sfRenderTexture* renderTexture, bool smooth);
 
 //Tell whether the smooth filter is enabled or not for a render texture
 bool sfRenderTexture_isSmooth(const sfRenderTexture* renderTexture);
-
-
-const(char)* sfErr_getOutput();

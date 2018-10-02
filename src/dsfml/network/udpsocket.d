@@ -181,11 +181,7 @@ class UdpSocket:Socket
      */
     Status bind(ushort port, IpAddress address = IpAddress.Any)
     {
-        import dsfml.system.string;
-
-        Status toReturn = sfUdpSocket_bind(sfPtr,port, &address);
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        return toReturn;
+        return sfUdpSocket_bind(sfPtr,port, &address);
     }
 
     /**
@@ -264,14 +260,8 @@ class UdpSocket:Socket
      */
     Status receive(void[] data, out size_t sizeReceived, out IpAddress address, out ushort port)
     {
-        import dsfml.system.string;
-
-        Status status = sfUdpSocket_receive(sfPtr, data.ptr, data.length,
+        return sfUdpSocket_receive(sfPtr, data.ptr, data.length,
                                             &sizeReceived, &address, &port);
-
-        err.write(dsfml.system.string.toString(sfErr_getOutput()));
-
-        return status;
     }
 
     /**
@@ -392,5 +382,3 @@ Socket.Status sfUdpSocket_sendPacket(sfUdpSocket* socket, sfPacket* packet, IpAd
 
 //Receive a formatted packet of data from a remote peer with a UDP socket
 Socket.Status sfUdpSocket_receivePacket(sfUdpSocket* socket, sfPacket* packet, IpAddress* sender, ushort* port);
-
-const(char)* sfErr_getOutput();

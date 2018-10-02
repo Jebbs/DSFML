@@ -22,11 +22,6 @@ set(SRC
     ${SRCROOT}/Texture.cpp
     ${SRCROOT}/TextureStruct.h
     ${SRCROOT}/Texture.h
-    ${SRCROOT}/DText.cpp
-    ${SRCROOT}/DText.hpp
-    ${SRCROOT}/Text.cpp
-    ${SRCROOT}/TextStruct.h
-    ${SRCROOT}/Text.h
     ${SRCROOT}/Transform.cpp
     ${SRCROOT}/Transform.h
     ${SRCROOT}/Types.h

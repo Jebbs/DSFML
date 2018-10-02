@@ -27,31 +27,16 @@
 
 #include <DSFMLC/System/Err.h>
 #include <SFML/System/Err.hpp>
-#include <sstream>
-#include <string>
+#include <DSFMLC/System/ErrStream.hpp>
 
 namespace
 {
-    //stream sf::err() get's redirected to
-    std::ostringstream outputStream;
-
-    //string for storing output
-    std::string outputString;
+    //Custom stream buffer that write's to our D-side err File.
+    ErrStream errStream;
 }
 
-void sfErr_redirect(void)
+void sfErr_redirect(void (*writeFunc)(const char* str, int size))
 {
-    //redirect sf::err() to write to outputStream
-    sf::err().rdbuf(outputStream.rdbuf());
-}
-
-const char* sfErr_getOutput(void)
-{
-    //get the contents of outputstream
-    outputString = outputStream.str();
-
-    //and then clear the stream
-    outputStream.str("");
-
-    return outputString.c_str();
+    errStream.setWriteFunc(writeFunc);
+    sf::err().rdbuf(&errStream);
 }

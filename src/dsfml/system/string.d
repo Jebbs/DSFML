@@ -49,6 +49,9 @@ deprecated("This method is expected to be removed in DSFML 2.5.")
 immutable(T)[] toString(T)(in const(T)* str) pure
 	if (is(T == dchar)||is(T == wchar)||is(T == char))
 {
+	if(str is null)
+		return "";
+
 	return str[0..strlen(str)].idup;
 }
 

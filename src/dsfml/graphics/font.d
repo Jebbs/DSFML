@@ -162,15 +162,7 @@ class Font
      */
     bool loadFromFile(const(char)[] filename)
     {
-        import dsfml.system.string;
-
-        bool ret = sfFont_loadFromFile(sfPtr, filename.ptr, filename.length);
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfFont_loadFromFile(sfPtr, filename.ptr, filename.length);
     }
 
     /**
@@ -190,15 +182,7 @@ class Font
      */
     bool loadFromMemory(const(void)[] data)
     {
-        import dsfml.system.string;
-
-        bool ret = sfFont_loadFromMemory(sfPtr, data.ptr, data.length);
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfFont_loadFromMemory(sfPtr, data.ptr, data.length);
     }
 
     /**
@@ -217,18 +201,8 @@ class Font
      */
     bool loadFromStream(InputStream stream)
     {
-        import dsfml.system.string;
-
         m_stream = new fontStream(stream);
-
-        bool ret = sfFont_loadFromStream(sfPtr, m_stream);
-
-        if(!ret)
-        {
-            err.write(dsfml.system.string.toString(sfErr_getOutput()));
-        }
-
-        return ret;
+        return sfFont_loadFromStream(sfPtr, m_stream);
     }
 
     ref const(Info) getInfo() const
@@ -466,5 +440,3 @@ float sfFont_getUnderlineThickness (const(sfFont)* font, uint characterSize);
 
 //Get the font texture for a given character size
 sfTexture* sfFont_getTexture(const(sfFont)* font, uint characterSize);
-
-const(char)* sfErr_getOutput();

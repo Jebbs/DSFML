@@ -243,10 +243,7 @@ class Window
 	 */
 	bool setActive(bool active)
 	{
-		import dsfml.system.string;
-		bool toReturn = sfWindow_setActive(sfPtr, active);
-		err.write(dsfml.system.string.toString(sfErr_getOutput()));
-		return toReturn;
+		return sfWindow_setActive(sfPtr, active);
 	}
 
 	///Request the current window to be made the active foreground window.
@@ -500,10 +497,8 @@ class Window
 	void create(VideoMode mode, const(char)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import std.utf: toUTF32;
-		import dsfml.system.string;
 		auto convertedTitle = toUTF32(title);
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	/// ditto
@@ -511,10 +506,8 @@ class Window
 	void create(VideoMode mode, const(wchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
 		import std.utf: toUTF32;
-		import dsfml.system.string;
 		auto convertedTitle = toUTF32(title);
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, convertedTitle.ptr, convertedTitle.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	/**
@@ -528,17 +521,13 @@ class Window
 	 */
 	void create(VideoMode mode, const(dchar)[] title, Style style = Style.DefaultStyle, ContextSettings settings = ContextSettings.init)
 	{
-		import dsfml.system.string;
 		sfWindow_createFromSettings(sfPtr, mode.width, mode.height, mode.bitsPerPixel, title.ptr, title.length, style, settings.depthBits, settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	/// ditto
 	void create(WindowHandle handle, ContextSettings settings = ContextSettings.init)
 	{
-		import dsfml.system.string;
 		sfWindow_createFromHandle(sfPtr, handle, settings.depthBits,settings.stencilBits, settings.antialiasingLevel, settings.majorVersion, settings.minorVersion);
-		err.write(dsfml.system.string.toString(sfErr_getOutput()));
 	}
 
 	/**
@@ -803,5 +792,3 @@ private extern(C):
 
 	void sfMouse_getPosition(const(sfWindow)* relativeTo, int* x, int* y);
 	void sfMouse_setPosition(int x, int y, const(sfWindow)* relativeTo);
-
-	const(char)* sfErr_getOutput();
